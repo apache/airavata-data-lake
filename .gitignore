@@ -3,3 +3,7 @@ airavata-data-lake.iml
 data-orchestrator/data-orchestrator.iml
 data-orchestrator/data-orchestrator-api/data-orchestrator-api.iml
 data-orchestrator/data-orchestrator-core/data-orchestrator-core.iml
+target/
+data-orchestrator/target
+data-orchestrator/data-orchestrator-core/target
+data-orchestrator/data-orchestrator-api/target
