@@ -19,6 +19,7 @@
 # Apache Airavata Data Lake
 
 [![License](http://img.shields.io/badge/license-Apache--2-blue.svg?style=flat)](https://apache.org/licenses/LICENSE-2.0)
+[![Build Status](https://travis-ci.org/apache/airavata-data-lake.svg?branch=master)](https://travis-ci.org/apache/airavata-data-lake)
 
 Apache Airavata use cases enable capture of data from observational and experimental instruments and computations resulting from Airavata's orchestration capabilities. As the data deluges into vast amounts, harvesting the data, capturing metadata, presenting it for easy and controlled access becomes unmanageable. 
 
