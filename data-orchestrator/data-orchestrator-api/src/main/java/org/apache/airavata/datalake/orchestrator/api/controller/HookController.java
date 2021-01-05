@@ -17,17 +17,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.airavata.datalake.orchestrator.api;
+package org.apache.airavata.datalake.orchestrator.api.controller;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-/**
- * TODO: Spring Boot API
- */
-@SpringBootApplication
-public class Application {
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+public class HookController {
 }
