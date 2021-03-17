@@ -20,7 +20,8 @@
     under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -29,6 +30,10 @@
     </prerequisites>
     <modules>
         <module>data-orchestrator</module>
+        <module>metadata-service</module>
+        <module>metadata-service/db-service/server</module>
+        <module>metadata-service/db-service/stub</module>
+        <module>metadata-service/db-service/client</module>
     </modules>
 
     <parent>
@@ -64,5 +69,78 @@
             </plugin>
         </plugins>
     </build>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <org.slf4j.version>1.7.25</org.slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <thrift.version>0.12.0</thrift.version>
+        <openjpa.version>2.4.3</openjpa.version>
+        <mysql.connector.version>5.1.34</mysql.connector.version>
+        <maven.assembly.plugin>3.3.0</maven.assembly.plugin>
+        <junit.version>4.8.1</junit.version>
+        <jmockit.version>1.8</jmockit.version>
+        <java.version>11</java.version>
+        <javax.annotation.version>1.3.2</javax.annotation.version>
+        <maven.compiler.plugin>3.8.1</maven.compiler.plugin>
+
+        <protobuf.maven.plugin>0.5.1</protobuf.maven.plugin>
+        <os.maven.plugin>1.5.0.Final</os.maven.plugin>
+
+        <!-- Spring dependencies -->
+        <spring.boot.version>2.4.2</spring.boot.version>
+        <spring.cloud.version>Greenwich.RELEASE</spring.cloud.version>
+        <grpc.spring.boot.version>2.4.4</grpc.spring.boot.version>
+
+        <spring.cloud.stream.version>2.0.0.RELEASE</spring.cloud.stream.version>
+        <spring.cloud.slueth.version>2.1.6.RELEASE</spring.cloud.slueth.version>
+        <spring.data.neo4j.version>6.0.3</spring.data.neo4j.version>
+
+        <io.grpc.version>1.25.0</io.grpc.version>
+        <google.common.protos>1.17.0</google.common.protos>
+        <io.micrometer.version>1.3.1</io.micrometer.version>
+        <brave.version>5.9.1</brave.version>
+
+        <docker.image.prefix>apachecustos</docker.image.prefix>
+        <docker.image.repo>custos</docker.image.repo>
+        <docker.plugin.version>1.4.13</docker.plugin.version>
+
+        <helm.maven.plugin.version>2.8.0</helm.maven.plugin.version>
+        <maven.assembly.plugin.version>3.2.0</maven.assembly.plugin.version>
+
+        <mysql.connector.java>8.0.18</mysql.connector.java>
+        <javax.persistance>1.0.2</javax.persistance>
+
+        <keycloak.admin.version>7.0.0</keycloak.admin.version>
+
+        <reasteasy.client.version>3.0.14.Final</reasteasy.client.version>
+
+        <com.google.protobuf.util>3.11.3</com.google.protobuf.util>
+
+        <springfox.swagger.version>2.9.2</springfox.swagger.version>
+        <org.wso2.charon>3.3.16</org.wso2.charon>
+        <jaxb.version>2.1</jaxb.version>
+
+        <kube.java.client.version>5.0.0</kube.java.client.version>
+
+        <testng.version>6.8</testng.version>
+        <org.json.version>20190722</org.json.version>
+
+        <apache.rat.plugin.version>0.13</apache.rat.plugin.version>
+
+        <maven.surefile.plugin.version>3.0.0-M4</maven.surefile.plugin.version>
+
+        <log.back.version>1.2.3</log.back.version>
+
+        <com.jcraft.version>0.1.55</com.jcraft.version>
+
+        <io.commons.version>2.7</io.commons.version>
+
+        <com.codahale.version>0.7.0</com.codahale.version>
+
+
+    </properties>
 
 </project>

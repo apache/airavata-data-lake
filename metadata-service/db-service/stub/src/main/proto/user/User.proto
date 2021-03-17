@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+package org.apache.airavata.datalake.metadata.service;
+
+import "google/api/annotations.proto";
+import "common/Common.proto";
+
+message UserMetadataAPIRequest {
+    User user = 1;
+    MetadataServiceAuthToken auth_token = 2;
+    string source = 3;
+}
+
+
+
+
+
+message UserMetadataAPIResponse {
+    bool status = 1;
+}
+
+message User {
+    string tenant_id = 1;
+    string username = 2;
+    string first_name = 3;
+    string last_name = 4;
+    string email_address = 5;
+    string status = 6;
+    map<string, string> properties = 7;
+    int64 created_at = 8;
+    int64 last_modified_at = 9;
+
+}
+
+
+
+service UserMetadataService {
+
+    rpc createUser (UserMetadataAPIRequest) returns (UserMetadataAPIResponse) {
+        option (google.api.http) = {
+           post: "/v1.0/api/metadata/user"
+        };
+    }
+
+    rpc getUser (UserMetadataAPIRequest) returns (User) {
+        option (google.api.http) = {
+           get: "/v1.0/api/metadata/user"
+        };
+    }
+
+    rpc updateUser (UserMetadataAPIRequest) returns (UserMetadataAPIResponse) {
+        option (google.api.http) = {
+           put: "/v1.0/api/metadata/user"
+        };
+    }
+
+    rpc deleteUser (UserMetadataAPIRequest) returns (UserMetadataAPIResponse) {
+        option (google.api.http) = {
+           delete: "/v1.0/api/metadata/user"
+        };
+    }
+
+
+
+}

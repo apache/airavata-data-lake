@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+package org.apache.airavata.datalake.metadata.service;
+
+import "google/api/annotations.proto";
+
+
+
+message MetadataServiceAuthToken {
+    string access_token = 1;
+}

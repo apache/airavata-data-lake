@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+package org.apache.airavata.datalake.metadata.service;
+
+import "google/api/annotations.proto";
+import "common/Common.proto";
+import "group/Group.proto";
+import "resource/Resource.proto";
+import "user/User.proto";
+
+
+message TenantMetadataAPIRequest {
+    Tenant tenant = 1;
+    MetadataServiceAuthToken auth_token = 2;
+    string source = 3;
+}
+
+message TenantMetadataAPIResponse {
+    bool status = 1;
+}
+
+
+message Tenant {
+    string tenant_id = 1;
+    string domain = 2;
+    string name = 3;
+    string requester_email = 4;
+    string scope = 5;
+    repeated string redirect_uris = 6;
+    map<string, string> properties = 7;
+    repeated Group groups = 8;
+    int64 created_at = 9;
+    int64 last_modified_at = 10;
+    repeated User users = 11;
+    repeated Resource resources = 12;
+
+}
+
+
+service TenantMetadataService {
+
+    rpc createTenant (TenantMetadataAPIRequest) returns (TenantMetadataAPIResponse) {
+        option (google.api.http) = {
+           post: "/v1.0/api/metadata/tenant"
+        };
+    }
+
+    rpc getTenant (TenantMetadataAPIRequest) returns (Tenant) {
+        option (google.api.http) = {
+           get: "/v1.0/api/metadata/tenant"
+        };
+    }
+
+    rpc updateTenant (TenantMetadataAPIRequest) returns (TenantMetadataAPIResponse) {
+        option (google.api.http) = {
+           put: "/v1.0/api/metadata/tenant"
+        };
+    }
+
+    rpc deleteTenant (TenantMetadataAPIRequest) returns (TenantMetadataAPIResponse) {
+        option (google.api.http) = {
+           delete: "/v1.0/api/metadata/tenant"
+        };
+    }
+
+}
