@@ -10,19 +10,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>db-service</artifactId>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>db-service-server</module>
-        <module>db-service-client</module>
-        <module>db-service-stub</module>
-    </modules>
+    <artifactId>client</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.airavata.data.lake</groupId>
+            <artifactId>stub</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>
