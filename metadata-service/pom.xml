@@ -12,7 +12,10 @@
     <artifactId>metadata-service</artifactId>
     <packaging>pom</packaging>
 
-
+    <modules>
+        <module>db-service</module>
+        <module>data-builders</module>
+    </modules>
     <dependencies>
 
         <dependency>

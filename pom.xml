@@ -31,9 +31,7 @@
     <modules>
         <module>data-orchestrator</module>
         <module>metadata-service</module>
-        <module>metadata-service/db-service/server</module>
-        <module>metadata-service/db-service/stub</module>
-        <module>metadata-service/db-service/client</module>
+        <module>data-resource-management-service</module>
     </modules>
 
     <parent>

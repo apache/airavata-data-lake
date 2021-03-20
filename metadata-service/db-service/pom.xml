@@ -14,9 +14,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>db-service-server</module>
-        <module>db-service-client</module>
-        <module>db-service-stub</module>
+        <module>client</module>
+        <module>server</module>
+        <module>stub</module>
     </modules>
 
     <properties>
