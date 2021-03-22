@@ -101,6 +101,11 @@ public class Tenant extends Entity {
         this.entities.add(entity);
     }
 
+    @Override
+    public String getSearchableId() {
+        return this.getName()+"@"+this.getTenantId();
+    }
+
     public void add(Entity entity, long relationShipCreatedAt, long relationShipModifiedAt,
                     Map<String, String> relationshipProperties) {
 

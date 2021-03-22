@@ -35,6 +35,8 @@ public abstract class Entity {
     @Property(name = "tenant_id")
     private String tenantId;
 
+
+
     public Long getId() {
         return id;
     }
@@ -105,5 +107,10 @@ public abstract class Entity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+
+    public String getSearchableId() {
+        return primaryExternalKey+"@"+tenantId;
     }
 }

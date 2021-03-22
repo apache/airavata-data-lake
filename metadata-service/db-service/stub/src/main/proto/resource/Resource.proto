@@ -47,12 +47,13 @@ message ResourceSharings {
     string shared_entity_id = 1;
     string shared_entity_type = 2;
     string sharing_type = 3;
-    map<string, string> properties = 4;
-    int64 created_at = 5;
-    int64 last_modified_at = 6;
-    string resource_id = 7;
-    repeated User users = 8;
-    repeated Group groups = 9;
+    string permission_type = 4;
+    map<string, string> properties = 5;
+    int64 created_at = 6;
+    int64 last_modified_at = 7;
+    string resource_id = 8;
+    repeated User users = 9;
+    repeated Group groups = 10;
 }
 
 

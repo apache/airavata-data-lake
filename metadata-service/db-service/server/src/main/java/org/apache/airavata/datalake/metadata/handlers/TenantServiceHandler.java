@@ -33,7 +33,8 @@ public class TenantServiceHandler extends TenantMetadataServiceGrpc.TenantMetada
         try {
             Tenant tenant = request.getTenant();
             org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Tenant parsedTenant =
-                    tenantParser.parseTenant(tenant);
+                    (org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Tenant)
+                            tenantParser.parse(tenant);
 
             TenantServiceImpl tenantService = new TenantServiceImpl(connector);
             tenantService.createOrUpdate(parsedTenant);
