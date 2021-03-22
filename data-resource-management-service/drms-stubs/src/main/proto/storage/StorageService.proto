@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+package org.apache.airavata.datalake.drms.storage;
+
+import "google/api/annotations.proto";
+import "Common.proto";
+import "storage/SSHStorage.proto";
+import "storage/S3Storage.proto";
+import "google/protobuf/empty.proto";
+
+message AnyStorage {
+  oneof storage {
+    org.apache.airavata.datalake.drms.storage.ssh.SSHStorage sshStorage = 1;
+    org.apache.airavata.datalake.drms.storage.s3.S3Storage s3Storage = 2;
+  }
+}
+message StorageFetchRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  string storageId = 2;
+}
+
+message StorageFetchResponse {
+    AnyStorage storage = 1;
+}
+
+message StorageCreateRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  AnyStorage storage = 2;
+}
+
+message StorageCreateResponse {
+  AnyStorage storage = 1;
+}
+
+message StorageUpdateRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  string storageId = 2;
+  AnyStorage storage = 3;
+}
+
+message StorageUpdateResponse {
+  AnyStorage storage = 1;
+}
+
+message StorageDeleteRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  string storageId = 2;
+}
+
+message StorageSearchQuery {
+  string field = 1;
+  string value = 2;
+  string options = 3; // LIKE, NOT, EQUALS, GREATER, LESS
+}
+
+message StorageSearchRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  repeated StorageSearchQuery queries = 2;
+}
+
+message StorageSearchResponse {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  repeated AnyStorage storages = 2;
+}
+
+service StorageService {
+
+  rpc fetchStorage (StorageFetchRequest) returns (StorageFetchResponse) {
+    option (google.api.http) = {
+      get: "/v1.0/api/drms/storage"
+    };
+  }
+
+  rpc createStorage (StorageCreateRequest) returns (StorageCreateResponse) {
+    option (google.api.http) = {
+      post: "/v1.0/api/drms/storage"
+    };
+  }
+
+  rpc updateStorage (StorageUpdateRequest) returns (StorageUpdateResponse) {
+    option (google.api.http) = {
+      put: "/v1.0/api/drms/storage"
+    };
+  }
+
+  rpc deleteStorage (StorageDeleteRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1.0/api/drms/storage"
+    };
+  }
+
+  rpc searchStorage (StorageSearchRequest) returns (StorageSearchResponse) {
+    option (google.api.http) = {
+      post: "/v1.0/api/drms/storage/search"
+    };
+  }
+}

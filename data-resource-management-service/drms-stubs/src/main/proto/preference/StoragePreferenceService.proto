@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+package org.apache.airavata.datalake.drms.storage;
+
+import "google/api/annotations.proto";
+import "Common.proto";
+import "preference/SSHPreference.proto";
+import "preference/S3Preference.proto";
+import "google/protobuf/empty.proto";
+
+message AnyStoragePreference {
+  oneof storage {
+    org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference sshStoragePreference = 1;
+    org.apache.airavata.datalake.drms.storage.preference.s3.S3StoragePreference s3StoragePreference = 2;
+  }
+}
+message StoragePreferenceFetchRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  string storagePreferenceId = 2;
+}
+
+message StoragePreferenceFetchResponse {
+  AnyStoragePreference storagePreference = 1;
+}
+
+message StoragePreferenceCreateRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  AnyStoragePreference storagePreference = 2;
+}
+
+message StoragePreferenceCreateResponse {
+  AnyStoragePreference storagePreference = 1;
+}
+
+message StoragePreferenceUpdateRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  string storagePreferenceId = 2;
+  AnyStoragePreference storagePreference = 3;
+}
+
+message StoragePreferenceUpdateResponse {
+  AnyStoragePreference storagePreference = 1;
+}
+
+message StoragePreferenceDeleteRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  string storagePreferenceId = 2;
+}
+
+message StoragePreferenceSearchQuery {
+  string field = 1;
+  string value = 2;
+  string options = 3; // LIKE, NOT, EQUALS, GREATER, LESS
+}
+
+message StoragePreferenceSearchRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  repeated StoragePreferenceSearchQuery queries = 2;
+}
+
+message StoragePreferenceSearchResponse {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  repeated AnyStoragePreference storagesPreference = 2;
+}
+
+service StoragePreferenceService {
+
+  rpc fetchStoragePreference (StoragePreferenceFetchRequest) returns (StoragePreferenceFetchResponse) {
+    option (google.api.http) = {
+      get: "/v1.0/api/drms/storagePreference"
+    };
+  }
+
+  rpc createStoragePreference (StoragePreferenceCreateRequest) returns (StoragePreferenceCreateResponse) {
+    option (google.api.http) = {
+      post: "/v1.0/api/drms/storagePreference"
+    };
+  }
+
+  rpc updateStoragePreference (StoragePreferenceUpdateRequest) returns (StoragePreferenceUpdateResponse) {
+    option (google.api.http) = {
+      put: "/v1.0/api/drms/storagePreference"
+    };
+  }
+
+  rpc deletePreferenceStorage (StoragePreferenceDeleteRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1.0/api/drms/storagePreference"
+    };
+  }
+
+  rpc searchStoragePreference (StoragePreferenceSearchRequest) returns (StoragePreferenceSearchResponse) {
+    option (google.api.http) = {
+      post: "/v1.0/api/drms/storagePreference/searchPreference"
+    };
+  }
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+package org.apache.airavata.datalake.drms.resource;
+
+import "google/api/annotations.proto";
+import "preference/S3Preference.proto";
+import "preference/SSHPreference.proto";
+
+message GenericResource {
+  string resourceId = 1;
+  string resourcePath = 2;
+  oneof storagePreference {
+    org.apache.airavata.datalake.drms.storage.preference.s3.S3StoragePreference s3Preference = 3;
+    org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference sshPreference = 4;
+  }
+}

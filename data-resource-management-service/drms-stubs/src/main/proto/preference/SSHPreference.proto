@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+package org.apache.airavata.datalake.drms.storage.preference.ssh;
+
+import "google/api/annotations.proto";
+import "storage/SSHStorage.proto";
+
+message SSHStoragePreference {
+  string storagePreferenceId = 1;
+  string credentialToken = 2;
+  string userName = 3;
+  enum AuthType {
+    SSH_KEY = 0;
+    PASSWORD = 1;
+    OPEN = 2;
+  }
+  AuthType authType = 4;
+  org.apache.airavata.datalake.drms.storage.ssh.SSHStorage storage = 5;
+}

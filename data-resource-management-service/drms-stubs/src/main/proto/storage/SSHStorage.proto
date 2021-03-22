@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+package org.apache.airavata.datalake.drms.storage.ssh;
+
+import "google/api/annotations.proto";
+
+message SSHStorage {
+    string storageId = 1;
+    string hostName = 2;
+    int32 port = 3;
+}
