@@ -11,5 +11,17 @@
 
     <artifactId>drms-core</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-ogm-core</artifactId>
+            <version>3.2.20</version>
+        </dependency>
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-ogm-bolt-driver</artifactId>
+            <version>3.2.20</version>
+        </dependency>
+    </dependencies>
 
 </project>

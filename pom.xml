@@ -82,10 +82,18 @@
         <jmockit.version>1.8</jmockit.version>
         <java.version>11</java.version>
         <javax.annotation.version>1.3.2</javax.annotation.version>
-        <maven.compiler.plugin>3.8.1</maven.compiler.plugin>
 
+        <maven.compiler.plugin>3.8.1</maven.compiler.plugin>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+
+        <!-- Grpc / protobuf dependencies -->
         <protobuf.maven.plugin>0.5.1</protobuf.maven.plugin>
         <os.maven.plugin>1.5.0.Final</os.maven.plugin>
+        <protobuf.java>3.10.0</protobuf.java>
+        <grpc.spring.boot>3.5.1</grpc.spring.boot>
+        <spring.boot.data.jpa>2.2.1.RELEASE</spring.boot.data.jpa>
+        <dozer>5.5.1</dozer>
 
         <!-- Spring dependencies -->
         <spring.boot.version>2.4.2</spring.boot.version>
