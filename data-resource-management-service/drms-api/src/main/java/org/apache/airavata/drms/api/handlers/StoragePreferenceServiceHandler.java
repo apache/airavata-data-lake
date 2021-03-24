@@ -65,7 +65,8 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
         User callUser = getUser(request.getAuthToken());
 
         List<Record> records = this.neo4JConnector.searchNodes(
-                "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage)-[r3:HAS_PREFERENCE]->(sp:StoragePreference) " +
+                "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage)-[r3:HAS_PREFERENCE]->(sp:StoragePreference), " +
+                        "(u)-[r4:MEMBER_OF]->(g2:Group)<-[r5:SHARED_WITH]-(sp) " +
                         "where sp.storagePreferenceId = '" + request.getStoragePreferenceId() + "' and u.userId = '"
                         + callUser.getUserId() + "' return distinct sp, s");
 
@@ -108,7 +109,8 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
         User callUser = getUser(request.getAuthToken());
 
         List<Record> records = this.neo4JConnector.searchNodes(
-                "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage)-[r3:HAS_PREFERENCE]->(sp:StoragePreference)" +
+                "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage)-[r3:HAS_PREFERENCE]->(sp:StoragePreference), " +
+                        "(u)-[r4:MEMBER_OF]->(g2:Group)<-[r5:SHARED_WITH]-(sp)" +
                         " where u.userId ='" + callUser.getUserId() + "' return distinct sp, s");
         try {
             List<AnyStoragePreference> storagePrefList = AnyStoragePreferenceDeserializer.deserializeList(records);

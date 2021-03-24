@@ -72,8 +72,29 @@ message ResourceSearchRequest {
 
 message ResourceSearchResponse {
   org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
-  repeated org.apache.airavata.datalake.drms.resource.GenericResource storagesPreference = 2;
+  repeated org.apache.airavata.datalake.drms.resource.GenericResource resources = 2;
 }
+
+message Metadata {
+  string key = 1;
+  string value = 2;
+}
+
+message AddResourceMetadataRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  string resourceId = 2;
+  Metadata metadata = 3;
+}
+
+message FetchResourceMetadataRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  string resourceId = 2;
+}
+
+message FetchResourceMetadataResponse {
+  repeated Metadata metadata = 1;
+}
+
 
 service ResourceService {
 
@@ -104,6 +125,18 @@ service ResourceService {
   rpc searchResource (ResourceSearchRequest) returns (ResourceSearchResponse) {
     option (google.api.http) = {
       post: "/v1.0/api/drms/resource/searchPreference"
+    };
+  }
+
+  rpc addResourceMetadata (AddResourceMetadataRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1.0/api/drms/resource/metadata"
+    };
+  }
+
+  rpc fetchResourceMetadata (FetchResourceMetadataRequest) returns (FetchResourceMetadataResponse) {
+    option (google.api.http) = {
+      get: "/v1.0/api/drms/resource/metadata"
     };
   }
 }

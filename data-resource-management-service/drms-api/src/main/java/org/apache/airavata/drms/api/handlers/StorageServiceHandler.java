@@ -113,6 +113,8 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
         this.neo4JConnector.createMetadataNode(StorageConstants.STORAGE_LABEL, "storageId",
                 request.getStorageId(), callUser.getUserId(),
                 request.getKey(), request.getValue());
+        responseObserver.onNext(Empty.getDefaultInstance());
+        responseObserver.onCompleted();
     }
 
     @Override
