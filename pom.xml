@@ -94,6 +94,7 @@
         <grpc.spring.boot>3.5.1</grpc.spring.boot>
         <spring.boot.data.jpa>2.2.1.RELEASE</spring.boot.data.jpa>
         <dozer>5.5.1</dozer>
+        <grpc.services>1.25.0</grpc.services>
 
         <!-- Spring dependencies -->
         <spring.boot.version>2.4.2</spring.boot.version>
@@ -146,7 +147,10 @@
 
         <com.codahale.version>0.7.0</com.codahale.version>
 
+        <neo4j.ogm.version>3.2.20</neo4j.ogm.version>
+        <neo4j.version>3.4.6</neo4j.version>
 
+        <log4j.over.slf4j>1.7.26</log4j.over.slf4j>
     </properties>
 
 </project>

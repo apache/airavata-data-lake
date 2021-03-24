@@ -18,20 +18,29 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-package org.apache.airavata.datalake.drms.storage.preference.ssh;
+package org.apache.airavata.datalake.drms.groups;
 
 import "google/api/annotations.proto";
-import "storage/SSHStorage.proto";
 
-message SSHStoragePreference {
-  string storagePreferenceId = 1;
-  string credentialToken = 2;
-  string userName = 3;
-  enum AuthType {
-    SSH_KEY = 0;
-    PASSWORD = 1;
-    OPEN = 2;
-  }
-  AuthType authType = 4;
-  org.apache.airavata.datalake.drms.storage.ssh.SSHStorage storage = 5;
+message User {
+    string userId = 1;
+    string username = 2;
+    string firstName = 3;
+    string lastName = 4;
+    string emailAddress = 5;
+}
+
+message Group {
+    string groupId = 1;
+    string name = 2;
+    string description = 3;
+    repeated Group childGroups = 4;
+    string parentGroupId = 5;
+    repeated GroupMembership groupMembership = 6;
+}
+
+message GroupMembership {
+    User user = 1;
+    string groupId = 2;
+    string membershipType = 3;
 }

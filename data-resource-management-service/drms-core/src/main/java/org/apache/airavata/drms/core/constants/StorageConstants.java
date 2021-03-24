@@ -14,24 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.apache.airavata.drms.core.constants;
 
-syntax = "proto3";
-
-option java_multiple_files = true;
-package org.apache.airavata.datalake.drms.storage.preference.ssh;
-
-import "google/api/annotations.proto";
-import "storage/SSHStorage.proto";
-
-message SSHStoragePreference {
-  string storagePreferenceId = 1;
-  string credentialToken = 2;
-  string userName = 3;
-  enum AuthType {
-    SSH_KEY = 0;
-    PASSWORD = 1;
-    OPEN = 2;
-  }
-  AuthType authType = 4;
-  org.apache.airavata.datalake.drms.storage.ssh.SSHStorage storage = 5;
+public final class StorageConstants {
+    public static final String STORAGE_LABEL = "Storage";
+    public static final String STORAGE_TYPE_LABEL = "type";
+    public static final String SSH_STORAGE_TYPE_LABEL = "SSH";
+    public static final String S3_STORAGE_TYPE_LABEL = "S3";
 }
