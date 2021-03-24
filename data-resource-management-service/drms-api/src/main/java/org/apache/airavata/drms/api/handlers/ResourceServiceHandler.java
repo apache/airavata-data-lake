@@ -32,6 +32,7 @@ import org.apache.airavata.drms.core.constants.ResourceConstants;
 import org.apache.airavata.drms.core.constants.StorageConstants;
 import org.apache.airavata.drms.core.deserializer.AnyStoragePreferenceDeserializer;
 import org.apache.airavata.drms.core.deserializer.GenericResourceDeserializer;
+import org.apache.airavata.drms.core.deserializer.MetadataDeserializer;
 import org.lognet.springboot.grpc.GRpcService;
 import org.neo4j.driver.Record;
 import org.slf4j.Logger;
@@ -140,6 +141,22 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
     @Override
     public void fetchResourceMetadata(FetchResourceMetadataRequest request, StreamObserver<FetchResourceMetadataResponse> responseObserver) {
-        super.fetchResourceMetadata(request, responseObserver);
+        User callUser = getUser(request.getAuthToken());
+        List<Record> records = neo4JConnector.searchNodes("match (u:User)-[MEMBER_OF]->(g:Group)<-[SHARED_WITH]-(res:Resource)-[r:HAS_METADATA]->(m:Metadata) " +
+                "where u.userId ='" + callUser.getUserId()+ "' and res.resourceId = '" + request.getResourceId() + "' return distinct m");
+        try {
+            List<MetadataNode> metadataNodes = MetadataDeserializer.deserializeList(records);
+            if (metadataNodes.size() == 1) {
+                responseObserver.onNext(FetchResourceMetadataResponse.newBuilder().setMetadataNode(metadataNodes.get(0)).build());
+                responseObserver.onCompleted();
+            } else {
+                logger.error("No metadata entry for resource {}", request.getResourceId());
+                responseObserver.onError(new Exception("No metadata entry for resource " + request.getResourceId()));
+            }
+        } catch (Exception e) {
+            logger.error("Errored while fetching metadata for resource with id {}", request.getResourceId(), e);
+            responseObserver.onError(new Exception("Errored while fetching metadata for resource with id "
+                    + request.getResourceId() + ". Msg " + e.getMessage()));
+        }
     }
 }
