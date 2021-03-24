@@ -15,21 +15,11 @@
  * limitations under the License.
  */
 
-syntax = "proto3";
+package org.apache.airavata.drms.core.constants;
 
-option java_multiple_files = true;
-package org.apache.airavata.datalake.drms.storage.preference.s3;
-
-import "google/api/annotations.proto";
-import "storage/S3Storage.proto";
-
-message S3StoragePreference {
-    string storagePreferenceId = 1;
-    string credentialToken = 2;
-    /*enum AuthType {
-        CLIENT_ID_SECRET_ID = 0;
-        OPEN = 2;
-    }*/
-    string authType = 3;
-    org.apache.airavata.datalake.drms.storage.s3.S3Storage storage = 4;
+public final class StoragePreferenceConstants {
+    public static final String STORAGE_PREFERENCE_LABEL = "StoragePreference";
+    public static final String STORAGE_PREFERENCE_TYPE_LABEL = "type";
+    public static final String SSH_STORAGE_PREFERENCE_TYPE_LABEL = "SSH";
+    public static final String S3_STORAGE_PREFERENCE_TYPE_LABEL = "S3";
 }

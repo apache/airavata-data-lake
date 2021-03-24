@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.airavata.drms.core.deserializer.storage;
+package org.apache.airavata.drms.core.deserializer;
 
 import org.apache.airavata.datalake.drms.storage.AnyStorage;
 import org.apache.airavata.datalake.drms.storage.s3.S3Storage;
@@ -46,7 +46,7 @@ public class AnyStorageDeserializer {
         return storageList;
     }
 
-    private static AnyStorage deriveStorageFromMap(Map<String, Object> fixedMap) throws Exception {
+    public static AnyStorage deriveStorageFromMap(Map<String, Object> fixedMap) throws Exception {
 
         Map<String, Object> asMap = new HashMap<>(fixedMap);
         AnyStorage.Builder anyStorageBuilder = AnyStorage.newBuilder();

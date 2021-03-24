@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.airavata.drms.core.serializer.storage;
+package org.apache.airavata.drms.core.serializer;
 
 import com.google.protobuf.Descriptors;
 import org.apache.airavata.datalake.drms.storage.AnyStorage;
