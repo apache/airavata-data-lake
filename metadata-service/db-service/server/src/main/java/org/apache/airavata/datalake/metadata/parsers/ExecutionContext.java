@@ -14,4 +14,8 @@ public class ExecutionContext {
     public void addNeo4JConvertedModels(String key, Object obj) {
         this.neo4JConvertedModels.put(key, obj);
     }
+
+    public Map<String, Object> getNeo4JConvertedModels() {
+        return neo4JConvertedModels;
+    }
 }

@@ -26,6 +26,20 @@ message ResourceMetadataAPIResponse {
     bool status = 1;
 }
 
+message ResourcePermissionRequest {
+    string username = 1;
+    string groupname = 2;
+    string permission_type = 3;
+    string tenant_id = 4;
+    string resource_name = 5;
+    map<string, string> resource_properties = 6;
+}
+
+message ResourcePermissionResponse {
+   bool accessible = 1;
+}
+
+
 
 message Resource {
     string tenant_id = 1;
@@ -92,6 +106,12 @@ service ResourceMetadataService {
     rpc deleteSharing (ResourceMetadataSharingRequest) returns (ResourceMetadataAPIResponse) {
         option (google.api.http) = {
            delete: "/v1.0/api/metadata/resource/sharings"
+        };
+    }
+
+    rpc hasAccess (ResourcePermissionRequest) returns (ResourcePermissionResponse) {
+        option (google.api.http) = {
+           get: "/v1.0/api/metadata/resource/permission"
         };
     }
 

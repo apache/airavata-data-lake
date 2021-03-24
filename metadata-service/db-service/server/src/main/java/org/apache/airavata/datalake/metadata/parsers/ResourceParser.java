@@ -5,6 +5,7 @@ import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Entity;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Group;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.User;
+import org.apache.airavata.datalake.metadata.mergers.Merger;
 import org.apache.airavata.datalake.metadata.service.ResourceSharings;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class ResourceParser implements Parser {
 
 
     @Override
-    public Entity parse(GeneratedMessageV3 entity, Entity parentEntity, ExecutionContext executionContext) {
+    public Resource parse(GeneratedMessageV3 entity, Entity parentEntity, ExecutionContext executionContext, Merger merger) {
         if (entity instanceof org.apache.airavata.datalake.metadata.service.Resource) {
             org.apache.airavata.datalake.metadata.service.Resource resource =
                     (org.apache.airavata.datalake.metadata.service.Resource) entity;
@@ -39,15 +40,19 @@ public class ResourceParser implements Parser {
                 newParentResource = dozerBeanMapper.map(resource,
                         org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource.class);
                 executionContext.addNeo4JConvertedModels(newParentResource.getSearchableId(), newParentResource);
+                newParentResource.setExecutionContext(executionContext);
             } else {
                 newParentResource = (Resource) parentEntity;
+
                 Resource childResource = dozerBeanMapper.map(resource,
                         org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource.class);
                 executionContext.addNeo4JConvertedModels(newParentResource.getSearchableId(), newParentResource);
+
                 newParentResource.addChildResource(childResource,
                         childResource.getCreatedAt() != 0 ? childResource.getCreatedAt() : System.currentTimeMillis(),
                         childResource.getLastModifiedAt() != 0 ? childResource.getLastModifiedAt() : System.currentTimeMillis(),
-                        null); // Improve this with relatioship properties
+                        null); // Improve this with relationship properties
+                childResource.setExecutionContext(executionContext);
                 newParentResource = childResource;
             }
 
@@ -102,7 +107,7 @@ public class ResourceParser implements Parser {
             if (!resources.isEmpty()) {
                 Resource finalNewParentResource = newParentResource;
                 resources.forEach(gr -> {
-                    this.parse(gr, finalNewParentResource, executionContext);
+                    this.parse(gr, finalNewParentResource, executionContext, merger);
                 });
             }
             return newParentResource;
@@ -115,11 +120,16 @@ public class ResourceParser implements Parser {
 
     @Override
     public Entity parse(GeneratedMessageV3 entity, ExecutionContext executionContext) {
-        return this.parse(entity, null, executionContext);
+        return this.parse(entity, null, executionContext, null);
     }
 
     @Override
     public Entity parse(GeneratedMessageV3 entity) {
-        return this.parse(entity, null, new ExecutionContext());
+        return this.parse(entity, null, new ExecutionContext(),null);
+    }
+
+    @Override
+    public Entity parseAndMerge(GeneratedMessageV3 entity) {
+        return null;
     }
 }

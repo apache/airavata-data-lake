@@ -11,4 +11,6 @@ public class Neo4JServiceInitializer {
     public static void main(String[] args) {
         SpringApplication.run(Neo4JServiceInitializer.class, args);
     }
+
+
 }

@@ -37,6 +37,10 @@ message Tenant {
 
 }
 
+message FindTenantResponse {
+    repeated Tenant tenants = 1;
+}
+
 
 service TenantMetadataService {
 
@@ -46,7 +50,7 @@ service TenantMetadataService {
         };
     }
 
-    rpc getTenant (TenantMetadataAPIRequest) returns (Tenant) {
+    rpc getTenant (TenantMetadataAPIRequest) returns (FindTenantResponse) {
         option (google.api.http) = {
            get: "/v1.0/api/metadata/tenant"
         };

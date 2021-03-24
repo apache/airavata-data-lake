@@ -1,6 +1,7 @@
 package org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes;
 
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.relationships.Has;
+import org.apache.airavata.datalake.metadata.parsers.ExecutionContext;
 import org.neo4j.ogm.annotation.*;
 
 import java.util.HashMap;
@@ -34,6 +35,9 @@ public abstract class Entity {
 
     @Property(name = "tenant_id")
     private String tenantId;
+
+    @Transient
+    private ExecutionContext executionContext;
 
 
 
@@ -112,5 +116,13 @@ public abstract class Entity {
 
     public String getSearchableId() {
         return primaryExternalKey+"@"+tenantId;
+    }
+
+    public ExecutionContext getExecutionContext() {
+        return executionContext;
+    }
+
+    public void setExecutionContext(ExecutionContext executionContext) {
+        this.executionContext = executionContext;
     }
 }

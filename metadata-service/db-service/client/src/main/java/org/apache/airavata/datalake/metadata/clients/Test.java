@@ -101,7 +101,36 @@ public class Test {
                 .setTenant(tenant)
                 .build();
 
-        stub.createTenant(request);
+//        stub.createTenant(request);
+//
+
+//        ResourceMetadataServiceGrpc.ResourceMetadataServiceBlockingStub resourceMetadataServiceBlockingStub = serviceClient.resource();
+//
+//        ResourcePermissionRequest permissionRequest = ResourcePermissionRequest
+//                .newBuilder()
+//                .setPermissionType("READ")
+//                .setUsername("TestingUserA")
+//                .setResourceName("R5")
+//                .setTenantId("100010402")
+//                .build();
+//      ResourcePermissionResponse response =   resourceMetadataServiceBlockingStub.hasAccess(permissionRequest);
+
+
+//        TenantMetadataAPIRequest tenantMetadataAPIRequest = TenantMetadataAPIRequest
+//                .newBuilder()
+//                .setTenant(tenant)
+//                .build();
+//
+//        stub.deleteTenant(tenantMetadataAPIRequest);
+
+        tenant = tenant.toBuilder().setDomain("testing.com").build();
+
+
+        TenantMetadataAPIRequest tenantMetadataAPIRequest = TenantMetadataAPIRequest
+                .newBuilder()
+                .setTenant(tenant)
+                .build();
+        stub.updateTenant(tenantMetadataAPIRequest);
 
     }
 }

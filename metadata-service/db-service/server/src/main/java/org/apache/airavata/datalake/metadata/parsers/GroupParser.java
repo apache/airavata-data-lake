@@ -4,6 +4,7 @@ import com.google.protobuf.GeneratedMessageV3;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Entity;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Group;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.User;
+import org.apache.airavata.datalake.metadata.mergers.Merger;
 import org.apache.airavata.datalake.metadata.service.GroupMembership;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class GroupParser implements Parser {
 
 
     @Override
-    public Entity parse(GeneratedMessageV3 entity, Entity parentEntity, ExecutionContext executionContext) {
+    public Group parse(GeneratedMessageV3 entity, Entity parentEntity, ExecutionContext executionContext, Merger merger) {
         if (entity instanceof org.apache.airavata.datalake.metadata.service.Group) {
             org.apache.airavata.datalake.metadata.service.Group group = (org.apache.airavata.datalake.metadata.service.Group) entity;
             Group newParentGroup = null;
@@ -31,6 +32,7 @@ public class GroupParser implements Parser {
                         org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Group.class);
                 LOGGER.info("Creating group "+ newParentGroup.getName() + " class"+ newParentGroup.toString());
                 executionContext.addNeo4JConvertedModels(newParentGroup.getSearchableId(),newParentGroup);
+                newParentGroup.setExecutionContext(executionContext);
             } else if (parentEntity != null){
                 newParentGroup = (Group) parentEntity;
                 Group childGroup = dozerBeanMapper.map(group,
@@ -41,7 +43,7 @@ public class GroupParser implements Parser {
                         childGroup.getCreatedAt() != 0 ? childGroup.getCreatedAt() : System.currentTimeMillis(),
                         childGroup.getLastModifiedAt() != 0 ? childGroup.getLastModifiedAt() : System.currentTimeMillis(),
                         null); // Improve this with relatioship propertie
-
+                childGroup.setExecutionContext(executionContext);
                 newParentGroup = childGroup;
             }
 
@@ -66,7 +68,7 @@ public class GroupParser implements Parser {
 
                 Group finalNewParentGroup = newParentGroup;
                 groups.forEach(gr -> {
-                    this.parse(gr, finalNewParentGroup, executionContext);
+                    this.parse(gr, finalNewParentGroup, executionContext,merger);
                 });
             }
 
@@ -80,11 +82,16 @@ public class GroupParser implements Parser {
 
     @Override
     public Entity parse(GeneratedMessageV3 entity, ExecutionContext executionContext) {
-        return this.parse(entity,null, executionContext);
+        return this.parse(entity,null, executionContext,null);
     }
 
     @Override
     public Entity parse(GeneratedMessageV3 entity) {
-        return this.parse(entity,null,new ExecutionContext());
+        return this.parse(entity,null,new ExecutionContext(),null);
+    }
+
+    @Override
+    public Entity parseAndMerge(GeneratedMessageV3 entity) {
+        return null;
     }
 }

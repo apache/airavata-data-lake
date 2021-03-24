@@ -1,15 +1,18 @@
 package org.apache.airavata.datalake.metadata;
 
+import io.grpc.ServerInterceptor;
 import org.apache.airavata.datalake.metadata.backend.Connector;
-import org.apache.airavata.datalake.metadata.backend.neo4j.curd.operators.ResourceServiceImpl;
-import org.apache.airavata.datalake.metadata.backend.neo4j.curd.operators.SearchOperator;
 import org.apache.airavata.datalake.metadata.backend.neo4j.curd.operators.TenantServiceImpl;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Group;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Tenant;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.User;
+import org.apache.airavata.datalake.metadata.interceptors.Authenticator;
+import org.apache.airavata.datalake.metadata.interceptors.InterceptorPipelineExecutor;
+import org.apache.airavata.datalake.metadata.interceptors.ServiceInterceptor;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
+import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
 import org.slf4j.Logger;
@@ -18,8 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 
 @Configuration
@@ -132,26 +134,37 @@ public class AppConfig {
         tenant.add(resource, 0, 0, null);
 
         TenantServiceImpl tenantService = new TenantServiceImpl(connector);
-        tenantService.createOrUpdate(tenant);
+//        tenantService.createOrUpdate(tenant);
 
         Filter filter = new Filter("name", ComparisonOperator.EQUALS, "R3");
 
-        ResourceServiceImpl resourceService = new ResourceServiceImpl(connector);
-        SearchOperator searchOperator = new SearchOperator();
-        searchOperator.setKey("name");
-        searchOperator.setValue("R2");
-        searchOperator.setComparisonOperator(ComparisonOperator.EQUALS);
-        List searchList = new ArrayList<>();
-        searchList.add(searchOperator);
-        List<Resource> collections = (List<Resource>) resourceService.search(searchList);
-        LOGGER.info("Size", collections.size());
-        for (Resource collection : collections) {
-            LOGGER.info("#############" + collection.getName() + "Created At" + collection.getCreatedAt());
-        }
+//        ResourceServiceImpl resourceService = new ResourceServiceImpl(connector);
+//        SearchOperator searchOperator = new SearchOperator();
+//        searchOperator.setKey("name");
+//        searchOperator.setValue("R2");
+//        searchOperator.setComparisonOperator(ComparisonOperator.EQUALS);
+//        List searchList = new ArrayList<>();
+//        searchList.add(searchOperator);
+//        List<Resource> collections = (List<Resource>) resourceService.search(searchList);
+//        LOGGER.info("Size", collections.size());
+//        for (Resource collection : collections) {
+//            LOGGER.info("#############" + collection.getName() + "Created At" + collection.getCreatedAt());
+//        }
 
 
         return tenant;
     }
 
+    @Bean
+    public Stack<ServiceInterceptor> getInterceptorSet(Authenticator authInterceptor) {
+        Stack<ServiceInterceptor> interceptors = new Stack<>();
+        interceptors.add(authInterceptor);
+        return interceptors;
+    }
 
+    @Bean
+    @GRpcGlobalInterceptor
+    ServerInterceptor validationInterceptor(Stack<ServiceInterceptor> integrationServiceInterceptors) {
+        return new InterceptorPipelineExecutor(integrationServiceInterceptors);
+    }
 }
