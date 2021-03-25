@@ -129,4 +129,9 @@ public class User extends Entity {
     public void addAccessibleResources(HasAccess accessibleResources) {
         this.accessibleResources.add(accessibleResources);
     }
+
+    @Override
+    public String getSearchableId() {
+        return this.getUsername() + "@" + this.getTenantId();
+    }
 }

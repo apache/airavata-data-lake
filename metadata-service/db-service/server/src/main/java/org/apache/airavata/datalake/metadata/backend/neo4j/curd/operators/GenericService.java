@@ -9,14 +9,15 @@ import org.neo4j.ogm.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 
-public abstract class GenericService<T> implements Service<T> {
+public abstract class GenericService<T> implements Service<T>, Closeable {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -77,8 +78,8 @@ public abstract class GenericService<T> implements Service<T> {
     }
 
     @Override
-    public Iterable<Map<String, Object>> execute(String query) {
-        return session.query(query, Collections.EMPTY_MAP);
+    public Iterable<Map<String, Object>> execute(String query, Map<String, ?> parameterMap) {
+        return session.query(query, parameterMap);
     }
 
     @Override
@@ -87,4 +88,9 @@ public abstract class GenericService<T> implements Service<T> {
     }
 
     abstract Class<T> getEntityType();
+
+    @Override
+    public void close() throws IOException {
+        this.session.clear();
+    }
 }

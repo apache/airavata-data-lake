@@ -142,6 +142,11 @@ public class Group extends Entity {
         this.memberUsersInPointers = memberUsersInPointers;
     }
 
+    @Override
+    public String getSearchableId() {
+        return this.getName()+"@"+this.getTenantId();
+    }
+
     public void addChildUser(User user, String membership, long relationshipCreatedAt,
                              long relationshipModifiedAt, Map<String, String> relationshipProperties) {
         MemberOf memberOf = new MemberOf();

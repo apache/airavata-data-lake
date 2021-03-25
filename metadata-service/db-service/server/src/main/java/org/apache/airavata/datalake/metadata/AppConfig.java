@@ -1,17 +1,27 @@
 package org.apache.airavata.datalake.metadata;
 
+import io.grpc.ServerInterceptor;
 import org.apache.airavata.datalake.metadata.backend.Connector;
+import org.apache.airavata.datalake.metadata.backend.neo4j.curd.operators.TenantServiceImpl;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Group;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Tenant;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.User;
+import org.apache.airavata.datalake.metadata.interceptors.Authenticator;
+import org.apache.airavata.datalake.metadata.interceptors.InterceptorPipelineExecutor;
+import org.apache.airavata.datalake.metadata.interceptors.ServiceInterceptor;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
+import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
+import org.neo4j.ogm.cypher.ComparisonOperator;
+import org.neo4j.ogm.cypher.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Stack;
 
 
 @Configuration
@@ -25,7 +35,9 @@ public class AppConfig {
 
     @Bean
     public DozerBeanMapper dozerBeanMapper() {
+
         DozerBeanMapper mapper = new DozerBeanMapper();
+
         BeanMappingBuilder tenantMapping = new BeanMappingBuilder() {
             @Override
             protected void configure() {
@@ -39,6 +51,7 @@ public class AppConfig {
                 mapping(org.apache.airavata.datalake.metadata.service.Group.class, Group.class);
             }
         };
+
         BeanMappingBuilder resourceMapping = new BeanMappingBuilder() {
             @Override
             protected void configure() {
@@ -52,10 +65,12 @@ public class AppConfig {
                 mapping(org.apache.airavata.datalake.metadata.service.User.class, User.class);
             }
         };
+
         mapper.addMapping(tenantMapping);
         mapper.addMapping(groupMapping);
         mapper.addMapping(resourceMapping);
         mapper.addMapping(userMapping);
+
         return mapper;
     }
 
@@ -63,6 +78,7 @@ public class AppConfig {
     @Bean
     Tenant getTenant() {
         LOGGER.info("Calling get tenant############");
+
         Tenant tenant = new Tenant();
         tenant.setTenantId("123456789");
         tenant.setName("Tenant");
@@ -91,7 +107,6 @@ public class AppConfig {
         group.addChildGroup(group2, 0, 0, null);
         group2.addChildGroup(group3, 0, 0, null);
 
-
         Resource resource = new Resource();
         resource.setName("R1");
 
@@ -104,11 +119,9 @@ public class AppConfig {
         Resource resource3 = new Resource();
         resource3.setName("R4");
 
-
         group.addChildUser(user, "ADMIN", 0, 0, null);
         resource.addChildResource(resource1, 0, 0, null);
         resource.shareWithAUser(user, "READ", 0, 0, null);
-
 
         group2.addChildUser(user1, "ADMIN", 0, 0, null);
         group3.addChildUser(user2, "ADMIN", 0, 0, null);
@@ -120,13 +133,11 @@ public class AppConfig {
         tenant.add(group, 0, 0, null);
         tenant.add(resource, 0, 0, null);
 
-
-//        TenantServiceImpl tenantService = new TenantServiceImpl(connector);
+        TenantServiceImpl tenantService = new TenantServiceImpl(connector);
 //        tenantService.createOrUpdate(tenant);
-//
-//        Filter filter = new Filter("name", ComparisonOperator.EQUALS, "R3");
-//
-//
+
+        Filter filter = new Filter("name", ComparisonOperator.EQUALS, "R3");
+
 //        ResourceServiceImpl resourceService = new ResourceServiceImpl(connector);
 //        SearchOperator searchOperator = new SearchOperator();
 //        searchOperator.setKey("name");
@@ -142,8 +153,18 @@ public class AppConfig {
 
 
         return tenant;
-
     }
 
+    @Bean
+    public Stack<ServiceInterceptor> getInterceptorSet(Authenticator authInterceptor) {
+        Stack<ServiceInterceptor> interceptors = new Stack<>();
+        interceptors.add(authInterceptor);
+        return interceptors;
+    }
 
+    @Bean
+    @GRpcGlobalInterceptor
+    ServerInterceptor validationInterceptor(Stack<ServiceInterceptor> integrationServiceInterceptors) {
+        return new InterceptorPipelineExecutor(integrationServiceInterceptors);
+    }
 }

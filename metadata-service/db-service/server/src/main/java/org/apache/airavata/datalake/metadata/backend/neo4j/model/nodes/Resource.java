@@ -108,6 +108,11 @@ public class Resource extends Entity {
     }
 
     @Override
+    public String getSearchableId() {
+        return this.getName()+"@"+this.getTenantId();
+    }
+
+    @Override
     public Long getId() {
         return id;
     }
