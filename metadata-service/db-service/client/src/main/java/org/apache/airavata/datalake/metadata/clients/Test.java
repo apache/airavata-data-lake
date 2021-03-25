@@ -125,7 +125,6 @@ public class Test {
 
         tenant = tenant.toBuilder().setDomain("testing.com").build();
 
-
         TenantMetadataAPIRequest tenantMetadataAPIRequest = TenantMetadataAPIRequest
                 .newBuilder()
                 .setTenant(tenant)
