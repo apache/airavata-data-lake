@@ -1,4 +1,6 @@
 .idea/*
+*.iml
+*.iws
 airavata-data-lake.iml
 data-orchestrator/data-orchestrator.iml
 data-orchestrator/data-orchestrator-api/data-orchestrator-api.iml
