@@ -55,8 +55,8 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.boot.version}</version>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring.boot.data.jpa}</version>
         </dependency>
     </dependencies>
 

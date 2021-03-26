@@ -51,8 +51,8 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.boot.version}</version>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring.boot.data.jpa}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.dozer</groupId>
@@ -64,10 +64,10 @@
             <artifactId>drms-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.apache.custos</groupId>-->
-<!--            <artifactId>custos-java-sdk</artifactId>-->
-<!--            <version>${custos.clients.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.custos</groupId>
+            <artifactId>custos-java-sdk</artifactId>
+            <version>${custos.clients.version}</version>
+        </dependency>
     </dependencies>
 </project>

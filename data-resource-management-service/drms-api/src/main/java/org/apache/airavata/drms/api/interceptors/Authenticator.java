@@ -2,8 +2,12 @@ package org.apache.airavata.drms.api.interceptors;
 
 import io.grpc.Metadata;
 import org.apache.airavata.datalake.drms.storage.*;
+import org.apache.custos.clients.CustosClientProvider;
+import org.apache.custos.identity.management.client.IdentityManagementClient;
+import org.apache.custos.identity.service.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -13,22 +17,22 @@ import java.util.Optional;
 public class Authenticator implements ServiceInterceptor {
     private static final Logger LOGGER = LoggerFactory.getLogger(Authenticator.class);
 
-//    @Autowired
-//    private CustosClientProvider custosClientProvider;
+    @Autowired
+    private CustosClientProvider custosClientProvider;
 
 
     @Override
     public <ReqT> ReqT intercept(String method, Metadata headers, ReqT msg) throws IOException {
-//        IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
-//        Optional<String> token = getAccessToken(msg);
-//        User user = identityManagementClient.getUser(token.get());
-//        org.apache.airavata.datalake.drms.groups.User drmsUser = org.apache.airavata.datalake.drms.groups.User
-//                .newBuilder()
-//                .setUserId(user.getUsername())
-//                .setFirstName(user.getFirstName())
-//                .setLastName(user.getLastName())
-//                .setEmailAddress(user.getEmailAddress())
-//                .build();
+        IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
+        Optional<String> token = getAccessToken(msg);
+        User user = identityManagementClient.getUser(token.get());
+        org.apache.airavata.datalake.drms.groups.User drmsUser = org.apache.airavata.datalake.drms.groups.User
+                .newBuilder()
+                .setUserId(user.getUsername())
+                .setFirstName(user.getFirstName())
+                .setLastName(user.getLastName())
+                .setEmailAddress(user.getEmailAddress())
+                .build();
         return msg;
 
     }

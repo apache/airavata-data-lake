@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
 import java.util.Stack;
 
 @Configuration
@@ -25,16 +26,16 @@ public class Config {
     @org.springframework.beans.factory.annotation.Value("${neo4j.server.password}")
     public String neo4jServerPassword;
 
-    @Value("custos.id")
+    @Value("${custos.id}")
     private String custosId;
 
-    @Value("custos.secret")
+    @Value("${custos.secret}")
     private String custosSec;
 
-    @Value("custos.host")
+    @Value("${custos.host}")
     private String custosHost;
 
-    @Value("custos.port")
+    @Value("${custos.port}")
     private int custosPort;
 
     @Bean

@@ -13,9 +13,6 @@ message UserMetadataAPIRequest {
 }
 
 
-
-
-
 message UserMetadataAPIResponse {
     bool status = 1;
 }
