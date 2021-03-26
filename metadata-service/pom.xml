@@ -12,7 +12,10 @@
     <artifactId>metadata-service</artifactId>
     <packaging>pom</packaging>
 
-
+    <modules>
+        <module>db-service</module>
+        <module>data-builders</module>
+    </modules>
     <dependencies>
 
         <dependency>
@@ -52,18 +55,4 @@
             <version>${dozer}</version>
         </dependency>
     </dependencies>
-
-
-    <properties>
-        <protobuf.maven.plugin>0.5.1</protobuf.maven.plugin>
-        <os.maven.plugin>1.5.0.Final</os.maven.plugin>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <protobuf.java>3.10.0</protobuf.java>
-        <grpc.spring.boot>3.5.1</grpc.spring.boot>
-        <spring.boot.data.jpa>2.2.1.RELEASE</spring.boot.data.jpa>
-        <dozer>5.5.1</dozer>
-    </properties>
-
-
 </project>

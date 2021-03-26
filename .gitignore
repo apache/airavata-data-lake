@@ -7,3 +7,13 @@ target/
 data-orchestrator/target
 data-orchestrator/data-orchestrator-core/target
 data-orchestrator/data-orchestrator-api/target
+/data-resource-management-service/data-resource-management-service.iml
+/data-resource-management-service/drms-stubs/drms-stubs.iml
+/data-resource-management-service/drms-api/drms-api.iml
+/data-resource-management-service/drms-core/drms-core.iml
+/metadata-service/metadata-service.iml
+/metadata-service/data-builders/data-builders.iml
+/metadata-service/db-service/db-service.iml
+/metadata-service/db-service/client/client.iml
+/metadata-service/db-service/server/server.iml
+/metadata-service/db-service/stub/stub.iml

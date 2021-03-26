@@ -102,10 +102,16 @@ under the License.
       <module filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-api/data-orchestrator-api.iml"/>
       <module filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-core/data-orchestrator-core.iml"/>
       <module filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator.iml"/>
-      <module filepath="$PROJECT_DIR$/metadata-service/metadata-service.iml"/>
+      <module filepath="$PROJECT_DIR$/metadata-service/db-service/client/client.iml"/>
       <module filepath="$PROJECT_DIR$/metadata-service/db-service/server/server.iml"/>
       <module filepath="$PROJECT_DIR$/metadata-service/db-service/stub/stub.iml"/>
-      <module filepath="$PROJECT_DIR$/metadata-service/db-service/client/client.iml"/>
+      <module filepath="$PROJECT_DIR$/metadata-service/db-service/db-service.iml"/>
+      <module filepath="$PROJECT_DIR$/metadata-service/data-builders/data-builders.iml"/>
+      <module filepath="$PROJECT_DIR$/metadata-service/metadata-service.iml"/>
+      <module filepath="$PROJECT_DIR$/data-resource-management-service/drms-stubs/drms-stubs.iml"/>
+      <module filepath="$PROJECT_DIR$/data-resource-management-service/drms-core/drms-core.iml"/>
+      <module filepath="$PROJECT_DIR$/data-resource-management-service/drms-api/drms-api.iml"/>
+      <module filepath="$PROJECT_DIR$/data-resource-management-service/data-resource-management-service.iml"/>
     </modules> 
   </component>  
   <UsedPathMacros> 

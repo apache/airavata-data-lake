@@ -31,9 +31,7 @@
     <modules>
         <module>data-orchestrator</module>
         <module>metadata-service</module>
-        <module>metadata-service/db-service/server</module>
-        <module>metadata-service/db-service/stub</module>
-        <module>metadata-service/db-service/client</module>
+        <module>data-resource-management-service</module>
     </modules>
 
     <parent>
@@ -84,10 +82,19 @@
         <jmockit.version>1.8</jmockit.version>
         <java.version>11</java.version>
         <javax.annotation.version>1.3.2</javax.annotation.version>
-        <maven.compiler.plugin>3.8.1</maven.compiler.plugin>
 
+        <maven.compiler.plugin>3.8.1</maven.compiler.plugin>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+
+        <!-- Grpc / protobuf dependencies -->
         <protobuf.maven.plugin>0.5.1</protobuf.maven.plugin>
         <os.maven.plugin>1.5.0.Final</os.maven.plugin>
+        <protobuf.java>3.10.0</protobuf.java>
+        <grpc.spring.boot>3.5.1</grpc.spring.boot>
+        <spring.boot.data.jpa>2.2.1.RELEASE</spring.boot.data.jpa>
+        <dozer>5.5.1</dozer>
+        <grpc.services>1.25.0</grpc.services>
 
         <!-- Spring dependencies -->
         <spring.boot.version>2.4.2</spring.boot.version>
@@ -140,7 +147,12 @@
 
         <com.codahale.version>0.7.0</com.codahale.version>
 
+        <neo4j.ogm.version>3.2.20</neo4j.ogm.version>
+        <neo4j.version>3.4.6</neo4j.version>
 
+        <log4j.over.slf4j>1.7.26</log4j.over.slf4j>
+
+        <custos.clients.version>1.0-SNAPSHOT</custos.clients.version>
     </properties>
 
 </project>
