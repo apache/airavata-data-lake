@@ -51,8 +51,8 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.4.2</version>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring.boot.data.jpa}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.dozer</groupId>
@@ -60,9 +60,9 @@
             <version>${dozer}</version>
         </dependency>
         <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-services</artifactId>
-            <version>1.25.0</version>
+            <groupId>org.apache.custos</groupId>
+            <artifactId>custos-java-sdk</artifactId>
+            <version>${custos.clients.version}</version>
         </dependency>
     </dependencies>
 

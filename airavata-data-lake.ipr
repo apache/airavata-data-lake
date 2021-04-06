@@ -16,6 +16,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="commons" target="11" />
       <module name="drms-rest-proxy" target="11" />
     </bytecodeTargetLevel>
   </component>

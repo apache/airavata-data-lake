@@ -110,13 +110,13 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
     @Override
     public void searchResource(ResourceSearchRequest request, StreamObserver<ResourceSearchResponse> responseObserver) {
-        User callUser = getUser(request.getAuthToken());
+        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
         // TODO review (u)-[r4:MEMBER_OF]->(g2:Group)<-[r5:SHARED_WITH]-(sp),
         List<Record> records = this.neo4JConnector.searchNodes(
                 "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage)-[r3:HAS_PREFERENCE]->(sp:StoragePreference)-[r6:HAS_RESOURCE]->(res:Resource), " +
                         "(u)-[r7:MEMBER_OF]->(g3:Group)<-[r8:SHARED_WITH]-(res) " +
-                        "where u.userId = '" + callUser.getUserId() + "' return distinct res, sp, s");
+                        "where u.userId = '" + callUser.getUsername() + "' return distinct res, sp, s");
         try {
             List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
             ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
@@ -132,9 +132,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
     @Override
     public void addResourceMetadata(AddResourceMetadataRequest request, StreamObserver<Empty> responseObserver) {
-        User callUser = getUser(request.getAuthToken());
+        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
         this.neo4JConnector.createMetadataNode(ResourceConstants.RESOURCE_LABEL, "resourceId",
-                request.getResourceId(), callUser.getUserId(),
+                request.getResourceId(), callUser.getUsername(),
                 request.getMetadata().getKey(), request.getMetadata().getValue());
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
@@ -142,9 +142,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
     @Override
     public void fetchResourceMetadata(FetchResourceMetadataRequest request, StreamObserver<FetchResourceMetadataResponse> responseObserver) {
-        User callUser = getUser(request.getAuthToken());
+        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
         List<Record> records = neo4JConnector.searchNodes("match (u:User)-[MEMBER_OF]->(g:Group)<-[SHARED_WITH]-(res:Resource)-[r:HAS_METADATA]->(m:Metadata) " +
-                "where u.userId ='" + callUser.getUserId() + "' and res.resourceId = '" + request.getResourceId() + "' return distinct m");
+                "where u.userId ='" + callUser.getUsername() + "' and res.resourceId = '" + request.getResourceId() + "' return distinct m");
         try {
             List<MetadataNode> metadataNodes = MetadataDeserializer.deserializeList(records);
             if (metadataNodes.size() == 1) {

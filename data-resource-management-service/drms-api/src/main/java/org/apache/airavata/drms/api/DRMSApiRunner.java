@@ -26,6 +26,4 @@ public class DRMSApiRunner {
     public static void main(String[] args) {
         SpringApplication.run(DRMSApiRunner.class, args);
     }
-
-
 }

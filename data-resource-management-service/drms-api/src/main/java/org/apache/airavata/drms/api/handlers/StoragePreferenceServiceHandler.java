@@ -20,6 +20,7 @@ import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
+import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.groups.FetchCurrentUserRequest;
 import org.apache.airavata.datalake.drms.groups.FetchCurrentUserResponse;
@@ -62,13 +63,13 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
 
     @Override
     public void fetchStoragePreference(StoragePreferenceFetchRequest request, StreamObserver<StoragePreferenceFetchResponse> responseObserver) {
-        User callUser = getUser(request.getAuthToken());
+        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
         List<Record> records = this.neo4JConnector.searchNodes(
                 "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage)-[r3:HAS_PREFERENCE]->(sp:StoragePreference), " +
                         "(u)-[r4:MEMBER_OF]->(g2:Group)<-[r5:SHARED_WITH]-(sp) " +
                         "where sp.storagePreferenceId = '" + request.getStoragePreferenceId() + "' and u.userId = '"
-                        + callUser.getUserId() + "' return distinct sp, s");
+                        + callUser.getUsername() + "' return distinct sp, s");
 
         if (!records.isEmpty()) {
             try {
@@ -106,12 +107,12 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
 
     @Override
     public void searchStoragePreference(StoragePreferenceSearchRequest request, StreamObserver<StoragePreferenceSearchResponse> responseObserver) {
-        User callUser = getUser(request.getAuthToken());
+        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
         List<Record> records = this.neo4JConnector.searchNodes(
                 "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage)-[r3:HAS_PREFERENCE]->(sp:StoragePreference), " +
                         "(u)-[r4:MEMBER_OF]->(g2:Group)<-[r5:SHARED_WITH]-(sp)" +
-                        " where u.userId ='" + callUser.getUserId() + "' return distinct sp, s");
+                        " where u.userId ='" + callUser.getUsername() + "' return distinct sp, s");
         try {
             List<AnyStoragePreference> storagePrefList = AnyStoragePreferenceDeserializer.deserializeList(records);
             StoragePreferenceSearchResponse.Builder builder = StoragePreferenceSearchResponse.newBuilder();

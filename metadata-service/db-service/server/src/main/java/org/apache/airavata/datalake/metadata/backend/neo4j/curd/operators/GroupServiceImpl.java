@@ -1,7 +1,6 @@
 package org.apache.airavata.datalake.metadata.backend.neo4j.curd.operators;
 
 import org.apache.airavata.datalake.metadata.backend.Connector;
-import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Entity;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Group;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 
@@ -21,7 +20,7 @@ public class GroupServiceImpl extends GenericService<Group> implements GroupServ
     }
 
     @Override
-    public List<Group> find( Group group) {
+    public List<Group> find(Group group) {
         List<SearchOperator> searchOperatorList = new ArrayList<>();
         if (group.getTenantId() != null) {
             SearchOperator searchOperator = new SearchOperator();

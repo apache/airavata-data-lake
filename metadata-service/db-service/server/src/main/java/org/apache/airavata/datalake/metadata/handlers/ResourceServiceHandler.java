@@ -43,21 +43,31 @@ public class ResourceServiceHandler extends ResourceMetadataServiceGrpc.Resource
     public void getResource(ResourceMetadataAPIRequest request,
                             StreamObserver<Resource> responseObserver) {
         try {
-
+            AuthenticatedUser authenticatedUser = request.getAuthToken().getAuthenticatedUser();
             ResourceServiceImpl resourceService = new ResourceServiceImpl(connector);
             Resource resource = request.getResource();
-            org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource backRes = dozerBeanMapper
-                    .map(resource, org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource.class);
-            List<org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource> resourceList =
-                    resourceService.find(backRes);
-            Resource  foundResource = Resource
-            .newBuilder()
-                    .setName(resourceList.get(0).getName())
-                    .setCreatedAt(resourceList.get(0).getCreatedAt())
-                    .setTenantId(resourceList.get(0).getTenantId())
-                    .build();
-            responseObserver.onNext(foundResource);
-            responseObserver.onCompleted();
+            boolean accessible = resourceService.hasAccess(authenticatedUser.getUsername(),
+                    resource.getName(), "READ",
+                    resource.getTenantId());
+
+            //TODO: move to full query
+            if(accessible) {
+                org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource backRes = dozerBeanMapper
+                        .map(resource, org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource.class);
+                List<org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource> resourceList =
+                        resourceService.find(backRes);
+                Resource foundResource = Resource
+                        .newBuilder()
+                        .setName(resourceList.get(0).getName())
+                        .setCreatedAt(resourceList.get(0).getCreatedAt())
+                        .setTenantId(resourceList.get(0).getTenantId())
+                        .build();
+                responseObserver.onNext(foundResource);
+                responseObserver.onCompleted();
+            } else {
+                responseObserver.onNext(null);
+                responseObserver.onCompleted();
+            }
 
         } catch (Exception ex) {
             String msg = "Exception occurred while fetching tenant " + ex;

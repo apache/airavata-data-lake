@@ -20,6 +20,7 @@ import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
+import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.groups.FetchCurrentUserRequest;
 import org.apache.airavata.datalake.drms.groups.FetchCurrentUserResponse;
@@ -27,8 +28,8 @@ import org.apache.airavata.datalake.drms.groups.GroupServiceGrpc;
 import org.apache.airavata.datalake.drms.groups.User;
 import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.airavata.drms.core.Neo4JConnector;
-import org.apache.airavata.drms.core.deserializer.AnyStorageDeserializer;
 import org.apache.airavata.drms.core.constants.StorageConstants;
+import org.apache.airavata.drms.core.deserializer.AnyStorageDeserializer;
 import org.apache.airavata.drms.core.serializer.AnyStorageSerializer;
 import org.lognet.springboot.grpc.GRpcService;
 import org.neo4j.driver.Record;
@@ -65,11 +66,11 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
     @Override
     public void fetchStorage(StorageFetchRequest request, StreamObserver<StorageFetchResponse> responseObserver) {
 
-        User callUser = getUser(request.getAuthToken());
+        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
         List<Record> records = this.neo4JConnector.searchNodes(
                 "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage) where " +
-                        "s.storageId = '" + request.getStorageId() + "' and u.userId = '" + callUser.getUserId() +
+                        "s.storageId = '" + request.getStorageId() + "' and u.userId = '" + callUser.getUsername() +
                         "' return distinct s");
 
         if (!records.isEmpty()) {
@@ -109,9 +110,9 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
     @Override
     public void addStorageMetadata(AddStorageMetadataRequest request, StreamObserver<Empty> responseObserver) {
-        User callUser = getUser(request.getAuthToken());
+        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
         this.neo4JConnector.createMetadataNode(StorageConstants.STORAGE_LABEL, "storageId",
-                request.getStorageId(), callUser.getUserId(),
+                request.getStorageId(), callUser.getUsername(),
                 request.getKey(), request.getValue());
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
@@ -119,11 +120,11 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
     @Override
     public void searchStorage(StorageSearchRequest request, StreamObserver<StorageSearchResponse> responseObserver) {
-        User callUser = getUser(request.getAuthToken());
+        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
         List<Record> records = this.neo4JConnector.searchNodes(
                 "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage) where u.userId ='" +
-                        callUser.getUserId() + "' return distinct s");
+                        callUser.getUsername() + "' return distinct s");
         try {
             List<AnyStorage> storageList = AnyStorageDeserializer.deserializeList(records);
             StorageSearchResponse.Builder builder = StorageSearchResponse.newBuilder();

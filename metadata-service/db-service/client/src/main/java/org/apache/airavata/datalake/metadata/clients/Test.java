@@ -300,17 +300,17 @@ public class Test {
 //        stub.createTenant(request);
 //
 
-        ResourceMetadataServiceGrpc.ResourceMetadataServiceBlockingStub resourceMetadataServiceBlockingStub = serviceClient.resource();
-
-        ResourcePermissionRequest permissionRequest = ResourcePermissionRequest
-                .newBuilder()
-                .setPermissionType("READ")
-                .setUsername("testuser")
-                .setResourceName("FileA")
-                .setTenantId("custos-cmcdclbywlxmc2ktzv0d-10000702")
-                .build();
-      ResourcePermissionResponse response =   resourceMetadataServiceBlockingStub.hasAccess(permissionRequest);
-        System.out.println(response.getAccessible());
+//        ResourceMetadataServiceGrpc.ResourceMetadataServiceBlockingStub resourceMetadataServiceBlockingStub = serviceClient.resource();
+//
+//        ResourcePermissionRequest permissionRequest = ResourcePermissionRequest
+//                .newBuilder()
+//                .setPermissionType("READ")
+//                .setUsername("testuser")
+//                .setResourceName("FileA")
+//                .setTenantId("custos-cmcdclbywlxmc2ktzv0d-10000702")
+//                .build();
+//      ResourcePermissionResponse response =   resourceMetadataServiceBlockingStub.hasAccess(permissionRequest);
+//        System.out.println(response.getAccessible());
 
 
 //        TenantMetadataAPIRequest tenantMetadataAPIRequest = TenantMetadataAPIRequest
@@ -319,14 +319,14 @@ public class Test {
 //                .build();
 //
 //        stub.deleteTenant(tenantMetadataAPIRequest);
-
-        tenant = tenant.toBuilder().setDomain("testing.com").build();
-
-        TenantMetadataAPIRequest tenantMetadataAPIRequest = TenantMetadataAPIRequest
-                .newBuilder()
-                .setTenant(tenant)
-                .build();
-        stub.createTenant(tenantMetadataAPIRequest);
+//
+//        tenant = tenant.toBuilder().setDomain("testing.com").build();
+//
+//        TenantMetadataAPIRequest tenantMetadataAPIRequest = TenantMetadataAPIRequest
+//                .newBuilder()
+//                .setTenant(tenant)
+//                .build();
+//        stub.createTenant(tenantMetadataAPIRequest);
 
     }
 }
