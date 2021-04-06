@@ -16,55 +16,70 @@
  */
 package org.apache.airavata.drms.api;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
-import org.apache.airavata.datalake.drms.groups.*;
-import org.apache.airavata.datalake.drms.storage.*;
-
 public class Client {
     public static void main(String ar[]) {
+//
+//        DRMSServiceAuthToken token1 = DRMSServiceAuthToken.newBuilder().setAccessToken("Token-1").build();
+//        DRMSServiceAuthToken token2 = DRMSServiceAuthToken.newBuilder().setAccessToken("Token-2").build();
+//
+//        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6565).usePlaintext().build();
+//        StorageServiceGrpc.StorageServiceBlockingStub storageClient = StorageServiceGrpc.newBlockingStub(channel);
+//
+//        System.out.println("List for user 1");
+//        StorageSearchResponse storages = storageClient.searchStorage(
+//                StorageSearchRequest.newBuilder().setAuthToken(token1).build());
+//        System.out.println(storages);
+//
+//        System.out.println("List for user 2");
+//        storages = storageClient.searchStorage(
+//                StorageSearchRequest.newBuilder().setAuthToken(token2).build());
+//        System.out.println(storages);
+//
+//        System.out.println("Fetch");
+//        StorageFetchResponse fetchResponse = storageClient.fetchStorage(
+//                StorageFetchRequest.newBuilder().setAuthToken(token1).setStorageId("staging_pga_storage").buildPartial());
+//
+//        System.out.println(fetchResponse);
+//
+//        GroupServiceGrpc.GroupServiceBlockingStub groupClient = GroupServiceGrpc.newBlockingStub(channel);
+//
+//        System.out.println("User");
+//        FetchCurrentUserResponse currentUser = groupClient.fetchCurrentUser(
+//                FetchCurrentUserRequest.newBuilder().setAuthToken(token1).build());
+//        System.out.println(currentUser);
+//
+//        System.out.println("Groups");
+//        FetchCurrentUserGroupsResponse currentGroups = groupClient.fetchCurrentUserGroups(
+//                FetchCurrentUserGroupsRequest.newBuilder().setAuthToken(token2).build());
+//        System.out.println(currentGroups);
+//
+//        System.out.println("Adding metadata");
+//        storageClient.addStorageMetadata(AddStorageMetadataRequest.newBuilder()
+//                .setAuthToken(token1)
+//                .setStorageId("prod_pga")
+//                .setKey("createdOn")
+//                .setValue("02/15/2021")
+//                .build());
 
-        DRMSServiceAuthToken token1 = DRMSServiceAuthToken.newBuilder().setAccessToken("Token-1").build();
-        DRMSServiceAuthToken token2 = DRMSServiceAuthToken.newBuilder().setAccessToken("Token-2").build();
-
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6565).usePlaintext().build();
-        StorageServiceGrpc.StorageServiceBlockingStub storageClient = StorageServiceGrpc.newBlockingStub(channel);
-
-        System.out.println("List for user 1");
-        StorageSearchResponse storages = storageClient.searchStorage(
-                StorageSearchRequest.newBuilder().setAuthToken(token1).build());
-        System.out.println(storages);
-
-        System.out.println("List for user 2");
-        storages = storageClient.searchStorage(
-                StorageSearchRequest.newBuilder().setAuthToken(token2).build());
-        System.out.println(storages);
-
-        System.out.println("Fetch");
-        StorageFetchResponse fetchResponse = storageClient.fetchStorage(
-                StorageFetchRequest.newBuilder().setAuthToken(token1).setStorageId("staging_pga_storage").buildPartial());
-
-        System.out.println(fetchResponse);
-
-        GroupServiceGrpc.GroupServiceBlockingStub groupClient = GroupServiceGrpc.newBlockingStub(channel);
-
-        System.out.println("User");
-        FetchCurrentUserResponse currentUser = groupClient.fetchCurrentUser(
-                FetchCurrentUserRequest.newBuilder().setAuthToken(token1).build());
-        System.out.println(currentUser);
-
-        System.out.println("Groups");
-        FetchCurrentUserGroupsResponse currentGroups = groupClient.fetchCurrentUserGroups(
-                FetchCurrentUserGroupsRequest.newBuilder().setAuthToken(token2).build());
-        System.out.println(currentGroups);
-
-        System.out.println("Adding metadata");
-        storageClient.addStorageMetadata(AddStorageMetadataRequest.newBuilder()
-                .setAuthToken(token1)
-                .setStorageId("prod_pga")
-                .setKey("createdOn")
-                .setValue("02/15/2021")
-                .build());
+//        try {
+//            InputStream inputStream = ClientUtils.getServerCertificate("custos.scigap.org",
+//                    "custos-2zuomcugra3ebgsqtzmf-10000514", "mupUhF4JL0S3IFHBjfhiTfLJS1NgSWfvkCj3l6c7");
+//            byte[] buffer = new byte[inputStream.available()];
+//            inputStream.read(buffer);
+//
+//            File targetFile = new File("/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-resource-management-service/drms-api/src/main/resources/tartget.tmp");
+//            OutputStream outStream = new FileOutputStream(targetFile);
+//            outStream.write(buffer);
+//
+//            CustosClientProvider custosClientProvider = new CustosClientProvider.Builder().setServerHost("custos.scigap.org")
+//                    .setServerPort(31499)
+//                    .setClientId("custos-2zuomcugra3ebgsqtzmf-10000514")
+//                    .setClientSec("mupUhF4JL0S3IFHBjfhiTfLJS1NgSWfvkCj3l6c7").build();
+//            UserManagementClient userManagementClient = custosClientProvider.getUserManagementClient();
+//            userManagementClient.getUser("testuser123", "custos-2zuomcugra3ebgsqtzmf-10000514");
+//
+//        } catch (Exception ex) {
+//
+//        }
     }
 }

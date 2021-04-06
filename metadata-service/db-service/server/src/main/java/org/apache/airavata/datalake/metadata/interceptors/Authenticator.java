@@ -12,7 +12,7 @@ public class Authenticator implements ServiceInterceptor {
 
     @Override
     public <ReqT> ReqT intercept(String method, Metadata headers, ReqT msg) {
-        LOGGER.info("Calling interceptor #######");
+
         return msg;
     }
 

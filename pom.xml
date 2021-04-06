@@ -146,6 +146,7 @@
         <neo4j.ogm.version>3.2.20</neo4j.ogm.version>
         <neo4j.version>3.4.6</neo4j.version>
         <io.grpc.version>1.25.0</io.grpc.version>
+        <spring-security.version>5.3.4.RELEASE</spring-security.version>
 
     </properties>
 

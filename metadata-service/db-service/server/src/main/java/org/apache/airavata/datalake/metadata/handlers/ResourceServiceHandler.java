@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 @GRpcService
 public class ResourceServiceHandler extends ResourceMetadataServiceGrpc.ResourceMetadataServiceImplBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceHandler.class);
@@ -42,6 +44,20 @@ public class ResourceServiceHandler extends ResourceMetadataServiceGrpc.Resource
                             StreamObserver<Resource> responseObserver) {
         try {
 
+            ResourceServiceImpl resourceService = new ResourceServiceImpl(connector);
+            Resource resource = request.getResource();
+            org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource backRes = dozerBeanMapper
+                    .map(resource, org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource.class);
+            List<org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Resource> resourceList =
+                    resourceService.find(backRes);
+            Resource  foundResource = Resource
+            .newBuilder()
+                    .setName(resourceList.get(0).getName())
+                    .setCreatedAt(resourceList.get(0).getCreatedAt())
+                    .setTenantId(resourceList.get(0).getTenantId())
+                    .build();
+            responseObserver.onNext(foundResource);
+            responseObserver.onCompleted();
 
         } catch (Exception ex) {
             String msg = "Exception occurred while fetching tenant " + ex;

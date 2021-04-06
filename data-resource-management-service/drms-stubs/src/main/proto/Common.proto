@@ -22,6 +22,16 @@ package org.apache.airavata.datalake.drms;
 
 import "google/api/annotations.proto";
 
+
+message AuthenticatedUser  {
+    string username = 2;
+    string firstName = 3;
+    string lastName = 4;
+    string emailAddress = 5;
+}
+
 message DRMSServiceAuthToken {
     string access_token = 1;
+    AuthenticatedUser authenticated_user = 2;
 }
+

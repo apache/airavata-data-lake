@@ -1,6 +1,8 @@
 package org.apache.airavata.drms.api.interceptors;
 
 import io.grpc.Metadata;
+import org.apache.airavata.datalake.drms.AuthenticatedUser;
+import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.identity.management.client.IdentityManagementClient;
@@ -25,15 +27,15 @@ public class Authenticator implements ServiceInterceptor {
     public <ReqT> ReqT intercept(String method, Metadata headers, ReqT msg) throws IOException {
         IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
         Optional<String> token = getAccessToken(msg);
+        LOGGER.info("Token " + token.get());
         User user = identityManagementClient.getUser(token.get());
-        org.apache.airavata.datalake.drms.groups.User drmsUser = org.apache.airavata.datalake.drms.groups.User
-                .newBuilder()
-                .setUserId(user.getUsername())
+        AuthenticatedUser authenticatedUser = AuthenticatedUser.newBuilder()
+                .setUsername(user.getUsername())
                 .setFirstName(user.getFirstName())
                 .setLastName(user.getLastName())
                 .setEmailAddress(user.getEmailAddress())
                 .build();
-        return msg;
+        return (ReqT) setAuthenticatedUser(msg, authenticatedUser);
 
     }
 
@@ -76,6 +78,58 @@ public class Authenticator implements ServiceInterceptor {
             return Optional.of(((StoragePreferenceCreateRequest) msg).getAuthToken().getAccessToken());
         } else if (msg instanceof StoragePreferenceSearchRequest) {
             return Optional.of(((StoragePreferenceSearchRequest) msg).getAuthToken().getAccessToken());
+        }
+        return Optional.empty();
+    }
+
+    private Object setAuthenticatedUser(Object msg, AuthenticatedUser user) {
+
+        if (msg instanceof StorageCreateRequest) {
+
+        } else if (msg instanceof StorageFetchRequest) {
+
+        } else if (msg instanceof StorageUpdateRequest) {
+
+        } else if (msg instanceof StorageDeleteRequest) {
+
+        } else if (msg instanceof StorageSearchRequest) {
+
+        } else if (msg instanceof AddStorageMetadataRequest) {
+
+        } else if (msg instanceof ResourceCreateRequest) {
+
+        } else if (msg instanceof ResourceFetchRequest) {
+
+        } else if (msg instanceof ResourceUpdateRequest) {
+
+        } else if (msg instanceof ResourceDeleteRequest) {
+
+        } else if (msg instanceof ResourceSearchRequest) {
+
+        } else if (msg instanceof AddResourceMetadataRequest) {
+
+        } else if (msg instanceof FetchResourceMetadataRequest) {
+            DRMSServiceAuthToken drmsServiceAuthToken = ((FetchResourceMetadataRequest) msg)
+                    .getAuthToken();
+            drmsServiceAuthToken = drmsServiceAuthToken
+                    .toBuilder()
+                    .setAuthenticatedUser(user)
+                    .build();
+
+            return ((FetchResourceMetadataRequest) msg)
+                    .toBuilder()
+                    .setAuthToken(drmsServiceAuthToken).build();
+
+        } else if (msg instanceof StoragePreferenceFetchRequest) {
+
+        } else if (msg instanceof StoragePreferenceUpdateRequest) {
+
+        } else if (msg instanceof StoragePreferenceDeleteRequest) {
+
+        } else if (msg instanceof StoragePreferenceCreateRequest) {
+
+        } else if (msg instanceof StoragePreferenceSearchRequest) {
+
         }
         return Optional.empty();
     }

@@ -20,6 +20,7 @@ import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
+import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.groups.FetchCurrentUserRequest;
 import org.apache.airavata.datalake.drms.groups.FetchCurrentUserResponse;
@@ -29,8 +30,6 @@ import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.core.constants.ResourceConstants;
-import org.apache.airavata.drms.core.constants.StorageConstants;
-import org.apache.airavata.drms.core.deserializer.AnyStoragePreferenceDeserializer;
 import org.apache.airavata.drms.core.deserializer.GenericResourceDeserializer;
 import org.apache.airavata.drms.core.deserializer.MetadataDeserializer;
 import org.lognet.springboot.grpc.GRpcService;
@@ -65,14 +64,16 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
     @Override
     public void fetchResource(ResourceFetchRequest request, StreamObserver<ResourceFetchResponse> responseObserver) {
-        User callUser = getUser(request.getAuthToken());
+//        User callUser = getUser(request.getAuthToken());
+
+        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
         // TODO review (u)-[r4:MEMBER_OF]->(g2:Group)<-[r5:SHARED_WITH]-(sp),
         List<Record> records = this.neo4JConnector.searchNodes(
                 "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage)-[r3:HAS_PREFERENCE]->(sp:StoragePreference)-[r6:HAS_RESOURCE]->(res:Resource), " +
                         "(u)-[r7:MEMBER_OF]->(g3:Group)<-[r8:SHARED_WITH]-(res) " +
                         "where res.resourceId = '" + request.getResourceId() + "' and u.userId = '"
-                        + callUser.getUserId() + "' return distinct res, sp, s");
+                        + callUser.getUsername() + "' return distinct res, sp, s");
 
         if (!records.isEmpty()) {
             try {
@@ -143,7 +144,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
     public void fetchResourceMetadata(FetchResourceMetadataRequest request, StreamObserver<FetchResourceMetadataResponse> responseObserver) {
         User callUser = getUser(request.getAuthToken());
         List<Record> records = neo4JConnector.searchNodes("match (u:User)-[MEMBER_OF]->(g:Group)<-[SHARED_WITH]-(res:Resource)-[r:HAS_METADATA]->(m:Metadata) " +
-                "where u.userId ='" + callUser.getUserId()+ "' and res.resourceId = '" + request.getResourceId() + "' return distinct m");
+                "where u.userId ='" + callUser.getUserId() + "' and res.resourceId = '" + request.getResourceId() + "' return distinct m");
         try {
             List<MetadataNode> metadataNodes = MetadataDeserializer.deserializeList(records);
             if (metadataNodes.size() == 1) {
