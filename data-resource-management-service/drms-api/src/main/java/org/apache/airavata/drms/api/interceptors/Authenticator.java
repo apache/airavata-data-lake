@@ -40,6 +40,7 @@ public class Authenticator implements ServiceInterceptor {
     }
 
 
+    // TODO : replace with security context
     private Optional<String> getAccessToken(Object msg) {
 
         if (msg instanceof StorageCreateRequest) {
@@ -104,8 +105,6 @@ public class Authenticator implements ServiceInterceptor {
 
         } else if (msg instanceof ResourceDeleteRequest) {
 
-        } else if (msg instanceof ResourceSearchRequest) {
-
         } else if (msg instanceof AddResourceMetadataRequest) {
 
         } else if (msg instanceof FetchResourceMetadataRequest) {
@@ -130,6 +129,17 @@ public class Authenticator implements ServiceInterceptor {
 
         } else if (msg instanceof StoragePreferenceSearchRequest) {
 
+        }else if (msg instanceof  ResourceSearchRequest) {
+            DRMSServiceAuthToken drmsServiceAuthToken = ((ResourceSearchRequest) msg)
+                    .getAuthToken();
+            drmsServiceAuthToken = drmsServiceAuthToken
+                    .toBuilder()
+                    .setAuthenticatedUser(user)
+                    .build();
+
+            return ((ResourceSearchRequest) msg)
+                    .toBuilder()
+                    .setAuthToken(drmsServiceAuthToken).build();
         }
         return Optional.empty();
     }

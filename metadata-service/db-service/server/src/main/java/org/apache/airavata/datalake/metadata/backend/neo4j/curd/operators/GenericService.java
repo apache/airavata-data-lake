@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -40,12 +41,12 @@ public abstract class GenericService<T> implements Service<T>, Closeable {
     }
 
     @Override
-    public T find(Long id) {
+    public T find(UUID id) {
         return session.load(getEntityType(), id, DEPTH_ENTITY);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         session.delete(session.load(getEntityType(), id));
     }
 

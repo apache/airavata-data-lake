@@ -46,20 +46,6 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
     @Autowired
     private Neo4JConnector neo4JConnector;
 
-    @org.springframework.beans.factory.annotation.Value("${group.service.host}")
-    private String groupServiceHost;
-
-    @org.springframework.beans.factory.annotation.Value("${group.service.port}")
-    private int groupServicePort;
-
-
-    private User getUser(DRMSServiceAuthToken authToken) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(groupServiceHost, groupServicePort).usePlaintext().build();
-        GroupServiceGrpc.GroupServiceBlockingStub groupClient = GroupServiceGrpc.newBlockingStub(channel);
-        FetchCurrentUserResponse userResponse = groupClient.fetchCurrentUser(
-                FetchCurrentUserRequest.newBuilder().setAuthToken(authToken).build());
-        return userResponse.getUser();
-    }
 
     @Override
     public void fetchStoragePreference(StoragePreferenceFetchRequest request, StreamObserver<StoragePreferenceFetchResponse> responseObserver) {

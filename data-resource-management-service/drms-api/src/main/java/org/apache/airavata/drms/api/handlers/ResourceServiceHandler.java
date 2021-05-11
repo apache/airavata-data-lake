@@ -17,15 +17,8 @@
 package org.apache.airavata.drms.api.handlers;
 
 import com.google.protobuf.Empty;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import org.apache.airavata.datalake.drms.AuthenticatedUser;
-import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
-import org.apache.airavata.datalake.drms.groups.FetchCurrentUserRequest;
-import org.apache.airavata.datalake.drms.groups.FetchCurrentUserResponse;
-import org.apache.airavata.datalake.drms.groups.GroupServiceGrpc;
-import org.apache.airavata.datalake.drms.groups.User;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.airavata.drms.core.Neo4JConnector;
@@ -48,20 +41,6 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
     @Autowired
     private Neo4JConnector neo4JConnector;
 
-    @org.springframework.beans.factory.annotation.Value("${group.service.host}")
-    private String groupServiceHost;
-
-    @org.springframework.beans.factory.annotation.Value("${group.service.port}")
-    private int groupServicePort;
-
-    private User getUser(DRMSServiceAuthToken authToken) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(groupServiceHost, groupServicePort).usePlaintext().build();
-        GroupServiceGrpc.GroupServiceBlockingStub groupClient = GroupServiceGrpc.newBlockingStub(channel);
-        FetchCurrentUserResponse userResponse = groupClient.fetchCurrentUser(
-                FetchCurrentUserRequest.newBuilder().setAuthToken(authToken).build());
-        return userResponse.getUser();
-    }
-
     @Override
     public void fetchResource(ResourceFetchRequest request, StreamObserver<ResourceFetchResponse> responseObserver) {
 //        User callUser = getUser(request.getAuthToken());
@@ -81,7 +60,6 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 responseObserver.onNext(ResourceFetchResponse.newBuilder().setResource(genericResourceList.get(0)).build());
                 responseObserver.onCompleted();
             } catch (Exception e) {
-
                 logger.error("Errored while fetching resource with id {}", request.getResourceId(), e);
                 responseObserver.onError(new Exception("Errored while fetching resource with id "
                         + request.getResourceId() + ". Msg " + e.getMessage()));
@@ -113,10 +91,15 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
         AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
         // TODO review (u)-[r4:MEMBER_OF]->(g2:Group)<-[r5:SHARED_WITH]-(sp),
-        List<Record> records = this.neo4JConnector.searchNodes(
-                "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage)-[r3:HAS_PREFERENCE]->(sp:StoragePreference)-[r6:HAS_RESOURCE]->(res:Resource), " +
-                        "(u)-[r7:MEMBER_OF]->(g3:Group)<-[r8:SHARED_WITH]-(res) " +
-                        "where u.userId = '" + callUser.getUsername() + "' return distinct res, sp, s");
+//        List<Record> records = this.neo4JConnector.searchNodes(
+//                "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage)-[r3:HAS_PREFERENCE]->(sp:StoragePreference)-[r6:HAS_RESOURCE]->(res:Resource), " +
+//                        "(u)-[r7:MEMBER_OF]->(g3:Group)<-[r8:SHARED_WITH]-(res) " +
+//                        "where u.userId = '" + callUser.getUsername() + "' return distinct res, sp, s");
+
+        List<Record> records = this.neo4JConnector.searchNodes("match (u:User)-[:HAS_PERMISSION]->(r)  where u.username='" + callUser.getUsername() + "'optional match (u)-[:MEMBER_OF]->(g)-[:HAS_PERMISSION]->(m)<-[:CHILD_OF]-(p) " +
+                "return distinct r, m,p");
+
+
         try {
             List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
             ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();

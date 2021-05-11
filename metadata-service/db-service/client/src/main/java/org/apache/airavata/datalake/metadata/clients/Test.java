@@ -297,20 +297,20 @@ public class Test {
                 .setTenant(tenant)
                 .build();
 
-//        stub.createTenant(request);
-//
+        stub.createTenant(request);
 
-//        ResourceMetadataServiceGrpc.ResourceMetadataServiceBlockingStub resourceMetadataServiceBlockingStub = serviceClient.resource();
-//
-//        ResourcePermissionRequest permissionRequest = ResourcePermissionRequest
-//                .newBuilder()
-//                .setPermissionType("READ")
-//                .setUsername("testuser")
-//                .setResourceName("FileA")
-//                .setTenantId("custos-cmcdclbywlxmc2ktzv0d-10000702")
-//                .build();
-//      ResourcePermissionResponse response =   resourceMetadataServiceBlockingStub.hasAccess(permissionRequest);
-//        System.out.println(response.getAccessible());
+
+        ResourceMetadataServiceGrpc.ResourceMetadataServiceBlockingStub resourceMetadataServiceBlockingStub = serviceClient.resource();
+
+        ResourcePermissionRequest permissionRequest = ResourcePermissionRequest
+                .newBuilder()
+                .setPermissionType("READ")
+                .setUsername("testuser")
+                .setResourceName("FileA")
+                .setTenantId("custos-cmcdclbywlxmc2ktzv0d-10000702")
+                .build();
+      ResourcePermissionResponse response =   resourceMetadataServiceBlockingStub.hasAccess(permissionRequest);
+        System.out.println(response.getAccessible());
 
 
 //        TenantMetadataAPIRequest tenantMetadataAPIRequest = TenantMetadataAPIRequest

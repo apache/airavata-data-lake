@@ -17,15 +17,8 @@
 package org.apache.airavata.drms.api.handlers;
 
 import com.google.protobuf.Empty;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 import org.apache.airavata.datalake.drms.AuthenticatedUser;
-import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
-import org.apache.airavata.datalake.drms.groups.FetchCurrentUserRequest;
-import org.apache.airavata.datalake.drms.groups.FetchCurrentUserResponse;
-import org.apache.airavata.datalake.drms.groups.GroupServiceGrpc;
-import org.apache.airavata.datalake.drms.groups.User;
 import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.core.constants.StorageConstants;
@@ -48,20 +41,6 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
     @Autowired
     private Neo4JConnector neo4JConnector;
 
-    @org.springframework.beans.factory.annotation.Value("${group.service.host}")
-    private String groupServiceHost;
-
-    @org.springframework.beans.factory.annotation.Value("${group.service.port}")
-    private int groupServicePort;
-
-
-    private User getUser(DRMSServiceAuthToken authToken) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress(groupServiceHost, groupServicePort).usePlaintext().build();
-        GroupServiceGrpc.GroupServiceBlockingStub groupClient = GroupServiceGrpc.newBlockingStub(channel);
-        FetchCurrentUserResponse userResponse = groupClient.fetchCurrentUser(
-                FetchCurrentUserRequest.newBuilder().setAuthToken(authToken).build());
-        return userResponse.getUser();
-    }
 
     @Override
     public void fetchStorage(StorageFetchRequest request, StreamObserver<StorageFetchResponse> responseObserver) {
@@ -92,10 +71,10 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
     @Override
     public void createStorage(StorageCreateRequest request, StreamObserver<StorageCreateResponse> responseObserver) {
-        User user = getUser(request.getAuthToken());
+        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
         AnyStorage storage = request.getStorage();
         Map<String, Object> serializedMap = AnyStorageSerializer.serializeToMap(storage);
-        this.neo4JConnector.createNode(serializedMap, StorageConstants.STORAGE_LABEL, user.getUserId());
+        this.neo4JConnector.createNode(serializedMap, StorageConstants.STORAGE_LABEL, callUser.getUsername());
     }
 
     @Override

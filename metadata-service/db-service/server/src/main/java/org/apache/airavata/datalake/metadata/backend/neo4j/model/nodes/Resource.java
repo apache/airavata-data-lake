@@ -7,13 +7,12 @@ import org.neo4j.ogm.annotation.*;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 @NodeEntity
 public class Resource extends Entity {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+
 
     @Property(name = "name")
     private String name;
@@ -27,17 +26,17 @@ public class Resource extends Entity {
     @Relationship(type = "HAS_CHILD_RESOURCE", direction = Relationship.INCOMING)
     private HasChildResource parentInPointer;
 
-    @Relationship(type = "HAS_PARENT_RESOURCE", direction = Relationship.INCOMING)
-    private final Set<HasParentResource> childInPointers = new HashSet<>();
-
-    @Relationship(type = "HAS_PARENT_RESOURCE")
-    private HasParentResource parent;
+//    @Relationship(type = "HAS_PARENT_RESOURCE", direction = Relationship.INCOMING)
+//    private final Set<HasParentResource> childInPointers = new HashSet<>();
+//
+//    @Relationship(type = "HAS_PARENT_RESOURCE")
+//    private HasParentResource parent;
 
     @Relationship(type = "SHARED_WITH")
     private final Set<SharedWith> shares = new HashSet<>();
 
-    @Relationship(type = "HAS_ACCESS", direction = Relationship.INCOMING)
-    private final Set<HasAccess> accesses = new HashSet<>();
+//    @Relationship(type = "HAS_ACCESS", direction = Relationship.INCOMING)
+//    private final Set<HasAccess> accesses = new HashSet<>();
 
     public Resource() {
     }
@@ -59,21 +58,21 @@ public class Resource extends Entity {
         this.childResourceSet.add(childResource);
     }
 
-    public Set<HasParentResource> getChildInPointers() {
-        return childInPointers;
-    }
-
-    public void addChildInPointers(HasParentResource childInPointers) {
-        this.childInPointers.add(childInPointers);
-    }
-
-    public HasParentResource getParent() {
-        return parent;
-    }
-
-    public void setParent(HasParentResource parent) {
-        this.parent = parent;
-    }
+//    public Set<HasParentResource> getChildInPointers() {
+//        return childInPointers;
+//    }
+//
+//    public void addChildInPointers(HasParentResource childInPointers) {
+//        this.childInPointers.add(childInPointers);
+//    }
+//
+//    public HasParentResource getParent() {
+//        return parent;
+//    }
+//
+//    public void setParent(HasParentResource parent) {
+//        this.parent = parent;
+//    }
 
     public HasChildResource getParentInPointer() {
         return parentInPointer;
@@ -99,28 +98,20 @@ public class Resource extends Entity {
         this.shares.add(share);
     }
 
-    public Set<HasAccess> getAccesses() {
-        return accesses;
-    }
-
-    public void addAccess(HasAccess access) {
-        this.accesses.add(access);
-    }
+//    public Set<HasAccess> getAccesses() {
+//        return accesses;
+//    }
+//
+//    public void addAccess(HasAccess access) {
+//        this.accesses.add(access);
+//    }
 
     @Override
     public String getSearchableId() {
         return this.getName()+"@"+this.getTenantId();
     }
 
-    @Override
-    public Long getId() {
-        return id;
-    }
 
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public void addChildResource(Resource resource, long createdAt, long lastModifiedAt,
                                  Map<String, String> properties) {
@@ -133,8 +124,8 @@ public class Resource extends Entity {
         HasParentResource hasParentResource = new HasParentResource();
         hasParentResource.setStartEntity(resource);
         hasParentResource.setEndEntity(this);
-        resource.setParent(hasParentResource);
-        this.addChildInPointers(hasParentResource);
+//        resource.setParent(hasParentResource);
+//        this.addChildInPointers(hasParentResource);
 
         if (createdAt != 0) {
             hasParentResource.setCreatedAt(createdAt);
@@ -165,8 +156,8 @@ public class Resource extends Entity {
         hasAccess.setStartEntity(user);
         hasAccess.setEndEntity(this);
         hasAccess.setPermissionType(permission);
-        this.addAccess(hasAccess);
-        user.addAccessibleResources(hasAccess);
+//        this.addAccess(hasAccess);
+//        user.addAccessibleResources(hasAccess);
 
         if (createdAt != 0) {
             sharedWith.setCreatedAt(createdAt);
@@ -197,8 +188,8 @@ public class Resource extends Entity {
         hasAccess.setStartEntity(group);
         hasAccess.setEndEntity(this);
         hasAccess.setPermissionType(permission);
-        this.addAccess(hasAccess);
-        group.addAccessibleResources(hasAccess);
+//        this.addAccess(hasAccess);
+//        group.addAccessibleResources(hasAccess);
 
         if (relationshipCreatedAt != 0) {
             sharedWith.setCreatedAt(relationshipCreatedAt);

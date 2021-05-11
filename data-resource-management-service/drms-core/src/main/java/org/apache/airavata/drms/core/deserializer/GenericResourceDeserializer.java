@@ -18,49 +18,42 @@
 package org.apache.airavata.drms.core.deserializer;
 
 import org.apache.airavata.datalake.drms.resource.GenericResource;
-import org.apache.airavata.datalake.drms.storage.AnyStorage;
 import org.apache.airavata.datalake.drms.storage.AnyStoragePreference;
-import org.apache.airavata.drms.core.constants.ResourceConstants;
-import org.apache.airavata.drms.core.constants.StorageConstants;
-import org.apache.airavata.drms.core.constants.StoragePreferenceConstants;
+import org.apache.commons.collections.map.HashedMap;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Value;
 import org.neo4j.driver.internal.InternalRecord;
 import org.neo4j.driver.types.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GenericResourceDeserializer {
+    public static final Logger LOGGER = LoggerFactory.getLogger(GenericResourceDeserializer.class);
 
     public static List<GenericResource> deserializeList(List<Record> neo4jRecords) throws Exception {
-        List<GenericResource> resourceList = new ArrayList<>();
+        Map<Long, Node> nodeMap = new HashedMap();
         for (Record record : neo4jRecords) {
             InternalRecord internalRecord = (InternalRecord) record;
             List<Value> values = internalRecord.values();
-            if (values.size() == 3) {
-                Value resourceValue = values.get(0);
-                Value prfValue = values.get(1);
-                Value stoValue = values.get(2);
-                Node resourceNode = resourceValue.asNode();
-                Node prefNode = prfValue.asNode();
-                Node stoNode = stoValue.asNode();
-                if (resourceNode.hasLabel(ResourceConstants.RESOURCE_LABEL) &&
-                        prefNode.hasLabel(StoragePreferenceConstants.STORAGE_PREFERENCE_LABEL) &&
-                        stoNode.hasLabel(StorageConstants.STORAGE_LABEL)) {
 
-                    AnyStorage storage = AnyStorageDeserializer.deriveStorageFromMap(stoNode.asMap());
-                    AnyStoragePreference preference = AnyStoragePreferenceDeserializer.deriveStoragePrefFromMap(
-                            prefNode.asMap(), storage);
-                    GenericResource genericResource = deriveGenericResourceFromMap(resourceNode.asMap(), preference);
-                    resourceList.add(genericResource);
-                }
+            if (values.size() > 0) {
+                Map<Long, Node> longNodeMap = values.stream().filter(val ->
+                        val.toString().equals("NULL") ? false : true
+                ).collect(Collectors.toMap(val -> val.asNode().id(),
+                        Value::asNode,(existing, replacement) -> existing));
+                nodeMap.putAll(longNodeMap);
             }
         }
-        return resourceList;
+
+        return deriveGenericResourceFromMap(nodeMap);
     }
 
     public static GenericResource deriveGenericResourceFromMap(Map<String, Object> fixedMap,
@@ -68,7 +61,7 @@ public class GenericResourceDeserializer {
 
         GenericResource.Builder genericResourceBuilder = GenericResource.newBuilder();
         setObjectFieldsUsingMap(genericResourceBuilder, fixedMap);
-        switch (preference.getStorageCase()){
+        switch (preference.getStorageCase()) {
             case S3STORAGEPREFERENCE:
                 genericResourceBuilder.setS3Preference(preference.getS3StoragePreference());
                 break;
@@ -80,10 +73,28 @@ public class GenericResourceDeserializer {
         return genericResourceBuilder.build();
     }
 
+    public static List<GenericResource> deriveGenericResourceFromMap(Map<Long, Node> nodeMap) throws Exception {
+        return nodeMap.values().stream().map(node -> {
+            GenericResource.Builder genericResourceBuilder = GenericResource.newBuilder();
+            Iterator<String> iterator = node.labels().iterator();
+            while (iterator.hasNext()) {
+                genericResourceBuilder.setType(iterator.next());
+            }
+            for (String field : node.asMap().keySet()) {
+                genericResourceBuilder.putProperties(field, String.valueOf(node.asMap().get(field)));
+            }
+            return genericResourceBuilder.build();
+        }).collect(Collectors.toList());
+
+    }
+
+
     private static void setObjectFieldsUsingMap(Object target, Map<String, Object> values) {
-        for (String field :values.keySet()) {
+        for (String field : values.keySet()) {
             BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(target);
             beanWrapper.setPropertyValue(field, values.get(field));
         }
     }
+
+
 }

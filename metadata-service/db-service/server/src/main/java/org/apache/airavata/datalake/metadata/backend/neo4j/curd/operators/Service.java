@@ -7,14 +7,15 @@ import org.neo4j.ogm.cypher.query.SortOrder;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public interface Service<T> {
 
     Iterable<T> findAll();
 
-    T find(Long id);
+    T find(UUID id);
 
-    void delete(Long id);
+    void delete(UUID id);
 
     Collection<T> search(List<SearchOperator> searchOperatorList);
 

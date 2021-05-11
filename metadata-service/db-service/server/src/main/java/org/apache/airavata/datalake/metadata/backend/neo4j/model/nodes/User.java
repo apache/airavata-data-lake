@@ -30,14 +30,14 @@ public class User extends Entity {
     @Relationship(type = "MEMBER_OF")
     private final Set<MemberOf> memberGroups = new HashSet<>();
 
-    @Relationship(type = "HAS_CHILD_USER", direction = Relationship.INCOMING)
-    private final Set<HasChildUser> groups = new HashSet<>();
+//    @Relationship(type = "HAS_CHILD_USER", direction = Relationship.INCOMING)
+//    private final Set<HasChildUser> groups = new HashSet<>();
 
     @Relationship(type = "SHARED_WITH", direction = Relationship.INCOMING)
     private final Set<SharedWith> sharedResources = new HashSet<>();
 
-    @Relationship(type = "HAS_ACCESS")
-    private final Set<HasAccess> accessibleResources = new HashSet<>();
+//    @Relationship(type = "HAS_ACCESS")
+//    private final Set<HasAccess> accessibleResources = new HashSet<>();
 
     public User() {
     }
@@ -106,13 +106,13 @@ public class User extends Entity {
         this.memberGroups.add(memberGroup);
     }
 
-    public Set<HasChildUser> getGroups() {
-        return groups;
-    }
-
-    public void addGroup(HasChildUser hasChildUser) {
-        this.groups.add(hasChildUser);
-    }
+//    public Set<HasChildUser> getGroups() {
+//        return groups;
+//    }
+//
+//    public void addGroup(HasChildUser hasChildUser) {
+//        this.groups.add(hasChildUser);
+//    }
 
     public Set<SharedWith> getSharedResources() {
         return sharedResources;
@@ -122,13 +122,13 @@ public class User extends Entity {
         this.sharedResources.add(sharedResource);
     }
 
-    public Set<HasAccess> getAccessibleResources() {
-        return accessibleResources;
-    }
-
-    public void addAccessibleResources(HasAccess accessibleResources) {
-        this.accessibleResources.add(accessibleResources);
-    }
+//    public Set<HasAccess> getAccessibleResources() {
+//        return accessibleResources;
+//    }
+//
+//    public void addAccessibleResources(HasAccess accessibleResources) {
+//        this.accessibleResources.add(accessibleResources);
+//    }
 
     @Override
     public String getSearchableId() {
