@@ -87,29 +87,25 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
-        <!-- Grpc / protobuf dependencies -->
         <protobuf.maven.plugin>0.5.1</protobuf.maven.plugin>
         <os.maven.plugin>1.5.0.Final</os.maven.plugin>
+        <javax.annotation>1.3.2</javax.annotation>
+        <consul.client>1.3.8</consul.client>
+        <h2>1.4.191</h2>
         <protobuf.java>3.10.0</protobuf.java>
         <grpc.spring.boot>3.5.1</grpc.spring.boot>
         <spring.boot.data.jpa>2.2.1.RELEASE</spring.boot.data.jpa>
+        <log4j.over.slf4j>1.7.26</log4j.over.slf4j>
         <dozer>5.5.1</dozer>
-        <grpc.services>1.25.0</grpc.services>
-
-        <!-- Spring dependencies -->
-        <spring.boot.version>2.4.2</spring.boot.version>
-        <spring.cloud.version>Greenwich.RELEASE</spring.cloud.version>
-        <grpc.spring.boot.version>2.4.4</grpc.spring.boot.version>
-
-        <spring.cloud.stream.version>2.0.0.RELEASE</spring.cloud.stream.version>
-        <spring.cloud.slueth.version>2.1.6.RELEASE</spring.cloud.slueth.version>
-        <spring.data.neo4j.version>6.0.3</spring.data.neo4j.version>
-
+        <jsch>0.1.55</jsch>
+        <sshj>0.27.0</sshj>
+        <mariadb.jdbc>2.5.1</mariadb.jdbc>
+        <custos.clients.version>1.0-SNAPSHOT</custos.clients.version>
         <io.grpc.version>1.25.0</io.grpc.version>
         <google.common.protos>1.17.0</google.common.protos>
         <io.micrometer.version>1.3.1</io.micrometer.version>
         <brave.version>5.9.1</brave.version>
-
+        <grpc.services>1.25.0</grpc.services>
         <docker.image.prefix>apachecustos</docker.image.prefix>
         <docker.image.repo>custos</docker.image.repo>
         <docker.plugin.version>1.4.13</docker.plugin.version>
@@ -149,8 +145,9 @@
 
         <neo4j.ogm.version>3.2.20</neo4j.ogm.version>
         <neo4j.version>3.4.6</neo4j.version>
+        <io.grpc.version>1.25.0</io.grpc.version>
+        <spring-security.version>5.3.4.RELEASE</spring-security.version>
 
-        <log4j.over.slf4j>1.7.26</log4j.over.slf4j>
     </properties>
 
 </project>

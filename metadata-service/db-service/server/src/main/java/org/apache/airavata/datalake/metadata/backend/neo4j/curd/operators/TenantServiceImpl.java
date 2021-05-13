@@ -1,7 +1,6 @@
 package org.apache.airavata.datalake.metadata.backend.neo4j.curd.operators;
 
 import org.apache.airavata.datalake.metadata.backend.Connector;
-import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Entity;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.Tenant;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 

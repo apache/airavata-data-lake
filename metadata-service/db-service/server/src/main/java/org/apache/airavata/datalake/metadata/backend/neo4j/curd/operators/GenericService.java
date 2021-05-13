@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -40,12 +41,12 @@ public abstract class GenericService<T> implements Service<T>, Closeable {
     }
 
     @Override
-    public T find(Long id) {
+    public T find(UUID id) {
         return session.load(getEntityType(), id, DEPTH_ENTITY);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
         session.delete(session.load(getEntityType(), id));
     }
 
@@ -57,12 +58,14 @@ public abstract class GenericService<T> implements Service<T>, Closeable {
                 LOGGER.info("Setting filter###");
                 filter.set(new Filter(operator.getKey(), operator.getComparisonOperator(), operator.getValue()));
             } else {
-                filter.get().and(new Filter(operator.getKey(), operator.getComparisonOperator(), operator.getValue()));
+                Filter oldFilter = filter.get();
+                oldFilter.and(new Filter(operator.getKey(), operator.getComparisonOperator(), operator.getValue()));
+                filter.set(oldFilter);
             }
 
         });
         LOGGER.info("Loading ###" + getEntityType());
-        return session.loadAll(getEntityType(), filter.get(), DEPTH_ENTITY);
+        return session.loadAll(getEntityType(), filter.get(), 1);
     }
 
     @Override
@@ -80,6 +83,7 @@ public abstract class GenericService<T> implements Service<T>, Closeable {
     @Override
     public Iterable<Map<String, Object>> execute(String query, Map<String, ?> parameterMap) {
         return session.query(query, parameterMap);
+
     }
 
     @Override

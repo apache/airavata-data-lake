@@ -31,4 +31,6 @@ message GenericResource {
     org.apache.airavata.datalake.drms.storage.preference.s3.S3StoragePreference s3Preference = 3;
     org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference sshPreference = 4;
   }
+  map<string, string> properties = 5;
+  string type=6;
 }

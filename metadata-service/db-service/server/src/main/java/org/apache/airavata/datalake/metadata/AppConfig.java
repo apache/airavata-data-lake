@@ -10,6 +10,7 @@ import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.User;
 import org.apache.airavata.datalake.metadata.interceptors.Authenticator;
 import org.apache.airavata.datalake.metadata.interceptors.InterceptorPipelineExecutor;
 import org.apache.airavata.datalake.metadata.interceptors.ServiceInterceptor;
+import org.apache.custos.clients.CustosClientProvider;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
@@ -18,6 +19,7 @@ import org.neo4j.ogm.cypher.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,6 +33,18 @@ public class AppConfig {
 
     @Autowired
     private Connector connector;
+
+    @Value("${custos.id}")
+    private String custosId;
+
+    @Value("${custos.secret}")
+    private String custosSec;
+
+    @Value("${custos.host}")
+    private String custosHost;
+
+    @Value("${custos.port}")
+    private int custosPort;
 
 
     @Bean
@@ -76,95 +90,25 @@ public class AppConfig {
 
 
     @Bean
-    Tenant getTenant() {
-        LOGGER.info("Calling get tenant############");
-
-        Tenant tenant = new Tenant();
-        tenant.setTenantId("123456789");
-        tenant.setName("Tenant");
-
-        User user = new User();
-        user.setFirstName("UserA");
-        user.setUsername("user_a");
-
-        User user1 = new User();
-        user1.setFirstName("UserB");
-        user1.setUsername("user_b");
-
-        User user2 = new User();
-        user2.setFirstName("UserC");
-        user2.setUsername("user_c");
-
-        Group group = new Group();
-        group.setName("g1");
-
-        Group group2 = new Group();
-        group2.setName("g2");
-
-        Group group3 = new Group();
-        group3.setName("g3");
-
-        group.addChildGroup(group2, 0, 0, null);
-        group2.addChildGroup(group3, 0, 0, null);
-
-        Resource resource = new Resource();
-        resource.setName("R1");
-
-        Resource resource1 = new Resource();
-        resource1.setName("R2");
-
-        Resource resource2 = new Resource();
-        resource2.setName("R3");
-
-        Resource resource3 = new Resource();
-        resource3.setName("R4");
-
-        group.addChildUser(user, "ADMIN", 0, 0, null);
-        resource.addChildResource(resource1, 0, 0, null);
-        resource.shareWithAUser(user, "READ", 0, 0, null);
-
-        group2.addChildUser(user1, "ADMIN", 0, 0, null);
-        group3.addChildUser(user2, "ADMIN", 0, 0, null);
-
-        resource1.shareWithAGroup(group2, "WRITE", 0, 0, null);
-        resource2.shareWithAGroup(group3, "WRITE", 0, 0, null);
-
-        tenant.add(user, 0, 0, null);
-        tenant.add(group, 0, 0, null);
-        tenant.add(resource, 0, 0, null);
-
-        TenantServiceImpl tenantService = new TenantServiceImpl(connector);
-//        tenantService.createOrUpdate(tenant);
-
-        Filter filter = new Filter("name", ComparisonOperator.EQUALS, "R3");
-
-//        ResourceServiceImpl resourceService = new ResourceServiceImpl(connector);
-//        SearchOperator searchOperator = new SearchOperator();
-//        searchOperator.setKey("name");
-//        searchOperator.setValue("R2");
-//        searchOperator.setComparisonOperator(ComparisonOperator.EQUALS);
-//        List searchList = new ArrayList<>();
-//        searchList.add(searchOperator);
-//        List<Resource> collections = (List<Resource>) resourceService.search(searchList);
-//        LOGGER.info("Size", collections.size());
-//        for (Resource collection : collections) {
-//            LOGGER.info("#############" + collection.getName() + "Created At" + collection.getCreatedAt());
-//        }
-
-
-        return tenant;
-    }
-
-    @Bean
     public Stack<ServiceInterceptor> getInterceptorSet(Authenticator authInterceptor) {
         Stack<ServiceInterceptor> interceptors = new Stack<>();
         interceptors.add(authInterceptor);
         return interceptors;
     }
 
+
     @Bean
     @GRpcGlobalInterceptor
-    ServerInterceptor validationInterceptor(Stack<ServiceInterceptor> integrationServiceInterceptors) {
+    public ServerInterceptor validationInterceptor(Stack<ServiceInterceptor> integrationServiceInterceptors) {
         return new InterceptorPipelineExecutor(integrationServiceInterceptors);
+    }
+
+
+    @Bean
+    public CustosClientProvider custosClientsFactory() {
+        return new CustosClientProvider.Builder().setServerHost(custosHost)
+                .setServerPort(custosPort)
+                .setClientId(custosId)
+                .setClientSec(custosSec).build();
     }
 }

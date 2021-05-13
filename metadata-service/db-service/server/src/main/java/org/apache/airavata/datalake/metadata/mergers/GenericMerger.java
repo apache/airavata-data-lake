@@ -4,11 +4,14 @@ import org.apache.airavata.datalake.metadata.backend.Connector;
 import org.apache.airavata.datalake.metadata.backend.neo4j.curd.operators.*;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes.*;
 import org.apache.airavata.datalake.metadata.parsers.ExecutionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 
 public class GenericMerger implements Merger {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenericMerger.class);
 
     private static Connector connector;
 
@@ -20,9 +23,11 @@ public class GenericMerger implements Merger {
     public Entity merge(Entity entity) {
         ExecutionContext executionContext = entity.getExecutionContext();
         executionContext.getNeo4JConvertedModels().values().forEach(en -> {
+            LOGGER.info("Entity name " + ((Entity) en).getSearchableId());
             List<Entity> entityList = genericService((Entity) en).find(en);
             if (!entityList.isEmpty()) {
                 Entity exEnt = entityList.get(0);
+                LOGGER.info("selected entity name " + exEnt.getSearchableId());
                 ((Entity) en).setId(exEnt.getId());
             }
         });

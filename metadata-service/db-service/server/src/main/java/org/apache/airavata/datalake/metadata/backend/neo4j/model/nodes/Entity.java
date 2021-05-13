@@ -3,14 +3,19 @@ package org.apache.airavata.datalake.metadata.backend.neo4j.model.nodes;
 import org.apache.airavata.datalake.metadata.backend.neo4j.model.relationships.Has;
 import org.apache.airavata.datalake.metadata.parsers.ExecutionContext;
 import org.neo4j.ogm.annotation.*;
+import org.neo4j.ogm.annotation.typeconversion.Convert;
+import org.neo4j.ogm.id.UuidStrategy;
+import org.neo4j.ogm.typeconversion.UuidStringConverter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public abstract class Entity {
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = UuidStrategy.class )
+    @Convert(UuidStringConverter.class)
+    private UUID id;
 
     @Properties(prefix = "external_id")
     private Map<String,String > externalIds = new HashMap<>();
@@ -41,7 +46,7 @@ public abstract class Entity {
 
 
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -109,7 +114,7 @@ public abstract class Entity {
         this.tenantId = tenantId;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
