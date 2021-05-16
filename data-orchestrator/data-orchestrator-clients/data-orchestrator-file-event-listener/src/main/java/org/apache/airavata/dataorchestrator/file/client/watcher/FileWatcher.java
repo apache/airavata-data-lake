@@ -1,7 +1,10 @@
 package org.apache.airavata.dataorchestrator.file.client.watcher;
 
-import org.apache.airavata.dataorchestrator.clients.core.listener.AbstractListener;
+import org.apache.airavata.dataorchestrator.clients.core.AbstractListener;
+import org.apache.airavata.dataorchestrator.file.client.model.Configuration;
 import org.apache.airavata.dataorchestrator.file.client.model.FileEvent;
+import org.apache.airavata.dataorchestrator.messaging.Constants;
+import org.apache.airavata.dataorchestrator.messaging.model.NotificationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,8 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
@@ -19,58 +23,35 @@ import static java.nio.file.StandardWatchEventKinds.*;
  */
 public class FileWatcher implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileWatcher.class);
-    protected List<AbstractListener> listeners = new ArrayList<>();
+    private List<AbstractListener> listeners = new ArrayList<>();
 
-    protected final File folder;
+    private final File rootFolder;
 
-    protected static final List<WatchService> watchServices = new ArrayList<>();
+    private static Map<WatchKey, Path> keyPathMap = new HashMap<>();
+
+    private Configuration configuration;
 
 
-    public FileWatcher(File folder) {
-
-        this.folder = folder;
-
+    public FileWatcher(File rootFolder, Configuration configuration) throws IOException {
+        this.rootFolder = rootFolder;
+        this.configuration = configuration;
     }
 
-    public void watch() {
-
-        if (folder.exists()) {
-            LOGGER.info("Starting watcher thread ...");
-            for (AbstractListener listener : listeners) {
-                listener.onRegistered(new FileEvent(folder));
-            }
-
-            Thread thread = new Thread(this);
-
-//            thread.setDaemon(true);
-
-            thread.start();
-
-        }
-    }
 
     @Override
 
     public void run() {
 
-        LOGGER.info("FileWatcher started at " + folder.getAbsolutePath());
+        LOGGER.info("Watcher service starting at " + rootFolder.getAbsolutePath());
         try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
-
-            Path path = Paths.get(folder.getAbsolutePath());
-
-            path.register(watchService, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
-
-            watchServices.add(watchService);
-
-            boolean poll = true;
-            while (poll) {
-
-                poll = pollEvents(watchService);
-
+            Path path = Paths.get(rootFolder.getAbsolutePath());
+            registerDir(path, watchService);
+            while (true) {
+                pollEvents(watchService);
             }
 
-        } catch (IOException | InterruptedException | ClosedWatchServiceException e) {
-            LOGGER.error("Error occurred while watching  folders ", e);
+        } catch (Exception e) {
+            LOGGER.error("Error occurred while watching  folder " + rootFolder.getAbsolutePath(), e);
             Thread.currentThread().interrupt();
 
         }
@@ -78,39 +59,41 @@ public class FileWatcher implements Runnable {
     }
 
 
-    protected boolean pollEvents(WatchService watchService) throws InterruptedException {
+    protected void pollEvents(WatchService watchService) throws Exception {
 
         WatchKey key = watchService.take();
 
-        Path path = (Path) key.watchable();
-
         for (WatchEvent<?> event : key.pollEvents()) {
-
-            notifyListeners(event.kind(), path.resolve((Path) event.context()).toFile());
-
+            notifyListeners(watchService, event.kind(), event, key);
         }
 
-        return key.reset();
+        if (!key.reset()) {
+            keyPathMap.remove(key);
+        }
+        if (keyPathMap.isEmpty()) {
+            return;
+        }
 
     }
 
 
-    protected void notifyListeners(WatchEvent.Kind<?> kind, File file) {
+    protected void notifyListeners(WatchService watchService, WatchEvent.Kind<?> kind, WatchEvent keyEvent, WatchKey key) throws Exception {
+        Path path = (Path) keyEvent.context();
 
-        FileEvent event = new FileEvent(file);
+        Path parentPath = keyPathMap.get(key);
+
+        path = parentPath.resolve(path);
+        File file = path.toFile();
+        FileEvent event = getFileEvent(file);
 
         if (kind == ENTRY_CREATE) {
 
             for (AbstractListener listener : listeners) {
-
                 listener.onCreated(event);
-
             }
 
             if (file.isDirectory()) {
-
-                new FileWatcher(file).setListeners(listeners).watch();
-
+                registerDir(path, watchService);
             }
 
         } else if (kind == ENTRY_MODIFY) {
@@ -124,9 +107,7 @@ public class FileWatcher implements Runnable {
         } else if (kind == ENTRY_DELETE) {
 
             for (AbstractListener listener : listeners) {
-
                 listener.onDeleted(event);
-
             }
 
         }
@@ -168,11 +149,50 @@ public class FileWatcher implements Runnable {
     }
 
 
-    public static List<WatchService> getWatchServices() {
+    /**
+     * Register the given directory and all its sub-directories with the WatchService.
+     */
 
-        return Collections.unmodifiableList(watchServices);
 
+    protected FileEvent getFileEvent(File file) {
+        FileEvent event = new FileEvent();
+        if (file.isDirectory()) {
+            event.setResourceType(Constants.FOLDER);
+        } else {
+            event.setResourceType(Constants.FILE);
+        }
+        event.setResourceName(file.getName());
+        event.setResourcePath(file.getAbsolutePath());
+        event.setHost(configuration.getFileServerHost());
+        event.setPort(configuration.getFileServerPort());
+        event.setProtocol(configuration.getFileServerProtocol());
+        NotificationEvent.Context context = new NotificationEvent.Context();
+        context.setOccuredTime(System.currentTimeMillis());
+        event.setContext(context);
+        return event;
     }
 
+    private static void registerDir(Path path, WatchService watchService) throws
+            IOException {
+
+
+        if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
+            return;
+        }
+
+        LOGGER.info("registering path: " + path);
+
+
+        WatchKey key = path.register(watchService,
+                StandardWatchEventKinds.ENTRY_CREATE,
+                StandardWatchEventKinds.ENTRY_MODIFY,
+                StandardWatchEventKinds.ENTRY_DELETE);
+        keyPathMap.put(key, path);
+
+
+        for (File f : path.toFile().listFiles()) {
+            registerDir(f.toPath(), watchService);
+        }
+    }
 
 }

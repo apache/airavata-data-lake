@@ -1,0 +1,527 @@
+2021-05-14 10:09:07,423 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 33339 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 10:09:07,427 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 10:09:07,689 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.623 seconds (JVM running for 0.977) []
+2021-05-14 10:09:07,690 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 10:09:07,691 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:09:07,713 [main] ERROR o.a.a.d.f.c.FileClientInitializer Error loading config file []
+2021-05-14 10:09:07,714 [main] ERROR o.a.a.d.f.c.FileClientInitializer Error loading config file []
+2021-05-14 10:09:07,716 [main] ERROR o.s.boot.SpringApplication Application run failed []
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.main(FileClientInitializer.java:23)
+Caused by: java.lang.NullPointerException: null
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.run(FileClientInitializer.java:40)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	... 5 common frames omitted
+2021-05-14 10:14:19,518 [main] WARN  o.s.boot.StartupInfoLogger InetAddress.getLocalHost().getHostName() took 205 milliseconds to respond. Please verify your network configuration (macOS machines may need to add entries to /etc/hosts). []
+2021-05-14 10:14:19,535 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 33387 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 10:14:19,535 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 10:14:19,769 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.639 seconds (JVM running for 1.013) []
+2021-05-14 10:14:19,770 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 10:14:19,770 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:14:19,771 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:14:19,788 [main] ERROR o.a.a.d.f.c.FileClientInitializer Error loading config file []
+2021-05-14 10:14:19,789 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path config.yml []
+2021-05-14 10:14:19,789 [main] ERROR o.a.a.d.f.c.FileClientInitializer Error loading config file []
+2021-05-14 10:14:19,792 [main] ERROR o.s.boot.SpringApplication Application run failed []
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.main(FileClientInitializer.java:23)
+Caused by: java.lang.NullPointerException: null
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.run(FileClientInitializer.java:40)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	... 5 common frames omitted
+2021-05-14 10:16:07,433 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 33428 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 10:16:07,436 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 10:16:07,688 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.446 seconds (JVM running for 0.822) []
+2021-05-14 10:16:07,689 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 10:16:07,689 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:16:07,689 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:16:07,717 [main] ERROR o.a.a.d.f.c.FileClientInitializer Error loading config file []
+org.yaml.snakeyaml.error.YAMLException: java.io.IOException: Stream closed
+	at org.yaml.snakeyaml.reader.StreamReader.update(StreamReader.java:200)
+	at org.yaml.snakeyaml.reader.StreamReader.<init>(StreamReader.java:60)
+	at org.yaml.snakeyaml.Yaml.loadAs(Yaml.java:444)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.loadConfig(FileClientInitializer.java:52)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer$$Lambda$183/000000000000000000.apply(Unknown Source)
+	at java.base/java.util.Optional.map(Optional.java:265)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.run(FileClientInitializer.java:37)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.main(FileClientInitializer.java:23)
+Caused by: java.io.IOException: Stream closed
+	at java.base/java.io.PushbackInputStream.ensureOpen(PushbackInputStream.java:75)
+	at java.base/java.io.PushbackInputStream.read(PushbackInputStream.java:163)
+	at org.yaml.snakeyaml.reader.UnicodeReader.init(UnicodeReader.java:90)
+	at org.yaml.snakeyaml.reader.UnicodeReader.read(UnicodeReader.java:122)
+	at java.base/java.io.Reader.read(Reader.java:229)
+	at org.yaml.snakeyaml.reader.StreamReader.update(StreamReader.java:184)
+	... 12 common frames omitted
+2021-05-14 10:16:07,718 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path config.yml []
+2021-05-14 10:16:07,718 [main] ERROR o.a.a.d.f.c.FileClientInitializer Error loading config file []
+org.yaml.snakeyaml.error.YAMLException: java.io.IOException: Stream closed
+	at org.yaml.snakeyaml.reader.StreamReader.update(StreamReader.java:200)
+	at org.yaml.snakeyaml.reader.StreamReader.<init>(StreamReader.java:60)
+	at org.yaml.snakeyaml.Yaml.loadAs(Yaml.java:444)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.loadConfig(FileClientInitializer.java:52)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.lambda$run$0(FileClientInitializer.java:38)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer$$Lambda$184/000000000000000000.get(Unknown Source)
+	at java.base/java.util.Optional.orElseGet(Optional.java:369)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.run(FileClientInitializer.java:38)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.main(FileClientInitializer.java:23)
+Caused by: java.io.IOException: Stream closed
+	at java.base/java.io.PushbackInputStream.ensureOpen(PushbackInputStream.java:75)
+	at java.base/java.io.PushbackInputStream.read(PushbackInputStream.java:163)
+	at org.yaml.snakeyaml.reader.UnicodeReader.init(UnicodeReader.java:90)
+	at org.yaml.snakeyaml.reader.UnicodeReader.read(UnicodeReader.java:122)
+	at java.base/java.io.Reader.read(Reader.java:229)
+	at org.yaml.snakeyaml.reader.StreamReader.update(StreamReader.java:184)
+	... 13 common frames omitted
+2021-05-14 10:16:07,719 [main] ERROR o.s.boot.SpringApplication Application run failed []
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.main(FileClientInitializer.java:23)
+Caused by: java.lang.NullPointerException: null
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.run(FileClientInitializer.java:40)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	... 5 common frames omitted
+2021-05-14 10:23:53,654 [main] WARN  o.s.boot.StartupInfoLogger InetAddress.getLocalHost().getHostName() took 209 milliseconds to respond. Please verify your network configuration (macOS machines may need to add entries to /etc/hosts). []
+2021-05-14 10:23:53,669 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 33575 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 10:23:53,669 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 10:23:53,911 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.622 seconds (JVM running for 0.923) []
+2021-05-14 10:23:53,912 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 10:23:53,912 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:23:53,913 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:23:53,936 [main] ERROR o.a.a.d.f.c.FileClientInitializer Error loading config file []
+org.yaml.snakeyaml.error.YAMLException: java.io.IOException: Stream closed
+	at org.yaml.snakeyaml.reader.StreamReader.update(StreamReader.java:200)
+	at org.yaml.snakeyaml.reader.StreamReader.<init>(StreamReader.java:60)
+	at org.yaml.snakeyaml.Yaml.loadAs(Yaml.java:444)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.loadConfig(FileClientInitializer.java:52)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer$$Lambda$183/000000000000000000.apply(Unknown Source)
+	at java.base/java.util.Optional.map(Optional.java:265)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.run(FileClientInitializer.java:37)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.main(FileClientInitializer.java:23)
+Caused by: java.io.IOException: Stream closed
+	at java.base/java.io.PushbackInputStream.ensureOpen(PushbackInputStream.java:75)
+	at java.base/java.io.PushbackInputStream.read(PushbackInputStream.java:163)
+	at org.yaml.snakeyaml.reader.UnicodeReader.init(UnicodeReader.java:90)
+	at org.yaml.snakeyaml.reader.UnicodeReader.read(UnicodeReader.java:122)
+	at java.base/java.io.Reader.read(Reader.java:229)
+	at org.yaml.snakeyaml.reader.StreamReader.update(StreamReader.java:184)
+	... 12 common frames omitted
+2021-05-14 10:23:53,937 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path config.yml []
+2021-05-14 10:23:53,937 [main] ERROR o.a.a.d.f.c.FileClientInitializer Error loading config file []
+org.yaml.snakeyaml.error.YAMLException: java.io.IOException: Stream closed
+	at org.yaml.snakeyaml.reader.StreamReader.update(StreamReader.java:200)
+	at org.yaml.snakeyaml.reader.StreamReader.<init>(StreamReader.java:60)
+	at org.yaml.snakeyaml.Yaml.loadAs(Yaml.java:444)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.loadConfig(FileClientInitializer.java:52)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.lambda$run$0(FileClientInitializer.java:38)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer$$Lambda$184/000000000000000000.get(Unknown Source)
+	at java.base/java.util.Optional.orElseGet(Optional.java:369)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.run(FileClientInitializer.java:38)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.main(FileClientInitializer.java:23)
+Caused by: java.io.IOException: Stream closed
+	at java.base/java.io.PushbackInputStream.ensureOpen(PushbackInputStream.java:75)
+	at java.base/java.io.PushbackInputStream.read(PushbackInputStream.java:163)
+	at org.yaml.snakeyaml.reader.UnicodeReader.init(UnicodeReader.java:90)
+	at org.yaml.snakeyaml.reader.UnicodeReader.read(UnicodeReader.java:122)
+	at java.base/java.io.Reader.read(Reader.java:229)
+	at org.yaml.snakeyaml.reader.StreamReader.update(StreamReader.java:184)
+	... 13 common frames omitted
+2021-05-14 10:23:53,939 [main] ERROR o.s.boot.SpringApplication Application run failed []
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.main(FileClientInitializer.java:23)
+Caused by: java.lang.NullPointerException: null
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.run(FileClientInitializer.java:40)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	... 5 common frames omitted
+2021-05-14 10:41:37,286 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 33811 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 10:41:37,289 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 10:41:37,509 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.377 seconds (JVM running for 0.645) []
+2021-05-14 10:41:37,510 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 10:41:37,510 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:41:37,510 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:41:37,531 [main] ERROR o.a.a.d.f.c.FileClientInitializer Error loading config file []
+org.yaml.snakeyaml.error.YAMLException: java.io.IOException: Stream closed
+	at org.yaml.snakeyaml.reader.StreamReader.update(StreamReader.java:200)
+	at org.yaml.snakeyaml.reader.StreamReader.<init>(StreamReader.java:60)
+	at org.yaml.snakeyaml.Yaml.loadAs(Yaml.java:444)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.loadConfig(FileClientInitializer.java:53)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.run(FileClientInitializer.java:39)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.main(FileClientInitializer.java:22)
+Caused by: java.io.IOException: Stream closed
+	at java.base/java.io.PushbackInputStream.ensureOpen(PushbackInputStream.java:75)
+	at java.base/java.io.PushbackInputStream.read(PushbackInputStream.java:163)
+	at org.yaml.snakeyaml.reader.UnicodeReader.init(UnicodeReader.java:90)
+	at org.yaml.snakeyaml.reader.UnicodeReader.read(UnicodeReader.java:122)
+	at java.base/java.io.Reader.read(Reader.java:229)
+	at org.yaml.snakeyaml.reader.StreamReader.update(StreamReader.java:184)
+	... 10 common frames omitted
+2021-05-14 10:41:37,532 [main] ERROR o.s.boot.SpringApplication Application run failed []
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.main(FileClientInitializer.java:22)
+Caused by: java.lang.NullPointerException: null
+	at org.apache.airavata.dataorchestrator.file.client.FileClientInitializer.run(FileClientInitializer.java:41)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	... 5 common frames omitted
+2021-05-14 10:45:05,678 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 33869 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 10:45:05,681 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 10:45:05,908 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.563 seconds (JVM running for 0.898) []
+2021-05-14 10:45:05,909 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 10:45:05,909 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:45:05,909 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:45:05,947 [main] INFO  o.a.a.d.f.c.FileClientInitializer SFTP []
+2021-05-14 10:45:05,947 [main] INFO  o.a.a.d.f.c.FileClientInitializer SFTP []
+2021-05-14 10:45:05,948 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 10:45:05,948 [main] INFO  o.a.a.d.c.c.l.AbstractListener Calling register method for folder /Users/isururanawaka/Documents/texts []
+2021-05-14 10:45:05,948 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 10:46:33,239 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 33905 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 10:46:33,242 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 10:46:33,431 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.317 seconds (JVM running for 0.55) []
+2021-05-14 10:46:33,432 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 10:46:33,432 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:46:33,433 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:46:33,465 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 10:46:33,465 [main] INFO  o.a.a.d.c.c.l.AbstractListener Calling register method for folder /Users/isururanawaka/Documents/texts []
+2021-05-14 10:46:33,466 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 10:50:36,856 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 33975 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 10:50:36,858 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 10:50:37,042 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.47 seconds (JVM running for 0.708) []
+2021-05-14 10:50:37,043 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 10:50:37,043 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:50:37,044 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:50:37,073 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 10:50:37,073 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 10:50:37,074 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 10:51:07,081 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File FIle.txt Deleted  []
+2021-05-14 10:51:27,080 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File test2 Created []
+2021-05-14 10:51:27,081 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 10:51:27,081 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 10:51:27,082 [Thread-4] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts/test2 []
+2021-05-14 10:51:57,083 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File test2 Modified  []
+2021-05-14 10:51:57,084 [Thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File FIle.test Created []
+2021-05-14 10:54:27,084 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File test2 Modified  []
+2021-05-14 10:54:27,087 [Thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File test Created []
+2021-05-14 10:54:27,088 [Thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File FIle.test Deleted  []
+2021-05-14 10:57:30,808 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 34024 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 10:57:30,811 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 10:57:31,069 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.579 seconds (JVM running for 0.912) []
+2021-05-14 10:57:31,069 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 10:57:31,069 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:57:31,070 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 10:57:31,104 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 10:57:31,104 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 10:57:31,105 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 10:58:01,109 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File test2 Modified  []
+2021-05-14 10:58:31,109 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File test2 Modified  []
+2021-05-14 10:59:51,111 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File sdf Created []
+2021-05-14 10:59:51,113 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 10:59:51,113 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 10:59:51,113 [Thread-4] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts/sdf []
+2021-05-14 11:05:27,708 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 34080 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 11:05:27,711 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 11:05:27,950 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.549 seconds (JVM running for 0.863) []
+2021-05-14 11:05:27,950 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 11:05:27,951 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 11:05:27,951 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 11:05:27,990 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:05:27,991 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 11:05:27,991 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 11:05:58,001 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File ffg Created []
+2021-05-14 11:05:58,002 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:05:58,002 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 11:05:58,003 [Thread-4] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts/ffg []
+2021-05-14 11:06:07,998 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File ffg Modified  []
+2021-05-14 11:06:08,005 [Thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File dcfvgbh Created []
+2021-05-14 11:06:08,005 [Thread-4] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:06:08,005 [Thread-4] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 11:06:08,006 [Thread-5] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts/ffg/dcfvgbh []
+2021-05-14 11:06:28,005 [Thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File dcfvgbh Modified  []
+2021-05-14 11:06:28,008 [Thread-5] INFO  o.a.a.d.c.c.l.AbstractListener File sedrfv.txt Created []
+2021-05-14 11:07:07,999 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File sdf Modified  []
+2021-05-14 11:07:17,999 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File sdf Modified  []
+2021-05-14 11:30:05,217 [main] WARN  o.s.boot.StartupInfoLogger InetAddress.getLocalHost().getHostName() took 210 milliseconds to respond. Please verify your network configuration (macOS machines may need to add entries to /etc/hosts). []
+2021-05-14 11:30:05,234 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 34540 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 11:30:05,235 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 11:30:05,526 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.708 seconds (JVM running for 1.088) []
+2021-05-14 11:30:05,527 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 11:30:05,528 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 11:30:05,528 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 11:30:05,573 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:30:05,573 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 11:30:05,587 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 11:30:05,593 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:30:05,593 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 11:30:05,594 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:30:05,594 [Thread-4] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts/sdf []
+2021-05-14 11:30:05,594 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 11:30:05,594 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:30:05,594 [Thread-5] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts/ffg []
+2021-05-14 11:30:05,594 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 11:30:05,594 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:30:05,594 [Thread-6] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts/ffg/dcfvgbh []
+2021-05-14 11:30:05,594 [Thread-5] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:30:05,594 [Thread-5] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 11:30:05,595 [Thread-7] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts/ffg/dcfvgbh []
+2021-05-14 11:30:05,594 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 11:30:05,596 [Thread-8] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts/test2 []
+2021-05-14 11:30:05,596 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:30:05,597 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 11:30:05,597 [Thread-8] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:30:05,597 [Thread-9] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts/test2/sdf []
+2021-05-14 11:30:05,597 [Thread-8] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for null []
+2021-05-14 11:30:05,597 [Thread-10] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts/test2/sdf []
+2021-05-14 11:31:05,597 [Thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File RGTYH.txrt.back Created []
+2021-05-14 11:57:05,035 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 34868 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 11:57:05,037 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 11:57:05,269 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.405 seconds (JVM running for 0.737) []
+2021-05-14 11:57:05,270 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 11:57:05,270 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 11:57:05,271 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 11:57:05,309 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 11:57:05,310 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for /Users/isururanawaka/Documents/texts []
+2021-05-14 11:57:05,313 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 11:57:05,316 [Thread-3] ERROR o.a.a.d.f.c.w.FileWatcher Error occurred while watching  folder /Users/isururanawaka/Documents/texts []
+java.nio.file.ClosedWatchServiceException: null
+	at java.base/sun.nio.fs.PollingWatchService.register(PollingWatchService.java:137)
+	at java.base/sun.nio.fs.UnixPath.register(UnixPath.java:920)
+	at java.base/java.nio.file.Path.register(Path.java:894)
+	at org.apache.airavata.dataorchestrator.file.client.watcher.FileWatcher.run(FileWatcher.java:76)
+	at java.base/java.lang.Thread.run(Thread.java:836)
+2021-05-14 12:05:31,026 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 34982 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 12:05:31,029 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 12:05:31,355 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.76 seconds (JVM running for 1.193) []
+2021-05-14 12:05:31,355 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 12:05:31,356 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:05:31,356 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:05:31,403 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 12:05:31,403 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for /Users/isururanawaka/Documents/texts []
+2021-05-14 12:05:31,407 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 12:06:01,413 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File texts Created []
+2021-05-14 12:13:04,563 [main] WARN  o.s.boot.StartupInfoLogger InetAddress.getLocalHost().getHostName() took 224 milliseconds to respond. Please verify your network configuration (macOS machines may need to add entries to /etc/hosts). []
+2021-05-14 12:13:04,577 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 35123 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 12:13:04,578 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 12:13:04,792 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.597 seconds (JVM running for 0.99) []
+2021-05-14 12:13:04,792 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 12:13:04,792 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:13:04,793 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:13:04,826 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 12:13:04,827 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for /Users/isururanawaka/Documents/texts []
+2021-05-14 12:13:04,827 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 12:13:24,834 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File texts Created []
+2021-05-14 12:23:40,454 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 35249 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 12:23:40,456 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 12:23:40,639 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.457 seconds (JVM running for 0.697) []
+2021-05-14 12:23:40,640 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 12:23:40,640 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:23:40,641 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:23:40,668 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 12:23:40,668 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for /Users/isururanawaka/Documents/texts []
+2021-05-14 12:23:40,669 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 12:24:50,677 [Thread-3] INFO  o.a.a.d.c.c.l.AbstractListener File texts Created []
+2021-05-14 12:35:50,631 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 35390 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 12:35:50,633 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 12:35:50,920 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.623 seconds (JVM running for 0.987) []
+2021-05-14 12:35:50,921 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 12:35:50,921 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:35:50,922 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:35:50,969 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 12:35:50,969 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for /Users/isururanawaka/Documents/texts []
+2021-05-14 12:35:50,970 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 12:35:50,974 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts in watcher service []
+2021-05-14 12:35:50,977 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/sdf in watcher service []
+2021-05-14 12:35:50,978 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/ffg in watcher service []
+2021-05-14 12:35:50,978 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/ffg/dcfvgbh in watcher service []
+2021-05-14 12:35:50,978 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/test2 in watcher service []
+2021-05-14 12:35:50,978 [Thread-3] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/test2/sdf in watcher service []
+2021-05-14 12:40:06,249 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 35439 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 12:40:06,251 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 12:40:06,492 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.566 seconds (JVM running for 0.895) []
+2021-05-14 12:40:06,492 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 12:40:06,493 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:40:06,493 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:40:06,533 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 12:40:06,534 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for /Users/isururanawaka/Documents/texts []
+2021-05-14 12:40:06,534 [main] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 12:40:06,537 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts in watcher service []
+2021-05-14 12:40:06,541 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/sdf in watcher service []
+2021-05-14 12:40:06,542 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/ffg in watcher service []
+2021-05-14 12:40:06,543 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/ffg/dcfvgbh in watcher service []
+2021-05-14 12:40:06,543 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/test2 in watcher service []
+2021-05-14 12:40:06,544 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/test2/sdf in watcher service []
+2021-05-14 12:40:06,545 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher Running ...... []
+2021-05-14 12:47:35,792 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 35508 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 12:47:35,794 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 12:47:36,095 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.684 seconds (JVM running for 1.064) []
+2021-05-14 12:47:36,095 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 12:47:36,096 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:47:36,096 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 12:47:36,150 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 12:47:36,151 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for /Users/isururanawaka/Documents/texts []
+2021-05-14 12:47:36,151 [main] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 12:47:36,154 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts in watcher service []
+2021-05-14 12:47:36,182 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/sdf in watcher service []
+2021-05-14 12:47:36,183 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/ffg in watcher service []
+2021-05-14 12:47:36,184 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/ffg/dcfvgbh in watcher service []
+2021-05-14 12:47:36,184 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/test2 in watcher service []
+2021-05-14 12:47:36,185 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/test2/sdf in watcher service []
+2021-05-14 12:47:36,187 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher Running ...... []
+2021-05-14 13:00:43,700 [main] WARN  o.s.boot.StartupInfoLogger InetAddress.getLocalHost().getHostName() took 209 milliseconds to respond. Please verify your network configuration (macOS machines may need to add entries to /etc/hosts). []
+2021-05-14 13:00:43,720 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 35823 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 13:00:43,721 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 13:00:43,902 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.522 seconds (JVM running for 0.748) []
+2021-05-14 13:00:43,902 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 13:00:43,903 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 13:00:43,903 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 13:00:43,931 [main] INFO  o.a.a.d.f.c.w.FileWatcher Starting watcher service ... []
+2021-05-14 13:00:43,932 [main] INFO  o.a.a.d.c.c.l.AbstractListener Caught register event for /Users/isururanawaka/Documents/texts []
+2021-05-14 13:00:43,932 [main] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service started at /Users/isururanawaka/Documents/texts []
+2021-05-14 13:00:43,935 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts in watcher service []
+2021-05-14 13:00:43,938 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/sdf in watcher service []
+2021-05-14 13:00:43,940 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/ffg in watcher service []
+2021-05-14 13:00:43,941 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/ffg/dcfvgbh in watcher service []
+2021-05-14 13:00:43,941 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/test2 in watcher service []
+2021-05-14 13:00:43,942 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/test2/sdf in watcher service []
+2021-05-14 13:00:43,943 [main] INFO  o.a.a.d.f.c.w.FileWatcher registering /Users/isururanawaka/Documents/texts/asdadas in watcher service []
+2021-05-14 13:00:43,944 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher Running ...... []
+2021-05-14 13:45:04,466 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 36026 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 13:45:04,468 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 13:45:04,646 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.473 seconds (JVM running for 0.694) []
+2021-05-14 13:45:04,646 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 13:45:04,646 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 13:45:04,647 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 13:45:04,677 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts []
+2021-05-14 13:45:04,679 [pool-1-thread-2] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/ffg []
+2021-05-14 13:45:04,679 [pool-1-thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/ffg/dcfvgbh []
+2021-05-14 13:45:04,680 [pool-1-thread-4] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/test2 []
+2021-05-14 13:45:04,681 [pool-1-thread-5] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/test2/sdf []
+2021-05-14 13:45:04,681 [pool-1-thread-6] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/asdadas []
+2021-05-14 13:46:04,684 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File texts Created []
+2021-05-14 13:48:20,617 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 36065 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 13:48:20,619 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 13:48:20,799 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.45 seconds (JVM running for 0.664) []
+2021-05-14 13:48:20,800 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 13:48:20,800 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 13:48:20,802 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 13:48:20,832 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts []
+2021-05-14 13:48:20,833 [pool-1-thread-2] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/ffg []
+2021-05-14 13:48:20,833 [pool-1-thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/ffg/dcfvgbh []
+2021-05-14 13:48:20,835 [pool-1-thread-4] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/test2 []
+2021-05-14 13:48:20,835 [pool-1-thread-5] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/test2/sdf []
+2021-05-14 13:48:20,836 [pool-1-thread-6] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/asdadas []
+2021-05-14 13:48:50,838 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File SDFG.txt.back Created []
+2021-05-14 13:50:10,839 [pool-1-thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File test.1.txt Created []
+2021-05-14 13:50:40,840 [pool-1-thread-7] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/test2/ferferfe []
+2021-05-14 13:50:50,842 [pool-1-thread-7] INFO  o.a.a.d.c.c.l.AbstractListener File .asdasda.txt.swp Created []
+2021-05-14 13:51:00,841 [pool-1-thread-7] INFO  o.a.a.d.c.c.l.AbstractListener File asdasda.txt Created []
+2021-05-14 13:54:30,846 [pool-1-thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File .test.1.txt.swp Created []
+2021-05-14 13:54:40,846 [pool-1-thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File test.1.txt Modified  []
+2021-05-14 13:55:00,846 [pool-1-thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File .test.1.txt.swp Created []
+2021-05-14 13:55:10,846 [pool-1-thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File test.1.txt Modified  []
+2021-05-14 14:00:02,946 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 36153 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 14:00:02,948 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 14:00:03,133 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.481 seconds (JVM running for 0.717) []
+2021-05-14 14:00:03,133 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 14:00:03,134 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 14:00:03,134 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 14:00:03,164 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts []
+2021-05-14 14:00:03,165 [pool-1-thread-2] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/ffg []
+2021-05-14 14:00:03,165 [pool-1-thread-3] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/ffg/dcfvgbh []
+2021-05-14 14:00:03,166 [pool-1-thread-4] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/test2 []
+2021-05-14 14:00:03,167 [pool-1-thread-5] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/test2/sdf []
+2021-05-14 14:00:03,167 [pool-1-thread-6] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/test2/ferferfe []
+2021-05-14 14:00:03,167 [pool-1-thread-7] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/asdadas []
+2021-05-14 14:00:23,170 [pool-1-thread-5] INFO  o.a.a.d.c.c.l.AbstractListener File FILE.txt Deleted  []
+2021-05-14 14:00:53,169 [pool-1-thread-8] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts/test2/sdf/lsdf []
+2021-05-14 14:01:43,170 [pool-1-thread-4] INFO  o.a.a.d.c.c.l.AbstractListener File sdf Deleted  []
+2021-05-14 14:17:51,031 [main] INFO  o.a.a.d.f.c.FileClientInitializer Starting FileClientInitializer on Isurus-MacBook-Pro.local with PID 36205 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target/data-orchestrator-file-event-listener-0.01-SNAPSHOT-jar-with-dependencies.jar started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/target) []
+2021-05-14 14:17:51,033 [main] INFO  o.a.a.d.f.c.FileClientInitializer No active profile set, falling back to default profiles: default []
+2021-05-14 14:17:51,211 [main] INFO  o.a.a.d.f.c.FileClientInitializer Started FileClientInitializer in 0.477 seconds (JVM running for 0.701) []
+2021-05-14 14:17:51,212 [main] INFO  o.a.a.d.f.c.FileClientInitializer Initializing File watcher service ... []
+2021-05-14 14:17:51,212 [main] INFO  o.a.a.d.f.c.FileClientInitializer Listening to file path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 14:17:51,213 [main] INFO  o.a.a.d.f.c.FileClientInitializer File path /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml []
+2021-05-14 14:17:51,240 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher Watcher service starting at /Users/isururanawaka/Documents/texts []
+2021-05-14 14:17:51,241 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher registering: /Users/isururanawaka/Documents/texts []
+2021-05-14 14:17:51,244 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher registering: /Users/isururanawaka/Documents/texts/ffg []
+2021-05-14 14:17:51,246 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher registering: /Users/isururanawaka/Documents/texts/ffg/dcfvgbh []
+2021-05-14 14:17:51,246 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher registering: /Users/isururanawaka/Documents/texts/test2 []
+2021-05-14 14:17:51,246 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher registering: /Users/isururanawaka/Documents/texts/test2/ferferfe []
+2021-05-14 14:17:51,247 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher registering: /Users/isururanawaka/Documents/texts/asdadas []
+2021-05-14 14:18:11,248 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File test2 Modified  []
+2021-05-14 14:18:11,248 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File .EDFCVGB.txt.swp Created []
+2021-05-14 14:18:21,246 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File test2 Modified  []
+2021-05-14 14:18:21,247 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File EDFCVGB.txt Created []
+2021-05-14 14:18:21,248 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File .EDFCVGB.txt.swp Deleted  []
+2021-05-14 14:18:51,247 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File dcfvg Created []
+2021-05-14 14:18:51,247 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher registering: /Users/isururanawaka/Documents/texts/dcfvg []
+2021-05-14 14:19:11,248 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File dcfvg Modified  []
+2021-05-14 14:19:11,248 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File RFGTYH.txt Created []
+2021-05-14 15:07:56,936 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File ffg Modified  []
+2021-05-14 15:07:56,937 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File fvgh Created []
+2021-05-14 15:07:56,937 [pool-1-thread-1] INFO  o.a.a.d.f.c.w.FileWatcher registering: /Users/isururanawaka/Documents/texts/ffg/fvgh []
+2021-05-14 15:08:06,940 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File fvgh Modified  []
+2021-05-14 15:08:06,942 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File ASXDC.txt Created []
+2021-05-14 15:08:06,942 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File .ASXDC.txt.swp Deleted  []
+2021-05-14 15:08:46,945 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File fvgh Modified  []
+2021-05-14 15:08:46,946 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File ASXDC.txt Deleted  []
+2021-05-15 13:22:42,216 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File fvgh Modified  []
+2021-05-15 13:22:42,250 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File WSED.txt Created []
+2021-05-16 08:50:37,427 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File fvgh Modified  []
+2021-05-16 08:50:37,435 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File .WSED.txt.swp Created []
+2021-05-16 08:50:47,422 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File fvgh Modified  []
+2021-05-16 08:50:47,423 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File WSED.txt Modified  []
+2021-05-16 08:50:47,423 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File .WSED.txt.swp Deleted  []
+2021-05-16 14:04:04,017 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File fvgh Modified  []
+2021-05-16 14:04:04,023 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File .WSED.txt.swp Created []
+2021-05-16 14:04:13,987 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File fvgh Modified  []
+2021-05-16 14:04:13,989 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File WSED.txt Modified  []
+2021-05-16 14:04:13,992 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File .WSED.txt.swp Deleted  []
+2021-05-16 14:07:43,990 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File fvgh Modified  []
+2021-05-16 14:07:43,993 [pool-1-thread-1] INFO  o.a.a.d.c.c.l.AbstractListener File WSED.txt Modified  []

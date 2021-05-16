@@ -1,0 +1,6 @@
+eventProcessorWorkers: 10
+consumer:
+  brokerURL: "localhost:9092"
+  consumerGroup: "DataOrchestratorGroup"
+  topic: "quickstart-events"
+  maxPollRecordsConfig: 10

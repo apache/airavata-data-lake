@@ -22,11 +22,7 @@
             <artifactId>data-orchestrator-messaging</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>${kafka-clients.version}</version>
-        </dependency>
+
     </dependencies>
 
 </project>
