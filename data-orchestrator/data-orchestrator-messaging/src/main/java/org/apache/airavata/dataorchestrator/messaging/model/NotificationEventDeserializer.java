@@ -29,6 +29,7 @@ public class NotificationEventDeserializer implements Deserializer<NotificationE
         event.setResourcePath(parts[6]);
         event.setResourceType(parts[7]);
         event.setResourceName(parts[8]);
+        event.setContext(context);
         return event;
     }
 

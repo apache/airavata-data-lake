@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
@@ -36,6 +37,7 @@ import java.util.Optional;
  * TODO: Spring Boot API
  */
 @SpringBootApplication
+@EnableJpaAuditing
 public class APIServerInitializer implements CommandLineRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(APIServerInitializer.class);
 

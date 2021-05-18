@@ -1,4 +1,13 @@
 eventProcessorWorkers: 10
+inMemoryStorageAdaptor: "org.apache.airavata.datalake.orchestrator.db.inmemory.DefaultInMemoryStore"
+messageFilter:
+  resourceType: "FILE"
+  eventType: "CREATE,MODIFY "
+  resourceNameExclusions: "swp$"
+outboundEventProcessor:
+  pollingDelay: 10000
+  pollingInterval: 10000
+  numOfEventsPerPoll: 10
 consumer:
   brokerURL: "localhost:9092"
   consumerGroup: "DataOrchestratorGroup"

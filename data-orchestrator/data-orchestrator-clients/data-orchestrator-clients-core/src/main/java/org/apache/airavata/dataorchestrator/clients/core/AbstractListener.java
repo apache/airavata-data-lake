@@ -36,7 +36,7 @@ public abstract class AbstractListener implements EventListener {
     public void onModified(NotificationEvent event) throws Exception {
         LOGGER.info(event.getResourceType() + " " +
                 event.getResourcePath() + ":" + event.getResourceName() + " Created");
-        eventPublisher.publish(event, MessagingEvents.MODIFIED);
+        eventPublisher.publish(event, MessagingEvents.MODIFY);
 
     }
 

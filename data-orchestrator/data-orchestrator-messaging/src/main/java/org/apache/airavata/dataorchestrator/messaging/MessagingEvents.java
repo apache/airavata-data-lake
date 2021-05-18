@@ -4,6 +4,6 @@ public enum MessagingEvents {
     
     REGISTER,
     CREATE,
-    MODIFIED,
+    MODIFY,
     DELETE
 }

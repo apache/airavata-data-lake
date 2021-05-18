@@ -111,5 +111,9 @@ public class NotificationEvent {
         }
     }
 
+    public String getResourceId() {
+        return host + ":" + resourcePath + ":" + resourceType;
+    }
+
 
 }

@@ -46,9 +46,15 @@ public class MessageConsumer {
                     for (ConsumerRecord<String, NotificationEvent> record : partitionRecords) {
 
 
-                        callback.process(record.value());
+                        try {
+                            callback.process(record.value());
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                        }finally {
+                            consumer.commitSync(Collections.singletonMap(partition, new OffsetAndMetadata(record.offset() + 1)));
+                        }
 
-                        consumer.commitSync(Collections.singletonMap(partition, new OffsetAndMetadata(record.offset() + 1)));
+
                     }
                 }
             }
