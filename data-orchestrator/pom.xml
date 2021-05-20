@@ -35,6 +35,7 @@
     <modules>
         <module>data-orchestrator-api</module>
         <module>data-orchestrator-core</module>
+        <module>workflow-engine</module>
     </modules>
 
 

@@ -20,3 +20,6 @@ data-orchestrator/data-orchestrator-api/target
 /metadata-service/db-service/client/client.iml
 /metadata-service/db-service/server/server.iml
 /metadata-service/db-service/stub/stub.iml
+/metadata-service/data-builders/data-builders.iml
+/metadata-service/db-service/db-service.iml
+/data-orchestrator/workflow-engine/workflow-engine.iml
