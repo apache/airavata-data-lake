@@ -57,13 +57,24 @@ public class DataSyncWorkflowManager implements CommandLineRunner {
         ExampleBlockingTask bt2 = new ExampleBlockingTask();
         bt2.setTaskId("bt2-" + UUID.randomUUID());
 
+        ExampleBlockingTask bt3 = new ExampleBlockingTask();
+        bt3.setTaskId("bt3-" + UUID.randomUUID());
+
+        ExampleBlockingTask bt4 = new ExampleBlockingTask();
+        bt4.setTaskId("bt4-" + UUID.randomUUID());
+
         // Setting dependency
-        bt1.setOutPort(new OutPort().setNextTaskId(bt2.getTaskId()));
+        bt1.setOutPort(new OutPort().setNextTaskId(bt3.getTaskId()));
+        bt2.setOutPort(new OutPort().setNextTaskId(bt3.getTaskId()));
+        bt4.setOutPort(new OutPort().setNextTaskId(bt3.getTaskId()));
 
         Map<String, AbstractTask> taskMap = new HashMap<>();
         taskMap.put(bt1.getTaskId(), bt1);
         taskMap.put(bt2.getTaskId(), bt2);
-        String workflowId = workflowOperator.buildAndRunWorkflow(taskMap, bt1.getTaskId());
+        taskMap.put(bt3.getTaskId(), bt3);
+        taskMap.put(bt4.getTaskId(), bt4);
+        String[] startTaskIds = {bt1.getTaskId(), bt2.getTaskId(), bt4.getTaskId()};
+        String workflowId = workflowOperator.buildAndRunWorkflow(taskMap, startTaskIds);
         logger.info("Launched workflow {}", workflowId);
     }
 

@@ -30,7 +30,22 @@ public class ExampleBlockingTask extends BlockingTask {
 
     @Override
     public TaskResult runBlockingCode() {
-        logger.info("Running example blocking task {}", getTaskId());
+        logger.info("Starting task {}", getTaskId());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (getTaskId().startsWith("bt1")) {
+            try {
+                logger.info("Task {} is sleeping", getTaskId());
+                Thread.sleep(10000);
+                //return new TaskResult(TaskResult.Status.FAILED, "Fail");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        logger.info("Ending task {}", getTaskId());
         return new TaskResult(TaskResult.Status.COMPLETED, "Success");
     }
 }

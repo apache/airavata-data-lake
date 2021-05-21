@@ -23,18 +23,25 @@ import org.apache.airavata.datalake.orchestrator.workflow.engine.task.TaskParamT
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.BlockingTaskDef;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.TaskOutPort;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.TaskParam;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.helix.HelixManager;
 import org.apache.helix.HelixManagerFactory;
 import org.apache.helix.InstanceType;
 import org.apache.helix.task.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class WorkflowOperator {
 
     private static final long WORKFLOW_EXPIRY_TIME = 1 * 1000;
     private static final long TASK_EXPIRY_TIME = 24 * 60 * 60 * 1000;
+    private static final int PARALLEL_JOBS_PER_WORKFLOW = 20;
+
+    private final static Logger logger = LoggerFactory.getLogger(WorkflowOperator.class);
 
     private TaskDriver taskDriver;
     private HelixManager helixManager;
@@ -64,7 +71,7 @@ public class WorkflowOperator {
         }
     }
 
-    public String buildAndRunWorkflow(Map<String, AbstractTask> taskMap, String startTaskId) throws Exception {
+    public String buildAndRunWorkflow(Map<String, AbstractTask> taskMap, String[] startTaskIds) throws Exception {
 
         if (taskDriver == null) {
             throw new Exception("Workflow operator needs to be initialized");
@@ -72,9 +79,15 @@ public class WorkflowOperator {
 
         String workflowName = UUID.randomUUID().toString();
         Workflow.Builder workflowBuilder = new Workflow.Builder(workflowName).setExpiry(0);
-        buildWorkflowRecursively(workflowBuilder, startTaskId, taskMap);
 
-        WorkflowConfig.Builder config = new WorkflowConfig.Builder().setFailureThreshold(0);
+        for (String startTaskId: startTaskIds) {
+            buildWorkflowRecursively(workflowBuilder, startTaskId, taskMap);
+        }
+
+        WorkflowConfig.Builder config = new WorkflowConfig.Builder()
+                .setFailureThreshold(0)
+                .setAllowOverlapJobAssignment(true);
+
         workflowBuilder.setWorkflowConfig(config.build());
         workflowBuilder.setExpiry(WORKFLOW_EXPIRY_TIME);
         Workflow workflow = workflowBuilder.build();
@@ -112,6 +125,7 @@ public class WorkflowOperator {
         for (OutPort outPort : outPorts) {
             if (outPort != null) {
                 workflowBuilder.addParentChildDependency(currentTask.getTaskId(), outPort.getNextTaskId());
+                logger.info("Parent to child dependency {} -> {}", currentTask.getTaskId(), outPort.getNextTaskId());
                 buildWorkflowRecursively(workflowBuilder, outPort.getNextTaskId(), taskMap);
             }
         }
@@ -135,7 +149,7 @@ public class WorkflowOperator {
         taskDriver.delete(workflowName);
     }
 
-    private <T extends AbstractTask> Map<String, String> serializeTaskData(T data) throws IllegalAccessException {
+    private <T extends AbstractTask> Map<String, String> serializeTaskData(T data) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 
         Map<String, String> result = new HashMap<>();
         for (Class<?> c = data.getClass(); c != null; c = c.getSuperclass()) {
@@ -143,11 +157,11 @@ public class WorkflowOperator {
             for (Field classField : fields) {
                 TaskParam parm = classField.getAnnotation(TaskParam.class);
                 if (parm != null) {
-                    classField.setAccessible(true);
-                    if (classField.get(data) instanceof TaskParamType) {
-                        result.put(parm.name(), TaskParamType.class.cast(classField.get(data)).serialize());
+                    Object propertyValue = PropertyUtils.getProperty(data, parm.name());
+                    if (propertyValue instanceof TaskParamType) {
+                        result.put(parm.name(), TaskParamType.class.cast(propertyValue).serialize());
                     } else {
-                        result.put(parm.name(), classField.get(data).toString());
+                        result.put(parm.name(), propertyValue.toString());
                     }
                 }
 

@@ -19,6 +19,7 @@ package org.apache.airavata.datalake.orchestrator.workflow.engine.task;
 
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.TaskOutPort;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.TaskParam;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.helix.task.Task;
 import org.apache.helix.task.TaskCallbackContext;
 import org.apache.helix.task.TaskResult;
@@ -26,27 +27,32 @@ import org.apache.helix.task.UserContentStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public abstract class AbstractTask extends UserContentStore implements Task {
 
     private final static Logger logger = LoggerFactory.getLogger(AbstractTask.class);
 
-    private TaskCallbackContext callbackContext;
+    private ThreadLocal<TaskCallbackContext> callbackContext = new ThreadLocal<>();
+    private BlockingQueue<TaskCallbackContext> callbackContextQueue = new LinkedBlockingQueue<>();
 
     @TaskOutPort(name = "nextTask")
     private OutPort outPort;
 
     @TaskParam(name = "taskId")
-    private String taskId;
+    private ThreadLocal<String> taskId = new ThreadLocal<>();
 
     @TaskParam(name = "retryCount")
-    private int retryCount = 3;
+    private ThreadLocal<Integer> retryCount = ThreadLocal.withInitial(()-> 3);
 
     public AbstractTask() {
 
@@ -55,9 +61,17 @@ public abstract class AbstractTask extends UserContentStore implements Task {
     @Override
     public TaskResult run() {
         try {
-            String helixTaskId = this.callbackContext.getTaskConfig().getId();
+            TaskCallbackContext cbc = callbackContextQueue.poll();
+
+            if (cbc == null) {
+                logger.error("No callback context available");
+                throw new Exception("No callback context available");
+            }
+
+            this.callbackContext.set(cbc);
+            String helixTaskId = getCallbackContext().getTaskConfig().getId();
             logger.info("Running task {}", helixTaskId);
-            deserializeTaskData(this, this.callbackContext.getTaskConfig().getConfigMap());
+            deserializeTaskData(this, getCallbackContext().getTaskConfig().getConfigMap());
         } catch (Exception e) {
             logger.error("Failed at deserializing task data", e);
             return new TaskResult(TaskResult.Status.FAILED, "Failed in deserializing task data");
@@ -83,27 +97,32 @@ public abstract class AbstractTask extends UserContentStore implements Task {
     }
 
     public int getRetryCount() {
-        return retryCount;
+        return retryCount.get();
     }
 
     public void setRetryCount(int retryCount) {
-        this.retryCount = retryCount;
+        this.retryCount.set(retryCount);
     }
 
     public TaskCallbackContext getCallbackContext() {
-        return callbackContext;
+        return callbackContext.get();
     }
 
     public String getTaskId() {
-        return taskId;
+        return taskId.get();
     }
 
     public void setTaskId(String taskId) {
-        this.taskId = taskId;
+        this.taskId.set(taskId);
     }
 
     public void setCallbackContext(TaskCallbackContext callbackContext) {
-        this.callbackContext = callbackContext;
+        logger.info("Setting callback context {}", callbackContext.getJobConfig().getId());
+        try {
+            this.callbackContextQueue.put(callbackContext);
+        } catch (InterruptedException e) {
+            logger.error("Failed to put callback context to the queue", e);
+        }
     }
 
     private <T extends AbstractTask> void deserializeTaskData(T instance, Map<String, String> params) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
@@ -124,23 +143,27 @@ public abstract class AbstractTask extends UserContentStore implements Task {
             if (param != null) {
                 if (params.containsKey(param.name())) {
                     classField.setAccessible(true);
-                    if (classField.getType().isAssignableFrom(String.class)) {
-                        classField.set(instance, params.get(param.name()));
-                    } else if (classField.getType().isAssignableFrom(Integer.class) ||
-                            classField.getType().isAssignableFrom(Integer.TYPE)) {
-                        classField.set(instance, Integer.parseInt(params.get(param.name())));
-                    } else if (classField.getType().isAssignableFrom(Long.class) ||
-                            classField.getType().isAssignableFrom(Long.TYPE)) {
-                        classField.set(instance, Long.parseLong(params.get(param.name())));
-                    } else if (classField.getType().isAssignableFrom(Boolean.class) ||
-                            classField.getType().isAssignableFrom(Boolean.TYPE)) {
-                        classField.set(instance, Boolean.parseBoolean(params.get(param.name())));
-                    } else if (TaskParamType.class.isAssignableFrom(classField.getType())) {
-                        Class<?> clazz = classField.getType();
-                        Constructor<?> ctor = clazz.getConstructor();
+                    PropertyDescriptor propertyDescriptor = PropertyUtils.getPropertyDescriptor(this, classField.getName());
+                    Method writeMethod = PropertyUtils.getWriteMethod(propertyDescriptor);
+                    Class<?>[] methodParamType = writeMethod.getParameterTypes();
+                    Class<?> writeParameterType = methodParamType[0];
+
+                    if (writeParameterType.isAssignableFrom(String.class)) {
+                        writeMethod.invoke(instance, params.get(param.name()));
+                    } else if (writeParameterType.isAssignableFrom(Integer.class) ||
+                            writeParameterType.isAssignableFrom(Integer.TYPE)) {
+                        writeMethod.invoke(instance, Integer.parseInt(params.get(param.name())));
+                    } else if (writeParameterType.isAssignableFrom(Long.class) ||
+                            writeParameterType.isAssignableFrom(Long.TYPE)) {
+                        writeMethod.invoke(instance, Long.parseLong(params.get(param.name())));
+                    } else if (writeParameterType.isAssignableFrom(Boolean.class) ||
+                            writeParameterType.isAssignableFrom(Boolean.TYPE)) {
+                        writeMethod.invoke(instance, Boolean.parseBoolean(params.get(param.name())));
+                    } else if (TaskParamType.class.isAssignableFrom(writeParameterType)) {
+                        Constructor<?> ctor = writeParameterType.getConstructor();
                         Object obj = ctor.newInstance();
                         ((TaskParamType)obj).deserialize(params.get(param.name()));
-                        classField.set(instance, obj);
+                        writeMethod.invoke(instance, obj);
                     }
                 }
             }

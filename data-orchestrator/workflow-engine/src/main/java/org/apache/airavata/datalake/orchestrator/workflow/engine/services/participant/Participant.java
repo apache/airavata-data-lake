@@ -87,6 +87,7 @@ public class Participant implements CommandLineRunner {
                 InstanceConfig instanceConfig = new InstanceConfig(participantName);
                 instanceConfig.setHostName("localhost");
                 instanceConfig.setInstanceEnabled(true);
+                instanceConfig.setMaxConcurrentTask(30);
                 zkHelixAdmin.addInstance(clusterName, instanceConfig);
                 logger.info("Participant: " + participantName + " has been added to cluster: " + clusterName);
 
