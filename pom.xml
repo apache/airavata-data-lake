@@ -150,6 +150,9 @@
         <kafka-clients.version>1.0.0</kafka-clients.version>
         <snakeyaml.version>1.15</snakeyaml.version>
 
+        <yaml.version>1.15</yaml.version>
+        <spring.boot.version>2.2.1.RELEASE</spring.boot.version>
+        <commons.beanutils.version>1.9.4</commons.beanutils.version>
     </properties>
 
 </project>

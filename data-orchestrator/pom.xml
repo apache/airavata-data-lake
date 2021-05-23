@@ -36,6 +36,7 @@
         <module>data-orchestrator-service</module>
         <module>data-orchestrator-clients</module>
         <module>data-orchestrator-messaging</module>
+        <module>workflow-engine</module>
     </modules>
 
 

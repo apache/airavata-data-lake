@@ -98,6 +98,12 @@
         <option value="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/pom.xml" />
       </list>
     </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/pom.xml" />
+        <option value="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service-core/pom.xml" />
+      </set>
+    </option>
   </component>
   <component name="Palette2">
     <group name="Swing">
