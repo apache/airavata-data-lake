@@ -18,11 +18,26 @@
 package org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl;
 
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.NonBlockingTask;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.NonBlockingSection;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.NonBlockingTaskDef;
+import org.apache.helix.task.TaskResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @NonBlockingTaskDef(name = "ExampleNonBlockingTask")
 public class ExampleNonBlockingTask extends NonBlockingTask {
 
-    public ExampleNonBlockingTask() {
+    private final static Logger logger = LoggerFactory.getLogger(ExampleNonBlockingTask.class);
+
+    @NonBlockingSection(sectionIndex = 1)
+    public TaskResult section1() {
+        logger.info("Running section 1");
+        return new TaskResult(TaskResult.Status.COMPLETED, "Completed");
+    }
+
+    @NonBlockingSection(sectionIndex = 2)
+    public TaskResult section2() {
+        logger.info("Running section 2");
+        return new TaskResult(TaskResult.Status.COMPLETED, "Completed");
     }
 }

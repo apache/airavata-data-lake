@@ -20,6 +20,7 @@ package org.apache.airavata.datalake.orchestrator.workflow.engine.services.wm;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.AbstractTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.OutPort;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -63,17 +64,23 @@ public class DataSyncWorkflowManager implements CommandLineRunner {
         ExampleBlockingTask bt4 = new ExampleBlockingTask();
         bt4.setTaskId("bt4-" + UUID.randomUUID());
 
+        ExampleNonBlockingTask nbt1 = new ExampleNonBlockingTask();
+        nbt1.setTaskId("nbt1-" + UUID.randomUUID());
+        nbt1.setCurrentSection(2);
+
         // Setting dependency
-        bt1.setOutPort(new OutPort().setNextTaskId(bt3.getTaskId()));
-        bt2.setOutPort(new OutPort().setNextTaskId(bt3.getTaskId()));
-        bt4.setOutPort(new OutPort().setNextTaskId(bt3.getTaskId()));
+        bt1.setOutPort(new OutPort().setNextTaskId(nbt1.getTaskId()));
+        //bt2.setOutPort(new OutPort().setNextTaskId(bt3.getTaskId()));
+        //bt4.setOutPort(new OutPort().setNextTaskId(bt3.getTaskId()));
 
         Map<String, AbstractTask> taskMap = new HashMap<>();
         taskMap.put(bt1.getTaskId(), bt1);
-        taskMap.put(bt2.getTaskId(), bt2);
-        taskMap.put(bt3.getTaskId(), bt3);
-        taskMap.put(bt4.getTaskId(), bt4);
-        String[] startTaskIds = {bt1.getTaskId(), bt2.getTaskId(), bt4.getTaskId()};
+        taskMap.put(nbt1.getTaskId(), nbt1);
+        //taskMap.put(bt2.getTaskId(), bt2);
+        //taskMap.put(bt3.getTaskId(), bt3);
+        //taskMap.put(bt4.getTaskId(), bt4);
+        //String[] startTaskIds = {bt1.getTaskId(), bt2.getTaskId(), bt4.getTaskId()};
+        String[] startTaskIds = {bt1.getTaskId()};
         String workflowId = workflowOperator.buildAndRunWorkflow(taskMap, startTaskIds);
         logger.info("Launched workflow {}", workflowId);
     }

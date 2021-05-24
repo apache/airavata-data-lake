@@ -76,7 +76,13 @@ public abstract class AbstractTask extends UserContentStore implements Task {
             logger.error("Failed at deserializing task data", e);
             return new TaskResult(TaskResult.Status.FAILED, "Failed in deserializing task data");
         }
-        return onRun();
+
+        try {
+            return onRun();
+        } catch (Exception e) {
+            logger.error("Unknown error while running task {}", getTaskId(), e);
+            return new TaskResult(TaskResult.Status.FAILED, "Failed due to unknown error");
+        }
     }
 
     @Override
