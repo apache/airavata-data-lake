@@ -41,6 +41,10 @@ public class InboundEventProcessor implements MessageProcessor {
         }
 
     }
+    @Override
+    public void close() throws Exception {
+
+    }
 
     @Override
     public void run() {

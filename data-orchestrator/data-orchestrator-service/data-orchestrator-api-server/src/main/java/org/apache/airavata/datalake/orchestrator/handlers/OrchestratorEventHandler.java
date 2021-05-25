@@ -2,9 +2,9 @@ package org.apache.airavata.datalake.orchestrator.handlers;
 
 import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.core.processor.MessageProcessor;
-import org.apache.airavata.datalake.orchestrator.db.persistance.DataOrchestratorEventRepository;
 import org.apache.airavata.datalake.orchestrator.processor.InboundEventProcessor;
 import org.apache.airavata.datalake.orchestrator.processor.OutboundEventProcessor;
+import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEventRepository;
 import org.apache.airavata.dataorchestrator.messaging.consumer.MessageConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

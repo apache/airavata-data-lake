@@ -151,6 +151,8 @@ public class Configuration {
         private long pollingDelay;
         private long pollingInterval;
         private int numOfEventsPerPoll;
+        private String workflowEngineHost;
+        private int workflowPort;
 
 
         public OutboundEventProcessorConfig() {
@@ -183,6 +185,22 @@ public class Configuration {
 
         public void setNumOfEventsPerPoll(int numOfEventsPerPoll) {
             this.numOfEventsPerPoll = numOfEventsPerPoll;
+        }
+
+        public String getWorkflowEngineHost() {
+            return workflowEngineHost;
+        }
+
+        public void setWorkflowEngineHost(String workflowEngineHost) {
+            this.workflowEngineHost = workflowEngineHost;
+        }
+
+        public int getWorkflowPort() {
+            return workflowPort;
+        }
+
+        public void setWorkflowPort(int workflowPort) {
+            this.workflowPort = workflowPort;
         }
     }
 

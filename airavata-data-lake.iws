@@ -5,24 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d1ef003-bfaa-49fa-837e-dc14d1daa977" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service-core/src/main/java/org/apache/airavata/datalake/orchestrator/core/adaptors/StorageAdaptor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/resources/task-list.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/airavata-data-lake.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/airavata-data-lake.ipr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/airavata-data-lake.iws" beforeDir="false" afterPath="$PROJECT_DIR$/airavata-data-lake.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-clients-core/src/main/java/org/apache/airavata/dataorchestrator/clients/core/AbstractListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-clients-core/src/main/java/org/apache/airavata/dataorchestrator/clients/core/AbstractListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/logs/airavata.log" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/logs/airavata.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/java/org/apache/airavata/dataorchestrator/messaging/MessagingEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/java/org/apache/airavata/dataorchestrator/messaging/MessagingEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/java/org/apache/airavata/dataorchestrator/messaging/consumer/ConsumerCallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/java/org/apache/airavata/dataorchestrator/messaging/consumer/ConsumerCallback.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/java/org/apache/airavata/dataorchestrator/messaging/consumer/MessageConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/java/org/apache/airavata/dataorchestrator/messaging/consumer/MessageConsumer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/java/org/apache/airavata/dataorchestrator/messaging/model/NotificationEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/java/org/apache/airavata/dataorchestrator/messaging/model/NotificationEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/java/org/apache/airavata/dataorchestrator/messaging/model/NotificationEventDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/java/org/apache/airavata/dataorchestrator/messaging/model/NotificationEventDeserializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/APIServerInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/APIServerInitializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/Configuration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/db/persistance/DataOrchestratorEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/db/persistance/DataOrchestratorEventRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/db/persistance/EntityStatus.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/handlers/OrchestratorEventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/handlers/OrchestratorEventHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/EventProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/OutboundEventProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/OutboundEventProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/resources/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service-core/src/main/java/org/apache/airavata/datalake/orchestrator/core/adaptors/OutboundAdaptor.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service-core/src/main/java/org/apache/airavata/datalake/orchestrator/core/processor/MessageProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service-core/src/main/java/org/apache/airavata/datalake/orchestrator/core/processor/MessageProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/monitor/AsyncEventMonitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/monitor/AsyncEventMonitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/services/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/services/controller/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/services/participant/Participant.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/services/participant/Participant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/services/wm/DataSyncWorkflowManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/services/wm/DataSyncWorkflowManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/services/wm/WorkflowOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/services/wm/WorkflowOperator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/AbstractTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/AbstractTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/BlockingTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/BlockingTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/NonBlockingTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/NonBlockingTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/OutPort.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/OutPort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/TaskParamType.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/TaskParamType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/annotation/BlockingTaskDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/annotation/BlockingTaskDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/annotation/NonBlockingSection.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/annotation/NonBlockingSection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/annotation/NonBlockingTaskDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/annotation/NonBlockingTaskDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/annotation/TaskOutPort.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/annotation/TaskOutPort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/annotation/TaskParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/annotation/TaskParam.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/impl/ExampleBlockingTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/impl/ExampleBlockingTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/impl/ExampleNonBlockingTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java/org/apache/airavata/datalake/orchestrator/workflow/engine/task/impl/ExampleNonBlockingTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/resources/logback.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data-orchestrator/workflow-engine/src/main/resources/task-list.yaml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -229,6 +249,14 @@
     <option name="ADD_LABEL_ON_UNIT_TEST_PASSED" value="true" />
     <option name="ADD_LABEL_ON_UNIT_TEST_FAILED" value="true" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="$USER_HOME$/.m13" />
+        <option name="userSettingsFile" value="$USER_HOME$/.m13/settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
   <component name="PerforceConfiguration">
     <option name="PORT" value="magic:1666" />
     <option name="USER" value="" />
@@ -288,27 +316,31 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/data-orchestrator/data-orchestrator-registry/src/main/java/org/apache/airavata/datalake/orchestrator/registry" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.32220942" />
+    <property name="project.structure.side.proportion" value="0.5873563" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data-orchestrator/data-orchestrator-registry/src/main/java/org/apache/airavata/datalake/orchestrator/registry" />
+      <recent name="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/resources" />
       <recent name="$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources" />
       <recent name="$PROJECT_DIR$/data-resource-management-service/drms-rest-proxy/src/main/resources" />
       <recent name="$PROJECT_DIR$/commons/src/main/java/org/apache/airavata/datalake/commons" />
-      <recent name="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/interceptors" />
-      <recent name="$PROJECT_DIR$/metadata-service" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service" />
       <recent name="$PROJECT_DIR$/metadata-service/db-rest-proxy/src/main/resources" />
       <recent name="$PROJECT_DIR$/data-resource-management-service/drms-rest-proxy/src/main/resources" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.APIServerInitializer">
+  <component name="RunManager" selected="Application.WorkflowEngineClient">
     <configuration selected="false" default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -319,13 +351,13 @@
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <option name="VM_PARAMETERS" />
     </configuration>
-    <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.apache.airavata.drms.api.Client" />
-      <module name="drms-api" />
+    <configuration name="Controller" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.apache.airavata.datalake.orchestrator.workflow.engine.services.controller.Controller" />
+      <module name="workflow-engine-api" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.apache.airavata.drms.api.*" />
+          <option name="PATTERN" value="org.apache.airavata.datalake.orchestrator.workflow.engine.services.controller.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -333,13 +365,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.apache.airavata.datalake.metadata.clients.Test" />
-      <module name="client" />
+    <configuration name="WorkflowEngineClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.apache.airavata.datalake.orchestrator.workflow.engine.client.WorkflowEngineClient" />
+      <module name="workflow-engine-client" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.apache.airavata.datalake.metadata.clients.*" />
+          <option name="PATTERN" value="org.apache.airavata.datalake.orchestrator.workflow.engine.client.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -349,6 +381,17 @@
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -364,8 +407,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="APIServerInitializer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <module name="data-orchestrator-api-server" />
+    <configuration name="APIRunner" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="workflow-engine-api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.apache.airavata.datalake.orchestrator.workflow.engine.services.handler.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.apache.airavata.datalake.orchestrator.workflow.engine.services.handler.APIRunner" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="APIServerInitializer (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="data-orchestrator-api" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="org.apache.airavata.datalake.orchestrator.*" />
@@ -377,54 +433,33 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DRMSApiRunner" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <module name="drms-api" />
+    <configuration name="Participant" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="workflow-engine-api" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.apache.airavata.drms.api.*" />
+          <option name="PATTERN" value="org.apache.airavata.datalake.orchestrator.workflow.engine.services.participant.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="SPRING_BOOT_MAIN_CLASS" value="org.apache.airavata.drms.api.DRMSApiRunner" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="FileClientInitializer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <module name="data-orchestrator-file-event-listener" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.apache.airavata.dataorchestrator.file.client.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="SPRING_BOOT_MAIN_CLASS" value="org.apache.airavata.dataorchestrator.file.client.FileClientInitializer" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <additionalParameters>
-        <param>
-          <option name="enabled" value="true" />
-          <option name="name" value="config" />
-          <option name="value" value="$PROJECT_DIR$/../../texts" />
-        </param>
-      </additionalParameters>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.apache.airavata.datalake.orchestrator.workflow.engine.services.participant.Participant" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Client" />
-      <item itemvalue="Application.Test" />
-      <item itemvalue="Spring Boot.DRMSApiRunner" />
-      <item itemvalue="Spring Boot.FileClientInitializer" />
-      <item itemvalue="Spring Boot.APIServerInitializer" />
+      <item itemvalue="Application.Controller" />
+      <item itemvalue="Application.WorkflowEngineClient" />
+      <item itemvalue="Spring Boot.Participant" />
+      <item itemvalue="Spring Boot.APIRunner" />
+      <item itemvalue="Spring Boot.APIServerInitializer (1)" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.APIServerInitializer" />
-        <item itemvalue="Spring Boot.FileClientInitializer" />
-        <item itemvalue="Application.Client" />
-        <item itemvalue="Spring Boot.DRMSApiRunner" />
-        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.WorkflowEngineClient" />
+        <item itemvalue="Spring Boot.APIRunner" />
+        <item itemvalue="Spring Boot.APIServerInitializer (1)" />
+        <item itemvalue="Spring Boot.Participant" />
+        <item itemvalue="Application.Controller" />
       </list>
     </recent_temporary>
   </component>
@@ -477,6 +512,19 @@
       <workItem from="1620245029118" duration="11436000" />
       <workItem from="1620909178858" duration="76752000" />
       <workItem from="1621278859757" duration="14545000" />
+      <workItem from="1621789692441" duration="16038000" />
+      <workItem from="1621872379871" duration="2121000" />
+      <workItem from="1621876529692" duration="516000" />
+      <workItem from="1621877063820" duration="415000" />
+      <workItem from="1621877499623" duration="5224000" />
+      <workItem from="1621884490058" duration="765000" />
+      <workItem from="1621885276355" duration="428000" />
+      <workItem from="1621885725244" duration="820000" />
+      <workItem from="1621886652353" duration="1313000" />
+      <workItem from="1621888062254" duration="496000" />
+      <workItem from="1621888580056" duration="407000" />
+      <workItem from="1621889007703" duration="687000" />
+      <workItem from="1621889725608" duration="4967000" />
     </task>
     <servers />
   </component>
@@ -819,22 +867,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>47</line>
+          <line>51</line>
           <option name="timeStamp" value="85" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>48</line>
+          <line>52</line>
           <option name="timeStamp" value="86" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>53</line>
+          <line>57</line>
           <option name="timeStamp" value="87" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>60</line>
+          <line>64</line>
           <option name="timeStamp" value="88" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -852,27 +900,27 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>75</line>
+          <line>79</line>
           <option name="timeStamp" value="95" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>72</line>
+          <line>76</line>
           <option name="timeStamp" value="96" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>50</line>
+          <line>54</line>
           <option name="timeStamp" value="97" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>57</line>
+          <line>61</line>
           <option name="timeStamp" value="100" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>59</line>
+          <line>63</line>
           <option name="timeStamp" value="101" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -882,22 +930,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>63</line>
+          <line>67</line>
           <option name="timeStamp" value="104" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>66</line>
+          <line>70</line>
           <option name="timeStamp" value="105" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>69</line>
+          <line>73</line>
           <option name="timeStamp" value="106" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java/org/apache/airavata/datalake/orchestrator/processor/InboundEventProcessor.java</url>
-          <line>71</line>
+          <line>75</line>
           <option name="timeStamp" value="107" />
         </line-breakpoint>
       </breakpoints>

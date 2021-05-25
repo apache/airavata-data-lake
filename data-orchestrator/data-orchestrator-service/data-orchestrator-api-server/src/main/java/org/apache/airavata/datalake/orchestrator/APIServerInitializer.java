@@ -26,7 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
@@ -36,8 +39,11 @@ import java.util.Optional;
 /**
  * TODO: Spring Boot API
  */
-@SpringBootApplication
+@ComponentScan(basePackages = {"org.apache.airavata.datalake.orchestrator"})
+@SpringBootApplication()
 @EnableJpaAuditing
+@EnableJpaRepositories("org.apache.airavata.datalake")
+@EntityScan("org.apache.airavata.datalake")
 public class APIServerInitializer implements CommandLineRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(APIServerInitializer.class);
 

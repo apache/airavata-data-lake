@@ -4,5 +4,5 @@ public interface MessageProcessor extends Runnable{
 
      void init() throws Exception;
 
-
+      void close() throws Exception;
 }

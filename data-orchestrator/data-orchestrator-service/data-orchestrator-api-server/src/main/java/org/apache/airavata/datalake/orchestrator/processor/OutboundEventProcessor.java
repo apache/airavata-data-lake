@@ -1,11 +1,17 @@
 package org.apache.airavata.datalake.orchestrator.processor;
 
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.core.adaptors.StorageAdaptor;
 import org.apache.airavata.datalake.orchestrator.core.processor.MessageProcessor;
-import org.apache.airavata.datalake.orchestrator.db.persistance.DataOrchestratorEntity;
-import org.apache.airavata.datalake.orchestrator.db.persistance.DataOrchestratorEventRepository;
-import org.apache.airavata.datalake.orchestrator.db.persistance.EntityStatus;
+import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEntity;
+import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEventRepository;
+import org.apache.airavata.datalake.orchestrator.registry.persistance.EntityStatus;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowInvocationRequest;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowInvocationResponse;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowMessage;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowServiceGrpc;
 import org.apache.airavata.dataorchestrator.messaging.model.NotificationEvent;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
@@ -28,9 +34,16 @@ public class OutboundEventProcessor implements MessageProcessor {
     private DozerBeanMapper dozerBeanMapper;
     private DataOrchestratorEventRepository repository;
 
+    private  final  ManagedChannel channel;
+    private final  WorkflowServiceGrpc.WorkflowServiceBlockingStub workflowServiceStub;
+
     public OutboundEventProcessor(Configuration configuration, DataOrchestratorEventRepository repository) throws Exception {
         this.configuration = configuration;
         this.repository = repository;
+        this.channel = ManagedChannelBuilder
+                .forAddress(configuration.getOutboundEventProcessor().getWorkflowEngineHost(),
+                        configuration.getOutboundEventProcessor().getWorkflowPort()).usePlaintext().build();
+        this.workflowServiceStub = WorkflowServiceGrpc.newBlockingStub(channel);
         this.init();
     }
 
@@ -57,6 +70,11 @@ public class OutboundEventProcessor implements MessageProcessor {
     }
 
     @Override
+    public void close() throws Exception {
+        this.channel.shutdown();
+    }
+
+    @Override
     public void run() {
         try {
             List<NotificationEvent> notificationEventList =
@@ -69,6 +87,16 @@ public class OutboundEventProcessor implements MessageProcessor {
                 entity.setOccurredTime(new Date(event.getContext().getOccuredTime()));
                 entity.setStatus(EntityStatus.RECEIVED.name());
                 repository.save(entity);
+                WorkflowMessage workflowMessage = WorkflowMessage
+                        .newBuilder()
+                        .setMessageId(event.getId())
+                        .build();
+                WorkflowInvocationRequest invocationRequest = WorkflowInvocationRequest
+                        .newBuilder()
+                        .setMessage(workflowMessage)
+                        .build();
+                this.workflowServiceStub.invokeWorkflow(invocationRequest);
+
             });
 
 
