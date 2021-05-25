@@ -18,7 +18,9 @@
 package org.apache.airavata.datalake.orchestrator.workflow.engine.services.participant;
 
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.BlockingTask;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.NonBlockingTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.BlockingTaskDef;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.NonBlockingTaskDef;
 import org.apache.helix.InstanceType;
 import org.apache.helix.examples.OnlineOfflineStateModelFactory;
 import org.apache.helix.manager.zk.ZKHelixAdmin;
@@ -190,6 +192,25 @@ public class Participant implements CommandLineRunner {
                 };
                 BlockingTaskDef btDef = blockingTask.getClass().getAnnotation(BlockingTaskDef.class);
                 taskMap.put(btDef.name(), taskFactory);
+
+            } catch (ClassNotFoundException e) {
+                logger.error("Couldn't find a class with name {}", className);
+                throw e;
+            }
+        }
+
+        for (String className : nonBlockingTaskClasses) {
+            try {
+                logger.info("Loading non blocking task {}", className);
+                Class<?> taskClz = Class.forName(className);
+                Object taskObj = taskClz.getConstructor().newInstance();
+                NonBlockingTask nonBlockingTask = (NonBlockingTask) taskObj;
+                TaskFactory taskFactory = context -> {
+                    nonBlockingTask.setCallbackContext(context);
+                    return nonBlockingTask;
+                };
+                NonBlockingTaskDef nbtDef = nonBlockingTask.getClass().getAnnotation(NonBlockingTaskDef.class);
+                taskMap.put(nbtDef.name(), taskFactory);
 
             } catch (ClassNotFoundException e) {
                 logger.error("Couldn't find a class with name {}", className);

@@ -39,7 +39,7 @@ public class ExampleBlockingTask extends BlockingTask {
         if (getTaskId().startsWith("bt1")) {
             try {
                 logger.info("Task {} is sleeping", getTaskId());
-                Thread.sleep(10000);
+                Thread.sleep(1000);
                 //return new TaskResult(TaskResult.Status.FAILED, "Fail");
             } catch (InterruptedException e) {
                 e.printStackTrace();

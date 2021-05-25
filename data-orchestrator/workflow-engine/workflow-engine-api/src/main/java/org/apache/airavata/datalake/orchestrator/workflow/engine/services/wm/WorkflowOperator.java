@@ -18,9 +18,11 @@
 package org.apache.airavata.datalake.orchestrator.workflow.engine.services.wm;
 
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.AbstractTask;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.NonBlockingTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.OutPort;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.TaskParamType;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.BlockingTaskDef;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.NonBlockingTaskDef;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.TaskOutPort;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.TaskParam;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -96,38 +98,82 @@ public class WorkflowOperator {
         return workflowName;
     }
 
+    private void continueNonBlockingRest(Map<String, AbstractTask> taskMap, String nonBlockingTaskId, int currentSection) {
+
+    }
+
     private void buildWorkflowRecursively(Workflow.Builder workflowBuilder, String nextTaskId, Map<String, AbstractTask> taskMap)
             throws Exception{
         AbstractTask currentTask = taskMap.get(nextTaskId);
-        String taskType = currentTask.getClass().getAnnotation(BlockingTaskDef.class).name();
-        TaskConfig.Builder taskBuilder = new TaskConfig.Builder()
-                .setTaskId(currentTask.getTaskId())
-                .setCommand(taskType);
 
-        Map<String, String> paramMap = serializeTaskData(currentTask);
-        paramMap.forEach(taskBuilder::addConfig);
+        if (currentTask == null) {
+            logger.error("Couldn't find a task with id {} in the task map", nextTaskId);
+            throw new Exception("Couldn't find a task with id " + nextTaskId +" in the task map");
+        }
 
-        List<TaskConfig> taskBuilds = new ArrayList<>();
-        taskBuilds.add(taskBuilder.build());
+        BlockingTaskDef blockingTaskDef = currentTask.getClass().getAnnotation(BlockingTaskDef.class);
+        NonBlockingTaskDef nonBlockingTaskDef = currentTask.getClass().getAnnotation(NonBlockingTaskDef.class);
 
-        JobConfig.Builder job = new JobConfig.Builder()
-                .addTaskConfigs(taskBuilds)
-                .setFailureThreshold(0)
-                .setExpiry(WORKFLOW_EXPIRY_TIME)
-                .setTimeoutPerTask(TASK_EXPIRY_TIME)
-                .setNumConcurrentTasksPerInstance(20)
-                .setMaxAttemptsPerTask(currentTask.getRetryCount());
+        if (blockingTaskDef != null) {
+            String taskName = blockingTaskDef.name();
+            TaskConfig.Builder taskBuilder = new TaskConfig.Builder()
+                    .setTaskId(currentTask.getTaskId())
+                    .setCommand(taskName);
 
-        workflowBuilder.addJob(currentTask.getTaskId(), job);
+            Map<String, String> paramMap = serializeTaskData(currentTask);
+            paramMap.forEach(taskBuilder::addConfig);
 
-        List<OutPort> outPorts = getOutPortsOfTask(currentTask);
+            List<TaskConfig> taskBuilds = new ArrayList<>();
+            taskBuilds.add(taskBuilder.build());
 
-        for (OutPort outPort : outPorts) {
-            if (outPort != null) {
-                workflowBuilder.addParentChildDependency(currentTask.getTaskId(), outPort.getNextTaskId());
-                logger.info("Parent to child dependency {} -> {}", currentTask.getTaskId(), outPort.getNextTaskId());
-                buildWorkflowRecursively(workflowBuilder, outPort.getNextTaskId(), taskMap);
+            JobConfig.Builder job = new JobConfig.Builder()
+                    .addTaskConfigs(taskBuilds)
+                    .setFailureThreshold(0)
+                    .setExpiry(WORKFLOW_EXPIRY_TIME)
+                    .setTimeoutPerTask(TASK_EXPIRY_TIME)
+                    .setNumConcurrentTasksPerInstance(20)
+                    .setMaxAttemptsPerTask(currentTask.getRetryCount());
+
+            workflowBuilder.addJob(currentTask.getTaskId(), job);
+
+            List<OutPort> outPorts = getOutPortsOfTask(currentTask);
+
+            for (OutPort outPort : outPorts) {
+                if (outPort != null) {
+                    workflowBuilder.addParentChildDependency(currentTask.getTaskId(), outPort.getNextTaskId());
+                    logger.info("Parent to child dependency {} -> {}", currentTask.getTaskId(), outPort.getNextTaskId());
+                    buildWorkflowRecursively(workflowBuilder, outPort.getNextTaskId(), taskMap);
+                }
             }
+        } else if (nonBlockingTaskDef != null) {
+
+            NonBlockingTask nbTask = (NonBlockingTask) currentTask;
+
+            String taskName = nonBlockingTaskDef.name();
+            TaskConfig.Builder taskBuilder = new TaskConfig.Builder()
+                    .setTaskId(currentTask.getTaskId())
+                    .setCommand(taskName);
+
+            Map<String, String> paramMap = serializeTaskData(currentTask);
+            paramMap.forEach(taskBuilder::addConfig);
+
+            List<TaskConfig> taskBuilds = new ArrayList<>();
+            taskBuilds.add(taskBuilder.build());
+
+            JobConfig.Builder job = new JobConfig.Builder()
+                    .addTaskConfigs(taskBuilds)
+                    .setFailureThreshold(0)
+                    .setExpiry(WORKFLOW_EXPIRY_TIME)
+                    .setTimeoutPerTask(TASK_EXPIRY_TIME)
+                    .setNumConcurrentTasksPerInstance(20)
+                    .setMaxAttemptsPerTask(currentTask.getRetryCount());
+
+            workflowBuilder.addJob(currentTask.getTaskId(), job);
+
+            continueNonBlockingRest(taskMap, nextTaskId, nbTask.getCurrentSection());
+        } else {
+            logger.error("Couldn't find the task def annotation in class {}", currentTask.getClass().getName());
+            throw new Exception("Couldn't find the task def annotation in class " + currentTask.getClass().getName());
         }
     }
 
@@ -156,13 +202,18 @@ public class WorkflowOperator {
             Field[] fields = c.getDeclaredFields();
             for (Field classField : fields) {
                 TaskParam parm = classField.getAnnotation(TaskParam.class);
-                if (parm != null) {
-                    Object propertyValue = PropertyUtils.getProperty(data, parm.name());
-                    if (propertyValue instanceof TaskParamType) {
-                        result.put(parm.name(), TaskParamType.class.cast(propertyValue).serialize());
-                    } else {
-                        result.put(parm.name(), propertyValue.toString());
+                try {
+                    if (parm != null) {
+                        Object propertyValue = PropertyUtils.getProperty(data, parm.name());
+                        if (propertyValue instanceof TaskParamType) {
+                            result.put(parm.name(), TaskParamType.class.cast(propertyValue).serialize());
+                        } else {
+                            result.put(parm.name(), propertyValue.toString());
+                        }
                     }
+                } catch (Exception e) {
+                    logger.error("Failed to serialize task parameter {} in class {}", parm.name(), data.getClass().getName());
+                    throw e;
                 }
 
                 TaskOutPort outPort = classField.getAnnotation(TaskOutPort.class);
