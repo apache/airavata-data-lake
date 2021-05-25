@@ -4,25 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d1ef003-bfaa-49fa-837e-dc14d1daa977" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/airavata-data-lake.iws" beforeDir="false" afterPath="$PROJECT_DIR$/airavata-data-lake.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/java/org/apache/airavata/drms/api/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/java/org/apache/airavata/drms/api/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/java/org/apache/airavata/drms/api/handlers/ResourceServiceHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/java/org/apache/airavata/drms/api/handlers/ResourceServiceHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/java/org/apache/airavata/drms/api/handlers/StoragePreferenceServiceHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/java/org/apache/airavata/drms/api/handlers/StoragePreferenceServiceHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/java/org/apache/airavata/drms/api/handlers/StorageServiceHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/java/org/apache/airavata/drms/api/handlers/StorageServiceHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/java/org/apache/airavata/drms/api/interceptors/Authenticator.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/java/org/apache/airavata/drms/api/interceptors/Authenticator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/data-resource-management-service/drms-api/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-resource-management-service/drms-core/src/main/java/org/apache/airavata/drms/core/deserializer/GenericResourceDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/data-resource-management-service/drms-core/src/main/java/org/apache/airavata/drms/core/deserializer/GenericResourceDeserializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-resource-management-service/drms-rest-proxy/src/main/resources/drms.pb" beforeDir="false" afterPath="$PROJECT_DIR$/data-resource-management-service/drms-rest-proxy/src/main/resources/drms.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data-resource-management-service/drms-stubs/src/main/proto/resource/DRMSResource.proto" beforeDir="false" afterPath="$PROJECT_DIR$/data-resource-management-service/drms-stubs/src/main/proto/resource/DRMSResource.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/metadata-service/db-service/client/src/main/java/org/apache/airavata/datalake/metadata/clients/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/metadata-service/db-service/client/src/main/java/org/apache/airavata/datalake/metadata/clients/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/curd/operators/GenericService.java" beforeDir="false" afterPath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/curd/operators/GenericService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/curd/operators/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/curd/operators/Service.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/model/nodes/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/model/nodes/Entity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/model/nodes/Group.java" beforeDir="false" afterPath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/model/nodes/Group.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/model/nodes/Resource.java" beforeDir="false" afterPath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/model/nodes/Resource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/model/nodes/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/metadata-service/db-service/server/src/main/java/org/apache/airavata/datalake/metadata/backend/neo4j/model/nodes/User.java" afterDir="false" />
-    </list>
+    <list default="true" id="1d1ef003-bfaa-49fa-837e-dc14d1daa977" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -383,6 +365,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Client" />
+      <item itemvalue="Application.Test" />
+      <item itemvalue="Spring Boot.DRMSApiRunner" />
+      <item itemvalue="Spring Boot.Neo4JServiceInitializer" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Client" />

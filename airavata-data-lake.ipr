@@ -190,20 +190,20 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module filepath="$PROJECT_DIR$/airavata-data-lake.iml" />
-      <module filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-api/data-orchestrator-api.iml" />
-      <module filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-core/data-orchestrator-core.iml" />
-      <module filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator.iml" />
-      <module filepath="$PROJECT_DIR$/metadata-service/db-service/client/client.iml" />
-      <module filepath="$PROJECT_DIR$/metadata-service/db-service/server/server.iml" />
-      <module filepath="$PROJECT_DIR$/metadata-service/db-service/stub/stub.iml" />
-      <module filepath="$PROJECT_DIR$/metadata-service/db-service/db-service.iml" />
-      <module filepath="$PROJECT_DIR$/metadata-service/data-builders/data-builders.iml" />
-      <module filepath="$PROJECT_DIR$/metadata-service/metadata-service.iml" />
-      <module filepath="$PROJECT_DIR$/data-resource-management-service/drms-stubs/drms-stubs.iml" />
-      <module filepath="$PROJECT_DIR$/data-resource-management-service/drms-core/drms-core.iml" />
-      <module filepath="$PROJECT_DIR$/data-resource-management-service/drms-api/drms-api.iml" />
-      <module filepath="$PROJECT_DIR$/data-resource-management-service/data-resource-management-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/airavata-data-lake.iml" filepath="$PROJECT_DIR$/airavata-data-lake.iml" />
+      <module fileurl="file://$PROJECT_DIR$/metadata-service/db-service/client/client.iml" filepath="$PROJECT_DIR$/metadata-service/db-service/client/client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/metadata-service/data-builders/data-builders.iml" filepath="$PROJECT_DIR$/metadata-service/data-builders/data-builders.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-api/data-orchestrator-api.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-api/data-orchestrator-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-core/data-orchestrator-core.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-core/data-orchestrator-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/data-resource-management-service.iml" filepath="$PROJECT_DIR$/data-resource-management-service/data-resource-management-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/metadata-service/db-service/db-service.iml" filepath="$PROJECT_DIR$/metadata-service/db-service/db-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/drms-api/drms-api.iml" filepath="$PROJECT_DIR$/data-resource-management-service/drms-api/drms-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/drms-core/drms-core.iml" filepath="$PROJECT_DIR$/data-resource-management-service/drms-core/drms-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/drms-stubs/drms-stubs.iml" filepath="$PROJECT_DIR$/data-resource-management-service/drms-stubs/drms-stubs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/metadata-service/metadata-service.iml" filepath="$PROJECT_DIR$/metadata-service/metadata-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/metadata-service/db-service/server/server.iml" filepath="$PROJECT_DIR$/metadata-service/db-service/server/server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/metadata-service/db-service/stub/stub.iml" filepath="$PROJECT_DIR$/metadata-service/db-service/stub/stub.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="11." />
