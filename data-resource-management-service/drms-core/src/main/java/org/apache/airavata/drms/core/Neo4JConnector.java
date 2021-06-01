@@ -28,10 +28,22 @@ public class Neo4JConnector {
     private String userName;
     private String password;
 
+    private Driver driver;
+
+    public Neo4JConnector() {
+    }
+
     public Neo4JConnector(String uri, String userName, String password) {
         this.uri = uri;
         this.userName = userName;
         this.password = password;
+    }
+
+    public void init(String uri, String userName, String password) {
+        this.uri = uri;
+        this.userName = userName;
+        this.password = password;
+        this.driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
     }
 
     public List<Record> searchNodes(String query) {
@@ -52,6 +64,22 @@ public class Neo4JConnector {
         tx.close();
     }
 
+    public void runTransactionalQuery(Map<String, Object> parameters, String query) {
+        Session session = driver.session();
+        Transaction tx = session.beginTransaction();
+        Result result = tx.run(query, parameters);
+        tx.commit();
+        tx.close();
+    }
+
+    public void runTransactionalQuery(String query) {
+        Session session = driver.session();
+        Transaction tx = session.beginTransaction();
+        Result result = tx.run(query);
+        tx.commit();
+        tx.close();
+    }
+
     public void createMetadataNode(String parentLabel, String parentIdName, String parentIdValue,
                                    String userId, String key, String value) {
         Driver driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
@@ -59,8 +87,10 @@ public class Neo4JConnector {
         Transaction tx = session.beginTransaction();
         tx.run("match (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:" + parentLabel + ") where u.userId='" + userId +
                 "' and s." + parentIdName + "='" + parentIdValue +
-                        "' merge (m:Metadata)<-[r3:HAS_METADATA]-(s) set m." + key + "='" + value + "' return m");
+                "' merge (m:Metadata)<-[r3:HAS_METADATA]-(s) set m." + key + "='" + value + "' return m");
         tx.commit();
         tx.close();
     }
+
+
 }
