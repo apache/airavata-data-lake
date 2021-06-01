@@ -30,7 +30,7 @@
     </prerequisites>
     <modules>
         <module>data-orchestrator</module>
-        <module>metadata-service</module>
+<!--        <module>metadata-service</module>-->
         <module>data-resource-management-service</module>
     </modules>
 
@@ -147,6 +147,9 @@
         <neo4j.version>3.4.6</neo4j.version>
         <io.grpc.version>1.25.0</io.grpc.version>
         <spring-security.version>5.3.4.RELEASE</spring-security.version>
+        <kafka-clients.version>1.0.0</kafka-clients.version>
+        <snakeyaml.version>1.15</snakeyaml.version>
+
         <yaml.version>1.15</yaml.version>
         <spring.boot.version>2.2.1.RELEASE</spring.boot.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>

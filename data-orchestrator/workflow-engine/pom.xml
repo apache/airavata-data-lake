@@ -29,7 +29,12 @@
         <version>0.01-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <packaging>pom</packaging>
+    <modules>
+        <module>workflow-engine-api</module>
+        <module>workflow-engine-stubs</module>
+        <module>workflow-engine-client</module>
+    </modules>
     <artifactId>workflow-engine</artifactId>
 
     <properties>

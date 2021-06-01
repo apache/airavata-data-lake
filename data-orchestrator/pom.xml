@@ -33,8 +33,10 @@
     <artifactId>data-orchestrator</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>data-orchestrator-api</module>
-        <module>data-orchestrator-core</module>
+        <module>data-orchestrator-service</module>
+        <module>data-orchestrator-clients</module>
+        <module>data-orchestrator-messaging</module>
+        <module>data-orchestrator-registry</module>
         <module>workflow-engine</module>
     </modules>
 
