@@ -1,0 +1,12 @@
+pollingInterval: 60
+dataResourceManagementService:
+  dbURI: "bolt://149.165.156.173:7687"
+  dbUser: "CHANGE"
+  dbPassword: "CHANGE"
+custos:
+  host: "custos.scigap.org"
+  port: 31499
+  custosId: "CHANGE"
+  custosSec: "CHANGE"
+  tenantsToBeSynced:
+    -  "custos-cmcdclbywlxmc2ktzv0d-10000702"
