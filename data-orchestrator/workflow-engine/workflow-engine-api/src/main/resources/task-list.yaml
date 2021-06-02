@@ -1,5 +1,0 @@
-tasks:
-  blocking:
-    - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask
-  nonBlocking:
-    - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask

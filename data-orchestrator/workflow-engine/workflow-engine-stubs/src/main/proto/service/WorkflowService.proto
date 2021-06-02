@@ -22,6 +22,7 @@ package org.apache.airavata.datalake.orchestrator.workflow.engine;
 
 import "google/api/annotations.proto";
 import "Common.proto";
+import "google/protobuf/empty.proto";
 
 message WorkflowMessage {
     string message_id = 1;
@@ -37,9 +38,27 @@ message WorkflowInvocationResponse {
     bool status = 1;
 }
 
+message MFTCallbackGetRequest {
+    string mftTransferId = 1;
+}
+
+message MFTCallbackGetResponse {
+    string mftTransferId = 1;
+    int32 prevSectionIndex = 2;
+    string workflowId = 3;
+    string taskId = 4;
+}
+
+message MFTCallbacSaveRequest {
+    string mftTransferId = 1;
+    int32 prevSectionIndex = 2;
+    string workflowId = 3;
+    string taskId = 4;
+}
 
 service WorkflowService {
 
     rpc invokeWorkflow (WorkflowInvocationRequest) returns (WorkflowInvocationResponse);
-
+    rpc getMFTCallback(MFTCallbackGetRequest) returns (MFTCallbackGetResponse);
+    rpc saveMFTCallback(MFTCallbacSaveRequest) returns (google.protobuf.Empty);
 }
