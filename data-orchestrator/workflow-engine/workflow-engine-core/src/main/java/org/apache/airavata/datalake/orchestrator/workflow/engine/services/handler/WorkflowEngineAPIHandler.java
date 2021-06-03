@@ -40,9 +40,6 @@ public class WorkflowEngineAPIHandler extends WorkflowServiceGrpc.WorkflowServic
     private MFTCallbackStore mftCallbackStore;
 
     @Autowired
-    private CallbackWorkflowStore callbackWorkflowStore;
-
-    @Autowired
     private DataSyncWorkflowManager dataSyncWorkflowManager;
 
     @Override

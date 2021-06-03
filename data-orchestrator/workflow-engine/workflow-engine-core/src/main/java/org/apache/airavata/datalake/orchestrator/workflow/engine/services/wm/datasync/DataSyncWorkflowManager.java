@@ -19,29 +19,18 @@ package org.apache.airavata.datalake.orchestrator.workflow.engine.services.wm.da
 
 import org.apache.airavata.datalake.orchestrator.workflow.engine.monitor.filter.mft.DataTransferEvent;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.monitor.filter.mft.DataTransferEventDeserializer;
-import org.apache.airavata.datalake.orchestrator.workflow.engine.services.controller.Controller;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.services.wm.CallbackWorkflowEntity;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.services.wm.CallbackWorkflowStore;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.services.wm.WorkflowOperator;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.AbstractTask;
-import org.apache.airavata.datalake.orchestrator.workflow.engine.task.OutPort;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.TaskUtil;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask;
-import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask;
-import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
 
 import java.time.Duration;
 import java.util.*;
@@ -78,7 +67,7 @@ public class DataSyncWorkflowManager {
     @Autowired
     private CallbackWorkflowStore callbackWorkflowStore;
 
-    private ExecutorService kafkaMessageProcessPool = Executors.newFixedThreadPool(10);
+    private final ExecutorService kafkaMessageProcessPool = Executors.newFixedThreadPool(10);
 
     private WorkflowOperator workflowOperator;
 
@@ -97,9 +86,32 @@ public class DataSyncWorkflowManager {
         return consumer;
     }
 
-    private boolean processKakfaMessage(DataTransferEvent dte) {
+    private boolean processCallbackMessage(DataTransferEvent dte) {
         logger.info("Processing DTE for task {}, workflow {} and status {}",
                 dte.getTaskId(), dte.getWorkflowId(), dte.getTransferStatus());
+        Optional<CallbackWorkflowEntity> workflowEntityOp = callbackWorkflowStore.getWorkflowEntity(dte.getWorkflowId(), dte.getTaskId(), 1);
+        if (workflowEntityOp.isPresent()) {
+            logger.info("Found a callback workflow to continue workflow {}", dte.getWorkflowId());
+            CallbackWorkflowEntity callbackWorkflowEntity = workflowEntityOp.get();
+            String[] startTasks = {callbackWorkflowEntity.getStartTaskId()};
+
+            try {
+                Map<String, AbstractTask> taskMap = callbackWorkflowEntity.getTaskMap();
+                Map<String, Map<String, String>> taskValueMap = callbackWorkflowEntity.getTaskValueMap();
+
+                // Initialize task data
+                for (String key : taskMap.keySet()) {
+                    TaskUtil.deserializeTaskData(taskMap.get(key), taskValueMap.get(key));
+                }
+
+                String workflowId = this.workflowOperator.buildAndRunWorkflow(taskMap, startTasks);
+                logger.info("Successfully submitted callback workflow {} for incoming workflow {}", workflowId, dte.getWorkflowId());
+            } catch (Exception e) {
+                logger.error("Failed in executing callback workflow for worrkflow {}", dte.getWorkflowId());
+            }
+        } else {
+            logger.warn("Didn't find a callback workflow for workflow {}", dte.getWorkflowId());
+        }
         return true;
     }
 
@@ -120,7 +132,7 @@ public class DataSyncWorkflowManager {
                         List<ConsumerRecord<String, DataTransferEvent>> partitionRecords = consumerRecords.records(partition);
                         for (ConsumerRecord<String, DataTransferEvent> record : partitionRecords) {
                             processingFutures.add(executorCompletionService.submit(() -> {
-                                boolean success = processKakfaMessage(record.value());
+                                boolean success = processCallbackMessage(record.value());
                                 logger.info("Processing DTE for task " + record.value().getTaskId() + " : " + success);
                                 return success;
                             }));

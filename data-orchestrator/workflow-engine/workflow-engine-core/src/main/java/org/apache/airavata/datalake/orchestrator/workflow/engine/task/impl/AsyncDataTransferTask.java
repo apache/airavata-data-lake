@@ -33,9 +33,6 @@ public class AsyncDataTransferTask extends BiSectionNonBlockingTask {
     @TaskParam(name = "DestinationCredToken")
     private final ThreadLocal<String> destinationCredToken = new ThreadLocal<>();
 
-    @TaskParam(name = "UserId")
-    private final ThreadLocal<String> userId = new ThreadLocal<>();
-
     @TaskParam(name = "CallbackUrl")
     private final ThreadLocal<String> callbackUrl = new ThreadLocal<>();
 
@@ -45,17 +42,23 @@ public class AsyncDataTransferTask extends BiSectionNonBlockingTask {
     @TaskParam(name = "MFTAPIPort")
     private final ThreadLocal<Integer> mftPort = new ThreadLocal<>();
 
+    // Security
+    @TaskParam(name = "UserId")
+    private final ThreadLocal<String> userId = new ThreadLocal<>();
+
     @TaskParam(name = "MFTClientId")
     private final ThreadLocal<String> mftClientId = new ThreadLocal<>();
 
     @TaskParam(name = "MFTClientSecret")
     private final ThreadLocal<String> mftClientSecret = new ThreadLocal<>();
 
+    ///
+
     @TaskParam(name = "MFTCallbackStoreHost")
-    private ThreadLocal<String> mftCallbackStoreHost = new ThreadLocal<>();
+    private final ThreadLocal<String> mftCallbackStoreHost = new ThreadLocal<>();
 
     @TaskParam(name = "MFTCallbackStorePort")
-    private ThreadLocal<Integer> mftCallbackStorePort = new ThreadLocal<>();
+    private final ThreadLocal<Integer> mftCallbackStorePort = new ThreadLocal<>();
 
 
     public TaskResult beforeSection() {
@@ -92,6 +95,7 @@ public class AsyncDataTransferTask extends BiSectionNonBlockingTask {
 
     public TaskResult afterSection() {
         logger.info("Transfer completed successfully");
+        // TODO update metadata into Datalake
         return new TaskResult(TaskResult.Status.COMPLETED, "Section 2 completed");
     }
 

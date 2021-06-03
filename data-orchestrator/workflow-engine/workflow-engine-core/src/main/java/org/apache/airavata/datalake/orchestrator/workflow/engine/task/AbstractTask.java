@@ -71,7 +71,7 @@ public abstract class AbstractTask extends UserContentStore implements Task {
             this.callbackContext.set(cbc);
             String helixTaskId = getCallbackContext().getTaskConfig().getId();
             logger.info("Running task {}", helixTaskId);
-            deserializeTaskData(this, getCallbackContext().getTaskConfig().getConfigMap());
+            TaskUtil.deserializeTaskData(this, getCallbackContext().getTaskConfig().getConfigMap());
         } catch (Exception e) {
             logger.error("Failed at deserializing task data", e);
             return new TaskResult(TaskResult.Status.FAILED, "Failed in deserializing task data");
@@ -128,60 +128,6 @@ public abstract class AbstractTask extends UserContentStore implements Task {
             this.callbackContextQueue.put(callbackContext);
         } catch (InterruptedException e) {
             logger.error("Failed to put callback context to the queue", e);
-        }
-    }
-
-    private <T extends AbstractTask> void deserializeTaskData(T instance, Map<String, String> params) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
-
-        List<Field> allFields = new ArrayList<>();
-        Class genericClass = instance.getClass();
-
-        while (AbstractTask.class.isAssignableFrom(genericClass)) {
-            Field[] declaredFields = genericClass.getDeclaredFields();
-            for (Field declaredField : declaredFields) {
-                allFields.add(declaredField);
-            }
-            genericClass = genericClass.getSuperclass();
-        }
-
-        for (Field classField : allFields) {
-            TaskParam param = classField.getAnnotation(TaskParam.class);
-            if (param != null) {
-                if (params.containsKey(param.name())) {
-                    classField.setAccessible(true);
-                    PropertyDescriptor propertyDescriptor = PropertyUtils.getPropertyDescriptor(this, classField.getName());
-                    Method writeMethod = PropertyUtils.getWriteMethod(propertyDescriptor);
-                    Class<?>[] methodParamType = writeMethod.getParameterTypes();
-                    Class<?> writeParameterType = methodParamType[0];
-
-                    if (writeParameterType.isAssignableFrom(String.class)) {
-                        writeMethod.invoke(instance, params.get(param.name()));
-                    } else if (writeParameterType.isAssignableFrom(Integer.class) ||
-                            writeParameterType.isAssignableFrom(Integer.TYPE)) {
-                        writeMethod.invoke(instance, Integer.parseInt(params.get(param.name())));
-                    } else if (writeParameterType.isAssignableFrom(Long.class) ||
-                            writeParameterType.isAssignableFrom(Long.TYPE)) {
-                        writeMethod.invoke(instance, Long.parseLong(params.get(param.name())));
-                    } else if (writeParameterType.isAssignableFrom(Boolean.class) ||
-                            writeParameterType.isAssignableFrom(Boolean.TYPE)) {
-                        writeMethod.invoke(instance, Boolean.parseBoolean(params.get(param.name())));
-                    } else if (TaskParamType.class.isAssignableFrom(writeParameterType)) {
-                        Constructor<?> ctor = writeParameterType.getConstructor();
-                        Object obj = ctor.newInstance();
-                        ((TaskParamType)obj).deserialize(params.get(param.name()));
-                        writeMethod.invoke(instance, obj);
-                    }
-                }
-            }
-        }
-
-        for (Field classField : allFields) {
-            TaskOutPort outPort = classField.getAnnotation(TaskOutPort.class);
-            if (outPort != null) {
-                classField.setAccessible(true);
-                OutPort op = new OutPort();
-                op.setNextTaskId(params.get(outPort.name()));
-            }
         }
     }
 }

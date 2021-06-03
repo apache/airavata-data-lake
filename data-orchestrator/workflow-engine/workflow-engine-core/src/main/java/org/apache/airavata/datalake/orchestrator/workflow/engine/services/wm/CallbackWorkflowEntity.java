@@ -23,6 +23,7 @@ import java.util.Map;
 
 public class CallbackWorkflowEntity {
     private int prevSectionIndex;
+    private Map<String, Map<String, String>> taskValueMap;
     private Map<String, AbstractTask> taskMap;
     private String workflowId;
     private String startTaskId;
@@ -33,6 +34,14 @@ public class CallbackWorkflowEntity {
 
     public void setPrevSectionIndex(int prevSectionIndex) {
         this.prevSectionIndex = prevSectionIndex;
+    }
+
+    public Map<String, Map<String, String>> getTaskValueMap() {
+        return taskValueMap;
+    }
+
+    public void setTaskValueMap(Map<String, Map<String, String>> taskValueMap) {
+        this.taskValueMap = taskValueMap;
     }
 
     public Map<String, AbstractTask> getTaskMap() {

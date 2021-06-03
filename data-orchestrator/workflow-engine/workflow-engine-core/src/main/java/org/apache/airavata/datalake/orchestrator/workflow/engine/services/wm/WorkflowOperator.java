@@ -21,6 +21,7 @@ import org.apache.airavata.datalake.orchestrator.workflow.engine.task.AbstractTa
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.NonBlockingTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.OutPort;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.TaskParamType;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.TaskUtil;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.BlockingTaskDef;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.NonBlockingTaskDef;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.TaskOutPort;
@@ -102,11 +103,21 @@ public class WorkflowOperator {
     }
 
     private void continueNonBlockingRest(Map<String, AbstractTask> taskMap, String workflowName,
-                                         String nonBlockingTaskId, int currentSection) {
+                                         String nonBlockingTaskId, int currentSection) throws Exception {
+
+        NonBlockingTask nbTask = (NonBlockingTask) taskMap.get(nonBlockingTaskId);
+        nbTask.setCurrentSection(currentSection + 1);
+
+        Map<String, Map<String, String>> serializedMap = new HashMap<>();
+        for (String key : taskMap.keySet()) {
+            Map<String, String> stringMap = TaskUtil.serializeTaskData(taskMap.get(key));
+            serializedMap.put(key, stringMap);
+        }
 
         CallbackWorkflowEntity cwe = new CallbackWorkflowEntity();
         cwe.setWorkflowId(workflowName);
         cwe.setPrevSectionIndex(currentSection);
+        cwe.setTaskValueMap(serializedMap);
         cwe.setTaskMap(taskMap);
         cwe.setStartTaskId(nonBlockingTaskId);
         this.cbws.saveWorkflowEntity(cwe);
@@ -131,7 +142,7 @@ public class WorkflowOperator {
                     .setTaskId(currentTask.getTaskId())
                     .setCommand(taskName);
 
-            Map<String, String> paramMap = serializeTaskData(currentTask);
+            Map<String, String> paramMap = TaskUtil.serializeTaskData(currentTask);
             paramMap.forEach(taskBuilder::addConfig);
 
             List<TaskConfig> taskBuilds = new ArrayList<>();
@@ -165,7 +176,7 @@ public class WorkflowOperator {
                     .setTaskId(currentTask.getTaskId())
                     .setCommand(taskName);
 
-            Map<String, String> paramMap = serializeTaskData(currentTask);
+            Map<String, String> paramMap = TaskUtil.serializeTaskData(currentTask);
             paramMap.forEach(taskBuilder::addConfig);
 
             List<TaskConfig> taskBuilds = new ArrayList<>();
@@ -204,39 +215,6 @@ public class WorkflowOperator {
 
     public void deleteWorkflow(String workflowName) {
         taskDriver.delete(workflowName);
-    }
-
-    private <T extends AbstractTask> Map<String, String> serializeTaskData(T data) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-
-        Map<String, String> result = new HashMap<>();
-        for (Class<?> c = data.getClass(); c != null; c = c.getSuperclass()) {
-            Field[] fields = c.getDeclaredFields();
-            for (Field classField : fields) {
-                TaskParam parm = classField.getAnnotation(TaskParam.class);
-                try {
-                    if (parm != null) {
-                        Object propertyValue = PropertyUtils.getProperty(data, classField.getName());
-                        if (propertyValue instanceof TaskParamType) {
-                            result.put(parm.name(), TaskParamType.class.cast(propertyValue).serialize());
-                        } else {
-                            result.put(parm.name(), propertyValue.toString());
-                        }
-                    }
-                } catch (Exception e) {
-                    logger.error("Failed to serialize task parameter {} in class {}", parm.name(), data.getClass().getName());
-                    throw e;
-                }
-
-                TaskOutPort outPort = classField.getAnnotation(TaskOutPort.class);
-                if (outPort != null) {
-                    classField.setAccessible(true);
-                    if (classField.get(data) != null) {
-                        result.put(outPort.name(), ((OutPort) classField.get(data)).getNextTaskId().toString());
-                    }
-                }
-            }
-        }
-        return result;
     }
 
     private <T extends AbstractTask> List<OutPort> getOutPortsOfTask(T taskObj) throws IllegalAccessException {
