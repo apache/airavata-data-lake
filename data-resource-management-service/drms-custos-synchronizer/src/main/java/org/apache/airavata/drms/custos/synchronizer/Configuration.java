@@ -41,13 +41,22 @@ public class Configuration {
         private String custosId;
         private String custosSec;
         private String[] tenantsToBeSynced;
+        private String custosBrokerURL;
+        private String consumerGroup;
+        private int maxPollRecordsConfig;
+        private String[] topics;
 
-        public Custos(String host, int port, String custosId, String custosSec, String[] tenantsToBeSynced) {
+        public Custos(String host, int port, String custosId, String custosSec, String[] tenantsToBeSynced,
+                      String custosBrokerURL, String consumerGroup, int maxPollRecordsConfig, String[] topics) {
             this.host = host;
             this.port = port;
             this.custosId = custosId;
             this.custosSec = custosSec;
             this.tenantsToBeSynced = tenantsToBeSynced;
+            this.custosBrokerURL = custosBrokerURL;
+            this.consumerGroup = consumerGroup;
+            this.maxPollRecordsConfig = maxPollRecordsConfig;
+            this.topics = topics;
         }
 
         public Custos() {
@@ -92,6 +101,38 @@ public class Configuration {
 
         public void setTenantsToBeSynced(String[] tenantsToBeSynced) {
             this.tenantsToBeSynced = tenantsToBeSynced;
+        }
+
+        public String getCustosBrokerURL() {
+            return custosBrokerURL;
+        }
+
+        public void setCustosBrokerURL(String custosBrokerURL) {
+            this.custosBrokerURL = custosBrokerURL;
+        }
+
+        public String getConsumerGroup() {
+            return consumerGroup;
+        }
+
+        public void setConsumerGroup(String consumerGroup) {
+            this.consumerGroup = consumerGroup;
+        }
+
+        public int getMaxPollRecordsConfig() {
+            return maxPollRecordsConfig;
+        }
+
+        public void setMaxPollRecordsConfig(int maxPollRecordsConfig) {
+            this.maxPollRecordsConfig = maxPollRecordsConfig;
+        }
+
+        public String[] getTopics() {
+            return topics;
+        }
+
+        public void setTopics(String[] topics) {
+            this.topics = topics;
         }
     }
 

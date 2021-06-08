@@ -1,6 +1,10 @@
 package org.apache.airavata.drms.custos.synchronizer;
 
 import org.apache.airavata.drms.custos.synchronizer.datafetcher.CustosDataFetchingJob;
+import org.apache.airavata.drms.custos.synchronizer.handlers.events.ConsumerCallback;
+import org.apache.airavata.drms.custos.synchronizer.handlers.events.CustosEventListener;
+import org.apache.airavata.drms.custos.synchronizer.handlers.events.EventDemux;
+import org.apache.custos.messaging.service.Message;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
@@ -32,6 +36,7 @@ public class CustosSynchronizer implements CommandLineRunner {
         LOGGER.info("Configuring scheduler ...");
         Utils.initializeConnectors(Utils.loadConfiguration(configFilePath));
         configureScheduler(configFilePath);
+        configureEventListener(configFilePath);
 
     }
 
@@ -54,6 +59,23 @@ public class CustosSynchronizer implements CommandLineRunner {
                 .build();
         scheduler.start();
         scheduler.scheduleJob(job, trigger);
+    }
+
+
+    private void configureEventListener(String configPath) {
+        Configuration configuration = Utils.loadConfig(configPath);
+        CustosEventListener custosEventListener = new CustosEventListener(
+                configuration.getCustos().getCustosBrokerURL(),
+                configuration.getCustos().getConsumerGroup(),
+                configuration.getCustos().getMaxPollRecordsConfig(),
+                configuration.getCustos().getTopics());
+        custosEventListener.consume(new ConsumerCallback() {
+            @Override
+            public void process(Message notificationEvent) throws Exception {
+                LOGGER.debug("Message Id" + notificationEvent.getMessageId());
+                EventDemux.delegateEvents(notificationEvent);
+            }
+        });
     }
 
 
