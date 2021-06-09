@@ -92,5 +92,9 @@ public class Neo4JConnector {
         tx.close();
     }
 
+    public boolean isOpen() {
+        return driver.session().isOpen();
+    }
+
 
 }
