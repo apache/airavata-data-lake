@@ -2,7 +2,7 @@
 
 * org.apache.airavata.datalake.orchestrator.workflow.engine.services.controller.Controller
 * org.apache.airavata.datalake.orchestrator.workflow.engine.services.participant.Participant
-* org.apache.airavata.datalake.orchestrator.workflow.engine.services.wm.DataSyncWorkflowManager
+* org.apache.airavata.datalake.orchestrator.workflow.engine.services.wm.datasync.DataSyncWorkflowManager
 
 ### Configure the participant with new tasks
 

@@ -1,0 +1,9 @@
+fileServerHost: "apidev.scigap.org"
+fileServerPort: 3124
+fileServerProtocol: "SFTP"
+listeningPath: "/Users/isururanawaka/Documents/texts"
+
+producer:
+  brokerURL: "localhost:9092"
+  publisherId: "DataOrchestratorProducer"
+  publisherTopic: "quickstart-events"

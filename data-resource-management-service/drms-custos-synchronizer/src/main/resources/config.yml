@@ -1,0 +1,17 @@
+pollingInterval: 60
+dataResourceManagementService:
+  dbURI: "bolt://149.165.156.173:7687"
+  dbUser: "neo4j"
+  dbPassword: "blastcovid19"
+custos:
+  host: "custos.scigap.org"
+  port: 31499
+  custosId: "custos-cmcdclbywlxmc2ktzv0d-10000702"
+  custosSec: "1hBjD0poRNTdxwLzV0baY5mgUlogPalH9jCFz9ZG"
+  custosBrokerURL: "149.165.156.200:9092"
+  consumerGroup: "custosEventsGroup"
+  maxPollRecordsConfig: 10
+  topics:
+    - "10000702-1df2a477-18d4-47e9-a1c9-27020d0d1946"
+  tenantsToBeSynced:
+    - "custos-cmcdclbywlxmc2ktzv0d-10000702"

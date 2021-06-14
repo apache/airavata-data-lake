@@ -13,12 +13,45 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="data-orchestrator-api" />
+        <module name="workflow-engine-client" />
+        <module name="data-orchestrator-messaging" />
+        <module name="data-orchestrator-core" />
+        <module name="data-orchestrator-clients-core" />
+        <module name="workflow-engine-stubs" />
+        <module name="data-orchestrator-registry" />
+        <module name="data-orchestrator-file-event-listener" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="commons" target="11" />
-      <module name="drms-rest-proxy" target="11" />
+      <module name="data-orchestrator-api" target="11" />
+      <module name="data-orchestrator-clients" target="11" />
+      <module name="data-orchestrator-clients-core" target="11" />
+      <module name="data-orchestrator-core" target="11" />
+      <module name="data-orchestrator-file-event-listener" target="11" />
+      <module name="data-orchestrator-messaging" target="11" />
+      <module name="data-orchestrator-registry" target="11" />
+      <module name="data-orchestrator-service" target="11" />
+      <module name="workflow-engine-api" target="11" />
+      <module name="workflow-engine-client" target="11" />
+      <module name="workflow-engine-stubs" target="11" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-clients-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-clients-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-registry/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-registry/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-client/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-stubs/src/main/resources" charset="UTF-8" />
   </component>
   <component name="ExportToHTMLSettings">
     <option name="PRINT_LINE_NUMBERS" value="false" />
@@ -66,6 +99,23 @@
     <option name="IS_EMACS_ERRORS_MODE" value="true" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/pom.xml" />
+        <option value="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/pom.xml" />
+        <option value="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/pom.xml" />
+        <option value="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-stubs/pom.xml" />
+        <option value="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/pom.xml" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/pom.xml" />
+        <option value="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service-core/pom.xml" />
+      </set>
+    </option>
   </component>
   <component name="Palette2">
     <group name="Swing">
@@ -191,19 +241,24 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/airavata-data-lake.iml" filepath="$PROJECT_DIR$/airavata-data-lake.iml" />
-      <module fileurl="file://$PROJECT_DIR$/metadata-service/db-service/client/client.iml" filepath="$PROJECT_DIR$/metadata-service/db-service/client/client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/metadata-service/data-builders/data-builders.iml" filepath="$PROJECT_DIR$/metadata-service/data-builders/data-builders.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-api/data-orchestrator-api.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-api/data-orchestrator-api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-core/data-orchestrator-core.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-core/data-orchestrator-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/data-orchestrator-api.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/data-orchestrator-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-clients.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-clients.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-clients-core/data-orchestrator-clients-core.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-clients-core/data-orchestrator-clients-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service-core/data-orchestrator-core.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service-core/data-orchestrator-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/data-orchestrator-file-event-listener.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/data-orchestrator-file-event-listener.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/data-orchestrator-messaging.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-messaging/data-orchestrator-messaging.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-registry/data-orchestrator-registry.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-registry/data-orchestrator-registry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service.iml" filepath="$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/data-resource-management-service.iml" filepath="$PROJECT_DIR$/data-resource-management-service/data-resource-management-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/metadata-service/db-service/db-service.iml" filepath="$PROJECT_DIR$/metadata-service/db-service/db-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/drms-api/drms-api.iml" filepath="$PROJECT_DIR$/data-resource-management-service/drms-api/drms-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/drms-core/drms-core.iml" filepath="$PROJECT_DIR$/data-resource-management-service/drms-core/drms-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/drms-custos-synchronizer/drms-custos-synchronizer.iml" filepath="$PROJECT_DIR$/data-resource-management-service/drms-custos-synchronizer/drms-custos-synchronizer.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/drms-stubs/drms-stubs.iml" filepath="$PROJECT_DIR$/data-resource-management-service/drms-stubs/drms-stubs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/metadata-service/metadata-service.iml" filepath="$PROJECT_DIR$/metadata-service/metadata-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/metadata-service/db-service/server/server.iml" filepath="$PROJECT_DIR$/metadata-service/db-service/server/server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/metadata-service/db-service/stub/stub.iml" filepath="$PROJECT_DIR$/metadata-service/db-service/stub/stub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine.iml" filepath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-client/workflow-engine-client.iml" filepath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-client/workflow-engine-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-core/workflow-engine-core.iml" filepath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-core/workflow-engine-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-stubs/workflow-engine-stubs.iml" filepath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-stubs/workflow-engine-stubs.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="11." />
@@ -212,6 +267,11 @@
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
       <option name="url" value="https://repo.maven.apache.org/maven2" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="apache.snapshots" />
+      <option name="name" value="Apache Snapshot Repository" />
+      <option name="url" value="https://repository.apache.org/snapshots" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
@@ -227,5 +287,1965 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/metadata-service/db-rest-proxy/googleapis" vcs="Git" />
+  </component>
+  <component name="libraryTable">
+    <library name="Maven: antlr:antlr:2.7.7">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/antlr/antlr/2.7.7/antlr-2.7.7.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/antlr/antlr/2.7.7/antlr-2.7.7-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/antlr/antlr/2.7.7/antlr-2.7.7-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: ch.qos.logback:logback-classic:1.2.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: ch.qos.logback:logback-core:1.2.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.101tec:zkclient:0.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/101tec/zkclient/0.5/zkclient-0.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/101tec/zkclient/0.5/zkclient-0.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/101tec/zkclient/0.5/zkclient-0.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.11.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/core/jackson-annotations/2.11.3/jackson-annotations-2.11.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/core/jackson-annotations/2.11.3/jackson-annotations-2.11.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/core/jackson-annotations/2.11.3/jackson-annotations-2.11.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.fasterxml.jackson.core:jackson-core:2.11.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/core/jackson-core/2.11.3/jackson-core-2.11.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/core/jackson-core/2.11.3/jackson-core-2.11.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/core/jackson-core/2.11.3/jackson-core-2.11.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.fasterxml.jackson.core:jackson-databind:2.11.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/core/jackson-databind/2.11.3/jackson-databind-2.11.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/core/jackson-databind/2.11.3/jackson-databind-2.11.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/core/jackson-databind/2.11.3/jackson-databind-2.11.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.11.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.11.3/jackson-datatype-jdk8-2.11.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.11.3/jackson-datatype-jdk8-2.11.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.11.3/jackson-datatype-jdk8-2.11.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.11.3/jackson-datatype-jsr310-2.11.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.11.3/jackson-datatype-jsr310-2.11.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.11.3/jackson-datatype-jsr310-2.11.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.11.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/module/jackson-module-parameter-names/2.11.3/jackson-module-parameter-names-2.11.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/module/jackson-module-parameter-names/2.11.3/jackson-module-parameter-names-2.11.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/jackson/module/jackson-module-parameter-names/2.11.3/jackson-module-parameter-names-2.11.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.fasterxml:classmate:1.5.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/classmate/1.5.1/classmate-1.5.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/classmate/1.5.1/classmate-1.5.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/fasterxml/classmate/1.5.1/classmate-1.5.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.android:annotations:4.1.1.4">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/android/annotations/4.1.1.4/annotations-4.1.1.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/android/annotations/4.1.1.4/annotations-4.1.1.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/android/annotations/4.1.1.4/annotations-4.1.1.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.api.grpc:proto-google-common-protos:1.12.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/api/grpc/proto-google-common-protos/1.12.0/proto-google-common-protos-1.12.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/api/grpc/proto-google-common-protos/1.12.0/proto-google-common-protos-1.12.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/api/grpc/proto-google-common-protos/1.12.0/proto-google-common-protos-1.12.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.code.findbugs:jsr305:1.3.9">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.code.findbugs:jsr305:3.0.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.code.gson:gson:2.8.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/code/gson/gson/2.8.5/gson-2.8.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/code/gson/gson/2.8.5/gson-2.8.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/code/gson/gson/2.8.5/gson-2.8.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.errorprone:error_prone_annotations:2.1.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.errorprone:error_prone_annotations:2.3.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/errorprone/error_prone_annotations/2.3.3/error_prone_annotations-2.3.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/errorprone/error_prone_annotations/2.3.3/error_prone_annotations-2.3.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/errorprone/error_prone_annotations/2.3.3/error_prone_annotations-2.3.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.guava:failureaccess:1.0.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.guava:guava:24.0-jre">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/guava/24.0-jre/guava-24.0-jre.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/guava/24.0-jre/guava-24.0-jre-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/guava/24.0-jre/guava-24.0-jre-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.guava:guava:28.1-android">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/guava/28.1-android/guava-28.1-android.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/guava/28.1-android/guava-28.1-android-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/guava/28.1-android/guava-28.1-android-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.j2objc:j2objc-annotations:1.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.j2objc:j2objc-annotations:1.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.protobuf:protobuf-java-util:3.10.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/protobuf/protobuf-java-util/3.10.0/protobuf-java-util-3.10.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/protobuf/protobuf-java-util/3.10.0/protobuf-java-util-3.10.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/protobuf/protobuf-java-util/3.10.0/protobuf-java-util-3.10.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.protobuf:protobuf-java:3.10.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/protobuf/protobuf-java/3.10.0/protobuf-java-3.10.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/protobuf/protobuf-java/3.10.0/protobuf-java-3.10.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/protobuf/protobuf-java/3.10.0/protobuf-java-3.10.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.google.protobuf:protobuf-java:3.6.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.h2database:h2:1.4.197">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/h2database/h2/1.4.197/h2-1.4.197.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/h2database/h2/1.4.197/h2-1.4.197-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/h2database/h2/1.4.197/h2-1.4.197-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.jayway.jsonpath:json-path:2.4.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/jayway/jsonpath/json-path/2.4.0/json-path-2.4.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.sun.istack:istack-commons-runtime:3.0.7">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.sun.xml.fastinfoset:FastInfoset:1.2.15">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.zaxxer:HikariCP:3.4.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/com/zaxxer/HikariCP/3.4.5/HikariCP-3.4.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/com/zaxxer/HikariCP/3.4.5/HikariCP-3.4.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/com/zaxxer/HikariCP/3.4.5/HikariCP-3.4.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: commons-beanutils:commons-beanutils:1.9.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/commons-beanutils/commons-beanutils/1.9.1/commons-beanutils-1.9.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/commons-beanutils/commons-beanutils/1.9.1/commons-beanutils-1.9.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/commons-beanutils/commons-beanutils/1.9.1/commons-beanutils-1.9.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: commons-beanutils:commons-beanutils:1.9.4">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/commons-beanutils/commons-beanutils/1.9.4/commons-beanutils-1.9.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/commons-beanutils/commons-beanutils/1.9.4/commons-beanutils-1.9.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/commons-beanutils/commons-beanutils/1.9.4/commons-beanutils-1.9.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: commons-cli:commons-cli:1.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/commons-cli/commons-cli/1.2/commons-cli-1.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/commons-cli/commons-cli/1.2/commons-cli-1.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/commons-cli/commons-cli/1.2/commons-cli-1.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: commons-codec:commons-codec:1.6">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/commons-codec/commons-codec/1.6/commons-codec-1.6.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/commons-codec/commons-codec/1.6/commons-codec-1.6-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/commons-codec/commons-codec/1.6/commons-codec-1.6-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: commons-collections:commons-collections:3.2.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: commons-collections:commons-collections:3.2.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: commons-io:commons-io:1.4">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/commons-io/commons-io/1.4/commons-io-1.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/commons-io/commons-io/1.4/commons-io-1.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/commons-io/commons-io/1.4/commons-io-1.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: commons-logging:commons-logging:1.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/commons-logging/commons-logging/1.2/commons-logging-1.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/commons-logging/commons-logging/1.2/commons-logging-1.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/commons-logging/commons-logging/1.2/commons-logging-1.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.dropwizard.metrics:metrics-core:3.2.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/dropwizard/metrics/metrics-core/3.2.3/metrics-core-3.2.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/dropwizard/metrics/metrics-core/3.2.3/metrics-core-3.2.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/dropwizard/metrics/metrics-core/3.2.3/metrics-core-3.2.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.github.lognet:grpc-spring-boot-starter:3.5.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/github/lognet/grpc-spring-boot-starter/3.5.1/grpc-spring-boot-starter-3.5.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/github/lognet/grpc-spring-boot-starter/3.5.1/grpc-spring-boot-starter-3.5.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/github/lognet/grpc-spring-boot-starter/3.5.1/grpc-spring-boot-starter-3.5.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.grpc:grpc-api:1.25.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-api/1.25.0/grpc-api-1.25.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-api/1.25.0/grpc-api-1.25.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-api/1.25.0/grpc-api-1.25.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.grpc:grpc-context:1.25.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-context/1.25.0/grpc-context-1.25.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-context/1.25.0/grpc-context-1.25.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-context/1.25.0/grpc-context-1.25.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.grpc:grpc-core:1.25.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-core/1.25.0/grpc-core-1.25.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-core/1.25.0/grpc-core-1.25.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-core/1.25.0/grpc-core-1.25.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.grpc:grpc-netty:1.25.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-netty/1.25.0/grpc-netty-1.25.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-netty/1.25.0/grpc-netty-1.25.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-netty/1.25.0/grpc-netty-1.25.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.grpc:grpc-protobuf-lite:1.25.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-protobuf-lite/1.25.0/grpc-protobuf-lite-1.25.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-protobuf-lite/1.25.0/grpc-protobuf-lite-1.25.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-protobuf-lite/1.25.0/grpc-protobuf-lite-1.25.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.grpc:grpc-protobuf:1.25.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-protobuf/1.25.0/grpc-protobuf-1.25.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-protobuf/1.25.0/grpc-protobuf-1.25.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-protobuf/1.25.0/grpc-protobuf-1.25.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.grpc:grpc-services:1.25.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-services/1.25.0/grpc-services-1.25.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-services/1.25.0/grpc-services-1.25.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-services/1.25.0/grpc-services-1.25.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.grpc:grpc-stub:1.25.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-stub/1.25.0/grpc-stub-1.25.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-stub/1.25.0/grpc-stub-1.25.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/grpc/grpc-stub/1.25.0/grpc-stub-1.25.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty-buffer:4.1.42.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-buffer/4.1.42.Final/netty-buffer-4.1.42.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-buffer/4.1.42.Final/netty-buffer-4.1.42.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-buffer/4.1.42.Final/netty-buffer-4.1.42.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty-codec-http2:4.1.42.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec-http2/4.1.42.Final/netty-codec-http2-4.1.42.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec-http2/4.1.42.Final/netty-codec-http2-4.1.42.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec-http2/4.1.42.Final/netty-codec-http2-4.1.42.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty-codec-http:4.1.42.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec-http/4.1.42.Final/netty-codec-http-4.1.42.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec-http/4.1.42.Final/netty-codec-http-4.1.42.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec-http/4.1.42.Final/netty-codec-http-4.1.42.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty-codec-socks:4.1.42.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec-socks/4.1.42.Final/netty-codec-socks-4.1.42.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec-socks/4.1.42.Final/netty-codec-socks-4.1.42.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec-socks/4.1.42.Final/netty-codec-socks-4.1.42.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty-codec:4.1.42.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec/4.1.42.Final/netty-codec-4.1.42.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec/4.1.42.Final/netty-codec-4.1.42.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-codec/4.1.42.Final/netty-codec-4.1.42.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty-common:4.1.42.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-common/4.1.42.Final/netty-common-4.1.42.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-common/4.1.42.Final/netty-common-4.1.42.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-common/4.1.42.Final/netty-common-4.1.42.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty-handler-proxy:4.1.42.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-handler-proxy/4.1.42.Final/netty-handler-proxy-4.1.42.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-handler-proxy/4.1.42.Final/netty-handler-proxy-4.1.42.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-handler-proxy/4.1.42.Final/netty-handler-proxy-4.1.42.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty-handler:4.1.42.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-handler/4.1.42.Final/netty-handler-4.1.42.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-handler/4.1.42.Final/netty-handler-4.1.42.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-handler/4.1.42.Final/netty-handler-4.1.42.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty-resolver:4.1.42.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-resolver/4.1.42.Final/netty-resolver-4.1.42.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-resolver/4.1.42.Final/netty-resolver-4.1.42.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-resolver/4.1.42.Final/netty-resolver-4.1.42.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty-tcnative-boringssl-static:2.0.25.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-tcnative-boringssl-static/2.0.25.Final/netty-tcnative-boringssl-static-2.0.25.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-tcnative-boringssl-static/2.0.25.Final/netty-tcnative-boringssl-static-2.0.25.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-tcnative-boringssl-static/2.0.25.Final/netty-tcnative-boringssl-static-2.0.25.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty-transport:4.1.42.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-transport/4.1.42.Final/netty-transport-4.1.42.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-transport/4.1.42.Final/netty-transport-4.1.42.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty-transport/4.1.42.Final/netty-transport-4.1.42.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.netty:netty:3.10.6.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty/3.10.6.Final/netty-3.10.6.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty/3.10.6.Final/netty-3.10.6.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/netty/netty/3.10.6.Final/netty-3.10.6.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.opencensus:opencensus-api:0.21.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/opencensus/opencensus-api/0.21.0/opencensus-api-0.21.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/opencensus/opencensus-api/0.21.0/opencensus-api-0.21.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/opencensus/opencensus-api/0.21.0/opencensus-api-0.21.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.opencensus:opencensus-contrib-grpc-metrics:0.21.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/opencensus/opencensus-contrib-grpc-metrics/0.21.0/opencensus-contrib-grpc-metrics-0.21.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/opencensus/opencensus-contrib-grpc-metrics/0.21.0/opencensus-contrib-grpc-metrics-0.21.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/opencensus/opencensus-contrib-grpc-metrics/0.21.0/opencensus-contrib-grpc-metrics-0.21.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: io.perfmark:perfmark-api:0.19.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/io/perfmark/perfmark-api/0.19.0/perfmark-api-0.19.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/io/perfmark/perfmark-api/0.19.0/perfmark-api-0.19.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/io/perfmark/perfmark-api/0.19.0/perfmark-api-0.19.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: jakarta.activation:jakarta.activation-api:1.2.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/jakarta/activation/jakarta.activation-api/1.2.2/jakarta.activation-api-1.2.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/jakarta/activation/jakarta.activation-api/1.2.2/jakarta.activation-api-1.2.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/jakarta/activation/jakarta.activation-api/1.2.2/jakarta.activation-api-1.2.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: jakarta.annotation:jakarta.annotation-api:1.3.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/jakarta/annotation/jakarta.annotation-api/1.3.5/jakarta.annotation-api-1.3.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/jakarta/annotation/jakarta.annotation-api/1.3.5/jakarta.annotation-api-1.3.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/jakarta/annotation/jakarta.annotation-api/1.3.5/jakarta.annotation-api-1.3.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: jakarta.persistence:jakarta.persistence-api:2.2.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/jakarta/persistence/jakarta.persistence-api/2.2.3/jakarta.persistence-api-2.2.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/jakarta/persistence/jakarta.persistence-api/2.2.3/jakarta.persistence-api-2.2.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/jakarta/persistence/jakarta.persistence-api/2.2.3/jakarta.persistence-api-2.2.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: jakarta.transaction:jakarta.transaction-api:1.3.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/jakarta/transaction/jakarta.transaction-api/1.3.3/jakarta.transaction-api-1.3.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/jakarta/transaction/jakarta.transaction-api/1.3.3/jakarta.transaction-api-1.3.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/jakarta/transaction/jakarta.transaction-api/1.3.3/jakarta.transaction-api-1.3.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: jakarta.xml.bind:jakarta.xml.bind-api:2.3.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/jakarta/xml/bind/jakarta.xml.bind-api/2.3.3/jakarta.xml.bind-api-2.3.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/jakarta/xml/bind/jakarta.xml.bind-api/2.3.3/jakarta.xml.bind-api-2.3.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/jakarta/xml/bind/jakarta.xml.bind-api/2.3.3/jakarta.xml.bind-api-2.3.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: javax.annotation:javax.annotation-api:1.3.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: javax.persistence:persistence-api:1.0.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/javax/persistence/persistence-api/1.0.2/persistence-api-1.0.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/javax/persistence/persistence-api/1.0.2/persistence-api-1.0.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/javax/persistence/persistence-api/1.0.2/persistence-api-1.0.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: jline:jline:0.9.94">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/jline/jline/0.9.94/jline-0.9.94.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/jline/jline/0.9.94/jline-0.9.94-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/jline/jline/0.9.94/jline-0.9.94-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: mysql:mysql-connector-java:8.0.18">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/mysql/mysql-connector-java/8.0.18/mysql-connector-java-8.0.18.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/mysql/mysql-connector-java/8.0.18/mysql-connector-java-8.0.18-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/mysql/mysql-connector-java/8.0.18/mysql-connector-java-8.0.18-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: net.bytebuddy:byte-buddy-agent:1.10.18">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/net/bytebuddy/byte-buddy-agent/1.10.18/byte-buddy-agent-1.10.18.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/net/bytebuddy/byte-buddy-agent/1.10.18/byte-buddy-agent-1.10.18-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/net/bytebuddy/byte-buddy-agent/1.10.18/byte-buddy-agent-1.10.18-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: net.bytebuddy:byte-buddy:1.10.21">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/net/bytebuddy/byte-buddy/1.10.21/byte-buddy-1.10.21.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/net/bytebuddy/byte-buddy/1.10.21/byte-buddy-1.10.21-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/net/bytebuddy/byte-buddy/1.10.21/byte-buddy-1.10.21-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: net.minidev:accessors-smart:1.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/net/minidev/accessors-smart/1.2/accessors-smart-1.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/net/minidev/accessors-smart/1.2/accessors-smart-1.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/net/minidev/accessors-smart/1.2/accessors-smart-1.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: net.minidev:json-smart:2.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/net/minidev/json-smart/2.3/json-smart-2.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/net/minidev/json-smart/2.3/json-smart-2.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/net/minidev/json-smart/2.3/json-smart-2.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: net.sf.dozer:dozer:5.5.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/net/sf/dozer/dozer/5.5.1/dozer-5.5.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/net/sf/dozer/dozer/5.5.1/dozer-5.5.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/net/sf/dozer/dozer/5.5.1/dozer-5.5.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.airavata.data.lake:data-orchestrator-core:0.01-SNAPSHOT">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/airavata/data/lake/data-orchestrator-core/0.01-SNAPSHOT/data-orchestrator-core-0.01-SNAPSHOT.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/airavata/data/lake/data-orchestrator-core/0.01-SNAPSHOT/data-orchestrator-core-0.01-SNAPSHOT-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/airavata/data/lake/data-orchestrator-core/0.01-SNAPSHOT/data-orchestrator-core-0.01-SNAPSHOT-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.airavata.data.lake:data-orchestrator-registry:0.01-SNAPSHOT">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/airavata/data/lake/data-orchestrator-registry/0.01-SNAPSHOT/data-orchestrator-registry-0.01-SNAPSHOT.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/airavata/data/lake/data-orchestrator-registry/0.01-SNAPSHOT/data-orchestrator-registry-0.01-SNAPSHOT-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/airavata/data/lake/data-orchestrator-registry/0.01-SNAPSHOT/data-orchestrator-registry-0.01-SNAPSHOT-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.commons:commons-lang3:3.2.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.commons:commons-math:2.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/commons/commons-math/2.1/commons-math-2.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/commons/commons-math/2.1/commons-math-2.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/commons/commons-math/2.1/commons-math-2.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.helix:helix-core:0.9.7">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/helix/helix-core/0.9.7/helix-core-0.9.7.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/helix/helix-core/0.9.7/helix-core-0.9.7-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/helix/helix-core/0.9.7/helix-core-0.9.7-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.kafka:kafka-clients:1.0.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/kafka/kafka-clients/1.0.0/kafka-clients-1.0.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/kafka/kafka-clients/1.0.0/kafka-clients-1.0.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/kafka/kafka-clients/1.0.0/kafka-clients-1.0.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.logging.log4j:log4j-api:2.12.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-api/2.12.1/log4j-api-2.12.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-api/2.12.1/log4j-api-2.12.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-api/2.12.1/log4j-api-2.12.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.logging.log4j:log4j-api:2.13.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-api/2.13.3/log4j-api-2.13.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-api/2.13.3/log4j-api-2.13.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-api/2.13.3/log4j-api-2.13.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.logging.log4j:log4j-to-slf4j:2.12.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-to-slf4j/2.12.1/log4j-to-slf4j-2.12.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-to-slf4j/2.12.1/log4j-to-slf4j-2.12.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-to-slf4j/2.12.1/log4j-to-slf4j-2.12.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.logging.log4j:log4j-to-slf4j:2.13.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-to-slf4j/2.13.3/log4j-to-slf4j-2.13.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-to-slf4j/2.13.3/log4j-to-slf4j-2.13.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/logging/log4j/log4j-to-slf4j/2.13.3/log4j-to-slf4j-2.13.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.41">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/tomcat/embed/tomcat-embed-core/9.0.41/tomcat-embed-core-9.0.41.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/tomcat/embed/tomcat-embed-core/9.0.41/tomcat-embed-core-9.0.41-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/tomcat/embed/tomcat-embed-core/9.0.41/tomcat-embed-core-9.0.41-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.41">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/tomcat/embed/tomcat-embed-websocket/9.0.41/tomcat-embed-websocket-9.0.41.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/tomcat/embed/tomcat-embed-websocket/9.0.41/tomcat-embed-websocket-9.0.41-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/tomcat/embed/tomcat-embed-websocket/9.0.41/tomcat-embed-websocket-9.0.41-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.yetus:audience-annotations:0.5.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/yetus/audience-annotations/0.5.0/audience-annotations-0.5.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/yetus/audience-annotations/0.5.0/audience-annotations-0.5.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/yetus/audience-annotations/0.5.0/audience-annotations-0.5.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.zookeeper:zookeeper:3.4.13">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/zookeeper/zookeeper/3.4.13/zookeeper-3.4.13.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apache/zookeeper/zookeeper/3.4.13/zookeeper-3.4.13-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apache/zookeeper/zookeeper/3.4.13/zookeeper-3.4.13-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apiguardian:apiguardian-api:1.1.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.aspectj:aspectjweaver:1.9.6">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/aspectj/aspectjweaver/1.9.6/aspectjweaver-1.9.6.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/aspectj/aspectjweaver/1.9.6/aspectjweaver-1.9.6-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/aspectj/aspectjweaver/1.9.6/aspectjweaver-1.9.6-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.assertj:assertj-core:3.18.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/assertj/assertj-core/3.18.1/assertj-core-3.18.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/assertj/assertj-core/3.18.1/assertj-core-3.18.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/assertj/assertj-core/3.18.1/assertj-core-3.18.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.checkerframework:checker-compat-qual:2.0.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/checkerframework/checker-compat-qual/2.0.0/checker-compat-qual-2.0.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/checkerframework/checker-compat-qual/2.0.0/checker-compat-qual-2.0.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/checkerframework/checker-compat-qual/2.0.0/checker-compat-qual-2.0.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.checkerframework:checker-compat-qual:2.5.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/checkerframework/checker-compat-qual/2.5.5/checker-compat-qual-2.5.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/checkerframework/checker-compat-qual/2.5.5/checker-compat-qual-2.5.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/checkerframework/checker-compat-qual/2.5.5/checker-compat-qual-2.5.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.codehaus.jackson:jackson-core-asl:1.8.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/jackson/jackson-core-asl/1.8.5/jackson-core-asl-1.8.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/jackson/jackson-core-asl/1.8.5/jackson-core-asl-1.8.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/jackson/jackson-core-asl/1.8.5/jackson-core-asl-1.8.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.8.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/jackson/jackson-mapper-asl/1.8.5/jackson-mapper-asl-1.8.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/jackson/jackson-mapper-asl/1.8.5/jackson-mapper-asl-1.8.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/jackson/jackson-mapper-asl/1.8.5/jackson-mapper-asl-1.8.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.14">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.17">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.dom4j:dom4j:2.1.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/dom4j/dom4j/2.1.3/dom4j-2.1.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/dom4j/dom4j/2.1.3/dom4j-2.1.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/dom4j/dom4j/2.1.3/dom4j-2.1.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.glassfish.jaxb:jaxb-runtime:2.3.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.glassfish.jaxb:txw2:2.3.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.glassfish:jakarta.el:3.0.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/glassfish/jakarta.el/3.0.3/jakarta.el-3.0.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/glassfish/jakarta.el/3.0.3/jakarta.el-3.0.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/glassfish/jakarta.el/3.0.3/jakarta.el-3.0.3-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.hamcrest:hamcrest:2.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/hamcrest/hamcrest/2.2/hamcrest-2.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/hamcrest/hamcrest/2.2/hamcrest-2.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/hamcrest/hamcrest/2.2/hamcrest-2.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.hibernate.common:hibernate-commons-annotations:5.1.2.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/hibernate/common/hibernate-commons-annotations/5.1.2.Final/hibernate-commons-annotations-5.1.2.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/hibernate/common/hibernate-commons-annotations/5.1.2.Final/hibernate-commons-annotations-5.1.2.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/hibernate/common/hibernate-commons-annotations/5.1.2.Final/hibernate-commons-annotations-5.1.2.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.hibernate:hibernate-core:5.4.30.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/hibernate/hibernate-core/5.4.30.Final/hibernate-core-5.4.30.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/hibernate/hibernate-core/5.4.30.Final/hibernate-core-5.4.30.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/hibernate/hibernate-core/5.4.30.Final/hibernate-core-5.4.30.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.javassist:javassist:3.27.0-GA">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/javassist/javassist/3.27.0-GA/javassist-3.27.0-GA.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/javassist/javassist/3.27.0-GA/javassist-3.27.0-GA-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/javassist/javassist/3.27.0-GA/javassist-3.27.0-GA-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jboss.logging:jboss-logging:3.4.1.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/jboss/logging/jboss-logging/3.4.1.Final/jboss-logging-3.4.1.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/jboss/logging/jboss-logging/3.4.1.Final/jboss-logging-3.4.1.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/jboss/logging/jboss-logging/3.4.1.Final/jboss-logging-3.4.1.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jboss:jandex:2.2.3.Final">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/jboss/jandex/2.2.3.Final/jandex-2.2.3.Final.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/jboss/jandex/2.2.3.Final/jandex-2.2.3.Final-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/jboss/jandex/2.2.3.Final/jandex-2.2.3.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.junit.jupiter:junit-jupiter-api:5.7.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter-api/5.7.0/junit-jupiter-api-5.7.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter-api/5.7.0/junit-jupiter-api-5.7.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter-api/5.7.0/junit-jupiter-api-5.7.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.junit.jupiter:junit-jupiter-engine:5.7.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter-engine/5.7.0/junit-jupiter-engine-5.7.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter-engine/5.7.0/junit-jupiter-engine-5.7.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter-engine/5.7.0/junit-jupiter-engine-5.7.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.junit.jupiter:junit-jupiter-params:5.7.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter-params/5.7.0/junit-jupiter-params-5.7.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter-params/5.7.0/junit-jupiter-params-5.7.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter-params/5.7.0/junit-jupiter-params-5.7.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.junit.jupiter:junit-jupiter:5.7.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter/5.7.0/junit-jupiter-5.7.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter/5.7.0/junit-jupiter-5.7.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/jupiter/junit-jupiter/5.7.0/junit-jupiter-5.7.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.junit.platform:junit-platform-commons:1.7.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/platform/junit-platform-commons/1.7.0/junit-platform-commons-1.7.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/junit/platform/junit-platform-commons/1.7.0/junit-platform-commons-1.7.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/platform/junit-platform-commons/1.7.0/junit-platform-commons-1.7.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.junit.platform:junit-platform-engine:1.7.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/platform/junit-platform-engine/1.7.0/junit-platform-engine-1.7.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/junit/platform/junit-platform-engine/1.7.0/junit-platform-engine-1.7.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/junit/platform/junit-platform-engine/1.7.0/junit-platform-engine-1.7.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jvnet.staxex:stax-ex:1.8">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.lz4:lz4-java:1.4">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/lz4/lz4-java/1.4/lz4-java-1.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/lz4/lz4-java/1.4/lz4-java-1.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/lz4/lz4-java/1.4/lz4-java-1.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.mockito:mockito-core:3.6.28">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/mockito/mockito-core/3.6.28/mockito-core-3.6.28.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/mockito/mockito-core/3.6.28/mockito-core-3.6.28-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/mockito/mockito-core/3.6.28/mockito-core-3.6.28-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.mockito:mockito-junit-jupiter:3.6.28">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/mockito/mockito-junit-jupiter/3.6.28/mockito-junit-jupiter-3.6.28.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/mockito/mockito-junit-jupiter/3.6.28/mockito-junit-jupiter-3.6.28-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/mockito/mockito-junit-jupiter/3.6.28/mockito-junit-jupiter-3.6.28-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.objenesis:objenesis:3.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/objenesis/objenesis/3.1/objenesis-3.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/objenesis/objenesis/3.1/objenesis-3.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/objenesis/objenesis/3.1/objenesis-3.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.opentest4j:opentest4j:1.2.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.ow2.asm:asm:5.0.4">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/ow2/asm/asm/5.0.4/asm-5.0.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/ow2/asm/asm/5.0.4/asm-5.0.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/ow2/asm/asm/5.0.4/asm-5.0.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.skyscreamer:jsonassert:1.5.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/skyscreamer/jsonassert/1.5.0/jsonassert-1.5.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/skyscreamer/jsonassert/1.5.0/jsonassert-1.5.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/skyscreamer/jsonassert/1.5.0/jsonassert-1.5.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.slf4j:jcl-over-slf4j:1.7.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/jcl-over-slf4j/1.7.5/jcl-over-slf4j-1.7.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/jcl-over-slf4j/1.7.5/jcl-over-slf4j-1.7.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/jcl-over-slf4j/1.7.5/jcl-over-slf4j-1.7.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.slf4j:jul-to-slf4j:1.7.29">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/jul-to-slf4j/1.7.29/jul-to-slf4j-1.7.29.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/jul-to-slf4j/1.7.29/jul-to-slf4j-1.7.29-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/jul-to-slf4j/1.7.29/jul-to-slf4j-1.7.29-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.slf4j:jul-to-slf4j:1.7.30">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/jul-to-slf4j/1.7.30/jul-to-slf4j-1.7.30.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/jul-to-slf4j/1.7.30/jul-to-slf4j-1.7.30-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/jul-to-slf4j/1.7.30/jul-to-slf4j-1.7.30-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.slf4j:log4j-over-slf4j:1.7.26">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/log4j-over-slf4j/1.7.26/log4j-over-slf4j-1.7.26.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/log4j-over-slf4j/1.7.26/log4j-over-slf4j-1.7.26-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/log4j-over-slf4j/1.7.26/log4j-over-slf4j-1.7.26-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.slf4j:slf4j-api:1.7.25">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.slf4j:slf4j-api:1.7.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.2.1.RELEASE">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-autoconfigure/2.2.1.RELEASE/spring-boot-autoconfigure-2.2.1.RELEASE.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-autoconfigure/2.2.1.RELEASE/spring-boot-autoconfigure-2.2.1.RELEASE-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-autoconfigure/2.2.1.RELEASE/spring-boot-autoconfigure-2.2.1.RELEASE-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.4.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-autoconfigure/2.4.1/spring-boot-autoconfigure-2.4.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-autoconfigure/2.4.1/spring-boot-autoconfigure-2.4.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-autoconfigure/2.4.1/spring-boot-autoconfigure-2.4.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter-aop:2.4.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-aop/2.4.5/spring-boot-starter-aop-2.4.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-aop/2.4.5/spring-boot-starter-aop-2.4.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-aop/2.4.5/spring-boot-starter-aop-2.4.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter-data-jdbc:2.4.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-data-jdbc/2.4.5/spring-boot-starter-data-jdbc-2.4.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-data-jdbc/2.4.5/spring-boot-starter-data-jdbc-2.4.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-data-jdbc/2.4.5/spring-boot-starter-data-jdbc-2.4.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter-data-jpa:2.4.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-data-jpa/2.4.5/spring-boot-starter-data-jpa-2.4.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-data-jpa/2.4.5/spring-boot-starter-data-jpa-2.4.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-data-jpa/2.4.5/spring-boot-starter-data-jpa-2.4.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter-jdbc:2.4.5">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-jdbc/2.4.5/spring-boot-starter-jdbc-2.4.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-jdbc/2.4.5/spring-boot-starter-jdbc-2.4.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-jdbc/2.4.5/spring-boot-starter-jdbc-2.4.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter-json:2.4.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-json/2.4.1/spring-boot-starter-json-2.4.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-json/2.4.1/spring-boot-starter-json-2.4.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-json/2.4.1/spring-boot-starter-json-2.4.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter-logging:2.2.1.RELEASE">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-logging/2.2.1.RELEASE/spring-boot-starter-logging-2.2.1.RELEASE.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-logging/2.2.1.RELEASE/spring-boot-starter-logging-2.2.1.RELEASE-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-logging/2.2.1.RELEASE/spring-boot-starter-logging-2.2.1.RELEASE-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter-logging:2.4.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-logging/2.4.1/spring-boot-starter-logging-2.4.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-logging/2.4.1/spring-boot-starter-logging-2.4.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-logging/2.4.1/spring-boot-starter-logging-2.4.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter-test:2.4.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-test/2.4.1/spring-boot-starter-test-2.4.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-test/2.4.1/spring-boot-starter-test-2.4.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-test/2.4.1/spring-boot-starter-test-2.4.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter-tomcat:2.4.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-tomcat/2.4.1/spring-boot-starter-tomcat-2.4.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-tomcat/2.4.1/spring-boot-starter-tomcat-2.4.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-tomcat/2.4.1/spring-boot-starter-tomcat-2.4.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter-web:2.4.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-web/2.4.1/spring-boot-starter-web-2.4.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-web/2.4.1/spring-boot-starter-web-2.4.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-web/2.4.1/spring-boot-starter-web-2.4.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter:2.2.1.RELEASE">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter/2.2.1.RELEASE/spring-boot-starter-2.2.1.RELEASE.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter/2.2.1.RELEASE/spring-boot-starter-2.2.1.RELEASE-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter/2.2.1.RELEASE/spring-boot-starter-2.2.1.RELEASE-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-starter:2.4.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter/2.4.1/spring-boot-starter-2.4.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter/2.4.1/spring-boot-starter-2.4.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter/2.4.1/spring-boot-starter-2.4.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-test-autoconfigure:2.4.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-test-autoconfigure/2.4.1/spring-boot-test-autoconfigure-2.4.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-test-autoconfigure/2.4.1/spring-boot-test-autoconfigure-2.4.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-test-autoconfigure/2.4.1/spring-boot-test-autoconfigure-2.4.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot-test:2.4.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-test/2.4.1/spring-boot-test-2.4.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-test/2.4.1/spring-boot-test-2.4.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-test/2.4.1/spring-boot-test-2.4.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot:2.2.1.RELEASE">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot/2.2.1.RELEASE/spring-boot-2.2.1.RELEASE.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot/2.2.1.RELEASE/spring-boot-2.2.1.RELEASE-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot/2.2.1.RELEASE/spring-boot-2.2.1.RELEASE-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.boot:spring-boot:2.4.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot/2.4.1/spring-boot-2.4.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot/2.4.1/spring-boot-2.4.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot/2.4.1/spring-boot-2.4.1-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.data:spring-data-commons:2.4.8">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-commons/2.4.8/spring-data-commons-2.4.8.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-commons/2.4.8/spring-data-commons-2.4.8-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-commons/2.4.8/spring-data-commons-2.4.8-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.data:spring-data-jdbc:2.1.8">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-jdbc/2.1.8/spring-data-jdbc-2.1.8.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-jdbc/2.1.8/spring-data-jdbc-2.1.8-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-jdbc/2.1.8/spring-data-jdbc-2.1.8-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.data:spring-data-jpa:2.4.8">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-jpa/2.4.8/spring-data-jpa-2.4.8.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-jpa/2.4.8/spring-data-jpa-2.4.8-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-jpa/2.4.8/spring-data-jpa-2.4.8-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework.data:spring-data-relational:2.1.8">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-relational/2.1.8/spring-data-relational-2.1.8.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-relational/2.1.8/spring-data-relational-2.1.8-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/data/spring-data-relational/2.1.8/spring-data-relational-2.1.8-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-aop:5.2.1.RELEASE">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aop/5.2.1.RELEASE/spring-aop-5.2.1.RELEASE.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aop/5.2.1.RELEASE/spring-aop-5.2.1.RELEASE-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aop/5.2.1.RELEASE/spring-aop-5.2.1.RELEASE-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-aop:5.3.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aop/5.3.2/spring-aop-5.3.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aop/5.3.2/spring-aop-5.3.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aop/5.3.2/spring-aop-5.3.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-aspects:5.3.6">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aspects/5.3.6/spring-aspects-5.3.6.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aspects/5.3.6/spring-aspects-5.3.6-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aspects/5.3.6/spring-aspects-5.3.6-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-beans:5.2.1.RELEASE">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-beans/5.2.1.RELEASE/spring-beans-5.2.1.RELEASE.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-beans/5.2.1.RELEASE/spring-beans-5.2.1.RELEASE-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-beans/5.2.1.RELEASE/spring-beans-5.2.1.RELEASE-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-beans:5.3.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-beans/5.3.2/spring-beans-5.3.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-beans/5.3.2/spring-beans-5.3.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-beans/5.3.2/spring-beans-5.3.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-context:5.2.1.RELEASE">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-context/5.2.1.RELEASE/spring-context-5.2.1.RELEASE.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-context/5.2.1.RELEASE/spring-context-5.2.1.RELEASE-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-context/5.2.1.RELEASE/spring-context-5.2.1.RELEASE-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-context:5.3.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-context/5.3.2/spring-context-5.3.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-context/5.3.2/spring-context-5.3.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-context/5.3.2/spring-context-5.3.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-core:5.2.1.RELEASE">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-core/5.2.1.RELEASE/spring-core-5.2.1.RELEASE.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-core/5.2.1.RELEASE/spring-core-5.2.1.RELEASE-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-core/5.2.1.RELEASE/spring-core-5.2.1.RELEASE-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-core:5.3.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-core/5.3.2/spring-core-5.3.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-core/5.3.2/spring-core-5.3.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-core/5.3.2/spring-core-5.3.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-expression:5.2.1.RELEASE">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-expression/5.2.1.RELEASE/spring-expression-5.2.1.RELEASE.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-expression/5.2.1.RELEASE/spring-expression-5.2.1.RELEASE-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-expression/5.2.1.RELEASE/spring-expression-5.2.1.RELEASE-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-expression:5.3.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-expression/5.3.2/spring-expression-5.3.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-expression/5.3.2/spring-expression-5.3.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-expression/5.3.2/spring-expression-5.3.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-jcl:5.2.1.RELEASE">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jcl/5.2.1.RELEASE/spring-jcl-5.2.1.RELEASE.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jcl/5.2.1.RELEASE/spring-jcl-5.2.1.RELEASE-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jcl/5.2.1.RELEASE/spring-jcl-5.2.1.RELEASE-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-jcl:5.3.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jcl/5.3.2/spring-jcl-5.3.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jcl/5.3.2/spring-jcl-5.3.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jcl/5.3.2/spring-jcl-5.3.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-jdbc:5.3.6">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jdbc/5.3.6/spring-jdbc-5.3.6.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jdbc/5.3.6/spring-jdbc-5.3.6-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jdbc/5.3.6/spring-jdbc-5.3.6-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-orm:5.3.6">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-orm/5.3.6/spring-orm-5.3.6.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-orm/5.3.6/spring-orm-5.3.6-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-orm/5.3.6/spring-orm-5.3.6-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-test:5.3.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-test/5.3.2/spring-test-5.3.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-test/5.3.2/spring-test-5.3.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-test/5.3.2/spring-test-5.3.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-tx:5.3.6">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-tx/5.3.6/spring-tx-5.3.6.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-tx/5.3.6/spring-tx-5.3.6-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-tx/5.3.6/spring-tx-5.3.6-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-web:5.3.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-web/5.3.2/spring-web-5.3.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-web/5.3.2/spring-web-5.3.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-web/5.3.2/spring-web-5.3.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.springframework:spring-webmvc:5.3.2">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-webmvc/5.3.2/spring-webmvc-5.3.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-webmvc/5.3.2/spring-webmvc-5.3.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-webmvc/5.3.2/spring-webmvc-5.3.2-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.xerial.snappy:snappy-java:1.1.4">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/xerial/snappy/snappy-java/1.1.4/snappy-java-1.1.4.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/xerial/snappy/snappy-java/1.1.4/snappy-java-1.1.4-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/xerial/snappy/snappy-java/1.1.4/snappy-java-1.1.4-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.xmlunit:xmlunit-core:2.7.0">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/xmlunit/xmlunit-core/2.7.0/xmlunit-core-2.7.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/xmlunit/xmlunit-core/2.7.0/xmlunit-core-2.7.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/xmlunit/xmlunit-core/2.7.0/xmlunit-core-2.7.0-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.yaml:snakeyaml:1.15">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/yaml/snakeyaml/1.15/snakeyaml-1.15.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/yaml/snakeyaml/1.15/snakeyaml-1.15-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/yaml/snakeyaml/1.15/snakeyaml-1.15-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.yaml:snakeyaml:1.27">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m13/org/yaml/snakeyaml/1.27/snakeyaml-1.27.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m13/org/yaml/snakeyaml/1.27/snakeyaml-1.27-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m13/org/yaml/snakeyaml/1.27/snakeyaml-1.27-sources.jar!/" />
+      </SOURCES>
+    </library>
   </component>
 </project>

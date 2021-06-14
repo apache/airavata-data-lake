@@ -25,9 +25,10 @@ import "google/api/annotations.proto";
 
 message AuthenticatedUser  {
     string username = 2;
-    string firstName = 3;
-    string lastName = 4;
-    string emailAddress = 5;
+    string first_name = 3;
+    string last_name = 4;
+    string email_address = 5;
+    string tenant_id = 6;
 }
 
 message DRMSServiceAuthToken {

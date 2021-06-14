@@ -38,19 +38,27 @@ import java.util.Map;
 public class AnyStoragePreferenceDeserializer {
     public static List<AnyStoragePreference> deserializeList(List<Record> neo4jRecords) throws Exception {
         List<AnyStoragePreference> storagePrefList = new ArrayList<>();
+        Map<Node,List<Node>> storagePreferenceList = new HashMap<>();
         for (Record record : neo4jRecords) {
             InternalRecord internalRecord = (InternalRecord) record;
             List<Value> values = internalRecord.values();
-            if (values.size() == 2) {
-                Value prfValue = values.get(0);
-                Value stoValue = values.get(1);
-                Node prefNode = prfValue.asNode();
-                Node stoNode = stoValue.asNode();
-                if (prefNode.hasLabel(StoragePreferenceConstants.STORAGE_PREFERENCE_LABEL) && stoNode.hasLabel(StorageConstants.STORAGE_LABEL)) {
-                    AnyStorage storage = AnyStorageDeserializer.deriveStorageFromMap(stoNode.asMap());
-                    AnyStoragePreference preference = deriveStoragePrefFromMap(prefNode.asMap(), storage);
-                    storagePrefList.add(preference);
-                }
+            int count = 0;
+            for (Value value : values) {
+//               int mod =  count % 2;
+//                if (!value.isNull()) {
+//                    Node node = value.asNode();
+//                    if(mod==0) {
+//
+//                    } else  {
+//
+//                    }
+//                   \
+//                    if (prefNode.hasLabel(StoragePreferenceConstants.STORAGE_PREFERENCE_LABEL) && stoNode.hasLabel(StorageConstants.STORAGE_LABEL)) {
+//                        AnyStorage storage = AnyStorageDeserializer.deriveStorageFromMap(stoNode.asMap());
+//                        AnyStoragePreference preference = deriveStoragePrefFromMap(prefNode.asMap(), storage);
+//                        storagePrefList.add(preference);
+//                    }
+//                }
             }
         }
         return storagePrefList;
@@ -60,7 +68,7 @@ public class AnyStoragePreferenceDeserializer {
 
         Map<String, Object> asMap = new HashMap<>(fixedMap);
         AnyStoragePreference.Builder anyStoragePrefBuilder = AnyStoragePreference.newBuilder();
-        String type = (String)asMap.get(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL);
+        String type = (String) asMap.get(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL);
         asMap.remove(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL);
 
         switch (type) {
@@ -85,7 +93,7 @@ public class AnyStoragePreferenceDeserializer {
     }
 
     private static void setObjectFieldsUsingMap(Object target, Map<String, Object> values) {
-        for (String field :values.keySet()) {
+        for (String field : values.keySet()) {
             BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(target);
             beanWrapper.setPropertyValue(field, values.get(field));
         }

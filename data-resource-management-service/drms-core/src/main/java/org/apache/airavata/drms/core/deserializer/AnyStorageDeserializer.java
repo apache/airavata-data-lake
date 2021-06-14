@@ -27,19 +27,25 @@ import org.neo4j.driver.types.Node;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
-import java.util.*;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AnyStorageDeserializer {
 
     public static List<AnyStorage> deserializeList(List<Record> neo4jRecords) throws Exception {
         List<AnyStorage> storageList = new ArrayList<>();
         for (Record record : neo4jRecords) {
-            InternalRecord  internalRecord = (InternalRecord) record;
+            InternalRecord internalRecord = (InternalRecord) record;
             List<Value> values = internalRecord.values();
             for (Value value : values) {
-                Node node = value.asNode();
-                if (node.hasLabel(StorageConstants.STORAGE_LABEL)) {
-                    storageList.add(deriveStorageFromMap(node.asMap()));
+                if (!value.isNull()) {
+                    Node node = value.asNode();
+                    if (node.hasLabel(StorageConstants.STORAGE_LABEL)) {
+                        storageList.add(deriveStorageFromMap(node.asMap()));
+                    }
                 }
             }
         }
@@ -50,7 +56,7 @@ public class AnyStorageDeserializer {
 
         Map<String, Object> asMap = new HashMap<>(fixedMap);
         AnyStorage.Builder anyStorageBuilder = AnyStorage.newBuilder();
-        String type = (String)asMap.get(StorageConstants.STORAGE_TYPE_LABEL);
+        String type = (String) asMap.get(StorageConstants.STORAGE_TYPE_LABEL);
         asMap.remove(StorageConstants.STORAGE_TYPE_LABEL);
 
         switch (type) {
@@ -73,7 +79,14 @@ public class AnyStorageDeserializer {
     }
 
     private static void setObjectFieldsUsingMap(Object target, Map<String, Object> values) {
-        for (String field :values.keySet()) {
+        for (String field : values.keySet()) {
+            Class<?> someClass = target.getClass();
+
+            try {
+                Field someField = someClass.getField(field);
+            } catch (Exception ex) {
+                continue;
+            }
             BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(target);
             beanWrapper.setPropertyValue(field, values.get(field));
         }

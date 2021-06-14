@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,21 +48,28 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
         AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
-        List<Record> records = this.neo4JConnector.searchNodes(
-                "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage) where " +
-                        "s.storageId = '" + request.getStorageId() + "' and u.userId = '" + callUser.getUsername() +
-                        "' return distinct s");
-
+        Map<String, Object> userProps = new HashMap<>();
+        userProps.put("username", callUser.getUsername());
+        userProps.put("tenantId", callUser.getTenantId());
+        userProps.put("storageId", request.getStorageId());
+        List<Record> records = this.neo4JConnector.searchNodes(userProps,
+                " MATCH (u:User) where u.username = $username = $username AND u.tenantId = $tenantId" +
+                        " OPTIONAL MATCH (u)<-[r2:SHARED_WITH]-(s:Storage) where s.storageId = $storageId AND s.tenantId = $tenantId" +
+                        " OPTIONAL MATCH (ch:Group)-[CHILD_OF*]->(g:Group)<-[r3:MEMBER_OF]-(u)" +
+                        " OPTIONAL MATCH (cs:Storage)-[SHARED_WITH]->(ch) where cs.storageId = $storageId AND s.tenantId = $tenantId" +
+                        " OPTIONAL MATCH (ds:Storage)-[SHARED_WITH]->(g)where ds.storageId = $storageId AND s.tenantId = $tenantId" +
+                        " return distinct s, cs, ds");
         if (!records.isEmpty()) {
             try {
                 List<AnyStorage> storageList = AnyStorageDeserializer.deserializeList(records);
-                responseObserver.onNext(StorageFetchResponse.newBuilder().setStorage(storageList.get(0)).build());
+                StorageFetchResponse.Builder builder = StorageFetchResponse.newBuilder();
+                builder.setStorage(storageList.get(0));
+                responseObserver.onNext(builder.build());
                 responseObserver.onCompleted();
             } catch (Exception e) {
-
-                logger.error("Errored while fetching storage with id {}", request.getStorageId(), e);
-                responseObserver.onError(new Exception("Errored while fetching storage with id " + request.getStorageId()
-                        + ". Msg " + e.getMessage()));
+                String msg = "(Errored while searching storages; Message: {}, e.getMessage())";
+                logger.error(msg, e);
+                responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
             }
         } else {
             logger.error("Could not find a storage with id {}", request.getStorageId());
@@ -71,39 +79,89 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
     @Override
     public void createStorage(StorageCreateRequest request, StreamObserver<StorageCreateResponse> responseObserver) {
-        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
-        AnyStorage storage = request.getStorage();
-        Map<String, Object> serializedMap = AnyStorageSerializer.serializeToMap(storage);
-        this.neo4JConnector.createNode(serializedMap, StorageConstants.STORAGE_LABEL, callUser.getUsername());
+        try {
+            AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
+
+            AnyStorage storage = request.getStorage();
+            Map<String, Object> serializedMap = AnyStorageSerializer.serializeToMap(storage);
+            String storageId = (String) serializedMap.get("storageId");
+            this.neo4JConnector.mergeNode(serializedMap, StorageConstants.STORAGE_LABEL, callUser.getUsername(), storageId,
+                    callUser.getTenantId());
+            StorageCreateResponse response = StorageCreateResponse.newBuilder().setStorage(storage).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception ex) {
+            String msg = "Errored while creating storage; Message: {}" + ex.getMessage();
+            logger.error(msg, ex);
+            responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
+        }
     }
 
     @Override
     public void updateStorage(StorageUpdateRequest request, StreamObserver<StorageUpdateResponse> responseObserver) {
-        super.updateStorage(request, responseObserver);
+        try {
+            AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
+
+            AnyStorage storage = request.getStorage();
+            Map<String, Object> serializedMap = AnyStorageSerializer.serializeToMap(storage);
+            String storageId = (String) serializedMap.get("storageId");
+            this.neo4JConnector.mergeNode(serializedMap, StorageConstants.STORAGE_LABEL, callUser.getUsername(), storageId,
+                    callUser.getTenantId());
+            StorageUpdateResponse response = StorageUpdateResponse.newBuilder().setStorage(storage).build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception ex) {
+            String msg = "Errored while updating storage; Message: {}" + ex.getMessage();
+            logger.error(msg, ex);
+            responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
+        }
     }
 
     @Override
     public void deleteStorage(StorageDeleteRequest request, StreamObserver<Empty> responseObserver) {
-        super.deleteStorage(request, responseObserver);
+        try {
+            AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
+
+            String id = request.getStorageId();
+            this.neo4JConnector.deleteNode(StorageConstants.STORAGE_LABEL, id, callUser.getTenantId());
+            responseObserver.onNext(Empty.newBuilder().build());
+            responseObserver.onCompleted();
+        } catch (Exception ex) {
+            String msg = "Errored while updating storage; Message: {}" + ex.getMessage();
+            logger.error(msg, ex);
+            responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
+        }
     }
 
     @Override
     public void addStorageMetadata(AddStorageMetadataRequest request, StreamObserver<Empty> responseObserver) {
-        AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
-        this.neo4JConnector.createMetadataNode(StorageConstants.STORAGE_LABEL, "storageId",
-                request.getStorageId(), callUser.getUsername(),
-                request.getKey(), request.getValue());
-        responseObserver.onNext(Empty.getDefaultInstance());
-        responseObserver.onCompleted();
+        try {
+            AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
+            this.neo4JConnector.createMetadataNode(StorageConstants.STORAGE_LABEL, "storageId",
+                    request.getStorageId(), callUser.getUsername(),
+                    request.getKey(), request.getValue());
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        } catch (Exception ex) {
+            String msg = "Errored while updating storage metadata; Message: {}" + ex.getMessage();
+            logger.error(msg, ex);
+            responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
+        }
     }
 
     @Override
     public void searchStorage(StorageSearchRequest request, StreamObserver<StorageSearchResponse> responseObserver) {
         AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
-        List<Record> records = this.neo4JConnector.searchNodes(
-                "MATCH (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:Storage) where u.userId ='" +
-                        callUser.getUsername() + "' return distinct s");
+        Map<String, Object> userProps = new HashMap<>();
+        userProps.put("username", callUser.getUsername());
+        userProps.put("tenantId", callUser.getTenantId());
+        List<Record> records = this.neo4JConnector.searchNodes(userProps,
+                " MATCH (u:User) where u.username = $username = $username AND u.tenantId = $tenantId" +
+                        " OPTIONAL MATCH (u)<-[r2:SHARED_WITH]-(s:Storage)" +
+                        " OPTIONAL MATCH (ch:Group)-[CHILD_OF*]->(g:Group)<-[r3:MEMBER_OF]-(u)" +
+                        " OPTIONAL MATCH (cs:Storage)-[SHARED_WITH]->(ch) " +
+                        " OPTIONAL MATCH (ds:Storage)-[SHARED_WITH]->(g) return distinct s, cs, ds");
         try {
             List<AnyStorage> storageList = AnyStorageDeserializer.deserializeList(records);
             StorageSearchResponse.Builder builder = StorageSearchResponse.newBuilder();
@@ -112,8 +170,9 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
             responseObserver.onCompleted();
 
         } catch (Exception e) {
-            logger.error("Errored while searching storages; Message: {}", e.getMessage(), e);
-            responseObserver.onError(e);
+            String msg = "(Errored while searching storages; Message: {}, e.getMessage())";
+            logger.error(msg, e);
+            responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
         }
     }
 }
