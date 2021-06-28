@@ -1,9 +1,7 @@
 package org.apache.airavata.drms.custos.synchronizer.handlers;
 
-import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.custos.synchronizer.Configuration;
 import org.apache.airavata.drms.custos.synchronizer.Utils;
-import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.sharing.management.client.SharingManagementClient;
 import org.apache.custos.sharing.service.Entity;
 import org.apache.custos.sharing.service.GetAllDirectSharingsResponse;
@@ -21,11 +19,8 @@ public class SharingHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SharingHandler.class);
 
-    private final Neo4JConnector neo4JConnector;
-    private CustosClientProvider custosClientProvider;
-
     public SharingHandler() {
-        this.neo4JConnector = Utils.getNeo4JConnector();
+
     }
 
     public void mergeSharings(Configuration configuration) {
@@ -85,7 +80,7 @@ public class SharingHandler {
         parameters.put("tenantId", clientId);
         parameters.put("entityId", entity.getId());
         try {
-            this.neo4JConnector.runTransactionalQuery(parameters, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(parameters, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while merging entities, " + ex.getMessage();
@@ -108,7 +103,7 @@ public class SharingHandler {
             map.put("parentEntityId", fullParentEntity.getId());
             map.put("tenantId", clientId);
             try {
-                this.neo4JConnector.runTransactionalQuery(map, query);
+                Utils.getNeo4JConnector().runTransactionalQuery(map, query);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 String msg = "Error occurred while merging parent child relationships ";
@@ -142,7 +137,7 @@ public class SharingHandler {
             map.put("permissionId", permissionId);
             map.put("userId", userId);
             try {
-                this.neo4JConnector.runTransactionalQuery(map, query);
+                Utils.getNeo4JConnector().runTransactionalQuery(map, query);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 String msg = "Error occurred while merging sharings, " + ex.getMessage();
@@ -159,7 +154,7 @@ public class SharingHandler {
         map.put("entityId", entityId);
         map.put("tenantId", clientId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while deleting entity, " + ex.getMessage();
@@ -187,7 +182,7 @@ public class SharingHandler {
         map.put("permission", permission);
         map.put("userId", userId);
         try {
-            this.neo4JConnector.runTransactionalQuery(query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while deleting entity, " + ex.getMessage();

@@ -80,15 +80,12 @@ public class AnyStorageDeserializer {
 
     private static void setObjectFieldsUsingMap(Object target, Map<String, Object> values) {
         for (String field : values.keySet()) {
-            Class<?> someClass = target.getClass();
-
+            BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(target);
             try {
-                Field someField = someClass.getField(field);
-            } catch (Exception ex) {
+                beanWrapper.setPropertyValue(field, values.get(field));
+            }catch (Exception ex) {
                 continue;
             }
-            BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(target);
-            beanWrapper.setPropertyValue(field, values.get(field));
         }
     }
 }

@@ -37,6 +37,7 @@ public class Neo4JConnector {
         this.uri = uri;
         this.userName = userName;
         this.password = password;
+        this.driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
     }
 
     public void init(String uri, String userName, String password) {
@@ -46,54 +47,100 @@ public class Neo4JConnector {
         this.driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
     }
 
+    public synchronized Session resume() {
+        this.driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
+        return driver.session();
+    }
+
     public List<Record> searchNodes(String query) {
-        Driver driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
         Session session = driver.session();
+        if(!session.isOpen()) {
+          session =  resume();
+        }
         Result result = session.run(query);
         return result.list();
     }
 
     public List<Record> searchNodes(Map<String, Object> properties, String query) {
-        Driver driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
         Session session = driver.session();
+        if(!session.isOpen()) {
+            session =  resume();
+        }
         Result result = session.run(query, properties);
         return result.list();
     }
 
     public void mergeNode(Map<String, Object> properties, String label, String userId, String entityId,
-                          String custosClientId) {
-        Driver driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
+                          String tenantId) {
         Session session = driver.session();
+        if(!session.isOpen()) {
+            session =  resume();
+        }
         Map<String, Object> parameters = new HashMap<>();
         properties.put("entityId", entityId);
-        properties.put("custosClientId", custosClientId);
+        properties.put("tenantId", tenantId);
         parameters.put("props", properties);
         parameters.put("username", userId);
         parameters.put("entityId", entityId);
-        parameters.put("custosClientId", custosClientId);
+        parameters.put("tenantId", tenantId);
         Transaction tx = session.beginTransaction();
-        tx.run("MATCH (u:User)  where u.username = $username AND  u.custosClientId = $custosClientId " +
-                " MERGE (n:" + label + " {entityId: $entityId,custosClientId: $custosClientId}) ON MATCH  SET n += $props ON CREATE SET n = $props" +
+        tx.run("MATCH (u:User)  where u.username = $username AND  u.tenantId = $tenantId " +
+                " MERGE (n:" + label + " {entityId: $entityId,tenantId: $tenantId}) ON MATCH  SET n += $props ON CREATE SET n = +$props" +
                 " MERGE (n)-[r2:SHARED_WITH {permission:'OWNER'}]->(u) return n", parameters);
         tx.commit();
         tx.close();
     }
 
-    public void deleteNode(String label, String entityId,
-                           String custosClientId) {
-        Driver driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
+    public void mergeNodesWithParentChildRelationShip(Map<String, Object> childProperties, Map<String, Object> parentProperties,
+                                                      String childLabel, String parentLablel, String userId, String childEntityId,
+                                                      String parentEntityId,
+                                                      String tenantId) {
         Session session = driver.session();
+        if(!session.isOpen()) {
+            session =  resume();
+        }
+        Map<String, Object> parameters = new HashMap<>();
+        childProperties.put("childEntityId", childEntityId);
+        childProperties.put("tenantId", tenantId);
+        parentProperties.put("parentEntityId", parentEntityId);
+        parentProperties.put("tenantId", tenantId);
+        parameters.put("childProps", childProperties);
+        parameters.put("parentProps", parentProperties);
+        parameters.put("username", userId);
+        parameters.put("childEntityId", childEntityId);
+        parameters.put("parentEntityId", parentEntityId);
+        parameters.put("tenantId", tenantId);
+        Transaction tx = session.beginTransaction();
+        tx.run("MATCH (u:User)  where u.username = $username AND  u.tenantId = $tenantId " +
+                " MERGE (p:" + parentLablel + " {entityId: $parentEntityId,tenantId: $tenantId}) ON MATCH  SET p += $parentProps ON CREATE SET p += $parentProps" +
+                " MERGE (c:" + childLabel + " {entityId: $childEntityId,tenantId: $tenantId}) ON MATCH  SET c += $childProps ON CREATE SET c += $childProps" +
+                " MERGE (c)-[:SHARED_WITH {permission:'OWNER'}]->(u)" +
+                " MERGE (p)-[:SHARED_WITH {permission:'OWNER'}]->(u)" +
+                " MERGE (c)-[:CHILD_OF]->(p) return c", parameters);
+        tx.commit();
+        tx.close();
+    }
+
+    public void deleteNode(String label, String entityId,
+                           String tenantId) {
+        Session session = driver.session();
+        if(!session.isOpen()) {
+            session =  resume();
+        }
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("entityId", entityId);
-        parameters.put("custosClientId", custosClientId);
+        parameters.put("tenantId", tenantId);
         Transaction tx = session.beginTransaction();
-        tx.run("MATCH (n:" + label + ") where n.entityId= $entityId AND n.custosClientId= $custosClientId detach delete n", parameters);
+        tx.run("MATCH (n:" + label + ") where n.entityId= $entityId AND n.tenantId= $tenantId detach delete n", parameters);
         tx.commit();
         tx.close();
     }
 
     public void runTransactionalQuery(Map<String, Object> parameters, String query) {
         Session session = driver.session();
+        if(!session.isOpen()) {
+            session =  resume();
+        }
         Transaction tx = session.beginTransaction();
         Result result = tx.run(query, parameters);
         tx.commit();
@@ -102,6 +149,9 @@ public class Neo4JConnector {
 
     public void runTransactionalQuery(String query) {
         Session session = driver.session();
+        if(!session.isOpen()) {
+            session =  resume();
+        }
         Transaction tx = session.beginTransaction();
         Result result = tx.run(query);
         tx.commit();
@@ -110,8 +160,11 @@ public class Neo4JConnector {
 
     public void createMetadataNode(String parentLabel, String parentIdName, String parentIdValue,
                                    String userId, String key, String value) {
-        Driver driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
         Session session = driver.session();
+        if(!session.isOpen()) {
+            session =  resume();
+        }
+
         Transaction tx = session.beginTransaction();
         tx.run("match (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:" + parentLabel + ") where u.userId='" + userId +
                 "' and s." + parentIdName + "='" + parentIdValue +

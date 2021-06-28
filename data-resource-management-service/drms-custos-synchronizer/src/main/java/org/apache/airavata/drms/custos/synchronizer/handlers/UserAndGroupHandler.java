@@ -1,9 +1,7 @@
 package org.apache.airavata.drms.custos.synchronizer.handlers;
 
-import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.custos.synchronizer.Configuration;
 import org.apache.airavata.drms.custos.synchronizer.Utils;
-import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.group.management.client.GroupManagementClient;
 import org.apache.custos.user.management.client.UserManagementClient;
 import org.apache.custos.user.profile.service.GetAllGroupsResponse;
@@ -20,12 +18,6 @@ public class UserAndGroupHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserAndGroupHandler.class);
 
-    private final Neo4JConnector neo4JConnector;
-    private CustosClientProvider custosClientProvider;
-
-    public UserAndGroupHandler() {
-        this.neo4JConnector = Utils.getNeo4JConnector();
-    }
 
     public void mergeUserAndGroups(Configuration configuration) {
         try {
@@ -64,7 +56,7 @@ public class UserAndGroupHandler {
                     parameters.put("props", map);
                     parameters.put("username", userProfile.getUsername());
                     parameters.put("tenantId", val);
-                    this.neo4JConnector.runTransactionalQuery(parameters, query);
+                    Utils.getNeo4JConnector().runTransactionalQuery(parameters, query);
                 });
 
             });
@@ -97,7 +89,7 @@ public class UserAndGroupHandler {
                     parameters.put("groupId", gr.getId());
                     parameters.put("tenantId", val);
                     try {
-                        this.neo4JConnector.runTransactionalQuery(parameters, query);
+                        Utils.getNeo4JConnector().runTransactionalQuery(parameters, query);
                     } catch (Exception ex) {
                         LOGGER.error("Error occurred while merging groups ", ex);
                     }
@@ -143,7 +135,7 @@ public class UserAndGroupHandler {
         map.put("groupId", groupId);
         map.put("tenantId", tenantId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             LOGGER.error("Error occurred while merging UserGroupMembership ", ex);
@@ -160,7 +152,7 @@ public class UserAndGroupHandler {
         map.put("tenantId", tenantId);
         map.put("childGroupId", childGroupId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             LOGGER.error("Error occurred while merging Group memberships ", ex);
@@ -176,7 +168,7 @@ public class UserAndGroupHandler {
         map.put("username", username);
         map.put("tenantId", clientId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while deleting user ";
@@ -193,7 +185,7 @@ public class UserAndGroupHandler {
         map.put("groupId", groupId);
         map.put("tenantId", clientId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while deleting group ";
@@ -210,7 +202,7 @@ public class UserAndGroupHandler {
         map.put("groupId", groupId);
         map.put("tenantId", tenantId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while deleting user group membership from user " +
@@ -229,7 +221,7 @@ public class UserAndGroupHandler {
         map.put("childGroupId", childGroupId);
         map.put("tenantId", tenantId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while deleting  group memberships from "

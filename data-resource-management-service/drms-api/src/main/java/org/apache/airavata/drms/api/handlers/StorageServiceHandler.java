@@ -20,10 +20,12 @@ import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.storage.*;
+import org.apache.airavata.drms.api.utils.CustosUtils;
 import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.core.constants.StorageConstants;
 import org.apache.airavata.drms.core.deserializer.AnyStorageDeserializer;
 import org.apache.airavata.drms.core.serializer.AnyStorageSerializer;
+import org.apache.custos.clients.CustosClientProvider;
 import org.lognet.springboot.grpc.GRpcService;
 import org.neo4j.driver.Record;
 import org.slf4j.Logger;
@@ -41,6 +43,9 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
     @Autowired
     private Neo4JConnector neo4JConnector;
+
+    @Autowired
+    private CustosClientProvider custosClientProvider;
 
 
     @Override
@@ -83,8 +88,12 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
             AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
             AnyStorage storage = request.getStorage();
+
             Map<String, Object> serializedMap = AnyStorageSerializer.serializeToMap(storage);
             String storageId = (String) serializedMap.get("storageId");
+
+            CustosUtils.
+                    mergeStorageEntity(custosClientProvider, callUser.getTenantId(), storageId, callUser.getUsername());
             this.neo4JConnector.mergeNode(serializedMap, StorageConstants.STORAGE_LABEL, callUser.getUsername(), storageId,
                     callUser.getTenantId());
             StorageCreateResponse response = StorageCreateResponse.newBuilder().setStorage(storage).build();
@@ -123,6 +132,9 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
             AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
             String id = request.getStorageId();
+
+            CustosUtils.deleteStorageEntity(custosClientProvider, callUser.getTenantId(), request.getStorageId());
+
             this.neo4JConnector.deleteNode(StorageConstants.STORAGE_LABEL, id, callUser.getTenantId());
             responseObserver.onNext(Empty.newBuilder().build());
             responseObserver.onCompleted();
