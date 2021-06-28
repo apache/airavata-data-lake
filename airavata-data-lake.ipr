@@ -17,7 +17,6 @@
         <module name="workflow-engine-client" />
         <module name="data-orchestrator-messaging" />
         <module name="data-orchestrator-core" />
-        <module name="workflow-engine-api" />
         <module name="data-orchestrator-clients-core" />
         <module name="workflow-engine-stubs" />
         <module name="data-orchestrator-registry" />
@@ -50,8 +49,6 @@
     <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/data-orchestrator/data-orchestrator-service/data-orchestrator-service-core/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-client/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-client/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-stubs/src/main/resources" charset="UTF-8" />
@@ -256,10 +253,11 @@
       <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/data-resource-management-service.iml" filepath="$PROJECT_DIR$/data-resource-management-service/data-resource-management-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/drms-api/drms-api.iml" filepath="$PROJECT_DIR$/data-resource-management-service/drms-api/drms-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/drms-core/drms-core.iml" filepath="$PROJECT_DIR$/data-resource-management-service/drms-core/drms-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/drms-custos-synchronizer/drms-custos-synchronizer.iml" filepath="$PROJECT_DIR$/data-resource-management-service/drms-custos-synchronizer/drms-custos-synchronizer.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-resource-management-service/drms-stubs/drms-stubs.iml" filepath="$PROJECT_DIR$/data-resource-management-service/drms-stubs/drms-stubs.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine.iml" filepath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine.iml" />
-      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/workflow-engine-api.iml" filepath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-api/workflow-engine-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-client/workflow-engine-client.iml" filepath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-client/workflow-engine-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-core/workflow-engine-core.iml" filepath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-core/workflow-engine-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-stubs/workflow-engine-stubs.iml" filepath="$PROJECT_DIR$/data-orchestrator/workflow-engine/workflow-engine-stubs/workflow-engine-stubs.iml" />
     </modules>
   </component>
@@ -1776,17 +1774,6 @@
         <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-autoconfigure/2.4.1/spring-boot-autoconfigure-2.4.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.4.3">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-autoconfigure/2.4.3/spring-boot-autoconfigure-2.4.3.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-autoconfigure/2.4.3/spring-boot-autoconfigure-2.4.3-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-autoconfigure/2.4.3/spring-boot-autoconfigure-2.4.3-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: org.springframework.boot:spring-boot-starter-aop:2.4.5">
       <CLASSES>
         <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-aop/2.4.5/spring-boot-starter-aop-2.4.5.jar!/" />
@@ -1864,17 +1851,6 @@
         <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-logging/2.4.1/spring-boot-starter-logging-2.4.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.springframework.boot:spring-boot-starter-logging:2.4.3">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-logging/2.4.3/spring-boot-starter-logging-2.4.3.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-logging/2.4.3/spring-boot-starter-logging-2.4.3-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-logging/2.4.3/spring-boot-starter-logging-2.4.3-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: org.springframework.boot:spring-boot-starter-test:2.4.1">
       <CLASSES>
         <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter-test/2.4.1/spring-boot-starter-test-2.4.1.jar!/" />
@@ -1930,17 +1906,6 @@
         <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter/2.4.1/spring-boot-starter-2.4.1-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.springframework.boot:spring-boot-starter:2.4.3">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter/2.4.3/spring-boot-starter-2.4.3.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter/2.4.3/spring-boot-starter-2.4.3-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-starter/2.4.3/spring-boot-starter-2.4.3-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: org.springframework.boot:spring-boot-test-autoconfigure:2.4.1">
       <CLASSES>
         <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot-test-autoconfigure/2.4.1/spring-boot-test-autoconfigure-2.4.1.jar!/" />
@@ -1983,17 +1948,6 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot/2.4.1/spring-boot-2.4.1-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.springframework.boot:spring-boot:2.4.3">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot/2.4.3/spring-boot-2.4.3.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot/2.4.3/spring-boot-2.4.3-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/boot/spring-boot/2.4.3/spring-boot-2.4.3-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.springframework.data:spring-data-commons:2.4.8">
@@ -2062,17 +2016,6 @@
         <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aop/5.3.2/spring-aop-5.3.2-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.springframework:spring-aop:5.3.4">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aop/5.3.4/spring-aop-5.3.4.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aop/5.3.4/spring-aop-5.3.4-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aop/5.3.4/spring-aop-5.3.4-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: org.springframework:spring-aspects:5.3.6">
       <CLASSES>
         <root url="jar://$USER_HOME$/.m13/org/springframework/spring-aspects/5.3.6/spring-aspects-5.3.6.jar!/" />
@@ -2106,17 +2049,6 @@
         <root url="jar://$USER_HOME$/.m13/org/springframework/spring-beans/5.3.2/spring-beans-5.3.2-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.springframework:spring-beans:5.3.4">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-beans/5.3.4/spring-beans-5.3.4.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-beans/5.3.4/spring-beans-5.3.4-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-beans/5.3.4/spring-beans-5.3.4-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: org.springframework:spring-context:5.2.1.RELEASE">
       <CLASSES>
         <root url="jar://$USER_HOME$/.m13/org/springframework/spring-context/5.2.1.RELEASE/spring-context-5.2.1.RELEASE.jar!/" />
@@ -2137,17 +2069,6 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$USER_HOME$/.m13/org/springframework/spring-context/5.3.2/spring-context-5.3.2-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.springframework:spring-context:5.3.4">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-context/5.3.4/spring-context-5.3.4.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-context/5.3.4/spring-context-5.3.4-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-context/5.3.4/spring-context-5.3.4-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.springframework:spring-core:5.2.1.RELEASE">
@@ -2172,17 +2093,6 @@
         <root url="jar://$USER_HOME$/.m13/org/springframework/spring-core/5.3.2/spring-core-5.3.2-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.springframework:spring-core:5.3.4">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-core/5.3.4/spring-core-5.3.4.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-core/5.3.4/spring-core-5.3.4-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-core/5.3.4/spring-core-5.3.4-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: org.springframework:spring-expression:5.2.1.RELEASE">
       <CLASSES>
         <root url="jar://$USER_HOME$/.m13/org/springframework/spring-expression/5.2.1.RELEASE/spring-expression-5.2.1.RELEASE.jar!/" />
@@ -2205,17 +2115,6 @@
         <root url="jar://$USER_HOME$/.m13/org/springframework/spring-expression/5.3.2/spring-expression-5.3.2-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.springframework:spring-expression:5.3.4">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-expression/5.3.4/spring-expression-5.3.4.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-expression/5.3.4/spring-expression-5.3.4-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-expression/5.3.4/spring-expression-5.3.4-sources.jar!/" />
-      </SOURCES>
-    </library>
     <library name="Maven: org.springframework:spring-jcl:5.2.1.RELEASE">
       <CLASSES>
         <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jcl/5.2.1.RELEASE/spring-jcl-5.2.1.RELEASE.jar!/" />
@@ -2236,17 +2135,6 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jcl/5.3.2/spring-jcl-5.3.2-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Maven: org.springframework:spring-jcl:5.3.4">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jcl/5.3.4/spring-jcl-5.3.4.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jcl/5.3.4/spring-jcl-5.3.4-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.m13/org/springframework/spring-jcl/5.3.4/spring-jcl-5.3.4-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.springframework:spring-jdbc:5.3.6">

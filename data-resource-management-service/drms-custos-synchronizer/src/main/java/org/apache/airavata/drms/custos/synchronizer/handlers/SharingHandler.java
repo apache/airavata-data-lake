@@ -1,9 +1,7 @@
 package org.apache.airavata.drms.custos.synchronizer.handlers;
 
-import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.custos.synchronizer.Configuration;
 import org.apache.airavata.drms.custos.synchronizer.Utils;
-import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.sharing.management.client.SharingManagementClient;
 import org.apache.custos.sharing.service.Entity;
 import org.apache.custos.sharing.service.GetAllDirectSharingsResponse;
@@ -21,11 +19,8 @@ public class SharingHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SharingHandler.class);
 
-    private final Neo4JConnector neo4JConnector;
-    private CustosClientProvider custosClientProvider;
-
     public SharingHandler() {
-        this.neo4JConnector = Utils.getNeo4JConnector();
+
     }
 
     public void mergeSharings(Configuration configuration) {
@@ -35,6 +30,7 @@ public class SharingHandler {
             mergeSharings(sharingManagementClient, configuration.getCustos().getTenantsToBeSynced());
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             String msg = "Exception occurred while merging user, " + ex.getMessage();
             LOGGER.error(msg, ex);
         }
@@ -60,6 +56,7 @@ public class SharingHandler {
             });
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             String msg = "Error occurred while merging sharings from Custos, " + ex.getMessage();
             LOGGER.error(msg, ex);
         }
@@ -69,21 +66,21 @@ public class SharingHandler {
 
     private void mergeEntities(Entity entity, String clientId) {
         String query = "Merge (u: " + entity.getType() + " {entityId: $entityId,"
-                + "custosClientId:$custosClientId})"
-                + " SET u = $props return u ";
+                + "tenantId:$tenantId})"
+                + " SET u += $props return u ";
         Map<String, Object> map = new HashMap<>();
         map.put("description", entity.getDescription());
         map.put("name", entity.getName());
         map.put("createdTime", entity.getCreatedAt());
-        map.put("custosClientId", clientId);
+        map.put("tenantId", clientId);
         map.put("entityId", entity.getId());
         map.put("entityType", entity.getType());
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("props", map);
-        parameters.put("custosClientId", clientId);
+        parameters.put("tenantId", clientId);
         parameters.put("entityId", entity.getId());
         try {
-            this.neo4JConnector.runTransactionalQuery(parameters, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(parameters, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while merging entities, " + ex.getMessage();
@@ -99,15 +96,16 @@ public class SharingHandler {
             Entity parentEntity = Entity.newBuilder().setId(entity.getParentId()).build();
             Entity fullParentEntity = sharingManagementClient.getEntity(clientId, parentEntity);
             String query = "MATCH (a:" + entity.getType() + "), (b:" + fullParentEntity.getType() + ") WHERE a.entityId = $entityId" +
-                    "AND a.custosClientId = $custosClientId  AND " + "b.entityId = $parentEntityId AND b.custosClientId = $custosClientId " +
+                    " AND a.tenantId = $tenantId  AND " + "b.entityId = $parentEntityId AND b.tenantId = $tenantId " +
                     "MERGE (a)-[r:CHILD_OF]->(b) RETURN a, b";
             Map<String, Object> map = new HashMap<>();
             map.put("entityId", entity.getId());
             map.put("parentEntityId", fullParentEntity.getId());
-            map.put("custosClientId", clientId);
+            map.put("tenantId", clientId);
             try {
-                this.neo4JConnector.runTransactionalQuery(map, query);
+                Utils.getNeo4JConnector().runTransactionalQuery(map, query);
             } catch (Exception ex) {
+                ex.printStackTrace();
                 String msg = "Error occurred while merging parent child relationships ";
                 LOGGER.error(msg, ex);
             }
@@ -123,13 +121,13 @@ public class SharingHandler {
         userId = userId.replaceAll("'", "`'");
         String query = null;
         if (type.equalsIgnoreCase("USER")) {
-            query = "MATCH (a:" + entity.getType() + "), (b:User) WHERE a.entityId = $sourceId  AND a.custosClientId = $clientId" +
-                    " AND  b.username = $userId  AND b.custosClientId = $clientId " +
+            query = "MATCH (a:" + entity.getType() + "), (b:User) WHERE a.entityId = $sourceId  AND a.tenantId = $clientId" +
+                    " AND  b.username = $userId  AND b.tenantId = $clientId " +
                     "MERGE (a)-[r:SHARED_WITH]->(b) SET r.permission= $permissionId  RETURN a, b";
 
         } else if (type.equalsIgnoreCase("GROUP")) {
             query = "MATCH (a:" + entity.getType() + "), (b:Group) WHERE a.entityId = $sourceId " +
-                    " AND a.custosClientId = $clientId  AND b.groupId = $userId  AND b.custosClientId = $clientId " +
+                    " AND a.tenantId = $clientId  AND b.groupId = $userId  AND b.tenantId = $clientId " +
                     "MERGE (a)-[r:SHARED_WITH]->(b) SET r.permission= $permissionId RETURN a, b";
         }
         if (query != null) {
@@ -139,7 +137,7 @@ public class SharingHandler {
             map.put("permissionId", permissionId);
             map.put("userId", userId);
             try {
-                this.neo4JConnector.runTransactionalQuery(map, query);
+                Utils.getNeo4JConnector().runTransactionalQuery(map, query);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 String msg = "Error occurred while merging sharings, " + ex.getMessage();
@@ -151,12 +149,12 @@ public class SharingHandler {
 
     public void deleteEntity(String entityId, String entityType, String clientId) {
         String query = "MATCH (e:" + entityType + ") WHERE e.entityId = $entityId " +
-                " AND e.custosClientId = $custosClientId DETACH DELETE e";
+                " AND e.tenantId = $tenantId DETACH DELETE e";
         Map<String, Object> map = new HashMap<>();
         map.put("entityId", entityId);
-        map.put("custosClientId", clientId);
+        map.put("tenantId", clientId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while deleting entity, " + ex.getMessage();
@@ -170,21 +168,21 @@ public class SharingHandler {
         String query = null;
         if (userType.equals("USER")) {
             query = "MATCH (e:" + entityType + ")-[r:SHARED_WITH]->(b:User) WHERE e.entityId = $entityId " +
-                    " AND e.custosClientId = $custosClientId AND b.username = $userId AND " +
-                    " b.custosClientId = $custosClientId AND r.permission = $permission DELETE r";
+                    " AND e.tenantId = $tenantId AND b.username = $userId AND " +
+                    " b.tenantId = $tenantId AND r.permission = $permission DELETE r";
 
         } else if (userType.equals("GROUP")) {
             query = "MATCH (e:" + entityType + ")-[r:SHARED_WITH]->(b:Group) WHERE e.entityId = $entityId " +
-                    " AND e.custosClientId = $custosClientId AND b.groupId = $userId AND " +
-                    " b.custosClientId = $custosClientId AND r.permission = $permission DELETE r";
+                    " AND e.tenantId = $tenantId AND b.groupId = $userId AND " +
+                    " b.tenantId = $tenantId AND r.permission = $permission DELETE r";
         }
         Map<String, Object> map = new HashMap<>();
         map.put("entityId", entityId);
-        map.put("custosClientId", clientId);
+        map.put("tenantId", clientId);
         map.put("permission", permission);
         map.put("userId", userId);
         try {
-            this.neo4JConnector.runTransactionalQuery(query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while deleting entity, " + ex.getMessage();

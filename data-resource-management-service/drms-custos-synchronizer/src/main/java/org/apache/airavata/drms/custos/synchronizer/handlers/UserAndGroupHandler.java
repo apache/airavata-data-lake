@@ -1,9 +1,7 @@
 package org.apache.airavata.drms.custos.synchronizer.handlers;
 
-import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.custos.synchronizer.Configuration;
 import org.apache.airavata.drms.custos.synchronizer.Utils;
-import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.group.management.client.GroupManagementClient;
 import org.apache.custos.user.management.client.UserManagementClient;
 import org.apache.custos.user.profile.service.GetAllGroupsResponse;
@@ -20,12 +18,6 @@ public class UserAndGroupHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserAndGroupHandler.class);
 
-    private final Neo4JConnector neo4JConnector;
-    private CustosClientProvider custosClientProvider;
-
-    public UserAndGroupHandler() {
-        this.neo4JConnector = Utils.getNeo4JConnector();
-    }
 
     public void mergeUserAndGroups(Configuration configuration) {
         try {
@@ -37,6 +29,7 @@ public class UserAndGroupHandler {
             mergeGroups(groupManagementClient, clientIds);
             mergeUserAndGroupMemberships(groupManagementClient, userManagementClient, clientIds);
         } catch (Exception ex) {
+            ex.printStackTrace();
             String msg = "Exception occurred while merging user" + ex.getMessage();
             LOGGER.error(msg, ex);
         }
@@ -50,7 +43,7 @@ public class UserAndGroupHandler {
                 GetAllUserProfilesResponse response = userManagementClient.getAllUserProfiles(val);
                 response.getProfilesList().forEach(userProfile -> {
                     String query = "Merge (u:User{username: $username,"
-                            + "custosClientId: $custosClientId}" + ")"
+                            + "tenantId: $tenantId}" + ")"
                             + " SET u = $props return u ";
                     Map<String, Object> map = new HashMap<>();
                     map.put("firstName", userProfile.getFirstName());
@@ -58,18 +51,19 @@ public class UserAndGroupHandler {
                     map.put("lastName", userProfile.getLastName());
                     map.put("email", userProfile.getEmail());
                     map.put("username", userProfile.getUsername());
-                    map.put("custosClientId", val);
+                    map.put("tenantId", val);
                     Map<String, Object> parameters = new HashMap<>();
                     parameters.put("props", map);
                     parameters.put("username", userProfile.getUsername());
-                    parameters.put("custosClientId", val);
-                    this.neo4JConnector.runTransactionalQuery(parameters, query);
+                    parameters.put("tenantId", val);
+                    Utils.getNeo4JConnector().runTransactionalQuery(parameters, query);
                 });
 
             });
 
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             LOGGER.error("Error occurred while merging user ", ex);
         }
     }
@@ -81,7 +75,7 @@ public class UserAndGroupHandler {
                 GetAllGroupsResponse response = groupManagementClient.getAllGroups(val);
                 response.getGroupsList().forEach(gr -> {
                     String query = "Merge (u:Group{groupId: $groupId,"
-                            + "custosClientId: $custosClientId} )"
+                            + "tenantId: $tenantId} )"
                             + " SET u = $props return u ";
                     Map<String, Object> map = new HashMap<>();
                     map.put("description", gr.getDescription());
@@ -89,19 +83,20 @@ public class UserAndGroupHandler {
                     map.put("groupId", gr.getId());
                     map.put("createdTime", gr.getCreatedTime());
                     map.put("lastModifiedTime", gr.getLastModifiedTime());
-                    map.put("custosClientId", val);
+                    map.put("tenantId", val);
                     Map<String, Object> parameters = new HashMap<>();
                     parameters.put("props", map);
                     parameters.put("groupId", gr.getId());
-                    parameters.put("custosClientId", val);
+                    parameters.put("tenantId", val);
                     try {
-                        this.neo4JConnector.runTransactionalQuery(parameters, query);
+                        Utils.getNeo4JConnector().runTransactionalQuery(parameters, query);
                     } catch (Exception ex) {
                         LOGGER.error("Error occurred while merging groups ", ex);
                     }
                 });
             });
         } catch (Exception ex) {
+            ex.printStackTrace();
             LOGGER.error("Error occurred while merging groups ", ex);
         }
     }
@@ -125,21 +120,22 @@ public class UserAndGroupHandler {
                 });
             });
         } catch (Exception ex) {
+            ex.printStackTrace();
             LOGGER.error("Error occurred while merging groups ", ex);
         }
     }
 
-    private void mergeUserMemberShip(String username, String groupId, String custosClientId, String role) {
-        String query = "MATCH (a:User), (b:Group) WHERE a.username = $username AND a.custosClientId = $custosClientId AND "
-                + "b.groupId =$groupId AND b.custosClientId =$custosClientId MERGE (a)-[r:MEMBER_OF]->(b) " +
+    private void mergeUserMemberShip(String username, String groupId, String tenantId, String role) {
+        String query = "MATCH (a:User), (b:Group) WHERE a.username = $username AND a.tenantId = $tenantId AND "
+                + "b.groupId =$groupId AND b.tenantId =$tenantId MERGE (a)-[r:MEMBER_OF]->(b) " +
                 "SET r.role=$role RETURN a, b";
         Map<String, Object> map = new HashMap<>();
         map.put("username", username);
         map.put("role", role);
         map.put("groupId", groupId);
-        map.put("custosClientId", custosClientId);
+        map.put("tenantId", tenantId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             LOGGER.error("Error occurred while merging UserGroupMembership ", ex);
@@ -147,16 +143,16 @@ public class UserAndGroupHandler {
 
     }
 
-    private void mergeGroupMemberShip(String parentGroupId, String childGroupId, String custosClientId) {
-        String query = "MATCH (a:Group), (b:Group) WHERE a.groupId = $parentGroupId AND a.custosClientId = $custosClientId" +
-                " AND " + "b.groupId = $childGroupId AND b.custosClientId = $custosClientId " +
+    private void mergeGroupMemberShip(String parentGroupId, String childGroupId, String tenantId) {
+        String query = "MATCH (a:Group), (b:Group) WHERE a.groupId = $parentGroupId AND a.tenantId = $tenantId" +
+                " AND " + "b.groupId = $childGroupId AND b.tenantId = $tenantId " +
                 "MERGE (a)<-[r:CHILD_OF]-(b)  RETURN a, b";
         Map<String, Object> map = new HashMap<>();
         map.put("parentGroupId", parentGroupId);
-        map.put("custosClientId", custosClientId);
+        map.put("tenantId", tenantId);
         map.put("childGroupId", childGroupId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             LOGGER.error("Error occurred while merging Group memberships ", ex);
@@ -166,14 +162,15 @@ public class UserAndGroupHandler {
 
     public void deleteUser(String username, String clientId) {
         String query = "Match (u:User{username: $username,"
-                + "custosClientId: $custosClientId}" + ")"
+                + "tenantId: $tenantId}" + ")"
                 + " DETACH DELETE u";
         Map<String, Object> map = new HashMap<>();
         map.put("username", username);
-        map.put("custosClientId", clientId);
+        map.put("tenantId", clientId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
+            ex.printStackTrace();
             String msg = "Error occurred while deleting user ";
             LOGGER.error(msg, ex);
         }
@@ -182,13 +179,13 @@ public class UserAndGroupHandler {
 
     public void deleteGroup(String groupId, String clientId) {
         String query = "Match (g:Group{groupId: $groupId,"
-                + "custosClientId: $custosClientId})"
+                + "tenantId: $tenantId})"
                 + " DETACH DELETE g";
         Map<String, Object> map = new HashMap<>();
         map.put("groupId", groupId);
-        map.put("custosClientId", clientId);
+        map.put("tenantId", clientId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while deleting group ";
@@ -197,15 +194,15 @@ public class UserAndGroupHandler {
 
     }
 
-    public void deleteUserGroupMembership(String username, String custosClientId, String groupId) {
-        String query = "MATCH (a:User)-[r:MEMBER_OF]->(b:Group) WHERE a.username = $username AND a.custosClientId = $custosClientId " +
-                "AND " + "b.groupId =$groupId AND b.custosClientId =$custosClientId Delete r";
+    public void deleteUserGroupMembership(String username, String tenantId, String groupId) {
+        String query = "MATCH (a:User)-[r:MEMBER_OF]->(b:Group) WHERE a.username = $username AND a.tenantId = $tenantId " +
+                "AND " + "b.groupId =$groupId AND b.tenantId =$tenantId Delete r";
         Map<String, Object> map = new HashMap<>();
         map.put("username", username);
         map.put("groupId", groupId);
-        map.put("custosClientId", custosClientId);
+        map.put("tenantId", tenantId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while deleting user group membership from user " +
@@ -215,16 +212,16 @@ public class UserAndGroupHandler {
 
     }
 
-    public void deleteGroupMembership(String parentGroupId, String childGroupId, String custosClientId, String groupId) {
-        String query = "MATCH (a:Group)<-[r:CHILD_OF]-(b:Group) WHERE a.groupId = $parentGroupId AND a.custosClientId = $custosClientId " +
-                " AND " + "b.groupId =  $childGroupId  AND b.custosClientId = $custosClientId  Delete r";
+    public void deleteGroupMembership(String parentGroupId, String childGroupId, String tenantId, String groupId) {
+        String query = "MATCH (a:Group)<-[r:CHILD_OF]-(b:Group) WHERE a.groupId = $parentGroupId AND a.tenantId = $tenantId " +
+                " AND " + "b.groupId =  $childGroupId  AND b.tenantId = $tenantId  Delete r";
         Map<String, Object> map = new HashMap<>();
         map.put("groupId", groupId);
         map.put("parentGroupId", parentGroupId);
         map.put("childGroupId", childGroupId);
-        map.put("custosClientId", custosClientId);
+        map.put("tenantId", tenantId);
         try {
-            this.neo4JConnector.runTransactionalQuery(map, query);
+            Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
             ex.printStackTrace();
             String msg = "Error occurred while deleting  group memberships from "

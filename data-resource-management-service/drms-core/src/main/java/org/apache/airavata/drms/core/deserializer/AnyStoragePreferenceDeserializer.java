@@ -25,6 +25,7 @@ import org.apache.airavata.drms.core.constants.StorageConstants;
 import org.apache.airavata.drms.core.constants.StoragePreferenceConstants;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Value;
+import org.neo4j.driver.internal.InternalNode;
 import org.neo4j.driver.internal.InternalRecord;
 import org.neo4j.driver.types.Node;
 import org.springframework.beans.BeanWrapper;
@@ -36,31 +37,52 @@ import java.util.List;
 import java.util.Map;
 
 public class AnyStoragePreferenceDeserializer {
-    public static List<AnyStoragePreference> deserializeList(List<Record> neo4jRecords) throws Exception {
+    public static List<AnyStoragePreference> deserializeList(List<Record> neo4jRecords, List<String> keyPairList) throws Exception {
         List<AnyStoragePreference> storagePrefList = new ArrayList<>();
-        for (Record record : neo4jRecords) {
-            InternalRecord internalRecord = (InternalRecord) record;
-            List<Value> values = internalRecord.values();
-            if (values.size() == 2) {
-                Value prfValue = values.get(0);
-                Value stoValue = values.get(1);
-                Node prefNode = prfValue.asNode();
-                Node stoNode = stoValue.asNode();
-                if (prefNode.hasLabel(StoragePreferenceConstants.STORAGE_PREFERENCE_LABEL) && stoNode.hasLabel(StorageConstants.STORAGE_LABEL)) {
-                    AnyStorage storage = AnyStorageDeserializer.deriveStorageFromMap(stoNode.asMap());
-                    AnyStoragePreference preference = deriveStoragePrefFromMap(prefNode.asMap(), storage);
-                    storagePrefList.add(preference);
-                }
+        try {
+
+            Map<Long, List<AnyStoragePreference>> storagePreferenceMap = new HashMap<>();
+            for (Record record : neo4jRecords) {
+                InternalRecord internalRecord = (InternalRecord) record;
+                Map<String, Object> values = internalRecord.asMap();
+
+                keyPairList.forEach(val -> {
+                    String[] keys = val.split(":");
+                    String storageNode = keys[0];
+                    String preferenceNode = keys[1];
+
+                    InternalNode stVal = (InternalNode) values.get(storageNode);
+                    InternalNode spVal = (InternalNode) values.get(preferenceNode);
+                    if (stVal != null && stVal.hasLabel(StorageConstants.STORAGE_LABEL)) {
+                        AnyStorage storage = null;
+                        try {
+                            storage = AnyStorageDeserializer.deriveStorageFromMap(stVal.asMap());
+                            AnyStoragePreference preference = deriveStoragePrefFromMap(spVal.asMap(), storage);
+                            storagePreferenceMap.computeIfAbsent(stVal.id(), v -> {
+                                return new ArrayList<AnyStoragePreference>();
+                            }).add(preference);
+
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                        }
+                    }
+                });
             }
+            storagePreferenceMap.forEach((key, value) -> {
+                storagePrefList.add(value.get(0));
+            });
+            return storagePrefList;
+        } catch (Exception ex) {
+            String msg = "Error occurred while deserializing Storage Preference : " + ex.getMessage();
+            throw new Exception(msg, ex);
         }
-        return storagePrefList;
     }
 
     public static AnyStoragePreference deriveStoragePrefFromMap(Map<String, Object> fixedMap, AnyStorage anyStorage) throws Exception {
 
         Map<String, Object> asMap = new HashMap<>(fixedMap);
         AnyStoragePreference.Builder anyStoragePrefBuilder = AnyStoragePreference.newBuilder();
-        String type = (String)asMap.get(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL);
+        String type = (String) asMap.get(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL);
         asMap.remove(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL);
 
         switch (type) {
@@ -85,9 +107,13 @@ public class AnyStoragePreferenceDeserializer {
     }
 
     private static void setObjectFieldsUsingMap(Object target, Map<String, Object> values) {
-        for (String field :values.keySet()) {
+        for (String field : values.keySet()) {
             BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(target);
-            beanWrapper.setPropertyValue(field, values.get(field));
+            try {
+                beanWrapper.setPropertyValue(field, values.get(field));
+            }catch (Exception ex){
+                continue;
+            }
         }
     }
 }

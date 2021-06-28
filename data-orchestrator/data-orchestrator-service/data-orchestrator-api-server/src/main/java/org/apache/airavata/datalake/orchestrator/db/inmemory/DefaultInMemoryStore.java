@@ -51,7 +51,6 @@ public class DefaultInMemoryStore implements StorageAdaptor<NotificationEvent> {
 
     @Override
     public List<NotificationEvent> poll(int numOfEvents) {
-        LOGGER.info("Polling events " + numOfEvents);
         List<NotificationEvent> notificationEventList = new ArrayList<>();
         AtomicInteger count = new AtomicInteger(1);
         int iterations = 0;
@@ -68,7 +67,6 @@ public class DefaultInMemoryStore implements StorageAdaptor<NotificationEvent> {
                 break;
             }
         }
-        LOGGER.info("Notification event list size " + notificationEventList.size());
         return notificationEventList;
     }
 
