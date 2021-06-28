@@ -40,16 +40,17 @@ public class Neo4JConnector {
         this.driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
     }
 
+
+    public synchronized Session resume() {
+        this.driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
+        return driver.session();
+    }
+
     public void init(String uri, String userName, String password) {
         this.uri = uri;
         this.userName = userName;
         this.password = password;
         this.driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
-    }
-
-    public synchronized Session resume() {
-        this.driver = GraphDatabase.driver(uri, AuthTokens.basic(userName, password));
-        return driver.session();
     }
 
     public List<Record> searchNodes(String query) {
@@ -147,11 +148,11 @@ public class Neo4JConnector {
         tx.close();
     }
 
+
+
+
     public void runTransactionalQuery(String query) {
         Session session = driver.session();
-        if(!session.isOpen()) {
-            session =  resume();
-        }
         Transaction tx = session.beginTransaction();
         Result result = tx.run(query);
         tx.commit();
