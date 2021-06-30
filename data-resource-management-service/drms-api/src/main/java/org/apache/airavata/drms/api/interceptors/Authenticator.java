@@ -28,7 +28,7 @@ public class Authenticator implements ServiceInterceptor {
     @Override
     public <ReqT> ReqT intercept(String method, Metadata headers, ReqT msg) throws IOException {
         IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
-        Optional<String> token = getAccessToken(msg);
+        Optional<String> token = getAccessToken(msg, headers);
         User user = identityManagementClient.getUser(token.get());
         AuthenticatedUser authenticatedUser = AuthenticatedUser.newBuilder()
                 .setUsername(user.getUsername())
@@ -42,18 +42,22 @@ public class Authenticator implements ServiceInterceptor {
     }
 
 
-    private Optional<String> getAccessToken(Object msg) {
-        Descriptors.FieldDescriptor fieldDescriptor =
-                ((com.google.protobuf.GeneratedMessageV3) msg).getDescriptorForType().findFieldByName("authToken");
-        Object value = ((com.google.protobuf.GeneratedMessageV3) msg).getField(fieldDescriptor);
-        DRMSServiceAuthToken drmsServiceAuthToken = (DRMSServiceAuthToken) value;
-        return Optional.ofNullable(drmsServiceAuthToken.getAccessToken());
+    private Optional<String> getAccessToken(Object msg, Metadata headers) {
+        Optional<String> tokenHeaders = getTokenFromHeader(headers);
+        if (tokenHeaders.isEmpty()) {
+            Descriptors.FieldDescriptor fieldDescriptor =
+                    ((com.google.protobuf.GeneratedMessageV3) msg).getDescriptorForType().findFieldByName("auth_token");
+            Object value = ((com.google.protobuf.GeneratedMessageV3) msg).getField(fieldDescriptor);
+            DRMSServiceAuthToken drmsServiceAuthToken = (DRMSServiceAuthToken) value;
+            return Optional.ofNullable(drmsServiceAuthToken.getAccessToken());
+        }
+        return Optional.ofNullable(tokenHeaders.get());
     }
 
     private Object setAuthenticatedUser(Object msg, AuthenticatedUser user) {
 
         Descriptors.FieldDescriptor fieldDescriptor =
-                ((com.google.protobuf.GeneratedMessageV3) msg).getDescriptorForType().findFieldByName("authToken");
+                ((com.google.protobuf.GeneratedMessageV3) msg).getDescriptorForType().findFieldByName("auth_token");
         Object value = ((com.google.protobuf.GeneratedMessageV3) msg).getField(fieldDescriptor);
         DRMSServiceAuthToken drmsServiceAuthToken = (DRMSServiceAuthToken) value;
         drmsServiceAuthToken = drmsServiceAuthToken.toBuilder().setAuthenticatedUser(user).build();
@@ -61,4 +65,18 @@ public class Authenticator implements ServiceInterceptor {
 
         return builder.setField(fieldDescriptor, drmsServiceAuthToken).build();
     }
+
+    public Optional<String> getTokenFromHeader(Metadata headers) {
+        String tokenWithBearer = headers.get(Metadata.Key.of("authorization", Metadata.ASCII_STRING_MARSHALLER));
+        if (tokenWithBearer == null) {
+            tokenWithBearer = headers.get(Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER));
+        }
+        if (tokenWithBearer == null) {
+            return Optional.empty();
+        }
+        String prefix = "Bearer";
+        String token = tokenWithBearer.substring(prefix.length());
+        return Optional.ofNullable(token.trim());
+    }
+
 }

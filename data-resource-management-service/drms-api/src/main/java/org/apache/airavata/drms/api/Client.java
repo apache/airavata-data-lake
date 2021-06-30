@@ -20,12 +20,16 @@ import com.google.protobuf.Struct;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
-import org.apache.airavata.datalake.drms.storage.StoragePreferenceFetchRequest;
-import org.apache.airavata.datalake.drms.storage.StoragePreferenceFetchResponse;
+import org.apache.airavata.datalake.drms.resource.GenericResource;
+import org.apache.airavata.datalake.drms.storage.ParentResourcesFetchRequest;
+import org.apache.airavata.datalake.drms.storage.ResourceServiceGrpc;
 import org.apache.airavata.datalake.drms.storage.StoragePreferenceServiceGrpc;
 import org.apache.airavata.datalake.drms.storage.StorageServiceGrpc;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.identity.management.client.IdentityManagementClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Client {
     public static void main(String ar[]) {
@@ -76,14 +80,14 @@ public class Client {
 //        storagePreferenceServiceBlockingStub.searchStoragePreference(storagePreferenceSearchRequest);
 
 
-        StoragePreferenceFetchRequest storagePreferenceSearchRequest = StoragePreferenceFetchRequest
-                .newBuilder()
-                .setAuthToken(authToken)
-                .setStoragePreferenceId("storage-preference-id-one")
-                .build();
-      StoragePreferenceFetchResponse response =   storagePreferenceServiceBlockingStub
-              .fetchStoragePreference(storagePreferenceSearchRequest);
-        System.out.println(response.getStoragePreference().getSshStoragePreference().getUserName());
+//        StoragePreferenceFetchRequest storagePreferenceSearchRequest = StoragePreferenceFetchRequest
+//                .newBuilder()
+//                .setAuthToken(authToken)
+//                .setStoragePreferenceId("storage-preference-id-one")
+//                .build();
+//      StoragePreferenceFetchResponse response =   storagePreferenceServiceBlockingStub
+//              .fetchStoragePreference(storagePreferenceSearchRequest);
+//        System.out.println(response.getStoragePreference().getSshStoragePreference().getUserName());
 
 
 //        StoragePreferenceCreateRequest storagePreferenceCreateRequest = StoragePreferenceCreateRequest
@@ -105,10 +109,103 @@ public class Client {
 //        storagePreferenceServiceBlockingStub.createStoragePreference(storagePreferenceCreateRequest);
 
 
+        ResourceServiceGrpc.ResourceServiceBlockingStub resourceServiceBlockingStub = ResourceServiceGrpc.newBlockingStub(channel);
+
+//        ResourceSearchQuery query = ResourceSearchQuery.newBuilder().setField("type").setValue("COLLECTION").build();
+//
+//        ResourceSearchRequest request = ResourceSearchRequest
+//                .newBuilder()
+//                .setAuthToken(authToken)
+//                .addQueries(query).build();
+//
+//        ResourceSearchResponse response =   resourceServiceBlockingStub.searchResource(request);
+//        response.getResourcesList();
+
+//        ChildResourceFetchRequest childResourceFetchRequest = ChildResourceFetchRequest
+//                .newBuilder()
+//                .setAuthToken(authToken)
+//                .setResourceId("COLLECTION_TWO_a1qeBCVSrpx8vLJ")
+//                .setDepth(1)
+//                .setType("COLLECTION")
+//                .build();
+//
+//        resourceServiceBlockingStub.fetchChildResources(childResourceFetchRequest);
+
+//        String id = UUID.randomUUID().toString();
+//
+//        GenericResource genericResource = GenericResource
+//                .newBuilder()
+//                .setResourceId(id)
+//                .setType("COLLECTION")
+//                .setResourceName("COLLECTION_SDK_TEST_TWO")
+//                .build();
+//
+//        ResourceCreateRequest resourceCreateRequest = ResourceCreateRequest.newBuilder()
+//                .setAuthToken(authToken)
+//                .setResource(genericResource)
+//                .build();
+//        resourceServiceBlockingStub.createResource(resourceCreateRequest);
+
+
+//        System.out.println(authToken.getAccessToken());
+//        ResourceFetchRequest resourceFetchRequest = ResourceFetchRequest.newBuilder()
+//                .setAuthToken(authToken)
+//                .setResourceId("COLLECTION_ONE_6kKQzhIt8zxvIgn")
+//                .setType("COLLECTION")
+//                .build();
+//
+//        resourceServiceBlockingStub.fetchResource(resourceFetchRequest);
+
+        GenericResource parentResource = GenericResource.newBuilder()
+                .setResourceId("56cec8a2-a2c2-4669-9274-a5b5bdd97c11")
+                .setType("COLLECTION")
+                .build();
+
+        GenericResource childResource = GenericResource.newBuilder()
+                .setResourceId("b75b4cec-8df4-4f99-9d06-818db285cf02")
+                .setType("COLLECTION")
+                .build();
+
+        GenericResource childResource1 = GenericResource.newBuilder()
+                .setResourceId("b7ee2fd5-c4b8-4bb9-896b-4cb98d91ad24")
+                .setType("COLLECTION")
+                .build();
+
+        List<GenericResource> genericResourceList = new ArrayList<>();
+        genericResourceList.add(childResource);
+        genericResourceList.add(childResource1);
+
+//        AddChildResourcesMembershipRequest addChildResourcesMembershipRequest = AddChildResourcesMembershipRequest
+//                .newBuilder()
+//                .setParentResource(parentResource)
+//                .addAllChildResources(genericResourceList)
+//                .setAuthToken(authToken)
+//                .build();
+//        resourceServiceBlockingStub.addChildMembership(addChildResourcesMembershipRequest);
+
+
+//        DeleteChildResourcesMembershipRequest deleteChildResourcesMembershipRequest = DeleteChildResourcesMembershipRequest
+//                .newBuilder()
+//                .setParentResource(parentResource)
+//                .addAllChildResources(genericResourceList)
+//                .setAuthToken(authToken)
+//                .build();
+//        resourceServiceBlockingStub.deleteChildMembership(deleteChildResourcesMembershipRequest);
+
+        ParentResourcesFetchRequest parentResourcesFetchRequest = ParentResourcesFetchRequest
+                .newBuilder()
+                .setAuthToken(authToken)
+                .setResourceId("FILE_ONE_bxZPopxbnPaAEq5")
+                .setType("FILE")
+                .setDepth(2)
+                .build();
+        resourceServiceBlockingStub.fetchParentResources(parentResourcesFetchRequest);
+
+
     }
 
 
-    private static String getAccessToken(){
+    private static String getAccessToken() {
         try {
 
             CustosClientProvider custosClientProvider = new CustosClientProvider.Builder().setServerHost("custos.scigap.org")
@@ -119,9 +216,9 @@ public class Client {
             IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
             Struct struct = identityManagementClient.getToken(null, null, "testuser", "testuser1234", null, "password");
             return struct.getFieldsMap().get("access_token").getStringValue();
-        }catch (Exception ex){
-ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-       return null;
+        return null;
     }
 }
