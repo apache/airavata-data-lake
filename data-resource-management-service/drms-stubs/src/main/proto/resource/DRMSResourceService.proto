@@ -27,8 +27,21 @@ import "google/protobuf/empty.proto";
 
 
 message ResourceFetchRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
-  string resourceId = 2;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  string resource_id = 2;
+  string type = 3;
+}
+
+
+message ChildResourceFetchRequest {
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  string resource_id = 2;
+  string type = 3;
+  int32 depth = 4;
+}
+
+message ChildResourceFetchResponse {
+  repeated org.apache.airavata.datalake.drms.resource.GenericResource resources = 1;
 }
 
 message ResourceFetchResponse {
@@ -36,7 +49,7 @@ message ResourceFetchResponse {
 }
 
 message ResourceCreateRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
   org.apache.airavata.datalake.drms.resource.GenericResource resource = 2;
 }
 
@@ -45,7 +58,7 @@ message ResourceCreateResponse {
 }
 
 message ResourceUpdateRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
   string resourceId = 2;
   org.apache.airavata.datalake.drms.resource.GenericResource resource = 3;
 }
@@ -55,7 +68,7 @@ message ResourceUpdateResponse {
 }
 
 message ResourceDeleteRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
   string resourceId = 2;
 }
 
@@ -66,12 +79,13 @@ message ResourceSearchQuery {
 }
 
 message ResourceSearchRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
   repeated ResourceSearchQuery queries = 2;
+  int32 depth = 4;
 }
 
 message ResourceSearchResponse {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
   repeated org.apache.airavata.datalake.drms.resource.GenericResource resources = 2;
 }
 
@@ -81,13 +95,13 @@ message Metadata {
 }
 
 message AddResourceMetadataRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
   string resourceId = 2;
   Metadata metadata = 3;
 }
 
 message FetchResourceMetadataRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
   string resourceId = 2;
 }
 
@@ -97,6 +111,37 @@ message MetadataNode {
 
 message FetchResourceMetadataResponse {
   MetadataNode metadataNode = 1;
+}
+
+
+message AddChildResourcesMembershipRequest{
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  org.apache.airavata.datalake.drms.resource.GenericResource parent_resource = 2;
+  repeated org.apache.airavata.datalake.drms.resource.GenericResource child_resources = 3;
+
+}
+
+message DeleteChildResourcesMembershipRequest{
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  org.apache.airavata.datalake.drms.resource.GenericResource parent_resource = 2;
+  repeated org.apache.airavata.datalake.drms.resource.GenericResource child_resources = 3;
+}
+
+
+message ParentResourcesFetchRequest{
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  string resource_id = 2;
+  string type =3;
+  int32 depth =4;
+
+}
+
+message ParentResourcesFetchResponse {
+    map<string, org.apache.airavata.datalake.drms.resource.GenericResource> properties = 1;
+}
+
+message OperationStatusResponse{
+  bool status = 1;
 }
 
 
@@ -128,7 +173,32 @@ service ResourceService {
 
   rpc searchResource (ResourceSearchRequest) returns (ResourceSearchResponse) {
     option (google.api.http) = {
-      post: "/v1.0/api/drms/resource/searchPreference"
+      post: "/v1.0/api/drms/resource/searchResource"
+    };
+  }
+
+  rpc fetchChildResources (ChildResourceFetchRequest) returns (ChildResourceFetchResponse) {
+    option (google.api.http) = {
+      get: "/v1.0/api/drms/resource/child"
+    };
+  }
+
+
+  rpc fetchParentResources (ParentResourcesFetchRequest) returns (ParentResourcesFetchResponse) {
+      option (google.api.http) = {
+      get: "/v1.0/api/drms/resource/parent"
+    };
+  }
+
+  rpc addChildMembership (AddChildResourcesMembershipRequest) returns (OperationStatusResponse) {
+    option (google.api.http) = {
+      post: "/v1.0/api/drms/resource/child"
+    };
+  }
+
+  rpc deleteChildMembership (DeleteChildResourcesMembershipRequest) returns (OperationStatusResponse) {
+    option (google.api.http) = {
+      delete: "/v1.0/api/drms/resource/child"
     };
   }
 

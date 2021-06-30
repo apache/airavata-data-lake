@@ -45,4 +45,4 @@ static_resources:
       hosts:
         - socket_address:
             address: host.docker.internal
-            port_value: 6565
+            port_value: 7070

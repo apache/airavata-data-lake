@@ -9,6 +9,7 @@ import org.apache.custos.sharing.service.EntityType;
 import org.apache.custos.sharing.service.Status;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class CustosUtils {
 
@@ -74,5 +75,39 @@ public class CustosUtils {
             sharingManagementClient.createEntity(tenantId, entity);
         }
     }
+
+
+    public static Optional<Entity> mergeResourceEntity(CustosClientProvider custosClientProvider, String tenantId, String storagePreferenceId,
+                                                       String entityTypeId, String entityId, String entityName, String description, String username) throws IOException {
+        SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient();
+        EntityType entityType = EntityType.newBuilder().setId(entityTypeId).build();
+        EntityType type = sharingManagementClient.getEntityType(tenantId, entityType);
+        if (!type.isInitialized() || type.getId().isEmpty()) {
+            EntityType storEntityType = EntityType.newBuilder()
+                    .setId(entityTypeId)
+                    .setName(entityTypeId)
+                    .setDescription("Resource  entity type " + entityTypeId)
+                    .build();
+            sharingManagementClient.createEntityType(tenantId, storEntityType);
+        }
+        Entity entity = Entity.newBuilder()
+                .setId(entityId)
+                .setName(entityName)
+                .setOwnerId(username)
+                .setParentId(storagePreferenceId)
+                .setType(entityTypeId)
+                .setDescription(description)
+                .build();
+
+        Status status = sharingManagementClient.isEntityExists(tenantId, entity);
+        if (!status.getStatus()) {
+            sharingManagementClient.createEntity(tenantId, entity);
+            return Optional.ofNullable(sharingManagementClient.getEntity(tenantId, entity));
+        }
+
+        return Optional.empty();
+
+    }
+
 
 }

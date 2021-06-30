@@ -29,9 +29,10 @@ public class CustosSynchronizer implements CommandLineRunner {
         LOGGER.info("Starting Custos synchronizer ...");
         if (args.length > 0) {
             configFilePath = args[0];
+        } else {
+            configFilePath = "/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake" +
+                    "/data-resource-management-service/drms-custos-synchronizer/src/main/resources/config.yml";
         }
-        configFilePath = "/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake" +
-                "/data-resource-management-service/drms-custos-synchronizer/src/main/resources/config.yml";
 
         LOGGER.info("Configuring scheduler ...");
         Utils.initializeConnectors(Utils.loadConfiguration(configFilePath));

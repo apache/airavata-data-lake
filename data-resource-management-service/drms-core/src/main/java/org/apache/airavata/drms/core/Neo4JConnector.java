@@ -85,7 +85,7 @@ public class Neo4JConnector {
         parameters.put("tenantId", tenantId);
         Transaction tx = session.beginTransaction();
         tx.run("MATCH (u:User)  where u.username = $username AND  u.tenantId = $tenantId " +
-                " MERGE (n:" + label + " {entityId: $entityId,tenantId: $tenantId}) ON MATCH  SET n += $props ON CREATE SET n = +$props" +
+                " MERGE (n:" + label + " {entityId: $entityId,tenantId: $tenantId}) ON MATCH  SET n += $props ON CREATE SET n += $props" +
                 " MERGE (n)-[r2:SHARED_WITH {permission:'OWNER'}]->(u) return n", parameters);
         tx.commit();
         tx.close();

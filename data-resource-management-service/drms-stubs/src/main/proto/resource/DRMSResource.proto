@@ -33,4 +33,6 @@ message GenericResource {
   }
   map<string, string> properties = 5;
   string type=6;
+  string parentResourcePath = 7;
+  string resourceName = 8;
 }
