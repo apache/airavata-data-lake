@@ -50,6 +50,9 @@ public class APIServerInitializer implements CommandLineRunner {
     @Autowired
     private OrchestratorEventHandler orchestratorEventHandler;
 
+    @org.springframework.beans.factory.annotation.Value("${config.path}")
+    private String configPath;
+
     public static void main(String[] args) {
         SpringApplication.run(APIServerInitializer.class, args);
     }
@@ -57,24 +60,14 @@ public class APIServerInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         LOGGER.info("Starting Data orchestrator API Server ...");
-        String filePath = null;
-        if (args.length > 0) {
-            filePath = args[0];
-        }
 
-        LOGGER.info("Loading configuration ...");
-        Configuration configuration = Optional.ofNullable(filePath).
-                map(this::loadConfig)
-                .orElseGet(() -> this.loadConfig(
-                        "/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake" +
-                                "/data-orchestrator/data-orchestrator-service/data-orchestrator-api-server" +
-                                "/src/main/resources/config.yml"));
+        LOGGER.info("Loading configuration from file {} ...", configPath);
+        Configuration configuration = this.loadConfig(configPath);
 
         LOGGER.info("Registering Orchestration even handler " + OrchestratorEventHandler.class.getName() + " ...");
         orchestratorEventHandler.init(configuration);
         LOGGER.info("Data orchestrator start accepting  events ....");
         orchestratorEventHandler.startProcessing();
-
     }
 
 

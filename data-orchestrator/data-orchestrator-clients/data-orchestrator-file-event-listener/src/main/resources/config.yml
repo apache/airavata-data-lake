@@ -1,7 +1,7 @@
 fileServerHost: "apidev.scigap.org"
 fileServerPort: 3124
 fileServerProtocol: "SFTP"
-listeningPath: "/Users/isururanawaka/Documents/texts"
+listeningPath: "/Users/dimuthu/EMC-data"
 
 producer:
   brokerURL: "localhost:9092"
