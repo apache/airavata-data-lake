@@ -33,7 +33,7 @@ SUBSET=""
 DEFAULT_LOG_FILE="${AIRAVATA_HOME}/logs/airavata-daemon.out"
 LOG_FILE=$DEFAULT_LOG_FILE
 
-SERVICE_NAME="API Orch Server"
+SERVICE_NAME="File Listener"
 PID_PATH_NAME="${AIRAVATA_HOME}/bin/service-pid"
 
 case $1 in
@@ -41,7 +41,7 @@ case $1 in
         echo "Starting $SERVICE_NAME ..."
         if [ ! -f $PID_PATH_NAME ]; then
             nohup java ${JAVA_OPTS} -classpath "${AIRAVATA_CLASSPATH}" \
-            org.apache.airavata.datalake.orchestrator.APIServerInitializer ${AIRAVATA_COMMAND} $* > $LOG_FILE 2>&1 &
+            org.apache.airavata.dataorchestrator.file.client.FileClientInitializer ${AIRAVATA_COMMAND} $* > $LOG_FILE 2>&1 &
             echo $! > $PID_PATH_NAME
             echo "$SERVICE_NAME started ..."
         else
@@ -90,7 +90,7 @@ case $1 in
             rm $PID_PATH_NAME
             echo "$SERVICE_NAME starting ..."
             nohup java ${JAVA_OPTS} -classpath "${AIRAVATA_CLASSPATH}" \
-            org.apache.airavata.datalake.orchestrator.APIServerInitializer ${AIRAVATA_COMMAND} $* > $LOG_FILE 2>&1 &
+            org.apache.airavata.dataorchestrator.file.client.FileClientInitializer ${AIRAVATA_COMMAND} $* > $LOG_FILE 2>&1 &
             echo $! > $PID_PATH_NAME
             echo "$SERVICE_NAME started ..."
         else
@@ -98,7 +98,7 @@ case $1 in
         fi
     ;;
     -h)
-        echo "Usage: orch-api-server-daemon.sh"
+        echo "Usage: controller-daemon.sh"
 
         echo "command options:"
         echo "  start               Start server in daemon mode"
