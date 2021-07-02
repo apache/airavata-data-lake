@@ -1,0 +1,609 @@
+{
+  "resourcePath":"/N/u/mcmullen/Carbonate/",
+  "fileinfo":{
+    "comp":1,
+    "offset":598726,
+    "ranges":"null",
+    "format":1,
+    "nImages":1,
+    "dir":"",
+    "type":"float",
+    "samples":1,
+    "url":"",
+    "gap":0,
+    "name":"testForClass_0006.dm4",
+    "width":4096,
+    "byteOrder":"little",
+    "lutSize":0,
+    "whiteIsZero":"f",
+    "height":4096
+  },
+  "RPIDhandle":"4263537/4000",
+  "dm4":{
+    "root":{
+      "InImageMode":"true",
+      "MinVersionList":{
+        "0":{
+          "RequiredVersion":50659328
+        }
+      },
+      "WindowPosition":[
+        32,
+        3,
+        1622,
+        1593
+      ],
+      "Thumbnails":{
+        "0":{
+          "SourceSize_Pixels":[
+            1590,
+            1590
+          ],
+          "ImageIndex":0
+        }
+      },
+      "DocumentObjectList":{
+        "0":{
+          "UniqueID":8,
+          "IsMoveable":"true",
+          "FillMode":1,
+          "HasBackground":"false",
+          "BackgroundMode":2,
+          "IsSelectable":"true",
+          "Rectangle":[
+            0,
+            0,
+            1590,
+            1590
+          ],
+          "IsTranslatable":"true",
+          "RestrictionStyle":0,
+          "AnnotationType":20,
+          "AnnotationGroupList":{
+            "0":{
+              "UniqueID":9,
+              "IsMoveable":"true",
+              "FillMode":2,
+              "TextOffsetH":1,
+              "HasBackground":"false",
+              "BackgroundMode":2,
+              "IsSelectable":"true",
+              "Rectangle":[
+                3616,
+                256,
+                3840,
+                1408
+              ],
+              "IsTranslatable":"true",
+              "RestrictionStyle":0,
+              "AnnotationType":31,
+              "Font":{
+                "FamilyName":"Lucida Console",
+                "Size":80,
+                "Attributes":7
+              },
+              "IsResizable":"true",
+              "TextOffsetV":1,
+              "ForegroundColor":[
+                -1,
+                -1,
+                -1
+              ],
+              "IsTransferrable":"true",
+              "IsVisible":"true",
+              "TextWidth":741.917,
+              "BackgroundColor":[
+                16448,
+                0,
+                16448
+              ]
+            }
+          },
+          "IsResizable":"true",
+          "ImageDisplayType":1,
+          "ImageDisplayInfo":{
+            "ComplexMode":4,
+            "Brightness":0.5,
+            "RangeAdjust":1,
+            "SparseSurvey_UseNumberPixels":"true",
+            "SparseSurvey_GridSize":16,
+            "HighLimit":91607.03,
+            "EstimatedMaxTrimPercentage":0.001,
+            "Gamma":0.5,
+            "CaptionSize":12,
+            "MinimumContrast":0,
+            "DiffractionMode":"false",
+            "EstimatedMin":91607.03,
+            "SparseSurvey_NumberPixels":32,
+            "CLUT":{
+              "Size":1536,
+              "Offset":2383
+            },
+            "BrightColor":[
+              -1,
+              -1,
+              -1
+            ],
+            "ContrastMode":1,
+            "SurveyTechique":2,
+            "DoAutoSurvey":"true",
+            "LowLimitContrastDeltaTriggerPercentage":0,
+            "EstimatedMinTrimPercentage":0.001,
+            "HiLimitContrastDeltaTriggerPercentage":0,
+            "MainSliceId":{
+              "0":0
+            },
+            "ComplexRange":1000,
+            "CaptionOn":"false",
+            "CLUTName":"Greyscale",
+            "EstimatedMax":76706.74,
+            "IsInverted":"false",
+            "Contrast":0.5,
+            "IsIgnoreGirdBar":"false",
+            "LowLimit":76706.74
+          },
+          "ImageSource":0,
+          "ForegroundColor":[
+            -1,
+            0,
+            0
+          ],
+          "IsTransferrable":"true",
+          "IsVisible":"true",
+          "BackgroundColor":[
+            -1,
+            -1,
+            -1
+          ]
+        }
+      },
+      "HasWindowPosition":"true",
+      "LayoutType":"Camera",
+      "ImageList":{
+        "0":{
+          "UniqueID":{
+            "0":1986283998,
+            "1":1970537810,
+            "2":2010261246,
+            "3":851384688
+          },
+          "ImageData":{
+            "DataType":23,
+            "Dimensions":{
+              "0":384,
+              "1":384
+            },
+            "Data":{
+              "Size":589824,
+              "Offset":7604
+            },
+            "PixelDepth":4,
+            "Calibrations":{
+              "Brightness":{
+                "Origin":0,
+                "Scale":1
+              },
+              "DisplayCalibratedUnits":"true",
+              "Dimension":{
+                "0":{
+                  "Origin":0,
+                  "Scale":1
+                },
+                "1":{
+                  "Origin":0,
+                  "Scale":1
+                }
+              }
+            }
+          },
+          "ImageTags":{
+            "GMS Version":{
+              "Created":"3.21.1374.0"
+            }
+          },
+          "Name":"Image Of testForClass_0006"
+        },
+        "1":{
+          "UniqueID":{
+            "0":649227372,
+            "1":2077039872,
+            "2":1831281967,
+            "3":1840526002
+          },
+          "ImageData":{
+            "DataType":2,
+            "Dimensions":{
+              "0":4096,
+              "1":4096
+            },
+            "Data":{
+              "Size":67108864,
+              "Offset":598726
+            },
+            "PixelDepth":4,
+            "Calibrations":{
+              "Brightness":{
+                "Origin":0,
+                "Scale":1
+              },
+              "DisplayCalibratedUnits":"true",
+              "Dimension":{
+                "0":{
+                  "Origin":0,
+                  "Scale":0.45125848,
+                  "Units":"nm"
+                },
+                "1":{
+                  "Origin":0,
+                  "Scale":0.45125848,
+                  "Units":"nm"
+                }
+              }
+            }
+          },
+          "ImageTags":{
+            "Session Info":{
+              "Microscope":"1400plus",
+              "Items":{
+                "0":{
+                  "Tag path":"Session Info:Specimen",
+                  "Data Type":20,
+                  "Precision":0,
+                  "Label":"Specimen"
+                },
+                "1":{
+                  "Tag path":"Session Info:Operator",
+                  "Data Type":20,
+                  "Precision":0,
+                  "Label":"Operator"
+                },
+                "2":{
+                  "Tag path":"Session Info:Microscope",
+                  "Data Type":20,
+                  "Precision":0,
+                  "Label":"Microscope",
+                  "Value":"1400plus"
+                }
+              }
+            },
+            "GMS Version":{
+              "Saved":"3.21.1374.0",
+              "Created":"3.21.1374.0"
+            },
+            "DataBar":{
+              "Acquisition Time (OS)":1.31661214205959776E17,
+              "Binning":1,
+              "Exposure Number":10720,
+              "Acquisition Time":"11:57:00 AM",
+              "Collection Number":6,
+              "Exposure Time (s)":1,
+              "Acquisition Date":"3/21/2018",
+              "Device Name":"OneView",
+              "Signal Name":"OneView"
+            },
+            "Microscope Info":{
+              "Illumination Mode":"TEM",
+              "Emission Current (�A)":0,
+              "Stage Position":{
+                "Stage Beta":0,
+                "Stage Z":-17.987630859375,
+                "Stage Alpha":-0.08524005115032196,
+                "Stage X":98.873078125,
+                "Stage Y":225.2194375
+              },
+              "Formatted Indicated Mag":"25kx",
+              "STEM Camera Length":0,
+              "Formatted Actual Mag":"33.2kx",
+              "HT Extrapolated":"false",
+              "Cs(mm)":0,
+              "Magnification Interpolated":"true",
+              "Name":"JEOL COM",
+              "Operation Mode":"IMAGING",
+              "Imaging Mode":"MAG1",
+              "Probe Size (nm)":0,
+              "Actual Magnification":33240.371968932224,
+              "Indicated Magnification":25000,
+              "Voltage":120000,
+              "Formatted Voltage":"120kV",
+              "Operation Mode Type":1,
+              "Probe Current (nA)":0
+            },
+            "Acquisition":{
+              "Frame":{
+                "Area":{
+                  "Transform":{
+                    "Transform List":{
+                      "0":{
+                        "Binning":[
+                          1,
+                          1
+                        ],
+                        "Class Name":"cm_acquisitiontransform",
+                        "Sub Area Adjust":[
+                          0,
+                          0,
+                          0,
+                          0
+                        ],
+                        "Transpose":{
+                          "Diagonal Flip":"false",
+                          "Vertical Flip":"false",
+                          "Horizontal Flip":"true"
+                        }
+                      }
+                    },
+                    "Class Name":"cm_acquisitiontransform_list"
+                  }
+                },
+                "CCD":{
+                  "Pixel Size (um)":[
+                    15,
+                    15
+                  ]
+                },
+                "Intensity":{
+                  "Transform":{
+                    "Transform List":{
+                      "0":{
+                        "Class Name":"cm_valuetransform_affine",
+                        "Scale":1,
+                        "Offset":0
+                      },
+                      "1":{
+                        "Class Name":"cm_valuetransform_adc",
+                        "ADC Max":65535,
+                        "ADC Min":0
+                      }
+                    },
+                    "Class Name":"cm_valuetransform_list"
+                  }
+                },
+                "Reference Images":{
+                  "Dark":{
+                    "Mean (counts)":130.79538156255063,
+                    "Standard Deviation (counts)":68.57993297466311
+                  }
+                }
+              },
+              "Parameters":{
+                "High Level":{
+                  "Acquisition Buffer Size":0,
+                  "Number Of Frame Shutters":1,
+                  "Secondary Shutter Post Exposure Compensation (s)":0,
+                  "Antiblooming":"false",
+                  "Continuous Readout":"false",
+                  "Class Name":"cm_camera_highlevelparameters",
+                  "Shutter":{
+                    "Primary Shutter States Mask":0,
+                    "Secondary Shutter States Mask":0,
+                    "Primary Shutter States":0,
+                    "Shutter Exposure":"false",
+                    "Secondary Shutter States":0,
+                    "Shutter Index":0
+                  },
+                  "Capture Duration":280.00638168800003,
+                  "Quality Level":0,
+                  "Processing":"Gain Normalized",
+                  "Binning":[
+                    1,
+                    1
+                  ],
+                  "Corrections Mask":817,
+                  "Frame Exposure":0.04,
+                  "CCD Read Ports":1,
+                  "Async Readout":0,
+                  "Stack Format":1,
+                  "Lookback Duration":0,
+                  "Shutter Pre Exposure Compensation (s)":0,
+                  "CCD Read Area":[
+                    0,
+                    0,
+                    4096,
+                    4096
+                  ],
+                  "Read Mode":0,
+                  "Read Frame Style":0,
+                  "Exposure (s)":1,
+                  "Shutter Post Exposure Compensation (s)":0,
+                  "Complex Exposure":{
+                    "Sub-Exposure Count":0,
+                    "Frame Count":0
+                  },
+                  "Acquire Stack":"true",
+                  "Exposure Live Time":"Infinity",
+                  "Async Processing":"false",
+                  "HardwareCorrections":0,
+                  "Choose Number Of Frame Shutters Automatically":"true",
+                  "Transform":{
+                    "Diagonal Flip":"false",
+                    "Vertical Flip":"false",
+                    "Horizontal Flip":"false"
+                  },
+                  "Exposure Priority":1,
+                  "Auto Save":"false",
+                  "Corrections":801,
+                  "Secondary Shutter Pre Exposure Compensation (s)":0
+                },
+                "Detector":{
+                  "top":0,
+                  "left":0,
+                  "vbin":1,
+                  "continuous":"false",
+                  "width":4096,
+                  "exposure (s)":1,
+                  "hbin":1,
+                  "height":4096
+                },
+                "Parameter Set Tag Path":"Imaging:Acquire:Record",
+                "Base Detector":{
+                  "Class Name":"cm_namedcameradetectorparameterset",
+                  "Name":"default"
+                },
+                "Version":34013184,
+                "Objects":{
+                  "0":{
+                    "Parameter 1":1,
+                    "Frame Combine Style":"Copy",
+                    "Class Name":"cm_imgproc_finalcombine"
+                  },
+                  "1":{
+                    "View Name":"Frame",
+                    "Screen Relative Position":[
+                      1,
+                      0
+                    ],
+                    "Do Auto Zoom":"false",
+                    "Viewer Class":"acquire",
+                    "Version":34013184,
+                    "Window Relative Position":[
+                      1,
+                      0
+                    ],
+                    "Class Name":"cm_stdviewerimagedisplayer",
+                    "Zoom":1
+                  }
+                },
+                "Parameter Set Name":"Record",
+                "Environment":{
+                  "Mode Name":"Imaging"
+                },
+                "Acquisition Write Flags":-1
+              },
+              "Device":{
+                "Camera Number":0,
+                "Configuration":{
+                  "Transpose":{
+                    "Diagonal Flip":"false",
+                    "Vertical Flip":"false",
+                    "Horizontal Flip":"true"
+                  },
+                  "Location":"high_resolution"
+                },
+                "Temperature (C)":19.99609375,
+                "CCD":{
+                  "Pixel Size (um)":[
+                    15,
+                    15
+                  ]
+                },
+                "Source ID":"OneView-46129640005",
+                "Source Model":"OneView",
+                "Active Size (pixels)":[
+                  4096,
+                  4096
+                ],
+                "Source":"OneView",
+                "Name":"OneView"
+              }
+            }
+          },
+          "Name":"testForClass_0006"
+        }
+      },
+      "ApplicationBounds":[
+        0,
+        0,
+        1626,
+        3011
+      ],
+      "NextDocumentObjectID":11,
+      "Page Behavior":{
+        "RestoreImageDisplayBounds":[
+          0,
+          0,
+          4096,
+          4096
+        ],
+        "PageTransform":{
+          "Scale":[
+            1,
+            1
+          ],
+          "Offset":[
+            0,
+            0
+          ]
+        },
+        "IsZoomedToWindow":"true",
+        "RestoreImageDisplayID":8,
+        "LayedOut":"false",
+        "DrawMargins":"true",
+        "TargetDisplayID":-1,
+        "DrawPaper":"true",
+        "IsFixedInPageMode":"false"
+      },
+      "Image Behavior":{
+        "WindowRect":[
+          0,
+          0,
+          1590,
+          1590
+        ],
+        "IsZoomedToWindow":"true",
+        "ImageDisplayBounds":[
+          0,
+          0,
+          1590,
+          1590
+        ],
+        "UnscaledTransform":{
+          "Scale":[
+            1,
+            1
+          ],
+          "Offset":[
+            0,
+            0
+          ]
+        },
+        "ZoomAndMoveTransform":{
+          "Scale":[
+            1,
+            1
+          ],
+          "Offset":[
+            0,
+            0
+          ]
+        },
+        "ViewDisplayID":8
+      },
+      "ImageSourceList":{
+        "0":{
+          "ImageRef":1,
+          "ClassName":"ImageSource:Simple",
+          "Id":{
+            "0":0
+          }
+        }
+      },
+      "PageSetup":{
+        "Win32":{
+          "Size":60,
+          "Offset":67720571
+        },
+        "Win32_DevModeW":{
+          "Size":1140,
+          "Offset":67720692
+        },
+        "General":[
+          1,
+          1000,
+          8500,
+          11000,
+          1000,
+          1000,
+          -1000,
+          -1000
+        ],
+        "Win32_DevNamesW":{
+          "Size":158,
+          "Offset":67721894
+        }
+      }
+    }
+  },
+  "resourceName":"testForClass_0006.dm4",
+  "Content-Length":67722459,
+  "Content-Type":"application/dm4"
+}
