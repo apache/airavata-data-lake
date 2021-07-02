@@ -75,6 +75,8 @@ public class SharingHandler {
         map.put("tenantId", clientId);
         map.put("entityId", entity.getId());
         map.put("entityType", entity.getType());
+        map.put("lastModifiedTime", entity.getUpdatedAt());
+        map.put("owner", entity.getOwnerId());
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("props", map);
         parameters.put("tenantId", clientId);

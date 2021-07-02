@@ -17,17 +17,18 @@
 package org.apache.airavata.drms.api;
 
 import com.google.protobuf.Struct;
+import com.google.protobuf.util.JsonFormat;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
-import org.apache.airavata.datalake.drms.storage.ParentResourcesFetchRequest;
-import org.apache.airavata.datalake.drms.storage.ResourceServiceGrpc;
-import org.apache.airavata.datalake.drms.storage.StoragePreferenceServiceGrpc;
-import org.apache.airavata.datalake.drms.storage.StorageServiceGrpc;
+import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.identity.management.client.IdentityManagementClient;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,12 +63,15 @@ public class Client {
 //
 
 
-//        StorageSearchRequest storageSearchRequest = StorageSearchRequest
-//                .newBuilder()
-//                .setAuthToken(authToken)
-//                .addQueries(StorageSearchQuery.newBuilder().build())
-//                .build();
-//
+        StorageSearchRequest storageSearchRequest = StorageSearchRequest
+                .newBuilder()
+                .setAuthToken(authToken)
+                .addQueries(StorageSearchQuery.newBuilder()
+                        .setField("type")
+                        .setValue("COLLECTION")
+                        .build())
+                .build();
+
 //        resourceClient.searchStorage(storageSearchRequest);
 
         StoragePreferenceServiceGrpc.StoragePreferenceServiceBlockingStub storagePreferenceServiceBlockingStub = StoragePreferenceServiceGrpc
@@ -150,30 +154,29 @@ public class Client {
 //        System.out.println(authToken.getAccessToken());
 //        ResourceFetchRequest resourceFetchRequest = ResourceFetchRequest.newBuilder()
 //                .setAuthToken(authToken)
-//                .setResourceId("COLLECTION_ONE_6kKQzhIt8zxvIgn")
-//                .setType("COLLECTION")
+//                .setResourceId("custos-whedmgamitu357p4wuke-10002708_29186.69999998808")
 //                .build();
 //
 //        resourceServiceBlockingStub.fetchResource(resourceFetchRequest);
-
-        GenericResource parentResource = GenericResource.newBuilder()
-                .setResourceId("56cec8a2-a2c2-4669-9274-a5b5bdd97c11")
-                .setType("COLLECTION")
-                .build();
-
-        GenericResource childResource = GenericResource.newBuilder()
-                .setResourceId("b75b4cec-8df4-4f99-9d06-818db285cf02")
-                .setType("COLLECTION")
-                .build();
-
-        GenericResource childResource1 = GenericResource.newBuilder()
-                .setResourceId("b7ee2fd5-c4b8-4bb9-896b-4cb98d91ad24")
-                .setType("COLLECTION")
-                .build();
-
-        List<GenericResource> genericResourceList = new ArrayList<>();
-        genericResourceList.add(childResource);
-        genericResourceList.add(childResource1);
+//
+//        GenericResource parentResource = GenericResource.newBuilder()
+//                .setResourceId("56cec8a2-a2c2-4669-9274-a5b5bdd97c11")
+//                .setType("COLLECTION")
+//                .build();
+//
+//        GenericResource childResource = GenericResource.newBuilder()
+//                .setResourceId("b75b4cec-8df4-4f99-9d06-818db285cf02")
+//                .setType("COLLECTION")
+//                .build();
+//
+//        GenericResource childResource1 = GenericResource.newBuilder()
+//                .setResourceId("b7ee2fd5-c4b8-4bb9-896b-4cb98d91ad24")
+//                .setType("COLLECTION")
+//                .build();
+//
+//        List<GenericResource> genericResourceList = new ArrayList<>();
+//        genericResourceList.add(childResource);
+//        genericResourceList.add(childResource1);
 
 //        AddChildResourcesMembershipRequest addChildResourcesMembershipRequest = AddChildResourcesMembershipRequest
 //                .newBuilder()
@@ -192,14 +195,49 @@ public class Client {
 //                .build();
 //        resourceServiceBlockingStub.deleteChildMembership(deleteChildResourcesMembershipRequest);
 
-        ParentResourcesFetchRequest parentResourcesFetchRequest = ParentResourcesFetchRequest
+//        ParentResourcesFetchRequest parentResourcesFetchRequest = ParentResourcesFetchRequest
+//                .newBuilder()
+//                .setAuthToken(authToken)
+//                .setResourceId("FILE_ONE_bxZPopxbnPaAEq5")
+//                .setType("FILE")
+//                .setDepth(2)
+//                .build();
+//        resourceServiceBlockingStub.fetchParentResources(parentResourcesFetchRequest);
+        try {
+            FileInputStream fileInputStream =
+                    new FileInputStream(
+                            "/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake" +
+                                    "/data-resource-management-service/drms-api/src/main/resources/sample.json");
+            JSONTokener tokener = new JSONTokener(fileInputStream);
+            JSONObject root = new JSONObject(tokener);
+//
+            Struct.Builder structBuilder = Struct.newBuilder();
+            JsonFormat.parser().merge(root.toString(), structBuilder);
+
+//            AddResourceMetadataRequest addResourceMetadataRequest = AddResourceMetadataRequest
+//                    .newBuilder()
+//                    .setMetadata(structBuilder.build())
+//                    .setAuthToken(authToken)
+//                    .setResourceId("custos-whedmgamitu357p4wuke-10002708_132068.39999997616")
+//                    .setType("FILE")
+//                    .build();
+//
+//            resourceServiceBlockingStub.addResourceMetadata(addResourceMetadataRequest);
+
+        FetchResourceMetadataRequest addResourceMetadataRequest = FetchResourceMetadataRequest
                 .newBuilder()
                 .setAuthToken(authToken)
-                .setResourceId("FILE_ONE_bxZPopxbnPaAEq5")
+                .setResourceId("custos-whedmgamitu357p4wuke-10002708_132068.39999997616")
                 .setType("FILE")
-                .setDepth(2)
                 .build();
-        resourceServiceBlockingStub.fetchParentResources(parentResourcesFetchRequest);
+
+        resourceServiceBlockingStub.fetchResourceMetadata(addResourceMetadataRequest);
+
+
+
+        } catch (Exception ex) {
+             ex.printStackTrace();
+        }
 
 
     }
@@ -210,11 +248,11 @@ public class Client {
 
             CustosClientProvider custosClientProvider = new CustosClientProvider.Builder().setServerHost("custos.scigap.org")
                     .setServerPort(31499)
-                    .setClientId("custos-cmcdclbywlxmc2ktzv0d-10000702")
-                    .setClientSec("1hBjD0poRNTdxwLzV0baY5mgUlogPalH9jCFz9ZG").build();
+                    .setClientId("custos-whedmgamitu357p4wuke-10002708")
+                    .setClientSec("mrMdl86Ia1H94cikW7CvHoh7L0ASNXQVt2aRzSIj").build();
 
             IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
-            Struct struct = identityManagementClient.getToken(null, null, "testuser", "testuser1234", null, "password");
+            Struct struct = identityManagementClient.getToken(null, null, "isjarana@iu.edu", "IJR@circ@1", null, "password");
             return struct.getFieldsMap().get("access_token").getStringValue();
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -24,115 +24,121 @@ import "google/api/annotations.proto";
 import "Common.proto";
 import "resource/DRMSResource.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
 
 
 message ResourceFetchRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  string resource_id = 2;
-  string type = 3;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string resource_id = 2;
+    string type = 3;
 }
 
 
 message ChildResourceFetchRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  string resource_id = 2;
-  string type = 3;
-  int32 depth = 4;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string resource_id = 2;
+    string type = 3;
+    int32 depth = 4;
 }
 
 message ChildResourceFetchResponse {
-  repeated org.apache.airavata.datalake.drms.resource.GenericResource resources = 1;
+    repeated org.apache.airavata.datalake.drms.resource.GenericResource resources = 1;
 }
 
 message ResourceFetchResponse {
-  org.apache.airavata.datalake.drms.resource.GenericResource resource = 1;
+    org.apache.airavata.datalake.drms.resource.GenericResource resource = 1;
 }
 
 message ResourceCreateRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  org.apache.airavata.datalake.drms.resource.GenericResource resource = 2;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    org.apache.airavata.datalake.drms.resource.GenericResource resource = 2;
 }
 
 message ResourceCreateResponse {
-  org.apache.airavata.datalake.drms.resource.GenericResource resource = 1;
+    org.apache.airavata.datalake.drms.resource.GenericResource resource = 1;
 }
 
 message ResourceUpdateRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  string resourceId = 2;
-  org.apache.airavata.datalake.drms.resource.GenericResource resource = 3;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string resourceId = 2;
+    org.apache.airavata.datalake.drms.resource.GenericResource resource = 3;
 }
 
 message ResourceUpdateResponse {
-  org.apache.airavata.datalake.drms.resource.GenericResource resource = 1;
+    org.apache.airavata.datalake.drms.resource.GenericResource resource = 1;
 }
 
 message ResourceDeleteRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  string resourceId = 2;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string resourceId = 2;
 }
 
 message ResourceSearchQuery {
-  string field = 1;
-  string value = 2;
-  string options = 3; // LIKE, NOT, EQUALS, GREATER, LESS
+    string field = 1;
+    string value = 2;
+    string options = 3; // LIKE, NOT, EQUALS, GREATER, LESS
 }
 
 message ResourceSearchRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  repeated ResourceSearchQuery queries = 2;
-  int32 depth = 4;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    repeated ResourceSearchQuery queries = 2;
+    int32 depth = 4;
+    string type = 5;
 }
 
 message ResourceSearchResponse {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  repeated org.apache.airavata.datalake.drms.resource.GenericResource resources = 2;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    repeated org.apache.airavata.datalake.drms.resource.GenericResource resources = 2;
 }
 
 message Metadata {
-  string key = 1;
-  string value = 2;
+    string key = 1;
+    string value = 2;
 }
 
 message AddResourceMetadataRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  string resourceId = 2;
-  Metadata metadata = 3;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string resourceId = 2;
+    string type = 3;
+    google.protobuf.Struct metadata = 4;
+
 }
 
 message FetchResourceMetadataRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  string resourceId = 2;
-}
-
-message MetadataNode {
-  repeated Metadata metadata = 1;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string resourceId = 2;
+    string type = 3;
 }
 
 message FetchResourceMetadataResponse {
-  MetadataNode metadataNode = 1;
-}
-
-
-message AddChildResourcesMembershipRequest{
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  org.apache.airavata.datalake.drms.resource.GenericResource parent_resource = 2;
-  repeated org.apache.airavata.datalake.drms.resource.GenericResource child_resources = 3;
+    repeated google.protobuf.Struct metadata = 1;
 
 }
 
-message DeleteChildResourcesMembershipRequest{
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  org.apache.airavata.datalake.drms.resource.GenericResource parent_resource = 2;
-  repeated org.apache.airavata.datalake.drms.resource.GenericResource child_resources = 3;
+message MetadataNode {
+    repeated Metadata metadata = 1;
 }
 
 
-message ParentResourcesFetchRequest{
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  string resource_id = 2;
-  string type =3;
-  int32 depth =4;
+message AddChildResourcesMembershipRequest {
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    org.apache.airavata.datalake.drms.resource.GenericResource parent_resource = 2;
+    repeated org.apache.airavata.datalake.drms.resource.GenericResource child_resources = 3;
+
+}
+
+message DeleteChildResourcesMembershipRequest {
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    org.apache.airavata.datalake.drms.resource.GenericResource parent_resource = 2;
+    repeated org.apache.airavata.datalake.drms.resource.GenericResource child_resources = 3;
+}
+
+
+message ParentResourcesFetchRequest {
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string resource_id = 2;
+    string type = 3;
+    int32 depth = 4;
 
 }
 
@@ -140,77 +146,83 @@ message ParentResourcesFetchResponse {
     map<string, org.apache.airavata.datalake.drms.resource.GenericResource> properties = 1;
 }
 
-message OperationStatusResponse{
-  bool status = 1;
+message OperationStatusResponse {
+    bool status = 1;
 }
 
 
 service ResourceService {
 
-  rpc fetchResource (ResourceFetchRequest) returns (ResourceFetchResponse) {
-    option (google.api.http) = {
+    rpc fetchResource (ResourceFetchRequest) returns (ResourceFetchResponse) {
+        option (google.api.http) = {
       get: "/v1.0/api/drms/resource"
     };
-  }
+    }
 
-  rpc createResource (ResourceCreateRequest) returns (ResourceCreateResponse) {
-    option (google.api.http) = {
+    rpc createResource (ResourceCreateRequest) returns (ResourceCreateResponse) {
+        option (google.api.http) = {
       post: "/v1.0/api/drms/resource"
     };
-  }
+    }
 
-  rpc updateResource (ResourceUpdateRequest) returns (ResourceUpdateResponse) {
-    option (google.api.http) = {
+    rpc updateResource (ResourceUpdateRequest) returns (ResourceUpdateResponse) {
+        option (google.api.http) = {
       put: "/v1.0/api/drms/resource"
     };
-  }
+    }
 
-  rpc deletePreferenceStorage (ResourceDeleteRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
+    rpc deletePreferenceStorage (ResourceDeleteRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
       delete: "/v1.0/api/drms/resource"
     };
-  }
+    }
 
-  rpc searchResource (ResourceSearchRequest) returns (ResourceSearchResponse) {
-    option (google.api.http) = {
+    rpc searchResource (ResourceSearchRequest) returns (ResourceSearchResponse) {
+        option (google.api.http) = {
       post: "/v1.0/api/drms/resource/searchResource"
     };
-  }
+    }
 
-  rpc fetchChildResources (ChildResourceFetchRequest) returns (ChildResourceFetchResponse) {
-    option (google.api.http) = {
+    rpc fetchChildResources (ChildResourceFetchRequest) returns (ChildResourceFetchResponse) {
+        option (google.api.http) = {
       get: "/v1.0/api/drms/resource/child"
     };
-  }
+    }
 
 
-  rpc fetchParentResources (ParentResourcesFetchRequest) returns (ParentResourcesFetchResponse) {
-      option (google.api.http) = {
+    rpc fetchParentResources (ParentResourcesFetchRequest) returns (ParentResourcesFetchResponse) {
+        option (google.api.http) = {
       get: "/v1.0/api/drms/resource/parent"
     };
-  }
+    }
 
-  rpc addChildMembership (AddChildResourcesMembershipRequest) returns (OperationStatusResponse) {
-    option (google.api.http) = {
+    rpc addChildMembership (AddChildResourcesMembershipRequest) returns (OperationStatusResponse) {
+        option (google.api.http) = {
       post: "/v1.0/api/drms/resource/child"
     };
-  }
+    }
 
-  rpc deleteChildMembership (DeleteChildResourcesMembershipRequest) returns (OperationStatusResponse) {
-    option (google.api.http) = {
+    rpc deleteChildMembership (DeleteChildResourcesMembershipRequest) returns (OperationStatusResponse) {
+        option (google.api.http) = {
       delete: "/v1.0/api/drms/resource/child"
     };
-  }
+    }
 
-  rpc addResourceMetadata (AddResourceMetadataRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
+    rpc addResourceMetadata (AddResourceMetadataRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
       post: "/v1.0/api/drms/resource/metadata"
     };
-  }
+    }
 
-  rpc fetchResourceMetadata (FetchResourceMetadataRequest) returns (FetchResourceMetadataResponse) {
-    option (google.api.http) = {
+    rpc fetchResourceMetadata (FetchResourceMetadataRequest) returns (FetchResourceMetadataResponse) {
+        option (google.api.http) = {
       get: "/v1.0/api/drms/resource/metadata"
     };
-  }
+    }
+
+    rpc SearchResourceThroughMetadata (FetchResourceMetadataRequest) returns (FetchResourceMetadataResponse) {
+        option (google.api.http) = {
+      get: "/v1.0/api/drms/resource/metadata"
+    };
+    }
 }
