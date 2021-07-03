@@ -6,12 +6,12 @@ dataResourceManagementService:
 custos:
   host: "custos.scigap.org"
   port: 31499
-  custosId: "custos-cmcdclbywlxmc2ktzv0d-10000702"
-  custosSec: "1hBjD0poRNTdxwLzV0baY5mgUlogPalH9jCFz9ZG"
+  custosId: "custos-whedmgamitu357p4wuke-10002708"
+  custosSec: "mrMdl86Ia1H94cikW7CvHoh7L0ASNXQVt2aRzSIj"
   custosBrokerURL: "149.165.156.200:9092"
   consumerGroup: "custosEventsGroup"
   maxPollRecordsConfig: 10
   topics:
-    - "10000702-1df2a477-18d4-47e9-a1c9-27020d0d1946"
+    - "10002708-754b89b5-3a57-496c-aa34-8e2b4916fbc"
   tenantsToBeSynced:
-    - "custos-cmcdclbywlxmc2ktzv0d-10000702"
+    - "custos-whedmgamitu357p4wuke-10002708"

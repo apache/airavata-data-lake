@@ -18,7 +18,6 @@
 package org.apache.airavata.drms.core.deserializer;
 
 import org.apache.airavata.datalake.drms.resource.GenericResource;
-import org.apache.airavata.datalake.drms.storage.AnyStoragePreference;
 import org.apache.commons.collections.map.HashedMap;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Value;
@@ -29,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,29 +46,12 @@ public class GenericResourceDeserializer {
                 Map<Long, Node> longNodeMap = values.stream().filter(val ->
                         val.toString().equals("NULL") ? false : true
                 ).collect(Collectors.toMap(val -> val.asNode().id(),
-                        Value::asNode,(existing, replacement) -> existing));
+                        Value::asNode, (existing, replacement) -> existing));
                 nodeMap.putAll(longNodeMap);
             }
         }
 
         return deriveGenericResourceFromMap(nodeMap);
-    }
-
-    public static GenericResource deriveGenericResourceFromMap(Map<String, Object> fixedMap,
-                                                               AnyStoragePreference preference) throws Exception {
-
-        GenericResource.Builder genericResourceBuilder = GenericResource.newBuilder();
-        setObjectFieldsUsingMap(genericResourceBuilder, fixedMap);
-        switch (preference.getStorageCase()) {
-            case S3STORAGEPREFERENCE:
-                genericResourceBuilder.setS3Preference(preference.getS3StoragePreference());
-                break;
-            case SSHSTORAGEPREFERENCE:
-                genericResourceBuilder.setSshPreference(preference.getSshStoragePreference());
-                break;
-        }
-
-        return genericResourceBuilder.build();
     }
 
     public static List<GenericResource> deriveGenericResourceFromMap(Map<Long, Node> nodeMap) throws Exception {
@@ -82,7 +63,7 @@ public class GenericResourceDeserializer {
             }
             for (String field : node.asMap().keySet()) {
                 genericResourceBuilder.putProperties(field, String.valueOf(node.asMap().get(field)));
-                if (field.equals("entityId")){
+                if (field.equals("entityId")) {
                     genericResourceBuilder.setResourceId(String.valueOf(node.asMap().get(field)));
                 }
             }

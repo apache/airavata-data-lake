@@ -24,12 +24,12 @@ import "google/api/annotations.proto";
 import "storage/S3Storage.proto";
 
 message S3StoragePreference {
-    string storagePreferenceId = 1;
-    string credentialToken = 2;
+    string storage_preference_id = 1;
+    string credential_token = 2;
     /*enum AuthType {
         CLIENT_ID_SECRET_ID = 0;
         OPEN = 2;
     }*/
-    string authType = 3;
+    string auth_type = 3;
     org.apache.airavata.datalake.drms.storage.s3.S3Storage storage = 4;
 }

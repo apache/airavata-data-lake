@@ -16,12 +16,12 @@ public class AnyStoragePreferenceSerializer {
         Map<String, Object> fields = new HashMap<>();
         Map<Descriptors.FieldDescriptor, Object> allFields = null;
         switch (anyStorage.getStorageCase()) {
-            case SSHSTORAGEPREFERENCE:
+            case SSH_STORAGE_PREFERENCE:
                 SSHStoragePreference sshStorage = anyStorage.getSshStoragePreference();
                 allFields = sshStorage.getAllFields();
                 fields.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL, StoragePreferenceConstants.SSH_STORAGE_PREFERENCE_TYPE_LABEL);
                 break;
-            case S3STORAGEPREFERENCE:
+            case S3_STORAGE_PREFERENCE:
                 S3StoragePreference s3Storage = anyStorage.getS3StoragePreference();
                 allFields = s3Storage.getAllFields();
                 fields.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL, StoragePreferenceConstants.S3_STORAGE_PREFERENCE_TYPE_LABEL);

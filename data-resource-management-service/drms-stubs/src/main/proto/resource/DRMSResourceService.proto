@@ -60,7 +60,7 @@ message ResourceCreateResponse {
 
 message ResourceUpdateRequest {
     org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-    string resourceId = 2;
+    string resource_id = 2;
     org.apache.airavata.datalake.drms.resource.GenericResource resource = 3;
 }
 
@@ -70,7 +70,7 @@ message ResourceUpdateResponse {
 
 message ResourceDeleteRequest {
     org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-    string resourceId = 2;
+    string resource_id = 2;
 }
 
 message ResourceSearchQuery {
@@ -106,7 +106,7 @@ message AddResourceMetadataRequest {
 
 message FetchResourceMetadataRequest {
     org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-    string resourceId = 2;
+    string resource_id = 2;
     string type = 3;
 }
 
@@ -220,9 +220,4 @@ service ResourceService {
     };
     }
 
-    rpc SearchResourceThroughMetadata (FetchResourceMetadataRequest) returns (FetchResourceMetadataResponse) {
-        option (google.api.http) = {
-      get: "/v1.0/api/drms/resource/metadata"
-    };
-    }
 }

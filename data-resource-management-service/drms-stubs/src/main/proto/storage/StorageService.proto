@@ -28,13 +28,13 @@ import "google/protobuf/empty.proto";
 
 message AnyStorage {
   oneof storage {
-    org.apache.airavata.datalake.drms.storage.ssh.SSHStorage sshStorage = 1;
-    org.apache.airavata.datalake.drms.storage.s3.S3Storage s3Storage = 2;
+    org.apache.airavata.datalake.drms.storage.ssh.SSHStorage ssh_storage = 1;
+    org.apache.airavata.datalake.drms.storage.s3.S3Storage s3_storage = 2;
   }
 }
 message StorageFetchRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
-  string storageId = 2;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  string storage_id = 2;
 }
 
 message StorageFetchResponse {
@@ -42,7 +42,7 @@ message StorageFetchResponse {
 }
 
 message StorageCreateRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
   AnyStorage storage = 2;
 }
 
@@ -51,8 +51,8 @@ message StorageCreateResponse {
 }
 
 message StorageUpdateRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
-  string storageId = 2;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  string storage_id = 2;
   AnyStorage storage = 3;
 }
 
@@ -61,8 +61,8 @@ message StorageUpdateResponse {
 }
 
 message StorageDeleteRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
-  string storageId = 2;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  string storage_id = 2;
 }
 
 message StorageSearchQuery {
@@ -72,18 +72,18 @@ message StorageSearchQuery {
 }
 
 message StorageSearchRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
   repeated StorageSearchQuery queries = 2;
 }
 
 message StorageSearchResponse {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
   repeated AnyStorage storages = 2;
 }
 
 message AddStorageMetadataRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
-  string storageId = 2;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  string storage_id = 2;
   string key = 3;
   string value = 4;
 }

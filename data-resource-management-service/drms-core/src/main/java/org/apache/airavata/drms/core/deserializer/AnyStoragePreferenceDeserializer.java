@@ -24,10 +24,8 @@ import org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePrefer
 import org.apache.airavata.drms.core.constants.StorageConstants;
 import org.apache.airavata.drms.core.constants.StoragePreferenceConstants;
 import org.neo4j.driver.Record;
-import org.neo4j.driver.Value;
 import org.neo4j.driver.internal.InternalNode;
 import org.neo4j.driver.internal.InternalRecord;
-import org.neo4j.driver.types.Node;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
@@ -111,7 +109,7 @@ public class AnyStoragePreferenceDeserializer {
             BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(target);
             try {
                 beanWrapper.setPropertyValue(field, values.get(field));
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 continue;
             }
         }

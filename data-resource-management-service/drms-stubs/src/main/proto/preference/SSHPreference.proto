@@ -24,14 +24,14 @@ import "google/api/annotations.proto";
 import "storage/SSHStorage.proto";
 
 message SSHStoragePreference {
-  string storagePreferenceId = 1;
-  string credentialToken = 2;
-  string userName = 3;
+  string storage_preference_id = 1;
+  string credential_token = 2;
+  string user_name = 3;
   /*enum AuthType {
     SSH_KEY = 0;
     PASSWORD = 1;
     OPEN = 2;
   }*/
-  string authType = 4;
+  string auth_type = 4;
   org.apache.airavata.datalake.drms.storage.ssh.SSHStorage storage = 5;
 }
