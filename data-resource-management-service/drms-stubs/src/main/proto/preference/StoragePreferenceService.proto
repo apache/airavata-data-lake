@@ -28,41 +28,41 @@ import "google/protobuf/empty.proto";
 
 message AnyStoragePreference {
   oneof storage {
-    org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference sshStoragePreference = 1;
-    org.apache.airavata.datalake.drms.storage.preference.s3.S3StoragePreference s3StoragePreference = 2;
+    org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference ssh_storage_preference = 1;
+    org.apache.airavata.datalake.drms.storage.preference.s3.S3StoragePreference s3_storage_preference = 2;
   }
 }
 message StoragePreferenceFetchRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
-  string storagePreferenceId = 2;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  string storage_preference_id = 2;
 }
 
 message StoragePreferenceFetchResponse {
-  AnyStoragePreference storagePreference = 1;
+  AnyStoragePreference storage_preference = 1;
 }
 
 message StoragePreferenceCreateRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
-  AnyStoragePreference storagePreference = 2;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  AnyStoragePreference storage_preference = 2;
 }
 
 message StoragePreferenceCreateResponse {
-  AnyStoragePreference storagePreference = 1;
+  AnyStoragePreference storage_preference = 1;
 }
 
 message StoragePreferenceUpdateRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
-  string storagePreferenceId = 2;
-  AnyStoragePreference storagePreference = 3;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  string storage_preference_id = 2;
+  AnyStoragePreference storage_preference = 3;
 }
 
 message StoragePreferenceUpdateResponse {
-  AnyStoragePreference storagePreference = 1;
+  AnyStoragePreference storage_preference = 1;
 }
 
 message StoragePreferenceDeleteRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
-  string storagePreferenceId = 2;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  string storage_preference_id = 2;
 }
 
 message StoragePreferenceSearchQuery {
@@ -72,13 +72,13 @@ message StoragePreferenceSearchQuery {
 }
 
 message StoragePreferenceSearchRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
   repeated StoragePreferenceSearchQuery queries = 2;
 }
 
 message StoragePreferenceSearchResponse {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken authToken = 1;
-  repeated AnyStoragePreference storagesPreference = 2;
+  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+  repeated AnyStoragePreference storages_preference = 2;
 }
 
 service StoragePreferenceService {

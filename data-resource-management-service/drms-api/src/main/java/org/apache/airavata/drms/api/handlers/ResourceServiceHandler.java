@@ -124,10 +124,10 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             String storagePreferenceId = "";
 
             if (request.getResource().getStoragePreferenceCase().name()
-                    .equals(AnyStoragePreference.StorageCase.S3STORAGEPREFERENCE)) {
+                    .equals(AnyStoragePreference.StorageCase.S3_STORAGE_PREFERENCE)) {
                 storagePreferenceId = request.getResource().getS3Preference().getStoragePreferenceId();
             } else if (request.getResource().getStoragePreferenceCase().name()
-                    .equals(AnyStoragePreference.StorageCase.SSHSTORAGEPREFERENCE)) {
+                    .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
                 storagePreferenceId = request.getResource().getSshPreference().getStoragePreferenceId();
             }
 
@@ -145,7 +145,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 serializedMap.put("tenantId", callUser.getTenantId());
                 serializedMap.put("entityId", exEntity.get().getId());
                 serializedMap.put("entityType", exEntity.get().getType());
-                serializedMap.put("lastUpdatedTime", exEntity.get().getCreatedAt());
+                serializedMap.put("lastModifiedTime", exEntity.get().getCreatedAt());
                 serializedMap.put("owner", exEntity.get().getOwnerId());
 
 

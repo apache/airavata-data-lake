@@ -112,14 +112,13 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
             serializedMap.remove("storage");
             String storageId = null;
             Map<String, Object> parentPropertiesMap = null;
-            if (storage.getStorageCase().name()
-                    .equals(AnyStoragePreference.StorageCase.S3STORAGEPREFERENCE)) {
+            if (storage.getStorageCase().equals(AnyStoragePreference.StorageCase.S3_STORAGE_PREFERENCE)) {
                 storageId = storage.getS3StoragePreference().getStorage().getStorageId();
                 parentPropertiesMap = AnyStorageSerializer.serializeToMap(AnyStorage
                         .newBuilder().setS3Storage(storage.getS3StoragePreference().getStorage()).build());
 
             } else if (storage.getStorageCase()
-                    .equals(AnyStoragePreference.StorageCase.SSHSTORAGEPREFERENCE)) {
+                    .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
 
                 storageId = storage.getSshStoragePreference().getStorage().getStorageId();
                 parentPropertiesMap = AnyStorageSerializer.serializeToMap(AnyStorage
@@ -156,13 +155,13 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
             String storageId = null;
             Map<String, Object> parentPropertiesMap = null;
             if (storage.getStorageCase().name()
-                    .equals(AnyStoragePreference.StorageCase.S3STORAGEPREFERENCE)) {
+                    .equals(AnyStoragePreference.StorageCase.S3_STORAGE_PREFERENCE)) {
                 storageId = storage.getS3StoragePreference().getStorage().getStorageId();
                 parentPropertiesMap = AnyStorageSerializer.serializeToMap(AnyStorage
                         .newBuilder().setS3Storage(storage.getS3StoragePreference().getStorage()).build());
 
             } else if (storage.getStorageCase()
-                    .equals(AnyStoragePreference.StorageCase.SSHSTORAGEPREFERENCE)) {
+                    .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
 
                 storageId = storage.getSshStoragePreference().getStorage().getStorageId();
                 parentPropertiesMap = AnyStorageSerializer.serializeToMap(AnyStorage

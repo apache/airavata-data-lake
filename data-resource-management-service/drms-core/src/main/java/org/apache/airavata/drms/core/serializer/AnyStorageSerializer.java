@@ -32,12 +32,12 @@ public class AnyStorageSerializer {
         Map<String, Object> fields = new HashMap<>();
         Map<Descriptors.FieldDescriptor, Object> allFields = null;
         switch (anyStorage.getStorageCase()) {
-            case SSHSTORAGE:
+            case SSH_STORAGE:
                 SSHStorage sshStorage = anyStorage.getSshStorage();
                 allFields = sshStorage.getAllFields();
                 fields.put(StorageConstants.STORAGE_TYPE_LABEL, StorageConstants.SSH_STORAGE_TYPE_LABEL);
                 break;
-            case S3STORAGE:
+            case S3_STORAGE:
                 S3Storage s3Storage = anyStorage.getS3Storage();
                 allFields = s3Storage.getAllFields();
                 fields.put(StorageConstants.STORAGE_TYPE_LABEL, StorageConstants.S3_STORAGE_TYPE_LABEL);

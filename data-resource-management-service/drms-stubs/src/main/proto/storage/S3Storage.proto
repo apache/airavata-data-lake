@@ -23,7 +23,7 @@ package org.apache.airavata.datalake.drms.storage.s3;
 import "google/api/annotations.proto";
 
 message S3Storage {
-    string storageId = 1;
-    string bucketName = 2;
+    string storage_id = 1;
+    string bucket_name = 2;
     string region = 3;
 }

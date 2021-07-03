@@ -26,14 +26,14 @@ static_resources:
                   - name: envoy.grpc_json_transcoder
                     config:
                       proto_descriptor: "/data/drms.pb"
-                      services: ["org.apache.airavata.datalake.drms.groups.GroupService", "org.apache.airavata.datalake.drms.storage.StoragePreferenceService",
+                      services: ["org.apache.airavata.datalake.drms.storage.StoragePreferenceService",
                                  "org.apache.airavata.datalake.drms.storage.ResourceService","org.apache.airavata.datalake.drms.storage.StorageService"]
                       convert_grpc_status: true
                       print_options:
                         add_whitespace: true
                         always_print_primitive_fields: true
                         always_print_enums_as_ints: false
-                        preserve_proto_field_names: true
+                        preserve_proto_field_names: false
                   - name: envoy.router
   clusters:
     - name: grpc-backend-services
