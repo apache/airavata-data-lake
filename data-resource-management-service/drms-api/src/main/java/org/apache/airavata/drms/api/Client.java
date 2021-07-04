@@ -20,6 +20,8 @@ import com.google.protobuf.Struct;
 import com.google.protobuf.util.JsonFormat;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import org.apache.airavata.datalake.drms.AuthCredentialType;
+import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.*;
@@ -29,8 +31,9 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.UUID;
 
 public class Client {
     public static void main(String ar[]) {
@@ -50,7 +53,7 @@ public class Client {
         DRMSServiceAuthToken authToken = DRMSServiceAuthToken.newBuilder().
                 setAccessToken(token).build();
 
-//
+
 //        StorageCreateRequest request = StorageCreateRequest.newBuilder().setAuthToken(authToken).
 //                setStorage(AnyStorage.newBuilder().setSshStorage(SSHStorage.newBuilder()
 //                        .setStorageId("qwerft-rftgyhu-oplmnj")
@@ -60,7 +63,6 @@ public class Client {
 //                        .build()).
 //                build();
 //        resourceClient.createStorage(request);
-//
 
 
         StorageSearchRequest storageSearchRequest = StorageSearchRequest
@@ -135,20 +137,27 @@ public class Client {
 //
 //        resourceServiceBlockingStub.fetchChildResources(childResourceFetchRequest);
 
-//        String id = UUID.randomUUID().toString();
-//
-//        GenericResource genericResource = GenericResource
-//                .newBuilder()
-//                .setResourceId(id)
-//                .setType("COLLECTION")
-//                .setResourceName("COLLECTION_SDK_TEST_TWO")
+        String id = UUID.randomUUID().toString();
+
+        GenericResource genericResource = GenericResource
+                .newBuilder()
+                .setResourceId(id)
+                .setType("COLLECTION")
+                .setResourceName("COLLECTION_SDK_TEST_TWO")
+                .build();
+
+
+//        DRMSServiceAuthToken drmsServiceAuthToken = DRMSServiceAuthToken.newBuilder()
+//                .setAccessToken(getServiceAccountToken())
+//                .setAuthenticatedUser(AuthenticatedUser.newBuilder().setUsername("isjarana@iu.edu")
+//                        .setTenantId("custos-whedmgamitu357p4wuke-10002708"))
+//                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
 //                .build();
-//
-//        ResourceCreateRequest resourceCreateRequest = ResourceCreateRequest.newBuilder()
-//                .setAuthToken(authToken)
-//                .setResource(genericResource)
-//                .build();
-//        resourceServiceBlockingStub.createResource(resourceCreateRequest);
+        ResourceCreateRequest resourceCreateRequest = ResourceCreateRequest.newBuilder()
+                .setAuthToken(authToken)
+                .setResource(genericResource)
+                .build();
+        resourceServiceBlockingStub.createResource(resourceCreateRequest);
 
 
 //        System.out.println(authToken.getAccessToken());
@@ -224,19 +233,18 @@ public class Client {
 //
 //            resourceServiceBlockingStub.addResourceMetadata(addResourceMetadataRequest);
 
-        FetchResourceMetadataRequest addResourceMetadataRequest = FetchResourceMetadataRequest
-                .newBuilder()
-                .setAuthToken(authToken)
-                .setResourceId("custos-whedmgamitu357p4wuke-10002708_132068.39999997616")
-                .setType("FILE")
-                .build();
-
-        resourceServiceBlockingStub.fetchResourceMetadata(addResourceMetadataRequest);
-
+//        FetchResourceMetadataRequest addResourceMetadataRequest = FetchResourceMetadataRequest
+//                .newBuilder()
+//                .setAuthToken(authToken)
+//                .setResourceId("custos-whedmgamitu357p4wuke-10002708_132068.39999997616")
+//                .setType("FILE")
+//                .build();
+//
+//        resourceServiceBlockingStub.fetchResourceMetadata(addResourceMetadataRequest);
 
 
         } catch (Exception ex) {
-             ex.printStackTrace();
+            ex.printStackTrace();
         }
 
 
@@ -254,6 +262,17 @@ public class Client {
             IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
             Struct struct = identityManagementClient.getToken(null, null, "isjarana@iu.edu", "IJR@circ@1", null, "password");
             return struct.getFieldsMap().get("access_token").getStringValue();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    private static String getServiceAccountToken() {
+        try {
+
+            return Base64.getEncoder().encodeToString(("file-listener-service-account" + ":" + "yyvQs3bKk2xp6W9YwuRQO3PvZrXruwRh0e0nR5kR")
+                    .getBytes(StandardCharsets.UTF_8));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
