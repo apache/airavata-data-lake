@@ -10,11 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
@@ -163,11 +161,12 @@ public class FileWatcher implements Runnable {
         }
         event.setResourceName(file.getName());
         event.setResourcePath(file.getAbsolutePath());
-        event.setHost(configuration.getFileServerHost());
-        event.setPort(configuration.getFileServerPort());
-        event.setProtocol(configuration.getFileServerProtocol());
         NotificationEvent.Context context = new NotificationEvent.Context();
         context.setOccuredTime(System.currentTimeMillis());
+        context.setAuthToken(Base64.getEncoder().encodeToString((configuration.getCustos().getServiceAccountId()
+                + ":" + configuration.getCustos().getServiceAccountSecret()).getBytes(StandardCharsets.UTF_8)));
+        context.setTenantId(configuration.getCustos().getTenantId());
+        context.setStoragePreferenceId(configuration.getStoragePreferenceId());
         event.setContext(context);
         return event;
     }
@@ -181,7 +180,6 @@ public class FileWatcher implements Runnable {
         }
 
         LOGGER.info("registering path: " + path);
-
 
         WatchKey key = path.register(watchService,
                 StandardWatchEventKinds.ENTRY_CREATE,

@@ -23,12 +23,13 @@ public class NotificationEventDeserializer implements Deserializer<NotificationE
         event.setId(parts[0]);
         context.setEvent(MessagingEvents.valueOf(parts[1]));
         context.setOccuredTime(Long.valueOf(parts[2]));
-        event.setHost(parts[3]);
-        event.setPort(Integer.parseInt(parts[4]));
-        event.setProtocol(parts[5]);
-        event.setResourcePath(parts[6]);
-        event.setResourceType(parts[7]);
-        event.setResourceName(parts[8]);
+        context.setAuthToken(String.valueOf(parts[3]));
+        context.setTenantId(String.valueOf(parts[4]));
+        context.setStoragePreferenceId(parts[5]);
+        context.setBasePath(parts[6]);
+        event.setResourcePath(parts[7]);
+        event.setResourceType(parts[8]);
+        event.setResourceName(parts[9]);
         event.setContext(context);
         return event;
     }
