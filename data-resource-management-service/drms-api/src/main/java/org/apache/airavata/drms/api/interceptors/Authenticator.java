@@ -3,18 +3,23 @@ package org.apache.airavata.drms.api.interceptors;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
+import com.google.protobuf.Struct;
 import io.grpc.Metadata;
+import org.apache.airavata.datalake.drms.AuthCredentialType;
 import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.custos.clients.CustosClientProvider;
+import org.apache.custos.iam.service.UserRepresentation;
 import org.apache.custos.identity.management.client.IdentityManagementClient;
 import org.apache.custos.identity.service.User;
+import org.apache.custos.user.management.client.UserManagementClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Optional;
 
 @Component
@@ -27,32 +32,15 @@ public class Authenticator implements ServiceInterceptor {
 
     @Override
     public <ReqT> ReqT intercept(String method, Metadata headers, ReqT msg) throws IOException {
-        IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
-        Optional<String> token = getAccessToken(msg, headers);
-        User user = identityManagementClient.getUser(token.get());
-        AuthenticatedUser authenticatedUser = AuthenticatedUser.newBuilder()
-                .setUsername(user.getUsername())
-                .setFirstName(user.getFirstName())
-                .setLastName(user.getLastName())
-                .setEmailAddress(user.getEmailAddress())
-                .setTenantId(user.getClientId())
-                .build();
-        return (ReqT) setAuthenticatedUser(msg, authenticatedUser);
-
-    }
-
-
-    private Optional<String> getAccessToken(Object msg, Metadata headers) {
-        Optional<String> tokenHeaders = getTokenFromHeader(headers);
-        if (tokenHeaders.isEmpty()) {
-            Descriptors.FieldDescriptor fieldDescriptor =
-                    ((com.google.protobuf.GeneratedMessageV3) msg).getDescriptorForType().findFieldByName("auth_token");
-            Object value = ((com.google.protobuf.GeneratedMessageV3) msg).getField(fieldDescriptor);
-            DRMSServiceAuthToken drmsServiceAuthToken = (DRMSServiceAuthToken) value;
-            return Optional.ofNullable(drmsServiceAuthToken.getAccessToken());
+        Optional<AuthenticatedUser> authenticatorOptional = getAuthenticatedUser(msg, headers);
+        if (authenticatorOptional.isPresent()) {
+            return (ReqT) setAuthenticatedUser(msg, authenticatorOptional.get());
+        } else {
+            throw new RuntimeException("Unauthenticated user");
         }
-        return Optional.ofNullable(tokenHeaders.get());
+
     }
+
 
     private Object setAuthenticatedUser(Object msg, AuthenticatedUser user) {
 
@@ -79,4 +67,61 @@ public class Authenticator implements ServiceInterceptor {
         return Optional.ofNullable(token.trim());
     }
 
+    public Optional<AuthenticatedUser> getAuthenticatedUser(Object msg, Metadata headers) throws IOException {
+        IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
+        UserManagementClient userManagementClient = custosClientProvider.getUserManagementClient();
+        Optional<String> tokenHeaders = getTokenFromHeader(headers);
+        if (tokenHeaders.isEmpty()) {
+            //Assume java client is used
+            Descriptors.FieldDescriptor fieldDescriptor =
+                    ((com.google.protobuf.GeneratedMessageV3) msg).getDescriptorForType().findFieldByName("auth_token");
+            Object value = ((com.google.protobuf.GeneratedMessageV3) msg).getField(fieldDescriptor);
+            DRMSServiceAuthToken drmsServiceAuthToken = (DRMSServiceAuthToken) value;
+            if (drmsServiceAuthToken.getAuthCredentialType().equals(AuthCredentialType.UNKNOWN) ||
+                    drmsServiceAuthToken.getAuthCredentialType().equals(AuthCredentialType.USER_CREDENTIAL)) {
+                String accessToken = drmsServiceAuthToken.getAccessToken();
+                User user = identityManagementClient.getUser(accessToken);
+                return Optional.ofNullable(AuthenticatedUser.newBuilder()
+                        .setUsername(user.getUsername())
+                        .setFirstName(user.getFirstName())
+                        .setLastName(user.getLastName())
+                        .setEmailAddress(user.getEmailAddress())
+                        .setTenantId(user.getClientId())
+                        .build());
+            } else if (drmsServiceAuthToken.getAuthCredentialType()
+                    .equals(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)) {
+                //Agents use service account to get access token
+                String accessToken = drmsServiceAuthToken.getAccessToken();
+                String decoded = new String(Base64.getDecoder().decode(accessToken));
+                String[] array = decoded.split(":");
+                String agentClientId = array[0];
+                String agentClientSec = array[1];
+                String username = drmsServiceAuthToken.getAuthenticatedUser().getUsername();
+                String tenantId = drmsServiceAuthToken.getAuthenticatedUser().getTenantId();
+                Struct struct = identityManagementClient
+                        .getAgentToken(tenantId, agentClientId, agentClientSec, "client_credentials", "");
+                if (struct.getFieldsMap().get("access_token").isInitialized()) {
+                    UserRepresentation user = userManagementClient.getUser(username, tenantId);
+                    return Optional.ofNullable(AuthenticatedUser.newBuilder()
+                            .setUsername(user.getUsername())
+                            .setFirstName(user.getFirstName())
+                            .setLastName(user.getLastName())
+                            .setEmailAddress(user.getEmail())
+                            .setTenantId(tenantId)
+                            .build());
+                }
+            }
+        } else {
+            //Assume rest clients always call with user token
+            User user = identityManagementClient.getUser(tokenHeaders.get());
+            return Optional.ofNullable(AuthenticatedUser.newBuilder()
+                    .setUsername(user.getUsername())
+                    .setFirstName(user.getFirstName())
+                    .setLastName(user.getLastName())
+                    .setEmailAddress(user.getEmailAddress())
+                    .setTenantId(user.getClientId())
+                    .build());
+        }
+        return Optional.empty();
+    }
 }
