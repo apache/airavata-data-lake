@@ -8,45 +8,19 @@ import java.util.UUID;
 /**
  * Notification event represents triggering messages
  */
-public class NotificationEvent {
-
-    private String host;
-    private int port;
-    private String protocol;
+public class  NotificationEvent {
     private String resourcePath;
     private String resourceName;
     private String resourceType;
     private Context context;
     private String id;
 
+
     public NotificationEvent() {
         this.id = UUID.randomUUID().toString();
 
     }
 
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public String getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
-    }
 
     public String getResourcePath() {
         return resourcePath;
@@ -92,6 +66,10 @@ public class NotificationEvent {
 
         private MessagingEvents event;
         private Long occuredTime;
+        private String authToken;
+        private String tenantId;
+        private String storagePreferenceId;
+        private String basePath;
 
 
         public MessagingEvents getEvent() {
@@ -109,10 +87,42 @@ public class NotificationEvent {
         public void setOccuredTime(Long occuredTime) {
             this.occuredTime = occuredTime;
         }
+
+        public String getAuthToken() {
+            return authToken;
+        }
+
+        public void setAuthToken(String authToken) {
+            this.authToken = authToken;
+        }
+
+        public String getTenantId() {
+            return tenantId;
+        }
+
+        public void setTenantId(String tenantId) {
+            this.tenantId = tenantId;
+        }
+
+        public String getStoragePreferenceId() {
+            return storagePreferenceId;
+        }
+
+        public void setStoragePreferenceId(String storagePreferenceId) {
+            this.storagePreferenceId = storagePreferenceId;
+        }
+
+        public String getBasePath() {
+            return basePath;
+        }
+
+        public void setBasePath(String basePath) {
+            this.basePath = basePath;
+        }
     }
 
     public String getResourceId() {
-        return host + ":" + resourcePath + ":" + resourceType;
+        return context.storagePreferenceId + ":" + resourcePath + ":" + resourceType;
     }
 
 

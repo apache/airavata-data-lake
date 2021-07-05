@@ -18,9 +18,10 @@ public class NotificationEventSerializer implements Serializer<NotificationEvent
         String serializedData = notificationEvent.getId() + "," +
                 notificationEvent.getContext().getEvent().name() + "," +
                 notificationEvent.getContext().getOccuredTime() + "," +
-                notificationEvent.getHost() + "," +
-                notificationEvent.getPort() + "," +
-                notificationEvent.getProtocol() + "," +
+                notificationEvent.getContext().getAuthToken() + "," +
+                notificationEvent.getContext().getTenantId() + "," +
+                notificationEvent.getContext().getStoragePreferenceId()+ "," +
+                notificationEvent.getContext().getBasePath() + "," +
                 notificationEvent.getResourcePath() + "," +
                 notificationEvent.getResourceType() + "," +
                 notificationEvent.getResourceName();

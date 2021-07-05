@@ -23,10 +23,6 @@ public class DataOrchestratorEntity {
     private String resourceId;
 
     @Column(nullable = false)
-    private String host;
-    private int port;
-    private String protocol;
-    @Column(nullable = false)
     private String resourcePath;
 
     @Column(nullable = false)
@@ -51,7 +47,28 @@ public class DataOrchestratorEntity {
     private Date lastModifiedAt;
 
     @Column(nullable = false)
-    private String status;
+    private String eventStatus;
+
+    @Column(nullable = false)
+    private String eventType;
+
+    @Column(nullable = false)
+    private String ownerId;
+
+    @Column(nullable = false)
+    private String tenantId;
+
+    @Column(nullable = false)
+    private String agentId;
+
+    @Column(nullable = false)
+    private String authToken;
+
+    @Column(nullable = false)
+    private String storagePreferenceId;
+
+    @Lob
+    private String error;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataOrchestratorEntity", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<WorkflowEntity> workFlowEntities;
@@ -70,30 +87,6 @@ public class DataOrchestratorEntity {
 
     public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public String getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
     }
 
     public String getResourcePath() {
@@ -144,12 +137,12 @@ public class DataOrchestratorEntity {
         this.lastModifiedAt = lastModifiedAt;
     }
 
-    public String getStatus() {
-        return status;
+    public String getEventStatus() {
+        return eventStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setEventStatus(String status) {
+        this.eventStatus = status;
     }
 
     public Set<WorkflowEntity> getWorkFlowEntities() {
@@ -158,5 +151,62 @@ public class DataOrchestratorEntity {
 
     public void setWorkFlowEntities(Set<WorkflowEntity> workFlowEntities) {
         this.workFlowEntities = workFlowEntities;
+    }
+
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
+    }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
+    public String getStoragePreferenceId() {
+        return storagePreferenceId;
+    }
+
+    public void setStoragePreferenceId(String storagePreferenceId) {
+        this.storagePreferenceId = storagePreferenceId;
     }
 }

@@ -1,39 +1,22 @@
 package org.apache.airavata.dataorchestrator.file.client.model;
 
 public class Configuration {
-    private String fileServerHost;
-    private int fileServerPort;
-    private String fileServerProtocol;
     private String listeningPath;
+    private String storagePreferenceId;
 
     private Producer producer;
+
+    private Custos custos;
 
     public Configuration() {
     }
 
-
-    public String getFileServerHost() {
-        return fileServerHost;
+    public String getStoragePreferenceId() {
+        return storagePreferenceId;
     }
 
-    public void setFileServerHost(String fileServerHost) {
-        this.fileServerHost = fileServerHost;
-    }
-
-    public int getFileServerPort() {
-        return fileServerPort;
-    }
-
-    public void setFileServerPort(int fileServerPort) {
-        this.fileServerPort = fileServerPort;
-    }
-
-    public String getFileServerProtocol() {
-        return fileServerProtocol;
-    }
-
-    public void setFileServerProtocol(String fileServerProtocol) {
-        this.fileServerProtocol = fileServerProtocol;
+    public void setStoragePreferenceId(String storagePreferenceId) {
+        this.storagePreferenceId = storagePreferenceId;
     }
 
     public String getListeningPath() {
@@ -50,6 +33,14 @@ public class Configuration {
 
     public void setProducer(Producer producer) {
         this.producer = producer;
+    }
+
+    public Custos getCustos() {
+        return custos;
+    }
+
+    public void setCustos(Custos custos) {
+        this.custos = custos;
     }
 
     public static class Producer {
@@ -81,4 +72,37 @@ public class Configuration {
             this.publisherTopic = publisherTopic;
         }
     }
+
+   public static class Custos {
+
+        private String serviceAccountId;
+        private String serviceAccountSecret;
+        private String tenantId;
+
+       public String getServiceAccountId() {
+           return serviceAccountId;
+       }
+
+       public void setServiceAccountId(String serviceAccountId) {
+           this.serviceAccountId = serviceAccountId;
+       }
+
+       public String getServiceAccountSecret() {
+           return serviceAccountSecret;
+       }
+
+       public void setServiceAccountSecret(String serviceAccountSecret) {
+           this.serviceAccountSecret = serviceAccountSecret;
+       }
+
+       public String getTenantId() {
+           return tenantId;
+       }
+
+       public void setTenantId(String tenantId) {
+           this.tenantId = tenantId;
+       }
+   }
+
+
 }
