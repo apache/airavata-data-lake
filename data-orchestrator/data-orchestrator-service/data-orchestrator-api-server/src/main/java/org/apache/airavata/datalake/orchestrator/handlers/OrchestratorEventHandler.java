@@ -1,7 +1,6 @@
 package org.apache.airavata.datalake.orchestrator.handlers;
 
 import org.apache.airavata.datalake.orchestrator.Configuration;
-import org.apache.airavata.datalake.orchestrator.core.processor.MessageProcessor;
 import org.apache.airavata.datalake.orchestrator.processor.InboundEventProcessor;
 import org.apache.airavata.datalake.orchestrator.processor.OutboundEventProcessor;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEventRepository;
@@ -27,10 +26,7 @@ public class OrchestratorEventHandler {
 
     private ExecutorService executorService;
     private ScheduledExecutorService ouboundExecutorService;
-    private MessageProcessor messageProcessor;
     private MessageConsumer messageConsumer;
-    private OutboundEventProcessor outboundEventProcessor;
-
 
     @Autowired
     private DataOrchestratorEventRepository dataOrchestratorEventRepository;
@@ -47,7 +43,6 @@ public class OrchestratorEventHandler {
                 configuration.getConsumer().getConsumerGroup(),
                 configuration.getConsumer().getMaxPollRecordsConfig(),
                 configuration.getConsumer().getTopic());
-        this.outboundEventProcessor = new OutboundEventProcessor(configuration, dataOrchestratorEventRepository);
 
     }
 
@@ -62,7 +57,6 @@ public class OrchestratorEventHandler {
         this.ouboundExecutorService
                 .scheduleAtFixedRate(new OutboundEventProcessor(configuration, dataOrchestratorEventRepository),
                         0, configuration.getOutboundEventProcessor().getPollingInterval(), TimeUnit.SECONDS);
-
     }
 
     public Configuration getConfiguration() {

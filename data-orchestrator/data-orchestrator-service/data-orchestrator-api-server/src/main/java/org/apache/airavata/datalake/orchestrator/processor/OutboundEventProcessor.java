@@ -45,6 +45,7 @@ public class OutboundEventProcessor implements MessageProcessor {
 
     public OutboundEventProcessor(Configuration configuration, DataOrchestratorEventRepository repository) throws Exception {
         this.repository = repository;
+        //convert these to SSL
         this.workflowChannel = ManagedChannelBuilder
                 .forAddress(configuration.getOutboundEventProcessor().getWorkflowEngineHost(),
                         configuration.getOutboundEventProcessor().getWorkflowPort()).usePlaintext().build();
@@ -89,8 +90,6 @@ public class OutboundEventProcessor implements MessageProcessor {
             entityMap.forEach((key, value) -> {
                 DataOrchestratorEntity entity = value.remove(0);
                 processEvent(entity);
-                entity.setEventStatus(EventStatus.WORKFLOW_LAUNCHED.name());
-                repository.save(entity);
                 value.forEach(val -> {
                     val.setEventStatus(EventStatus.DATA_ORCH_PROCESSED_AND_SKIPPED.name());
                     repository.save(val);
@@ -104,7 +103,6 @@ public class OutboundEventProcessor implements MessageProcessor {
 
     private void processEvent(DataOrchestratorEntity entity) {
         try {
-
             DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
                     .setAccessToken(entity.getAuthToken())
                     .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
@@ -141,21 +139,52 @@ public class OutboundEventProcessor implements MessageProcessor {
                         .setAuthToken(serviceAuthToken)
                         .setResource(genericResource)
                         .build();
-                ResourceCreateResponse resourceCreateResponse = resourceServiceBlockingStub.createResource(resourceCreateRequest);
-                GenericResource resource = resourceCreateResponse.getResource();
+                GenericResource resource = null;
+                try {
+                    ResourceCreateResponse resourceCreateResponse = resourceServiceBlockingStub.createResource(resourceCreateRequest);
+                    resource = resourceCreateResponse.getResource();
+                } catch (Exception ex) {
+                    LOGGER.error("Error occurred while creating resource {} in DRMS", entity.getResourceId(), ex);
+                    entity.setEventStatus(EventStatus.ERRORED.name());
+                    entity.setError("Error occurred while creating resource in DRMS " + ex.getMessage());
+                    repository.save(entity);
+                    return;
+                }
 
-                WorkflowServiceAuthToken workflowServiceAuthToken = WorkflowServiceAuthToken.newBuilder().setAccessToken("").build();
-                WorkflowMessage workflowMessage = WorkflowMessage.newBuilder().setResourceId(resource.getResourceId()).build();
+                try {
+                    WorkflowServiceAuthToken workflowServiceAuthToken = WorkflowServiceAuthToken
+                            .newBuilder()
+                            .setAccessToken("")
+                            .build();
+                    WorkflowMessage workflowMessage = WorkflowMessage.newBuilder()
+                            .setResourceId(resource.getResourceId())
+                            .build();
 
-                WorkflowInvocationRequest workflowInvocationRequest = WorkflowInvocationRequest
-                        .newBuilder().setMessage(workflowMessage).setAuthToken(workflowServiceAuthToken).build();
-                this.workflowServiceStub.invokeWorkflow(workflowInvocationRequest);
+                    WorkflowInvocationRequest workflowInvocationRequest = WorkflowInvocationRequest
+                            .newBuilder().setMessage(workflowMessage).setAuthToken(workflowServiceAuthToken).build();
+                    this.workflowServiceStub.invokeWorkflow(workflowInvocationRequest);
+                } catch (Exception ex) {
+                    LOGGER.error("Error occurred while invoking workflow engine", entity.getResourceId(), ex);
+                    entity.setEventStatus(EventStatus.ERRORED.name());
+                    entity.setError("Error occurred while invoking workflow engine" + ex.getMessage());
+                    repository.save(entity);
+                    return;
+                }
+            } else {
+                LOGGER.error("Incorrect storage preference  {}", entity.getStoragePreferenceId());
+                entity.setEventStatus(EventStatus.ERRORED.name());
+                entity.setError("Incorrect storage preference " + entity.getStoragePreferenceId());
+                repository.save(entity);
+                return;
             }
+            entity.setEventStatus(EventStatus.DISPATCHED_TO_WORFLOW_ENGING.name());
+            repository.save(entity);
         } catch (Exception exception) {
             LOGGER.error("Error occurred while processing outbound data orcehstrator event", exception);
-            throw new RuntimeException(exception);
+            entity.setEventStatus(EventStatus.ERRORED.name());
+            entity.setError("Error occurred while processing ");
+            repository.save(entity);
         }
     }
-
 
 }

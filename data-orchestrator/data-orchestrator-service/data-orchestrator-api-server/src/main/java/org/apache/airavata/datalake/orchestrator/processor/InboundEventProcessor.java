@@ -1,7 +1,6 @@
 package org.apache.airavata.datalake.orchestrator.processor;
 
 import org.apache.airavata.datalake.orchestrator.Configuration;
-import org.apache.airavata.datalake.orchestrator.core.adaptors.StorageAdaptor;
 import org.apache.airavata.datalake.orchestrator.core.processor.MessageProcessor;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEntity;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEventRepository;
@@ -27,8 +26,6 @@ import java.util.regex.Pattern;
  */
 public class InboundEventProcessor implements MessageProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(InboundEventProcessor.class);
-    private StorageAdaptor store;
-
     private Configuration configuration;
     private NotificationEvent notificationEvent;
     private DozerBeanMapper dozerBeanMapper;
