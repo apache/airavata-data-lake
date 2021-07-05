@@ -126,7 +126,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             if (request.getResource().getStoragePreferenceCase()
                     .equals(GenericResource.StoragePreferenceCase.S3_PREFERENCE)) {
                 storagePreferenceId = request.getResource().getS3Preference().getStoragePreferenceId();
-            } else if (request.getResource().getStoragePreferenceCase().name()
+            } else if (request.getResource().getStoragePreferenceCase()
                     .equals(GenericResource.StoragePreferenceCase.SSH_PREFERENCE)) {
                 storagePreferenceId = request.getResource().getSshPreference().getStoragePreferenceId();
             }

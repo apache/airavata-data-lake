@@ -30,7 +30,7 @@ message WorkflowMessage {
 }
 
 message WorkflowInvocationRequest {
-    org.apache.airavata.datalake.orchestrator.workflow.WorkflowServiceAuthToken authToken = 1;
+    org.apache.airavata.datalake.orchestrator.workflow.WorkflowServiceAuthToken auth_token = 1;
     WorkflowMessage message = 2;
 }
 
