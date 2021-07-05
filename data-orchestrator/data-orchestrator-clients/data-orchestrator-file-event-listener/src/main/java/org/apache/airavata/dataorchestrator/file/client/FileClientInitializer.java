@@ -22,18 +22,14 @@ public class FileClientInitializer implements CommandLineRunner {
         SpringApplication.run(FileClientInitializer.class, args);
     }
 
+    @org.springframework.beans.factory.annotation.Value("${config.path}")
+    private String configPath;
 
     @Override
     public void run(String... args) throws Exception {
-        LOGGER.info("Initializing File watcher service ...");
-        String filePath = null;
-        if (args.length > 0) {
-            filePath = args[0];
-        }
+        LOGGER.info("Initializing File watcher service using config {}...", configPath);
 
-        Configuration configuration = Optional.ofNullable(filePath).
-                map(this::loadConfig)
-                .orElseGet(() -> this.loadConfig("/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/data-orchestrator-clients/data-orchestrator-file-event-listener/src/main/resources/config.yml"));
+        Configuration configuration = this.loadConfig(configPath);
         FileWatcherExecutor.startRecursiveWatching(configuration);
     }
 

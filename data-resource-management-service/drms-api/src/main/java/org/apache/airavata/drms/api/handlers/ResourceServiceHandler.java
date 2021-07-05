@@ -123,11 +123,11 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
             String storagePreferenceId = "";
 
-            if (request.getResource().getStoragePreferenceCase().name()
-                    .equals(AnyStoragePreference.StorageCase.S3_STORAGE_PREFERENCE)) {
+            if (request.getResource().getStoragePreferenceCase()
+                    .equals(GenericResource.StoragePreferenceCase.S3_PREFERENCE)) {
                 storagePreferenceId = request.getResource().getS3Preference().getStoragePreferenceId();
             } else if (request.getResource().getStoragePreferenceCase().name()
-                    .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
+                    .equals(GenericResource.StoragePreferenceCase.SSH_PREFERENCE)) {
                 storagePreferenceId = request.getResource().getSshPreference().getStoragePreferenceId();
             }
 

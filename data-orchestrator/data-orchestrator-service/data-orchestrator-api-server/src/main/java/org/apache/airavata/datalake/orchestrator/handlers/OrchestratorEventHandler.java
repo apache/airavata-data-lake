@@ -26,9 +26,11 @@ public class OrchestratorEventHandler {
     private Configuration configuration;
 
     private ExecutorService executorService;
+    private ScheduledExecutorService ouboundExecutorService;
     private MessageProcessor messageProcessor;
     private MessageConsumer messageConsumer;
-    private ScheduledExecutorService scheduledExecutorService;
+    private OutboundEventProcessor outboundEventProcessor;
+
 
     @Autowired
     private DataOrchestratorEventRepository dataOrchestratorEventRepository;
@@ -37,29 +39,29 @@ public class OrchestratorEventHandler {
     public OrchestratorEventHandler() {
     }
 
-    public void init(Configuration configuration) {
+    public void init(Configuration configuration) throws Exception {
         this.configuration = configuration;
         this.executorService = Executors.newFixedThreadPool(configuration.getEventProcessorWorkers());
+        this.ouboundExecutorService = Executors.newSingleThreadScheduledExecutor();
         messageConsumer = new MessageConsumer(configuration.getConsumer().getBrokerURL(),
                 configuration.getConsumer().getConsumerGroup(),
                 configuration.getConsumer().getMaxPollRecordsConfig(),
                 configuration.getConsumer().getTopic());
-        this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        this.outboundEventProcessor = new OutboundEventProcessor(configuration, dataOrchestratorEventRepository);
+
     }
 
     public void startProcessing() throws Exception {
         messageConsumer.consume((notificationEvent -> {
             LOGGER.info("Message received " + notificationEvent.getResourceName());
             LOGGER.info("Submitting {} to process in thread pool", notificationEvent.getId());
-            this.executorService.submit(new InboundEventProcessor(configuration, notificationEvent));
+            this.executorService.submit(new InboundEventProcessor(configuration, notificationEvent, dataOrchestratorEventRepository));
 
         }));
 
-        this.scheduledExecutorService
+        this.ouboundExecutorService
                 .scheduleAtFixedRate(new OutboundEventProcessor(configuration, dataOrchestratorEventRepository),
-                        configuration.getOutboundEventProcessor().getPollingDelay(),
-                        configuration.getOutboundEventProcessor().getPollingInterval(),
-                        TimeUnit.MILLISECONDS);
+                        0, configuration.getOutboundEventProcessor().getPollingInterval(), TimeUnit.SECONDS);
 
     }
 

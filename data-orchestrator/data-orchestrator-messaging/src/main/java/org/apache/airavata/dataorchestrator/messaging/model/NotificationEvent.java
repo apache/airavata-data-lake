@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * Notification event represents triggering messages
  */
-public class NotificationEvent {
+public class  NotificationEvent {
     private String resourcePath;
     private String resourceName;
     private String resourceType;

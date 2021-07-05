@@ -58,26 +58,26 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven.assembly.plugin}</version>
                 <executions>
                     <execution>
+                        <id>file-event-listener-distribution-package</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
+                        <configuration>
+                            <tarLongFileMode>posix</tarLongFileMode>
+                            <finalName>file-event-listener</finalName>
+                            <descriptors>
+                                <descriptor>src/main/dist/file-event-listener-assembly.xml</descriptor>
+                            </descriptors>
+                            <attach>false</attach>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>org.apache.airavata.dataorchestrator.file.client.FileClientInitializer</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
             </plugin>
         </plugins>
     </build>

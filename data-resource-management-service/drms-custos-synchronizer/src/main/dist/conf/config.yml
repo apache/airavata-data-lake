@@ -1,0 +1,17 @@
+pollingInterval: 60
+dataResourceManagementService:
+  dbURI: "bolt://192.168.0.14:7687"
+  dbUser: "neo4j"
+  dbPassword: "123456"
+custos:
+  host: "custos.scigap.org"
+  port: 31499
+  custosId: "custos-plgz25nnaqzkfhbmux9c-10002709"
+  custosSec: "NvecnxCK9mpM7AjKalnCRRrer7mFGjSPd3zbv2I3"
+  custosBrokerURL: "149.165.156.200:9092"
+  consumerGroup: "custosEventsGroup"
+  maxPollRecordsConfig: 10
+  topics:
+    - "10002708-754b89b5-3a57-496c-aa34-8e2b4916fbc"
+  tenantsToBeSynced:
+    - "custos-plgz25nnaqzkfhbmux9c-10002709"

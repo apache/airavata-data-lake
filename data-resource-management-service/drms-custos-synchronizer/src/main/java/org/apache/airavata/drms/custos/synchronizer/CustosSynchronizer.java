@@ -17,8 +17,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CustosSynchronizer implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustosSynchronizer.class);
-    private static String configFilePath;
 
+    @org.springframework.beans.factory.annotation.Value("${config.path}")
+    private String configPath;
 
     public static void main(String[] args) {
         SpringApplication.run(CustosSynchronizer.class, args);
@@ -27,18 +28,11 @@ public class CustosSynchronizer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         LOGGER.info("Starting Custos synchronizer ...");
-        if (args.length > 0) {
-            configFilePath = args[0];
-        } else {
-            configFilePath = "/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake" +
-                    "/data-resource-management-service/drms-custos-synchronizer/src/main/resources/config.yml";
-        }
 
-        LOGGER.info("Configuring scheduler ...");
-        Utils.initializeConnectors(Utils.loadConfiguration(configFilePath));
-        configureScheduler(configFilePath);
-        configureEventListener(configFilePath);
-
+        LOGGER.info("Configuring scheduler using file {}...", configPath);
+        Utils.initializeConnectors(Utils.loadConfiguration(configPath));
+        configureScheduler(configPath);
+        configureEventListener(configPath);
     }
 
 
@@ -78,6 +72,4 @@ public class CustosSynchronizer implements CommandLineRunner {
             }
         });
     }
-
-
 }

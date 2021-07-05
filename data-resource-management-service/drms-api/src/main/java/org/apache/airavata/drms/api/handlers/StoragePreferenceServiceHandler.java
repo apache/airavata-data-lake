@@ -86,7 +86,9 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                 keyList.add("s6:sp6");
                 List<AnyStoragePreference> storagePrefList = AnyStoragePreferenceDeserializer.deserializeList(records, keyList);
                 StoragePreferenceFetchResponse.Builder builder = StoragePreferenceFetchResponse.newBuilder();
-                builder.setStoragePreference(storagePrefList.get(0));
+                if (!storagePrefList.isEmpty()) {
+                    builder.setStoragePreference(storagePrefList.get(0));
+                }
                 responseObserver.onNext(builder.build());
                 responseObserver.onCompleted();
             } catch (Exception e) {

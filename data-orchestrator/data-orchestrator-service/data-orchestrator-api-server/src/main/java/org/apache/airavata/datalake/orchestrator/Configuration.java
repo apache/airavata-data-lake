@@ -148,44 +148,16 @@ public class Configuration {
 
     public static class OutboundEventProcessorConfig {
 
-        private long pollingDelay;
-        private long pollingInterval;
-        private int numOfEventsPerPoll;
         private String workflowEngineHost;
         private int workflowPort;
+        private String drmsHost;
+        private int drmsPort;
+        private int pollingInterval;
 
 
         public OutboundEventProcessorConfig() {
         }
 
-        public OutboundEventProcessorConfig(long pollingDelay, long pollingInterval) {
-            this.pollingDelay = pollingDelay;
-            this.pollingInterval = pollingInterval;
-        }
-
-        public long getPollingDelay() {
-            return pollingDelay;
-        }
-
-        public void setPollingDelay(long pollingDelay) {
-            this.pollingDelay = pollingDelay;
-        }
-
-        public long getPollingInterval() {
-            return pollingInterval;
-        }
-
-        public void setPollingInterval(long pollingInterval) {
-            this.pollingInterval = pollingInterval;
-        }
-
-        public int getNumOfEventsPerPoll() {
-            return numOfEventsPerPoll;
-        }
-
-        public void setNumOfEventsPerPoll(int numOfEventsPerPoll) {
-            this.numOfEventsPerPoll = numOfEventsPerPoll;
-        }
 
         public String getWorkflowEngineHost() {
             return workflowEngineHost;
@@ -201,6 +173,30 @@ public class Configuration {
 
         public void setWorkflowPort(int workflowPort) {
             this.workflowPort = workflowPort;
+        }
+
+        public String getDrmsHost() {
+            return drmsHost;
+        }
+
+        public void setDrmsHost(String drmsHost) {
+            this.drmsHost = drmsHost;
+        }
+
+        public int getDrmsPort() {
+            return drmsPort;
+        }
+
+        public void setDrmsPort(int drmsPort) {
+            this.drmsPort = drmsPort;
+        }
+
+        public int getPollingInterval() {
+            return pollingInterval;
+        }
+
+        public void setPollingInterval(int pollingInterval) {
+            this.pollingInterval = pollingInterval;
         }
     }
 

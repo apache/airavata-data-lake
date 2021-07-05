@@ -86,17 +86,24 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <fork>true</fork>
-                    <mainClass>org.apache.airavata.drms.api.DRMSApiRunner</mainClass>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven.assembly.plugin}</version>
                 <executions>
                     <execution>
+                        <id>drms-package</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>repackage</goal>
+                            <goal>single</goal>
                         </goals>
+                        <configuration>
+                            <tarLongFileMode>posix</tarLongFileMode>
+                            <finalName>drms</finalName>
+                            <descriptors>
+                                <descriptor>src/main/dist/drms-assembly.xml</descriptor>
+                            </descriptors>
+                            <attach>false</attach>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

@@ -5,13 +5,13 @@ messageFilter:
   eventType: "CREATE,MODIFY "
   resourceNameExclusions: "swp$"
 outboundEventProcessor:
-  pollingInterval: 5
+  pollingDelay: 10000
+  pollingInterval: 10000
+  numOfEventsPerPoll: 10
   workflowEngineHost: "localhost"
   workflowPort: 6565
-  drmsHost: "localhost"
-  drmsPort: 7070
 consumer:
-  brokerURL: "149.165.157.235:9092"
+  brokerURL: "localhost:9092"
   consumerGroup: "DataOrchestratorGroup"
-  topic: "data-orchestrator-file-events"
+  topic: "quickstart-events"
   maxPollRecordsConfig: 10

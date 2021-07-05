@@ -165,6 +165,7 @@ public class FileWatcher implements Runnable {
         context.setOccuredTime(System.currentTimeMillis());
         context.setAuthToken(Base64.getEncoder().encodeToString((configuration.getCustos().getServiceAccountId()
                 + ":" + configuration.getCustos().getServiceAccountSecret()).getBytes(StandardCharsets.UTF_8)));
+        context.setBasePath(configuration.getListeningPath());
         context.setTenantId(configuration.getCustos().getTenantId());
         context.setStoragePreferenceId(configuration.getStoragePreferenceId());
         event.setContext(context);
