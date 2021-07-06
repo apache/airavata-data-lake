@@ -56,7 +56,7 @@ public class AnyStoragePreferenceDeserializer {
                         try {
                             storage = AnyStorageDeserializer.deriveStorageFromMap(stVal.asMap());
                             AnyStoragePreference preference = deriveStoragePrefFromMap(spVal.asMap(), storage);
-                            storagePreferenceMap.computeIfAbsent(stVal.id(), v -> {
+                            storagePreferenceMap.computeIfAbsent(spVal.id(), v -> {
                                 return new ArrayList<AnyStoragePreference>();
                             }).add(preference);
 
