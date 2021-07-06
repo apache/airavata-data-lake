@@ -1,0 +1,31 @@
+- name: open firewall port 8443 for DRMS REST connections
+  firewalld: port="8443/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
+- name: open firewall port 7070 for DRMS Grpc connections
+  firewalld: port="7070/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
+- name: open firewall port 80 for HTTP connections
+  firewalld: port="80/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
+- name: open firewall port 443 for HTTPS connections
+  firewalld: port="443/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
+- name: open firewall port 9092 for Kafka connections
+  firewalld: port="9092/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
+- name: open firewall port 6060 for Data Orchestrator Grpc connections
+  firewalld: port="6060/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
+
