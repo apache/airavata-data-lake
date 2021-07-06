@@ -140,7 +140,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
             if (exEntity.isPresent()) {
                 serializedMap.put("description", exEntity.get().getDescription());
-                serializedMap.put("name", exEntity.get().getName());
+                serializedMap.put("resourceName", exEntity.get().getName());
                 serializedMap.put("createdTime", String.valueOf(exEntity.get().getCreatedAt()));
                 serializedMap.put("tenantId", callUser.getTenantId());
                 serializedMap.put("entityId", exEntity.get().getId());
@@ -148,15 +148,12 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 serializedMap.put("lastModifiedTime", exEntity.get().getCreatedAt());
                 serializedMap.put("owner", exEntity.get().getOwnerId());
 
-
-                HashMap<String, Object> hashMap = new HashMap<>();
-
                 if (!storagePreferenceId.isEmpty()) {
                     this.neo4JConnector.mergeNodesWithParentChildRelationShip(serializedMap, new HashMap<>(),
                             request.getResource().getType(), StoragePreferenceConstants.STORAGE_PREFERENCE_LABEL,
                             callUser.getUsername(), entityId, storagePreferenceId, callUser.getTenantId());
                 } else {
-                    this.neo4JConnector.mergeNode(hashMap, request.getResource().getType(),
+                    this.neo4JConnector.mergeNode(serializedMap, request.getResource().getType(),
                             callUser.getUsername(), entityId, callUser.getTenantId());
                 }
             } else {
@@ -181,9 +178,17 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             List<Record> records = this.neo4JConnector.searchNodes(exProps, query);
 
             List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
+            GenericResource genericResource = genericResourceList.get(0);
+            if (genericResource.getPropertiesMap().containsKey("name")) {
+                genericResource = genericResource.toBuilder()
+                        .setResourceName(genericResource.getPropertiesMap().get("name")).build();
+            } else if (genericResource.getPropertiesMap().containsKey("resourceName")) {
+                genericResource = genericResource.toBuilder()
+                        .setResourceName(genericResource.getPropertiesMap().get("resourceName")).build();
+            }
             ResourceCreateResponse response = ResourceCreateResponse
                     .newBuilder()
-                    .setResource(genericResourceList.get(0))
+                    .setResource(genericResource)
                     .build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
@@ -457,9 +462,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 userProps.put("tenantId", callUser.getTenantId());
                 userProps.put("entityId", resource.getResourceId());
                 userProps.put("childEntityId", childResource.getResourceId());
-                String query = "MATCH  (r:" + resource.getType() + "), (cr:" + childResource.getType() + ")  where " +
+                String query = "MATCH (cr:" + childResource.getType() + ")-[crel:CHILD_OF]->(r:" + resource.getType() + ")  where " +
                         " r.entityId = $entityId AND r.tenantId = $tenantId  AND cr.entityId = $childEntityId AND cr.tenantId = $tenantId " +
-                        " MATCH (cr)-[crel:CHILD_OF]->(r) delete crel";
+                        "delete crel";
                 this.neo4JConnector.runTransactionalQuery(userProps, query);
             });
 
@@ -512,6 +517,10 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
                     ParentResourcesFetchResponse.Builder builder = ParentResourcesFetchResponse.newBuilder();
                     builder.putAllProperties(genericResourceMap);
+                    responseObserver.onNext(builder.build());
+                    responseObserver.onCompleted();
+                } else {
+                    ParentResourcesFetchResponse.Builder builder = ParentResourcesFetchResponse.newBuilder();
                     responseObserver.onNext(builder.build());
                     responseObserver.onCompleted();
                 }

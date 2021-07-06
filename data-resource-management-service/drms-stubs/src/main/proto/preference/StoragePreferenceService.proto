@@ -27,89 +27,146 @@ import "preference/S3Preference.proto";
 import "google/protobuf/empty.proto";
 
 message AnyStoragePreference {
-  oneof storage {
-    org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference ssh_storage_preference = 1;
-    org.apache.airavata.datalake.drms.storage.preference.s3.S3StoragePreference s3_storage_preference = 2;
-  }
+    oneof storage {
+        org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference ssh_storage_preference = 1;
+        org.apache.airavata.datalake.drms.storage.preference.s3.S3StoragePreference s3_storage_preference = 2;
+    }
 }
 message StoragePreferenceFetchRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  string storage_preference_id = 2;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string storage_preference_id = 2;
 }
 
 message StoragePreferenceFetchResponse {
-  AnyStoragePreference storage_preference = 1;
+    AnyStoragePreference storage_preference = 1;
 }
 
 message StoragePreferenceCreateRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  AnyStoragePreference storage_preference = 2;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    AnyStoragePreference storage_preference = 2;
 }
 
 message StoragePreferenceCreateResponse {
-  AnyStoragePreference storage_preference = 1;
+    AnyStoragePreference storage_preference = 1;
 }
 
 message StoragePreferenceUpdateRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  string storage_preference_id = 2;
-  AnyStoragePreference storage_preference = 3;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string storage_preference_id = 2;
+    AnyStoragePreference storage_preference = 3;
 }
 
 message StoragePreferenceUpdateResponse {
-  AnyStoragePreference storage_preference = 1;
+    AnyStoragePreference storage_preference = 1;
 }
 
 message StoragePreferenceDeleteRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  string storage_preference_id = 2;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string storage_preference_id = 2;
 }
 
 message StoragePreferenceSearchQuery {
-  string field = 1;
-  string value = 2;
-  string options = 3; // LIKE, NOT, EQUALS, GREATER, LESS
+    string field = 1;
+    string value = 2;
+    string options = 3; // LIKE, NOT, EQUALS, GREATER, LESS
 }
 
 message StoragePreferenceSearchRequest {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  repeated StoragePreferenceSearchQuery queries = 2;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    repeated StoragePreferenceSearchQuery queries = 2;
 }
 
 message StoragePreferenceSearchResponse {
-  org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-  repeated AnyStoragePreference storages_preference = 2;
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    repeated AnyStoragePreference storages_preference = 2;
 }
+
+enum TransferScope {
+    UNKNOWN = 0;
+    GLOBAL = 1;
+    USER = 2;
+}
+
+message TransferMapping {
+    string id = 1;
+    string user_id = 2;
+    AnyStoragePreference source_storage_preference = 3;
+    AnyStoragePreference destination_storage_preference = 4;
+    TransferScope transfer_scope = 5;
+}
+
+message CreateTransferMappingRequest {
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    TransferMapping transfer_mapping = 2;
+}
+
+message CreateTransferMappingResponse {
+    TransferMapping transfer_mapping = 1;
+}
+
+message FindTransferMappingsRequest {
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string id = 2;
+    TransferScope transfer_scope = 3;
+}
+
+message FindTransferMappingsResponse {
+    repeated TransferMapping mappings = 1;
+}
+
+message DeleteTransferMappingRequest {
+    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
+    string id = 2;
+}
+
 
 service StoragePreferenceService {
 
-  rpc fetchStoragePreference (StoragePreferenceFetchRequest) returns (StoragePreferenceFetchResponse) {
-    option (google.api.http) = {
+    rpc fetchStoragePreference (StoragePreferenceFetchRequest) returns (StoragePreferenceFetchResponse) {
+        option (google.api.http) = {
       get: "/v1.0/api/drms/storagePreference"
     };
-  }
+    }
 
-  rpc createStoragePreference (StoragePreferenceCreateRequest) returns (StoragePreferenceCreateResponse) {
-    option (google.api.http) = {
+    rpc createStoragePreference (StoragePreferenceCreateRequest) returns (StoragePreferenceCreateResponse) {
+        option (google.api.http) = {
       post: "/v1.0/api/drms/storagePreference"
     };
-  }
+    }
 
-  rpc updateStoragePreference (StoragePreferenceUpdateRequest) returns (StoragePreferenceUpdateResponse) {
-    option (google.api.http) = {
+    rpc updateStoragePreference (StoragePreferenceUpdateRequest) returns (StoragePreferenceUpdateResponse) {
+        option (google.api.http) = {
       put: "/v1.0/api/drms/storagePreference"
     };
-  }
+    }
 
-  rpc deletePreferenceStorage (StoragePreferenceDeleteRequest) returns (google.protobuf.Empty) {
-    option (google.api.http) = {
+    rpc deletePreferenceStorage (StoragePreferenceDeleteRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
       delete: "/v1.0/api/drms/storagePreference"
     };
-  }
+    }
 
-  rpc searchStoragePreference (StoragePreferenceSearchRequest) returns (StoragePreferenceSearchResponse) {
-    option (google.api.http) = {
+    rpc searchStoragePreference (StoragePreferenceSearchRequest) returns (StoragePreferenceSearchResponse) {
+        option (google.api.http) = {
       post: "/v1.0/api/drms/storagePreference/searchPreference"
     };
-  }
+    }
+
+    rpc createTransferMapping (CreateTransferMappingRequest) returns (CreateTransferMappingResponse) {
+        option (google.api.http) = {
+      post: "/v1.0/api/drms/storagePreference/transferMapping"
+    };
+    }
+
+    rpc getTransferMappings (FindTransferMappingsRequest) returns (FindTransferMappingsResponse) {
+        option (google.api.http) = {
+      get: "/v1.0/api/drms/storagePreference/transferMapping"
+    };
+    }
+
+    rpc deleteTransferMappings (DeleteTransferMappingRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+      delete: "/v1.0/api/drms/storagePreference/transferMapping"
+    };
+    }
 }

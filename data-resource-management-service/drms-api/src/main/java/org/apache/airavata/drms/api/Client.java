@@ -20,11 +20,10 @@ import com.google.protobuf.Struct;
 import com.google.protobuf.util.JsonFormat;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import org.apache.airavata.datalake.drms.AuthCredentialType;
-import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.*;
+import org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.identity.management.client.IdentityManagementClient;
 import org.json.JSONObject;
@@ -114,7 +113,34 @@ public class Client {
 //
 //        storagePreferenceServiceBlockingStub.createStoragePreference(storagePreferenceCreateRequest);
 
+        TransferMapping transferMapping = TransferMapping.newBuilder()
+                .setUserId("isjarana@iu.edu")
+                .setTransferScope(TransferScope.GLOBAL)
+                .setDestinationStoragePreference(AnyStoragePreference.newBuilder()
+                        .setSshStoragePreference(SSHStoragePreference.newBuilder()
+                                .setStoragePreferenceId("ssh_storage_preference").build()))
+                .setSourceStoragePreference(AnyStoragePreference.newBuilder()
+                        .setSshStoragePreference(SSHStoragePreference.newBuilder()
+                                .setStoragePreferenceId("ssh_storage_preference_2").build()))
+                .build();
 
+        CreateTransferMappingRequest request = CreateTransferMappingRequest.newBuilder()
+                .setAuthToken(authToken)
+                .setTransferMapping(transferMapping)
+                .build();
+
+        FindTransferMappingsRequest findTransferMappingsRequest = FindTransferMappingsRequest.newBuilder()
+                .setAuthToken(authToken)
+                .build();
+
+        DeleteTransferMappingRequest transferMappingRequest = DeleteTransferMappingRequest.newBuilder()
+                .setAuthToken(authToken)
+                .setId("ssh_storage_preference_2_ssh_storage_preference")
+                .build();
+
+//        storagePreferenceServiceBlockingStub.deleteTransferMappings(transferMappingRequest);
+
+        storagePreferenceServiceBlockingStub.createTransferMapping(request);
         ResourceServiceGrpc.ResourceServiceBlockingStub resourceServiceBlockingStub = ResourceServiceGrpc.newBlockingStub(channel);
 
 //        ResourceSearchQuery query = ResourceSearchQuery.newBuilder().setField("type").setValue("COLLECTION").build();
@@ -153,11 +179,11 @@ public class Client {
 //                        .setTenantId("custos-whedmgamitu357p4wuke-10002708"))
 //                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
 //                .build();
-        ResourceCreateRequest resourceCreateRequest = ResourceCreateRequest.newBuilder()
-                .setAuthToken(authToken)
-                .setResource(genericResource)
-                .build();
-        resourceServiceBlockingStub.createResource(resourceCreateRequest);
+//        ResourceCreateRequest resourceCreateRequest = ResourceCreateRequest.newBuilder()
+//                .setAuthToken(authToken)
+//                .setResource(genericResource)
+//                .build();
+//        resourceServiceBlockingStub.createResource(resourceCreateRequest);
 
 
 //        System.out.println(authToken.getAccessToken());
