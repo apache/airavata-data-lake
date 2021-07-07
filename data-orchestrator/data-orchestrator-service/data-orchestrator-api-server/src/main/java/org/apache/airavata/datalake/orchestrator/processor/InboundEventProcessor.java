@@ -1,6 +1,7 @@
 package org.apache.airavata.datalake.orchestrator.processor;
 
 import org.apache.airavata.datalake.orchestrator.Configuration;
+import org.apache.airavata.datalake.orchestrator.Utils;
 import org.apache.airavata.datalake.orchestrator.core.processor.MessageProcessor;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEntity;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEventRepository;
@@ -11,9 +12,7 @@ import org.dozer.loader.api.BeanMappingBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
@@ -24,7 +23,7 @@ import java.util.regex.Pattern;
 /**
  * This class is responsible for pick events from kafka queue and publish them into inmemory store
  */
-public class InboundEventProcessor implements MessageProcessor {
+public class InboundEventProcessor implements MessageProcessor<Configuration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(InboundEventProcessor.class);
     private Configuration configuration;
     private NotificationEvent notificationEvent;
@@ -34,15 +33,15 @@ public class InboundEventProcessor implements MessageProcessor {
 
     public InboundEventProcessor(Configuration configuration, NotificationEvent notificationEvent,
                                  DataOrchestratorEventRepository repository) throws Exception {
-        this.configuration = configuration;
         this.notificationEvent = notificationEvent;
         this.repository = repository;
-        this.init();
+        this.init(configuration);
     }
 
     @Override
-    public void init() throws Exception {
+    public void init(Configuration configuration) throws Exception {
         try {
+            this.configuration = configuration;
             dozerBeanMapper = new DozerBeanMapper();
             BeanMappingBuilder orchestratorEventMapper = new BeanMappingBuilder() {
                 @Override
@@ -109,7 +108,7 @@ public class InboundEventProcessor implements MessageProcessor {
         entity.setEventStatus(EventStatus.DATA_ORCH_RECEIVED.name());
         entity.setEventType(event.getContext().getEvent().name());
         entity.setAuthToken(event.getContext().getAuthToken());
-        entity.setStoragePreferenceId(event.getContext().getStoragePreferenceId());
+        entity.setHostName(event.getContext().getHostName());
 
         String resourcePath = event.getResourcePath();
         String basePath = event.getContext().getBasePath();
@@ -124,27 +123,9 @@ public class InboundEventProcessor implements MessageProcessor {
                 .decode(event.getContext().getAuthToken().getBytes(StandardCharsets.UTF_8)));
         String agentId = authDecoded.split(":")[0];
         entity.setAgentId(agentId);
-        entity.setResourceId(getResourceId(event.getResourceId()));
+        entity.setResourceId(Utils.getId(event.getResourceId()));
         return entity;
     }
 
-    private String getResourceId(String message) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        // digest() method called
-        // to calculate message digest of an input
-        // and return array of byte
-        byte[] array = md.digest(message.getBytes(StandardCharsets.UTF_8));
-        // Convert byte array into signum representation
-        BigInteger number = new BigInteger(1, array);
 
-        // Convert message digest into hex value
-        StringBuilder hexString = new StringBuilder(number.toString(16));
-
-        // Pad with leading zeros
-        while (hexString.length() < 32) {
-            hexString.insert(0, '0');
-        }
-
-        return hexString.toString();
-    }
 }

@@ -20,7 +20,7 @@ public class NotificationEventSerializer implements Serializer<NotificationEvent
                 notificationEvent.getContext().getOccuredTime() + "," +
                 notificationEvent.getContext().getAuthToken() + "," +
                 notificationEvent.getContext().getTenantId() + "," +
-                notificationEvent.getContext().getStoragePreferenceId()+ "," +
+                notificationEvent.getContext().getHostName() + "," +
                 notificationEvent.getContext().getBasePath() + "," +
                 notificationEvent.getResourcePath() + "," +
                 notificationEvent.getResourceType() + "," +

@@ -35,4 +35,5 @@ message GenericResource {
   string type=6;
   string parent_resource_path = 7;
   string resource_name = 8;
+  string parent_id = 9;
 }

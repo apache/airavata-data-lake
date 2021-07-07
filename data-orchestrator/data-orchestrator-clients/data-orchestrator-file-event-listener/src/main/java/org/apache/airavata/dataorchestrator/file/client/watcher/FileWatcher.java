@@ -167,7 +167,7 @@ public class FileWatcher implements Runnable {
                 + ":" + configuration.getCustos().getServiceAccountSecret()).getBytes(StandardCharsets.UTF_8)));
         context.setBasePath(configuration.getListeningPath());
         context.setTenantId(configuration.getCustos().getTenantId());
-        context.setStoragePreferenceId(configuration.getStoragePreferenceId());
+        context.setHostName(configuration.getHostName());
         event.setContext(context);
         return event;
     }

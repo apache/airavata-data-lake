@@ -25,7 +25,7 @@ public class NotificationEventDeserializer implements Deserializer<NotificationE
         context.setOccuredTime(Long.valueOf(parts[2]));
         context.setAuthToken(String.valueOf(parts[3]));
         context.setTenantId(String.valueOf(parts[4]));
-        context.setStoragePreferenceId(parts[5]);
+        context.setHostName(parts[5]);
         context.setBasePath(parts[6]);
         event.setResourcePath(parts[7]);
         event.setResourceType(parts[8]);

@@ -68,7 +68,7 @@ public class  NotificationEvent {
         private Long occuredTime;
         private String authToken;
         private String tenantId;
-        private String storagePreferenceId;
+        private String hostName;
         private String basePath;
 
 
@@ -104,14 +104,6 @@ public class  NotificationEvent {
             this.tenantId = tenantId;
         }
 
-        public String getStoragePreferenceId() {
-            return storagePreferenceId;
-        }
-
-        public void setStoragePreferenceId(String storagePreferenceId) {
-            this.storagePreferenceId = storagePreferenceId;
-        }
-
         public String getBasePath() {
             return basePath;
         }
@@ -119,10 +111,18 @@ public class  NotificationEvent {
         public void setBasePath(String basePath) {
             this.basePath = basePath;
         }
+
+        public String getHostName() {
+            return hostName;
+        }
+
+        public void setHostName(String hostName) {
+            this.hostName = hostName;
+        }
     }
 
     public String getResourceId() {
-        return context.storagePreferenceId + ":" + resourcePath + ":" + resourceType;
+        return context.hostName+ ":" + resourcePath + ":" + resourceType;
     }
 
 

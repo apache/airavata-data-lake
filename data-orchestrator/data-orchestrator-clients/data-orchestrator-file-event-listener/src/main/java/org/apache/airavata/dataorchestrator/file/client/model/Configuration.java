@@ -2,7 +2,7 @@ package org.apache.airavata.dataorchestrator.file.client.model;
 
 public class Configuration {
     private String listeningPath;
-    private String storagePreferenceId;
+    private String hostName;
 
     private Producer producer;
 
@@ -11,12 +11,12 @@ public class Configuration {
     public Configuration() {
     }
 
-    public String getStoragePreferenceId() {
-        return storagePreferenceId;
+    public String getHostName() {
+        return hostName;
     }
 
-    public void setStoragePreferenceId(String storagePreferenceId) {
-        this.storagePreferenceId = storagePreferenceId;
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
     }
 
     public String getListeningPath() {
@@ -73,36 +73,36 @@ public class Configuration {
         }
     }
 
-   public static class Custos {
+    public static class Custos {
 
         private String serviceAccountId;
         private String serviceAccountSecret;
         private String tenantId;
 
-       public String getServiceAccountId() {
-           return serviceAccountId;
-       }
+        public String getServiceAccountId() {
+            return serviceAccountId;
+        }
 
-       public void setServiceAccountId(String serviceAccountId) {
-           this.serviceAccountId = serviceAccountId;
-       }
+        public void setServiceAccountId(String serviceAccountId) {
+            this.serviceAccountId = serviceAccountId;
+        }
 
-       public String getServiceAccountSecret() {
-           return serviceAccountSecret;
-       }
+        public String getServiceAccountSecret() {
+            return serviceAccountSecret;
+        }
 
-       public void setServiceAccountSecret(String serviceAccountSecret) {
-           this.serviceAccountSecret = serviceAccountSecret;
-       }
+        public void setServiceAccountSecret(String serviceAccountSecret) {
+            this.serviceAccountSecret = serviceAccountSecret;
+        }
 
-       public String getTenantId() {
-           return tenantId;
-       }
+        public String getTenantId() {
+            return tenantId;
+        }
 
-       public void setTenantId(String tenantId) {
-           this.tenantId = tenantId;
-       }
-   }
+        public void setTenantId(String tenantId) {
+            this.tenantId = tenantId;
+        }
+    }
 
 
 }

@@ -65,7 +65,7 @@ public class DataOrchestratorEntity {
     private String authToken;
 
     @Column(nullable = false)
-    private String storagePreferenceId;
+    private String hostName;
 
     @Lob
     private String error;
@@ -202,11 +202,11 @@ public class DataOrchestratorEntity {
         this.authToken = authToken;
     }
 
-    public String getStoragePreferenceId() {
-        return storagePreferenceId;
+    public String getHostName() {
+        return hostName;
     }
 
-    public void setStoragePreferenceId(String storagePreferenceId) {
-        this.storagePreferenceId = storagePreferenceId;
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
     }
 }

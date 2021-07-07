@@ -120,21 +120,12 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             userProps.put("username", callUser.getUsername());
             userProps.put("tenantId", callUser.getTenantId());
 
-
-            String storagePreferenceId = "";
-
-            if (request.getResource().getStoragePreferenceCase()
-                    .equals(GenericResource.StoragePreferenceCase.S3_PREFERENCE)) {
-                storagePreferenceId = request.getResource().getS3Preference().getStoragePreferenceId();
-            } else if (request.getResource().getStoragePreferenceCase()
-                    .equals(GenericResource.StoragePreferenceCase.SSH_PREFERENCE)) {
-                storagePreferenceId = request.getResource().getSshPreference().getStoragePreferenceId();
-            }
+            String parentId = request.getResource().getParentId();
 
             String entityId = request.getResource().getResourceId();
             Map<String, Object> serializedMap = GenericResourceSerializer.serializeToMap(request.getResource());
             Optional<Entity> exEntity = CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
-                    storagePreferenceId, type, entityId,
+                    parentId, type, entityId,
                     request.getResource().getResourceName(), request.getResource().getResourceName(),
                     callUser.getUsername());
 
@@ -148,10 +139,10 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 serializedMap.put("lastModifiedTime", exEntity.get().getCreatedAt());
                 serializedMap.put("owner", exEntity.get().getOwnerId());
 
-                if (!storagePreferenceId.isEmpty()) {
+                if (!parentId.isEmpty()) {
                     this.neo4JConnector.mergeNodesWithParentChildRelationShip(serializedMap, new HashMap<>(),
                             request.getResource().getType(), StoragePreferenceConstants.STORAGE_PREFERENCE_LABEL,
-                            callUser.getUsername(), entityId, storagePreferenceId, callUser.getTenantId());
+                            callUser.getUsername(), entityId, parentId, callUser.getTenantId());
                 } else {
                     this.neo4JConnector.mergeNode(serializedMap, request.getResource().getType(),
                             callUser.getUsername(), entityId, callUser.getTenantId());
