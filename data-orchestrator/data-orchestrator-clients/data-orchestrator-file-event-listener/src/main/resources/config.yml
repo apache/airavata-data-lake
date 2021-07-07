@@ -1,5 +1,5 @@
 listeningPath: "/Users/isururanawaka/Documents/texts"
-storagePreferenceId:""
+hostName: "beta.iubemcenter.scigap.org"
 
 producer:
   brokerURL: "localhost:9092"

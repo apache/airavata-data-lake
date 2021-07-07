@@ -1,64 +1,44 @@
 package org.apache.airavata.datalake.orchestrator.processor;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import org.apache.airavata.datalake.drms.AuthCredentialType;
-import org.apache.airavata.datalake.drms.AuthenticatedUser;
-import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
-import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.airavata.datalake.orchestrator.Configuration;
+import org.apache.airavata.datalake.orchestrator.Utils;
+import org.apache.airavata.datalake.orchestrator.connectors.DRMSConnector;
+import org.apache.airavata.datalake.orchestrator.connectors.WorkflowServiceConnector;
 import org.apache.airavata.datalake.orchestrator.core.processor.MessageProcessor;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEntity;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEventRepository;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.EventStatus;
-import org.apache.airavata.datalake.orchestrator.workflow.WorkflowServiceAuthToken;
-import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowInvocationRequest;
-import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowMessage;
-import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowServiceGrpc;
 import org.apache.airavata.dataorchestrator.messaging.model.NotificationEvent;
 import org.dozer.DozerBeanMapper;
 import org.dozer.loader.api.BeanMappingBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is responsible  and publish events to registry and
  * Workflow engine
  */
-public class OutboundEventProcessor implements MessageProcessor {
+public class OutboundEventProcessor implements MessageProcessor<Configuration> {
     private static final Logger LOGGER = LoggerFactory.getLogger(OutboundEventProcessor.class);
 
     private DozerBeanMapper dozerBeanMapper;
     private DataOrchestratorEventRepository repository;
 
-    private final ManagedChannel workflowChannel;
-    private final ManagedChannel drmsChannel;
-    private final WorkflowServiceGrpc.WorkflowServiceBlockingStub workflowServiceStub;
-    private final ResourceServiceGrpc.ResourceServiceBlockingStub resourceServiceBlockingStub;
-    private final StoragePreferenceServiceGrpc.StoragePreferenceServiceBlockingStub storagePreferenceServiceBlockingStub;
+    private DRMSConnector drmsConnector;
+    private WorkflowServiceConnector workflowServiceConnector;
 
     public OutboundEventProcessor(Configuration configuration, DataOrchestratorEventRepository repository) throws Exception {
         this.repository = repository;
-        //convert these to SSL
-        this.workflowChannel = ManagedChannelBuilder
-                .forAddress(configuration.getOutboundEventProcessor().getWorkflowEngineHost(),
-                        configuration.getOutboundEventProcessor().getWorkflowPort()).usePlaintext().build();
-        this.drmsChannel = ManagedChannelBuilder.forAddress(configuration.getOutboundEventProcessor().getDrmsHost(),
-                configuration.getOutboundEventProcessor().getDrmsPort()).usePlaintext().build();
-        this.workflowServiceStub = WorkflowServiceGrpc.newBlockingStub(workflowChannel);
-        this.resourceServiceBlockingStub = ResourceServiceGrpc.newBlockingStub(drmsChannel);
-        this.storagePreferenceServiceBlockingStub = StoragePreferenceServiceGrpc.newBlockingStub(drmsChannel);
-        this.init();
+        this.init(configuration);
     }
 
     @Override
-    public void init() throws Exception {
+    public void init(Configuration configuration) throws Exception {
+        this.drmsConnector = new DRMSConnector(configuration);
+        this.workflowServiceConnector = new WorkflowServiceConnector(configuration);
         dozerBeanMapper = new DozerBeanMapper();
         BeanMappingBuilder orchestratorEventMapper = new BeanMappingBuilder() {
             @Override
@@ -72,8 +52,8 @@ public class OutboundEventProcessor implements MessageProcessor {
 
     @Override
     public void close() throws Exception {
-        this.workflowChannel.shutdown();
-        this.drmsChannel.shutdown();
+        this.drmsConnector.close();
+        this.workflowServiceConnector.close();
     }
 
 
@@ -103,84 +83,54 @@ public class OutboundEventProcessor implements MessageProcessor {
 
     private void processEvent(DataOrchestratorEntity entity) {
         try {
-            DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
-                    .setAccessToken(entity.getAuthToken())
-                    .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
-                    .setAuthenticatedUser(AuthenticatedUser.newBuilder()
-                            .setUsername(entity.getOwnerId())
-                            .setTenantId(entity.getTenantId())
-                            .build())
-                    .build();
 
-            StoragePreferenceFetchRequest storagePreferenceFetchRequest = StoragePreferenceFetchRequest.newBuilder()
-                    .setStoragePreferenceId(entity.getStoragePreferenceId()).setAuthToken(serviceAuthToken).build();
+            String ownerId = entity.getOwnerId();
+            String resourcePath = entity.getResourcePath();
+            String tail = resourcePath.substring(resourcePath.indexOf(ownerId));
+            String[] collections = tail.split("/");
 
-            StoragePreferenceFetchResponse response = storagePreferenceServiceBlockingStub
-                    .fetchStoragePreference(storagePreferenceFetchRequest);
-
-            if (!response.hasStoragePreference()) {
+            Optional<String> optionalStorPref = drmsConnector.getSourceStoragePreferenceId(entity, entity.getHostName());
+            if (optionalStorPref.isEmpty()) {
                 entity.setEventStatus(EventStatus.ERRORED.name());
-                entity.setError("StoragePreference not found ");
+                entity.setError("StoragePreference not found for host: " + entity.getHostName());
                 repository.save(entity);
                 return;
             }
 
-            //currently only ssh is working
-            if (response.getStoragePreference().getSshStoragePreference().isInitialized()) {
-                GenericResource genericResource = GenericResource
-                        .newBuilder()
-                        .setResourceId(entity.getResourceId())
-                        .setResourceName(entity.getResourceName())
-                        .setResourcePath(entity.getResourcePath())
-                        .setType("FILE")
-                        .setSshPreference(response.getStoragePreference().getSshStoragePreference()).build();
-                ResourceCreateRequest resourceCreateRequest = ResourceCreateRequest
-                        .newBuilder()
-                        .setAuthToken(serviceAuthToken)
-                        .setResource(genericResource)
-                        .build();
-                GenericResource resource = null;
-                try {
-                    ResourceCreateResponse resourceCreateResponse = resourceServiceBlockingStub.createResource(resourceCreateRequest);
-                    resource = resourceCreateResponse.getResource();
-                } catch (Exception ex) {
-                    LOGGER.error("Error occurred while creating resource {} in DRMS", entity.getResourceId(), ex);
+            String parentId = optionalStorPref.get();
+
+            for (int i = 1; i < collections.length - 1; i++) {
+                String resourceName = collections[i];
+                String entityId = Utils.getId(resourcePath.substring(resourcePath.indexOf(resourceName)));
+                String path = entity.getResourcePath().substring(0, entity.getResourcePath().indexOf(resourceName));
+                Optional<GenericResource> optionalGenericResource =
+                        this.drmsConnector.createResource(repository, entity, entityId, resourceName, path, parentId, "COLLECTION");
+                if (optionalGenericResource.isPresent()) {
+                    parentId = optionalGenericResource.get().getResourceId();
+
+                } else {
                     entity.setEventStatus(EventStatus.ERRORED.name());
-                    entity.setError("Error occurred while creating resource in DRMS " + ex.getMessage());
+                    entity.setError("Collection structure creation failed: " + entity.getHostName());
                     repository.save(entity);
                     return;
                 }
+            }
 
-                try {
-                    WorkflowServiceAuthToken workflowServiceAuthToken = WorkflowServiceAuthToken
-                            .newBuilder()
-                            .setAccessToken("")
-                            .build();
-                    WorkflowMessage workflowMessage = WorkflowMessage.newBuilder()
-                            .setResourceId(resource.getResourceId())
-                            .build();
+            Optional<GenericResource> optionalGenericResource =
+                    this.drmsConnector.createResource(repository, entity, entity.getResourceId(),
+                            collections[collections.length - 1], entity.getResourcePath(),
+                            parentId, "FILE");
 
-                    WorkflowInvocationRequest workflowInvocationRequest = WorkflowInvocationRequest
-                            .newBuilder().setMessage(workflowMessage).setAuthToken(workflowServiceAuthToken).build();
-                    this.workflowServiceStub.invokeWorkflow(workflowInvocationRequest);
-                } catch (Exception ex) {
-                    LOGGER.error("Error occurred while invoking workflow engine", entity.getResourceId(), ex);
-                    entity.setEventStatus(EventStatus.ERRORED.name());
-                    entity.setError("Error occurred while invoking workflow engine" + ex.getMessage());
-                    repository.save(entity);
-                    return;
-                }
+
+            if (optionalGenericResource.isPresent()) {
+                this.workflowServiceConnector.invokeWorkflow(repository, entity, optionalGenericResource.get());
+                entity.setEventStatus(EventStatus.DISPATCHED_TO_WORFLOW_ENGING.name());
+                repository.save(entity);
             } else {
-                LOGGER.error("Incorrect storage preference  {}", entity.getStoragePreferenceId());
-                entity.setEventStatus(EventStatus.ERRORED.name());
-                entity.setError("Incorrect storage preference " + entity.getStoragePreferenceId());
-                repository.save(entity);
-                return;
+
             }
-            entity.setEventStatus(EventStatus.DISPATCHED_TO_WORFLOW_ENGING.name());
-            repository.save(entity);
         } catch (Exception exception) {
-            LOGGER.error("Error occurred while processing outbound data orcehstrator event", exception);
+            LOGGER.error("Error occurred while processing outbound data orchestrator event", exception);
             entity.setEventStatus(EventStatus.ERRORED.name());
             entity.setError("Error occurred while processing ");
             repository.save(entity);
