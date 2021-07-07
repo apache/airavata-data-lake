@@ -1,8 +1,8 @@
 ### Service Execution Order
 
-* org.apache.airavata.datalake.orchestrator.workflow.engine.services.controller.Controller
-* org.apache.airavata.datalake.orchestrator.workflow.engine.services.participant.Participant
-* org.apache.airavata.datalake.orchestrator.workflow.engine.services.wm.datasync.DataSyncWorkflowManager
+* org.apache.airavata.datalake.workflow.engine.controller.Controller
+* org.apache.airavata.datalake.workflow.engine.worker.Participant
+* org.apache.airavata.datalake.workflow.engine.wm.datasync.DataSyncWorkflowManager
 
 ### Configure the participant with new tasks
 

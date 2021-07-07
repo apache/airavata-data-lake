@@ -34,6 +34,10 @@
         <module>workflow-engine-core</module>
         <module>workflow-engine-stubs</module>
         <module>workflow-engine-client</module>
+        <module>workflow-engine-worker</module>
+        <module>workflow-engine-controller</module>
+        <module>mft-callback-listener</module>
+        <module>datasync-workflow-manager</module>
     </modules>
     <artifactId>workflow-engine</artifactId>
 
