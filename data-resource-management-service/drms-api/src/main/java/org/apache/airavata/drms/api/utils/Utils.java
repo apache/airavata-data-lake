@@ -49,8 +49,8 @@ public class Utils {
     public static Optional<String> getPropertySearchQuery(List<ResourceSearchQuery> resourceSearchQueries, String type) {
         if (!resourceSearchQueries.isEmpty()) {
             for (ResourceSearchQuery qry : resourceSearchQueries) {
-                String query = " MATCH (r:" + type + "{`" + qry.getField() + "`: '" + qry.getValue() + "'})" +
-                        " Return r ";
+                String query = " MATCH (r:" + type +
+                        ") where r." + qry.getField() + " contains  '" + qry.getValue() + "' Return r ";
                 return Optional.ofNullable(query);
             }
         }
