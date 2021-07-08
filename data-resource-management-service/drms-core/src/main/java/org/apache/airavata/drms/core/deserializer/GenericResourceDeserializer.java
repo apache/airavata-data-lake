@@ -69,6 +69,9 @@ public class GenericResourceDeserializer {
                 if (field.equals("resourceName") || field.equals("name")) {
                     genericResourceBuilder.setResourceName(String.valueOf(node.asMap().get(field)));
                 }
+                if (field.equals("resourcePath")) {
+                    genericResourceBuilder.setResourcePath(String.valueOf(node.asMap().get(field)));
+                }
             }
             return genericResourceBuilder.build();
         }).collect(Collectors.toList());
