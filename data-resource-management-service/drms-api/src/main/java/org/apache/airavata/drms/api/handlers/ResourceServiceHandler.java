@@ -30,6 +30,7 @@ import org.apache.airavata.drms.api.utils.Utils;
 import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.core.constants.StoragePreferenceConstants;
 import org.apache.airavata.drms.core.deserializer.GenericResourceDeserializer;
+import org.apache.airavata.drms.core.deserializer.TransferMappingDeserializer;
 import org.apache.airavata.drms.core.serializer.GenericResourceSerializer;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.sharing.service.Entity;
@@ -89,7 +90,28 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
                 ResourceFetchResponse.Builder builder = ResourceFetchResponse.newBuilder();
                 if (!genericResourceList.isEmpty()) {
-                    builder.setResource(genericResourceList.get(0));
+                     // TODO: Move to Storage
+                    String searchQuery = "Match (srcStr:Storage)<-[:CHILD_OF]-" +
+                            "(srcSp:StoragePreference)-[:TRANSFER_OUT]->(t:TransferMapping" +
+                            "{scope:'GLOBAL', tenantId:$tenantId})-[:TRANSFER_IN]->(dstSp:StoragePreference)-[:CHILD_OF]->(dstStr:Storage)" +
+                            " return srcStr, srcSp, dstStr, dstSp, t";
+
+                    List<Record> globalRecords = this.neo4JConnector.searchNodes(userProps, searchQuery);
+
+                    if (!globalRecords.isEmpty()) {
+                        List<TransferMapping> transferMappings = TransferMappingDeserializer.deserializeList(globalRecords);
+                        if (!transferMappings.isEmpty()) {
+                            AnyStoragePreference anyStoragePreference = transferMappings.get(0)
+                                    .getSourceStoragePreference();
+                            GenericResource resource = genericResourceList.get(0)
+                                    .toBuilder()
+                                    .setSshPreference(anyStoragePreference.getSshStoragePreference())
+                                    .build();
+                            builder.setResource(resource);
+                        } else {
+                            builder.setResource(genericResourceList.get(0));
+                        }
+                    }
                 }
                 responseObserver.onNext(builder.build());
                 responseObserver.onCompleted();
