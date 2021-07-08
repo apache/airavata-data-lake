@@ -101,8 +101,9 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
 
             for (int i = 1; i < collections.length - 1; i++) {
                 String resourceName = collections[i];
-                String entityId = Utils.getId(resourcePath.substring(resourcePath.indexOf(resourceName)));
                 String path = entity.getResourcePath().substring(0, entity.getResourcePath().indexOf(resourceName));
+                path = path.concat(resourceName);
+                String entityId = Utils.getId(path);
                 Optional<GenericResource> optionalGenericResource =
                         this.drmsConnector.createResource(repository, entity, entityId, resourceName, path, parentId, "COLLECTION");
                 if (optionalGenericResource.isPresent()) {

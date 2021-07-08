@@ -8,6 +8,8 @@ import io.grpc.Metadata;
 import org.apache.airavata.datalake.drms.AuthCredentialType;
 import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
+import org.apache.airavata.drms.api.interceptors.authcache.AuthCache;
+import org.apache.airavata.drms.api.interceptors.authcache.CacheEntry;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.iam.service.UserRepresentation;
 import org.apache.custos.identity.management.client.IdentityManagementClient;
@@ -80,14 +82,22 @@ public class Authenticator implements ServiceInterceptor {
             if (drmsServiceAuthToken.getAuthCredentialType().equals(AuthCredentialType.UNKNOWN) ||
                     drmsServiceAuthToken.getAuthCredentialType().equals(AuthCredentialType.USER_CREDENTIAL)) {
                 String accessToken = drmsServiceAuthToken.getAccessToken();
-                User user = identityManagementClient.getUser(accessToken);
-                return Optional.ofNullable(AuthenticatedUser.newBuilder()
-                        .setUsername(user.getUsername())
-                        .setFirstName(user.getFirstName())
-                        .setLastName(user.getLastName())
-                        .setEmailAddress(user.getEmailAddress())
-                        .setTenantId(user.getClientId())
-                        .build());
+                Optional<AuthenticatedUser> optionalAuthenticatedUser = AuthCache.getAuthenticatedUser(accessToken);
+                if (optionalAuthenticatedUser.isPresent()) {
+                    return Optional.ofNullable(optionalAuthenticatedUser.get());
+                } else {
+                    User user = identityManagementClient.getUser(accessToken);
+                    AuthenticatedUser authUser = AuthenticatedUser.newBuilder()
+                            .setUsername(user.getUsername())
+                            .setFirstName(user.getFirstName())
+                            .setLastName(user.getLastName())
+                            .setEmailAddress(user.getEmailAddress())
+                            .setTenantId(user.getClientId())
+                            .build();
+                    CacheEntry cacheEntry = new CacheEntry(accessToken, System.currentTimeMillis(), authUser);
+                    AuthCache.cache(cacheEntry);
+                    return Optional.ofNullable(authUser);
+                }
             } else if (drmsServiceAuthToken.getAuthCredentialType()
                     .equals(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)) {
                 //Agents use service account to get access token
@@ -113,14 +123,22 @@ public class Authenticator implements ServiceInterceptor {
             }
         } else {
             //Assume rest clients always call with user token
-            User user = identityManagementClient.getUser(tokenHeaders.get());
-            return Optional.ofNullable(AuthenticatedUser.newBuilder()
-                    .setUsername(user.getUsername())
-                    .setFirstName(user.getFirstName())
-                    .setLastName(user.getLastName())
-                    .setEmailAddress(user.getEmailAddress())
-                    .setTenantId(user.getClientId())
-                    .build());
+            Optional<AuthenticatedUser> optionalAuthenticatedUser = AuthCache.getAuthenticatedUser(tokenHeaders.get());
+            if (optionalAuthenticatedUser.isPresent()) {
+                return Optional.ofNullable(optionalAuthenticatedUser.get());
+            } else {
+                User user = identityManagementClient.getUser(tokenHeaders.get());
+                AuthenticatedUser authUser = AuthenticatedUser.newBuilder()
+                        .setUsername(user.getUsername())
+                        .setFirstName(user.getFirstName())
+                        .setLastName(user.getLastName())
+                        .setEmailAddress(user.getEmailAddress())
+                        .setTenantId(user.getClientId())
+                        .build();
+                CacheEntry cacheEntry = new CacheEntry(tokenHeaders.get(), System.currentTimeMillis(), authUser);
+                AuthCache.cache(cacheEntry);
+                return Optional.ofNullable(authUser);
+            }
         }
         return Optional.empty();
     }
