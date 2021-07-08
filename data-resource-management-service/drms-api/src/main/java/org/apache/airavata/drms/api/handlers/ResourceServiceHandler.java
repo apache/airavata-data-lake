@@ -90,7 +90,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
                 ResourceFetchResponse.Builder builder = ResourceFetchResponse.newBuilder();
                 if (!genericResourceList.isEmpty()) {
-                     // TODO: Move to Storage
+                    // TODO: Move to Storage
                     String searchQuery = "Match (srcStr:Storage)<-[:CHILD_OF]-" +
                             "(srcSp:StoragePreference)-[:TRANSFER_OUT]->(t:TransferMapping" +
                             "{scope:'GLOBAL', tenantId:$tenantId})-[:TRANSFER_IN]->(dstSp:StoragePreference)-[:CHILD_OF]->(dstStr:Storage)" +
@@ -279,7 +279,86 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
     @Override
     public void updateResource(ResourceUpdateRequest
                                        request, StreamObserver<ResourceUpdateResponse> responseObserver) {
-        super.updateResource(request, responseObserver);
+        try {
+            AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
+
+            String type = request.getResource().getType();
+
+            Map<String, Object> userProps = new HashMap<>();
+            userProps.put("username", callUser.getUsername());
+            userProps.put("tenantId", callUser.getTenantId());
+
+            String parentId = request.getResource().getParentId();
+
+            String entityId = request.getResource().getResourceId();
+            Map<String, Object> serializedMap = GenericResourceSerializer.serializeToMap(request.getResource());
+            Optional<Entity> exEntity = CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
+                    parentId, type, entityId,
+                    request.getResource().getResourceName(), request.getResource().getResourceName(),
+                    callUser.getUsername());
+
+            if (exEntity.isPresent()) {
+                serializedMap.put("description", exEntity.get().getDescription());
+                serializedMap.put("resourceName", exEntity.get().getName());
+                serializedMap.put("createdTime", String.valueOf(exEntity.get().getCreatedAt()));
+                serializedMap.put("tenantId", callUser.getTenantId());
+                serializedMap.put("entityId", exEntity.get().getId());
+                serializedMap.put("entityType", exEntity.get().getType());
+                serializedMap.put("lastModifiedTime", exEntity.get().getCreatedAt());
+                serializedMap.put("owner", exEntity.get().getOwnerId());
+                serializedMap.putAll(request.getResource().getPropertiesMap());
+
+                if (!parentId.isEmpty()) {
+                    this.neo4JConnector.mergeNodesWithParentChildRelationShip(serializedMap, new HashMap<>(),
+                            request.getResource().getType(), StoragePreferenceConstants.STORAGE_PREFERENCE_LABEL,
+                            callUser.getUsername(), entityId, parentId, callUser.getTenantId());
+                } else {
+                    this.neo4JConnector.mergeNode(serializedMap, request.getResource().getType(),
+                            callUser.getUsername(), entityId, callUser.getTenantId());
+                }
+            } else {
+                logger.error("Error occurred while creating resource entity in Custos {}", request.getResource().getResourceId());
+                String msg = "Error occurred while creating resource entity in Custos with id"
+                        + request.getResource().getResourceId();
+                responseObserver.onError(Status.INTERNAL.withDescription(msg).asRuntimeException());
+                return;
+            }
+            Map<String, Object> exProps = new HashMap<>();
+            exProps.put("username", callUser.getUsername());
+            exProps.put("tenantId", callUser.getTenantId());
+            exProps.put("entityId", exEntity.get().getId());
+
+            String query = " MATCH (u:User),  (r:" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
+                    " r.entityId = $entityId AND r.tenantId = $tenantId" +
+                    " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
+                    " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
+                    "exists((cg)<-[:SHARED_WITH]-(r)) then r  else NULL end as value";
+
+
+            List<Record> records = this.neo4JConnector.searchNodes(exProps, query);
+
+            List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
+            GenericResource genericResource = genericResourceList.get(0);
+            if (genericResource.getPropertiesMap().containsKey("name")) {
+                genericResource = genericResource.toBuilder()
+                        .setResourceName(genericResource.getPropertiesMap().get("name")).build();
+            } else if (genericResource.getPropertiesMap().containsKey("resourceName")) {
+                genericResource = genericResource.toBuilder()
+                        .setResourceName(genericResource.getPropertiesMap().get("resourceName")).build();
+            }
+            ResourceUpdateResponse response = ResourceUpdateResponse
+                    .newBuilder()
+                    .setResource(genericResource)
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
+
+        } catch (Exception ex) {
+            logger.error("Error occurred while creating resource {}", request.getResource().getResourceId());
+            String msg = "Error occurred while creating resource" + ex.getMessage();
+            responseObserver.onError(Status.INTERNAL.withDescription(msg).asRuntimeException());
+        }
     }
 
     @Override
