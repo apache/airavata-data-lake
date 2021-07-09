@@ -12,6 +12,6 @@ outboundEventProcessor:
   drmsPort: 7070
 consumer:
   brokerURL: "149.165.157.235:9092"
-  consumerGroup: "DataOrchestratorGroup"
+  consumerGroup: "DataOrchestratorGroup2"
   topic: "data-orchestrator-file-events"
   maxPollRecordsConfig: 10
