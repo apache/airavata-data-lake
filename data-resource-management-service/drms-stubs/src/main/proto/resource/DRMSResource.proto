@@ -21,15 +21,15 @@ option java_multiple_files = true;
 package org.apache.airavata.datalake.drms.resource;
 
 import "google/api/annotations.proto";
-import "preference/S3Preference.proto";
-import "preference/SSHPreference.proto";
+import "storage/S3Storage.proto";
+import "storage/SSHStorage.proto";
 
 message GenericResource {
   string resource_id = 1;
   string resource_path = 2;
-  oneof storagePreference {
-    org.apache.airavata.datalake.drms.storage.preference.s3.S3StoragePreference s3_preference = 3;
-    org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference ssh_preference = 4;
+  oneof storage {
+    org.apache.airavata.datalake.drms.storage.ssh.SSHStorage ssh_storage = 3;
+    org.apache.airavata.datalake.drms.storage.s3.S3Storage s3_storage = 4;
   }
   map<string, string> properties = 5;
   string type=6;

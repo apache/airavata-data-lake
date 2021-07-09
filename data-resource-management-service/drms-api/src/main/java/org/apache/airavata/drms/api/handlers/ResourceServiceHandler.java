@@ -29,8 +29,8 @@ import org.apache.airavata.drms.api.utils.CustosUtils;
 import org.apache.airavata.drms.api.utils.Utils;
 import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.core.constants.StoragePreferenceConstants;
+import org.apache.airavata.drms.core.deserializer.AnyStorageDeserializer;
 import org.apache.airavata.drms.core.deserializer.GenericResourceDeserializer;
-import org.apache.airavata.drms.core.deserializer.TransferMappingDeserializer;
 import org.apache.airavata.drms.core.serializer.GenericResourceSerializer;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.sharing.service.Entity;
@@ -90,28 +90,16 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
                 ResourceFetchResponse.Builder builder = ResourceFetchResponse.newBuilder();
                 if (!genericResourceList.isEmpty()) {
-                    // TODO: Move to Storage
-                    String searchQuery = "Match (srcStr:Storage)<-[:CHILD_OF]-" +
-                            "(srcSp:StoragePreference)-[:TRANSFER_OUT]->(t:TransferMapping" +
-                            "{scope:'GLOBAL', tenantId:$tenantId})-[:TRANSFER_IN]->(dstSp:StoragePreference)-[:CHILD_OF]->(dstStr:Storage)" +
-                            " return srcStr, srcSp, dstStr, dstSp, t";
-
-                    List<Record> globalRecords = this.neo4JConnector.searchNodes(userProps, searchQuery);
-
-                    if (!globalRecords.isEmpty()) {
-                        List<TransferMapping> transferMappings = TransferMappingDeserializer.deserializeList(globalRecords);
-                        if (!transferMappings.isEmpty()) {
-                            AnyStoragePreference anyStoragePreference = transferMappings.get(0)
-                                    .getSourceStoragePreference();
-                            GenericResource resource = genericResourceList.get(0)
-                                    .toBuilder()
-                                    .setSshPreference(anyStoragePreference.getSshStoragePreference())
-                                    .build();
-                            builder.setResource(resource);
+                    Optional<AnyStorage> anyStorage = findStorage(resourceId, type, callUser.getTenantId());
+                    GenericResource resource = genericResourceList.get(0);
+                    if (anyStorage.isPresent()) {
+                        if (anyStorage.get().getStorageCase().equals(AnyStorage.StorageCase.SSH_STORAGE)) {
+                            resource = resource.toBuilder().setSshStorage(anyStorage.get().getSshStorage()).build();
                         } else {
-                            builder.setResource(genericResourceList.get(0));
+                            resource = resource.toBuilder().setS3Storage(anyStorage.get().getS3Storage()).build();
                         }
                     }
+                    builder.setResource(resource);
                 }
                 responseObserver.onNext(builder.build());
                 responseObserver.onCompleted();
@@ -835,6 +823,23 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 Map<String, String> proprties = val.getPropertiesMap();
                 return proprties.get("metadata");
             }).collect(Collectors.toList()));
+        }
+        return Optional.empty();
+    }
+
+
+    private Optional<AnyStorage> findStorage(String entityId, String type, String tenantId) throws Exception {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("entityId", entityId);
+        parameters.put("tenantId", tenantId);
+        String query = " Match (r" + type + ") where r.entityId=$entityId and r.tenantId=$tenantId " +
+                " Match (s:Storage)<-[:CHILD_OF*]-(r) return (s)";
+
+        List<Record> records = this.neo4JConnector.searchNodes(parameters, query);
+        if (!records.isEmpty()) {
+            List<AnyStorage> storageList = AnyStorageDeserializer.deserializeList(records);
+            return Optional.ofNullable(storageList.get(0));
+
         }
         return Optional.empty();
     }
