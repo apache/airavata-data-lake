@@ -120,17 +120,18 @@ public class SharingHandler {
         String permissionId = metadata.getPermission().getId();
         String userId = metadata.getOwnerId();
         String type = metadata.getOwnerType();
+        String sharedBy = metadata.getSharedBy();
         userId = userId.replaceAll("'", "`'");
         String query = null;
         if (type.equalsIgnoreCase("USER")) {
             query = "MATCH (a:" + entity.getType() + "), (b:User) WHERE a.entityId = $sourceId  AND a.tenantId = $clientId" +
                     " AND  b.username = $userId  AND b.tenantId = $clientId " +
-                    "MERGE (a)-[r:SHARED_WITH]->(b) SET r.permission= $permissionId  RETURN a, b";
+                    "MERGE (a)-[r:SHARED_WITH]->(b) SET r += $props RETURN a, b";
 
         } else if (type.equalsIgnoreCase("GROUP")) {
             query = "MATCH (a:" + entity.getType() + "), (b:Group) WHERE a.entityId = $sourceId " +
                     " AND a.tenantId = $clientId  AND b.groupId = $userId  AND b.tenantId = $clientId " +
-                    "MERGE (a)-[r:SHARED_WITH]->(b) SET r.permission= $permissionId RETURN a, b";
+                    "MERGE (a)-[r:SHARED_WITH]->(b) SET r += $props RETURN a, b";
         }
         if (query != null) {
             Map<String, Object> map = new HashMap<>();
@@ -138,6 +139,11 @@ public class SharingHandler {
             map.put("clientId", clientId);
             map.put("permissionId", permissionId);
             map.put("userId", userId);
+            map.put("sharedBy", sharedBy);
+            Map<String, Object> props = new HashMap<>();
+            props.put("sharedBy", sharedBy);
+            props.put("permission", permissionId);
+            map.put("props", props);
             try {
                 Utils.getNeo4JConnector().runTransactionalQuery(map, query);
             } catch (Exception ex) {
