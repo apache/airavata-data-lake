@@ -363,6 +363,50 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             List<ResourceSearchQuery> resourceSearchQueries = request.getQueriesList();
             int depth = request.getDepth();
             String value = request.getType();
+
+            if (!resourceSearchQueries.isEmpty()) {
+                for (ResourceSearchQuery qry : resourceSearchQueries) {
+                    if (qry.getField().equals("sharedBy")) {
+                        String val = qry.getValue();
+                        String query = " Match (m)-[r:SHARED_WITH]->(l) where r.sharedBy=$sharedBy AND m.tenantId=$tenantId and l.tenantId=$tenantId " +
+                                "return (m) ";
+                        Map<String, Object> objectMap = new HashMap<>();
+                        objectMap.put("sharedBy", val);
+                        objectMap.put("tenantId", callUser.getTenantId());
+                        List<Record> records = this.neo4JConnector.searchNodes(objectMap, query);
+
+                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
+                        ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
+                        builder.addAllResources(genericResourceList);
+                        responseObserver.onNext(builder.build());
+                        responseObserver.onCompleted();
+                        return;
+                    }
+
+                    if (qry.getField().equals("sharedWith")) {
+                        String val = qry.getValue();
+                        String query = "MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId " +
+                                " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)  " +
+                                " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm) , (r)-[:SHARED_WITH]->(u) where NOT  r.owner  = '" + val + "'" +
+                                " AND NOT rm.owner='" + val + "' " +
+                                " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg), (rg)-[:SHARED_WITH]->(g) where NOT  rg.owner  = '" + val + "'" +
+                                " AND NOT rmg.owner='" + val + "' " +
+                                " return distinct   r, rm, rmg, rg ";
+                        Map<String, Object> objectMap = new HashMap<>();
+                        objectMap.put("username", val);
+                        objectMap.put("tenantId", callUser.getTenantId());
+                        List<Record> records = this.neo4JConnector.searchNodes(objectMap, query);
+
+                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
+                        ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
+                        builder.addAllResources(genericResourceList);
+                        responseObserver.onNext(builder.build());
+                        responseObserver.onCompleted();
+                        return;
+                    }
+                }
+            }
+
             if (value == null || value.isEmpty()) {
                 logger.error("Errored while searching generic resources");
                 responseObserver
@@ -417,6 +461,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
                 builder.addAllResources(allowedResourceList);
                 responseObserver.onNext(builder.build());
+                return;
             } else {
                 Map<String, Object> userProps = new HashMap<>();
                 userProps.put("username", callUser.getUsername());
@@ -444,8 +489,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
                 builder.addAllResources(genericResourceList);
                 responseObserver.onNext(builder.build());
+                responseObserver.onCompleted();
             }
-            responseObserver.onCompleted();
+
 
         } catch (Exception e) {
             logger.error("Errored while searching generic resources; Message: {}", e.getMessage(), e);
