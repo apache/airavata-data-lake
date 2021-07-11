@@ -23,7 +23,7 @@ import io.grpc.ManagedChannelBuilder;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.*;
-import org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference;
+import org.apache.airavata.datalake.drms.storage.ssh.SSHStorage;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.identity.management.client.IdentityManagementClient;
 import org.json.JSONObject;
@@ -55,7 +55,7 @@ public class Client {
 
 //        StorageCreateRequest request = StorageCreateRequest.newBuilder().setAuthToken(authToken).
 //                setStorage(AnyStorage.newBuilder().setSshStorage(SSHStorage.newBuilder()
-//                        .setStorageId("qwerft-rftgyhu-oplmnj")
+//                        .setStorageId("testing.com")
 //                        .setHostName("localhost")
 //                        .setPort(3565)
 //                        .build())
@@ -116,31 +116,39 @@ public class Client {
         TransferMapping transferMapping = TransferMapping.newBuilder()
                 .setUserId("isjarana@iu.edu")
                 .setTransferScope(TransferScope.GLOBAL)
-                .setDestinationStoragePreference(AnyStoragePreference.newBuilder()
-                        .setSshStoragePreference(SSHStoragePreference.newBuilder()
-                                .setStoragePreferenceId("ssh_storage_preference").build()))
-                .setSourceStoragePreference(AnyStoragePreference.newBuilder()
-                        .setSshStoragePreference(SSHStoragePreference.newBuilder()
-                                .setStoragePreferenceId("ssh_storage_preference_2").build()))
+                .setSourceStorage(AnyStorage
+                        .newBuilder()
+                        .setSshStorage(SSHStorage.newBuilder().setStorageId("testing.com")
+                                .build())
+                        .build())
+                .setDestinationStorage(AnyStorage
+                        .newBuilder()
+                        .setSshStorage(SSHStorage.newBuilder().setStorageId("qwerft-rftgyhu-oplmnj")
+                                .build())
+                        .build())
                 .build();
-
+//
         CreateTransferMappingRequest request = CreateTransferMappingRequest.newBuilder()
                 .setAuthToken(authToken)
                 .setTransferMapping(transferMapping)
                 .build();
 
+//        resourceClient.createTransferMapping(request);
+//
         FindTransferMappingsRequest findTransferMappingsRequest = FindTransferMappingsRequest.newBuilder()
                 .setAuthToken(authToken)
                 .build();
-
+//        resourceClient.getTransferMappings(findTransferMappingsRequest);
+//
         DeleteTransferMappingRequest transferMappingRequest = DeleteTransferMappingRequest.newBuilder()
                 .setAuthToken(authToken)
-                .setId("ssh_storage_preference_2_ssh_storage_preference")
+                .setId("testing.com_qwerft-rftgyhu-oplmnj")
                 .build();
+        resourceClient.deleteTransferMappings(transferMappingRequest);
 
 //        storagePreferenceServiceBlockingStub.deleteTransferMappings(transferMappingRequest);
 
-        storagePreferenceServiceBlockingStub.createTransferMapping(request);
+//        storagePreferenceServiceBlockingStub.createTransferMapping(request);
         ResourceServiceGrpc.ResourceServiceBlockingStub resourceServiceBlockingStub = ResourceServiceGrpc.newBlockingStub(channel);
 
 //        ResourceSearchQuery query = ResourceSearchQuery.newBuilder().setField("type").setValue("COLLECTION").build();

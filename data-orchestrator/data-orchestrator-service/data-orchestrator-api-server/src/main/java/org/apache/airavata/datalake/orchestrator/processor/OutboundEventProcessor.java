@@ -89,7 +89,8 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
             String tail = resourcePath.substring(resourcePath.indexOf(ownerId));
             String[] collections = tail.split("/");
 
-            Optional<String> optionalStorPref = drmsConnector.getSourceStoragePreferenceId(entity, entity.getHostName());
+//            Optional<String> optionalStorPref = drmsConnector.getSourceStoragePreferenceId(entity, entity.getHostName());
+            Optional<String> optionalStorPref = null;
             if (optionalStorPref.isEmpty()) {
                 entity.setEventStatus(EventStatus.ERRORED.name());
                 entity.setError("StoragePreference not found for host: " + entity.getHostName());
