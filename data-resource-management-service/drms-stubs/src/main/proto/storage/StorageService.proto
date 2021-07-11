@@ -167,19 +167,19 @@ service StorageService {
 
   rpc createTransferMapping (CreateTransferMappingRequest) returns (CreateTransferMappingResponse) {
     option (google.api.http) = {
-      post: "/v1.0/api/drms/storagePreference/transferMapping"
+      post: "/v1.0/api/drms/storage/transferMapping"
     };
   }
 
   rpc getTransferMappings (FindTransferMappingsRequest) returns (FindTransferMappingsResponse) {
     option (google.api.http) = {
-      get: "/v1.0/api/drms/storagePreference/transferMapping"
+      get: "/v1.0/api/drms/storage/transferMapping"
     };
   }
 
   rpc deleteTransferMappings (DeleteTransferMappingRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      delete: "/v1.0/api/drms/storagePreference/transferMapping"
+      delete: "/v1.0/api/drms/storage/transferMapping"
     };
   }
 }

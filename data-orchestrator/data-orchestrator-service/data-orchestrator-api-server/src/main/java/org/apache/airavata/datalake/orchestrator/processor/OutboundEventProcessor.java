@@ -1,6 +1,7 @@
 package org.apache.airavata.datalake.orchestrator.processor;
 
 import org.apache.airavata.datalake.drms.resource.GenericResource;
+import org.apache.airavata.datalake.drms.storage.TransferMapping;
 import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.Utils;
 import org.apache.airavata.datalake.orchestrator.connectors.DRMSConnector;
@@ -89,27 +90,28 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
             String tail = resourcePath.substring(resourcePath.indexOf(ownerId));
             String[] collections = tail.split("/");
 
-//            Optional<String> optionalStorPref = drmsConnector.getSourceStoragePreferenceId(entity, entity.getHostName());
-            Optional<String> optionalStorPref = null;
+            Optional<TransferMapping> optionalStorPref = drmsConnector.getActiveTransferMapping(entity, entity.getHostName());
             if (optionalStorPref.isEmpty()) {
                 entity.setEventStatus(EventStatus.ERRORED.name());
-                entity.setError("StoragePreference not found for host: " + entity.getHostName());
+                entity.setError("Storage not found for host: " + entity.getHostName());
                 repository.save(entity);
                 return;
             }
 
-            String parentId = optionalStorPref.get();
+            TransferMapping transferMapping = optionalStorPref.get();
+            String sourceStorageId = transferMapping.getSourceStorage().getSshStorage().getStorageId();
+            String destinationStorageId = transferMapping.getDestinationStorage().getSshStorage().getStorageId();
 
+            String parentId = sourceStorageId;
             for (int i = 1; i < collections.length - 1; i++) {
                 String resourceName = collections[i];
                 String path = entity.getResourcePath().substring(0, entity.getResourcePath().indexOf(resourceName));
                 path = path.concat(resourceName);
                 String entityId = Utils.getId(path);
                 Optional<GenericResource> optionalGenericResource =
-                        this.drmsConnector.createResource(repository, entity, entityId, resourceName, path, parentId, "COLLECTION");
+                        this.drmsConnector.createResource(repository, entity, entityId, resourceName, path, sourceStorageId, "COLLECTION");
                 if (optionalGenericResource.isPresent()) {
                     parentId = optionalGenericResource.get().getResourceId();
-
                 } else {
                     entity.setEventStatus(EventStatus.ERRORED.name());
                     entity.setError("Collection structure creation failed: " + entity.getHostName());
@@ -123,6 +125,20 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
                             collections[collections.length - 1], entity.getResourcePath(),
                             parentId, "FILE");
 
+            String dstResourceHost = transferMapping.getDestinationStorage().getSshStorage().getHostName();
+            String destinationResourceId = dstResourceHost+":"+ entity.getResourcePath() + ":" + entity.getResourceType();
+            String messageId  = Utils.getId(destinationResourceId);
+
+            Optional<GenericResource> destinationFile = this.drmsConnector.createResource(repository, entity, messageId,
+                    entity.getResourceName(),
+                    entity.getResourcePath(),
+                    destinationStorageId,
+                    "FILE");
+
+            Optional<GenericResource> optionalGenericResourceDST =
+                    this.drmsConnector.createResource(repository, entity, messageId,
+                            collections[collections.length - 1], entity.getResourcePath(),
+                            destinationStorageId, "FILE");
 
             if (optionalGenericResource.isPresent()) {
                 this.workflowServiceConnector.invokeWorkflow(repository, entity, optionalGenericResource.get());
