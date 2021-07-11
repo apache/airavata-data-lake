@@ -28,7 +28,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
 
     private ManagedChannel drmsChannel;
     private ResourceServiceGrpc.ResourceServiceBlockingStub resourceServiceBlockingStub;
-    private StoragePreferenceServiceGrpc.StoragePreferenceServiceBlockingStub storagePreferenceServiceBlockingStub;
+    private StorageServiceGrpc.StorageServiceBlockingStub storageServiceBlockingStub;
 
     public DRMSConnector(Configuration configuration) throws Exception {
         this.init(configuration);
@@ -40,7 +40,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
                 .forAddress(configuration.getOutboundEventProcessor().getDrmsHost(),
                         configuration.getOutboundEventProcessor().getDrmsPort()).usePlaintext().build();
         this.resourceServiceBlockingStub = ResourceServiceGrpc.newBlockingStub(drmsChannel);
-        this.storagePreferenceServiceBlockingStub = StoragePreferenceServiceGrpc.newBlockingStub(drmsChannel);
+        this.storageServiceBlockingStub = StorageServiceGrpc.newBlockingStub(drmsChannel);
 
     }
 
@@ -54,67 +54,62 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
         return !this.drmsChannel.isShutdown();
     }
 
-//    public Optional<String> getSourceStoragePreferenceId(DataOrchestratorEntity entity, String hostname) {
-//        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
-//                .setAccessToken(entity.getAuthToken())
-//                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
-//                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
-//                        .setUsername(entity.getOwnerId())
-//                        .setTenantId(entity.getTenantId())
-//                        .build())
-//                .build();
-//        FindTransferMappingsRequest request = FindTransferMappingsRequest.newBuilder()
-//                .setAuthToken(serviceAuthToken)
-//                .build();
-//        FindTransferMappingsResponse response = storagePreferenceServiceBlockingStub.getTransferMappings(request);
-//        List<TransferMapping> transferMappingList = response.getMappingsList();
-//        AtomicReference<String> storagePreferenceId = new AtomicReference<>(null);
-//        if (!transferMappingList.isEmpty()) {
-//            transferMappingList.forEach(transferMapping -> {
-//                if (transferMapping.getSourceStoragePreference().getStorageCase()
-//                        .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
-//                    if (transferMapping.getSourceStoragePreference().getSshStoragePreference()
-//                            .getStorage().getHostName().equals(hostname)) {
-//                        storagePreferenceId
-//                                .set(transferMapping.getSourceStoragePreference()
-//                                        .getSshStoragePreference().getStoragePreferenceId());
-//                    }
-//                }
-//            });
-//        }
-//        return Optional.ofNullable(storagePreferenceId.get());
-//    }
-//
-//    public Optional<String> getDestinationStoragePreferenceId(DataOrchestratorEntity entity, String hostname) {
-//        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
-//                .setAccessToken(entity.getAuthToken())
-//                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
-//                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
-//                        .setUsername(entity.getOwnerId())
-//                        .setTenantId(entity.getTenantId())
-//                        .build())
-//                .build();
-//        FindTransferMappingsRequest request = FindTransferMappingsRequest.newBuilder()
-//                .setAuthToken(serviceAuthToken)
-//                .build();
-//        FindTransferMappingsResponse response = storagePreferenceServiceBlockingStub.getTransferMappings(request);
-//        List<TransferMapping> transferMappingList = response.getMappingsList();
-//        AtomicReference<String> storagePreferenceId = new AtomicReference<>(null);
-//        if (!transferMappingList.isEmpty()) {
-//            transferMappingList.forEach(transferMapping -> {
-//                if (transferMapping.getDestinationStoragePreference().getStorageCase()
-//                        .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
-//                    if (transferMapping.getDestinationStoragePreference().getSshStoragePreference()
-//                            .getStorage().getHostName().equals(hostname)) {
-//                        storagePreferenceId
-//                                .set(transferMapping.getDestinationStoragePreference()
-//                                        .getSshStoragePreference().getStoragePreferenceId());
-//                    }
-//                }
-//            });
-//        }
-//        return Optional.ofNullable(storagePreferenceId.get());
-//    }
+    public Optional<TransferMapping> getActiveTransferMapping(DataOrchestratorEntity entity, String hostname) {
+        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
+                .setAccessToken(entity.getAuthToken())
+                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
+                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
+                        .setUsername(entity.getOwnerId())
+                        .setTenantId(entity.getTenantId())
+                        .build())
+                .build();
+        FindTransferMappingsRequest request = FindTransferMappingsRequest.newBuilder()
+                .setAuthToken(serviceAuthToken)
+                .build();
+        FindTransferMappingsResponse response = storageServiceBlockingStub.getTransferMappings(request);
+        List<TransferMapping> transferMappingList = response.getMappingsList();
+        AtomicReference<TransferMapping> transferMappingOp = new AtomicReference<>(null);
+        if (!transferMappingList.isEmpty()) {
+            transferMappingList.forEach(transferMapping -> {
+                if (transferMapping.getSourceStorage().getStorageCase()
+                        .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
+                    if (transferMapping.getSourceStorage().getSshStorage().getHostName().equals(hostname)) {
+                            transferMappingOp.set(transferMapping);
+                    }
+                }
+            });
+        }
+        return Optional.ofNullable(transferMappingOp.get());
+    }
+
+    public Optional<String> getDestinationStorageId(DataOrchestratorEntity entity, String hostname) {
+        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
+                .setAccessToken(entity.getAuthToken())
+                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
+                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
+                        .setUsername(entity.getOwnerId())
+                        .setTenantId(entity.getTenantId())
+                        .build())
+                .build();
+        FindTransferMappingsRequest request = FindTransferMappingsRequest.newBuilder()
+                .setAuthToken(serviceAuthToken)
+                .build();
+        FindTransferMappingsResponse response = storageServiceBlockingStub.getTransferMappings(request);
+        List<TransferMapping> transferMappingList = response.getMappingsList();
+        AtomicReference<String> storagePreferenceId = new AtomicReference<>(null);
+        if (!transferMappingList.isEmpty()) {
+            transferMappingList.forEach(transferMapping -> {
+                if (transferMapping.getDestinationStorage().getStorageCase()
+                        .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
+                    if (transferMapping.getDestinationStorage().getSshStorage().getHostName().equals(hostname)) {
+                        storagePreferenceId
+                                .set(transferMapping.getDestinationStorage().getSshStorage().getStorageId());
+                    }
+                }
+            });
+        }
+        return Optional.ofNullable(storagePreferenceId.get());
+    }
 
 
     public Optional<GenericResource> createResource(DataOrchestratorEventRepository repository, DataOrchestratorEntity entity,
