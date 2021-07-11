@@ -17,6 +17,7 @@
 package org.apache.airavata.drms.api.handlers;
 
 import com.google.protobuf.Empty;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.storage.*;
@@ -24,6 +25,7 @@ import org.apache.airavata.drms.api.utils.CustosUtils;
 import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.core.constants.StorageConstants;
 import org.apache.airavata.drms.core.deserializer.AnyStorageDeserializer;
+import org.apache.airavata.drms.core.deserializer.TransferMappingDeserializer;
 import org.apache.airavata.drms.core.serializer.AnyStorageSerializer;
 import org.apache.custos.clients.CustosClientProvider;
 import org.lognet.springboot.grpc.GRpcService;
@@ -32,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,5 +189,179 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
             logger.error(msg, e);
             responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
         }
+    }
+
+
+    @Override
+    public void createTransferMapping(CreateTransferMappingRequest request, StreamObserver<CreateTransferMappingResponse> responseObserver) {
+        try {
+            AuthenticatedUser authenticatedUser = request.getAuthToken().getAuthenticatedUser();
+            AnyStorage sourceStoragePreference = request.getTransferMapping().getSourceStorage();
+            AnyStorage destinationStoragePreference = request.getTransferMapping().getDestinationStorage();
+            String sourceId = getStorageId(sourceStoragePreference);
+            String destinationId = getStorageId(destinationStoragePreference);
+
+            TransferScope scope = request.getTransferMapping().getTransferScope();
+            Map<String, Object> properties = new HashMap<>();
+            Map<String, Object> props = new HashMap<>();
+            props.put("tenantId", authenticatedUser.getTenantId());
+            props.put("owner", authenticatedUser.getUsername());
+            props.put("srcStorageId", sourceId);
+            props.put("dstStorageId", destinationId);
+            String entityId = sourceId + "_" + destinationId;
+            if (scope.equals(TransferScope.GLOBAL)) {
+                props.put("scope", TransferScope.GLOBAL.name());
+            } else {
+                props.put("scope", TransferScope.USER.name());
+            }
+            properties.put("props", props);
+            properties.put("tenantId", authenticatedUser.getTenantId());
+            properties.put("entityId", entityId);
+            properties.put("username", authenticatedUser.getUsername());
+            properties.put("srcStorageId", sourceId);
+            properties.put("dstStorageId", destinationId);
+            properties.put("owner", authenticatedUser.getUsername());
+
+
+            if (hasAccess(authenticatedUser.getUsername(), authenticatedUser.getTenantId(), sourceId) &&
+                    hasAccess(authenticatedUser.getUsername(), authenticatedUser.getTenantId(), destinationId)) {
+                String query = " Match (u:User), (srcSp:Storage), (dstSp:Storage) where " +
+                        " u.username=$username AND u.tenantId=$tenantId AND " +
+                        "srcSp.storageId=$srcStorageId AND " +
+                        "srcSp.tenantId = $tenantId AND dstSp.storageId=$dstStorageId " +
+                        "AND dstSp.tenantId =$tenantId " +
+                        " Merge (u)-[:HAS_TRANSFER_MAPPING]->(tm:TransferMapping{entityId:$entityId, tenantId:$tenantId, " +
+                        "srcStorageId:$srcStorageId," +
+                        "dstStorageId:$dstStorageId,owner:$owner}) set tm += $props" +
+                        " Merge (tm)<-[:TRANSFER_OUT]-(srcSp)" +
+                        " Merge (tm)-[:TRANSFER_IN]->(dstSp) return (tm)";
+                this.neo4JConnector.runTransactionalQuery(properties, query);
+
+                String searchQuery = " Match (srcStr:Storage)-[:TRANSFER_OUT]->(tm:TransferMapping)" +
+                        "-[:TRANSFER_IN]->(dstStr:Storage)  where " +
+                        " tm.entityId=$entityId AND tm.tenantId=$tenantId return srcStr,  dstStr,  tm";
+                List<Record> records = this.neo4JConnector.searchNodes(properties, searchQuery);
+                if (!records.isEmpty()) {
+                    List<TransferMapping> transferMappings = TransferMappingDeserializer.deserializeList(records);
+                    if (!transferMappings.isEmpty()) {
+                        CreateTransferMappingResponse response = CreateTransferMappingResponse
+                                .newBuilder()
+                                .setTransferMapping(transferMappings.get(0))
+                                .build();
+                        responseObserver.onNext(response);
+                        responseObserver.onCompleted();
+                    } else {
+                        String msg = "Errored while creating transfer mapping; Message:";
+                        logger.error("Errored while creating transfer mapping; Message:");
+                        responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
+                    }
+                } else {
+                    String msg = "Errored while creating transfer mapping; Message:";
+                    logger.error("Errored while creating transfer mapping; Message:");
+                    responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
+                }
+            } else {
+                String msg = "User does not have permission to create mapping ";
+                logger.error("User does not have permission to create mapping ");
+                responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
+
+            }
+        } catch (Exception e) {
+            String msg = "Errored while creating transfer mapping; Message:" + e.getMessage();
+            logger.error("Errored while creating transfer mapping; Message: {}", e.getMessage(), e);
+            responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
+        }
+    }
+
+    @Override
+    public void getTransferMappings(FindTransferMappingsRequest request, StreamObserver<FindTransferMappingsResponse> responseObserver) {
+        try {
+            List<TransferMapping> transferMappings = new ArrayList<>();
+            AuthenticatedUser authenticatedUser = request.getAuthToken().getAuthenticatedUser();
+            Map<String, Object> properties = new HashMap<>();
+            properties.put("username", authenticatedUser.getUsername());
+            properties.put("tenantId", authenticatedUser.getTenantId());
+            properties.put("scope", TransferScope.USER.name());
+            String query = " MATCH (u:User)-[:HAS_TRANSFER_MAPPING]->(t:TransferMapping{scope:$scope}) where u.username = $username AND u.tenantId = $tenantId" +
+                    " Match (srcStr:Storage)-[:TRANSFER_OUT]->(t)-[:TRANSFER_IN]->(dstStr:Storage)" +
+                    " return srcStr,  dstStr,  t";
+            List<Record> records = this.neo4JConnector.searchNodes(properties, query);
+            properties.put("scope", TransferScope.GLOBAL.name());
+            String queryFetchGlobal = "Match (srcStr:Storage)<-[:TRANSFER_OUT]->(t:TransferMapping{scope:$scope, tenantId:$tenantId})-[:TRANSFER_IN]->(dstStr:Storage)" +
+                    " return srcStr,  dstStr,  t";
+            List<Record> globalRecords = this.neo4JConnector.searchNodes(properties, queryFetchGlobal);
+            if (!records.isEmpty()) {
+                transferMappings = TransferMappingDeserializer.deserializeList(records);
+            }
+            if (!globalRecords.isEmpty()) {
+                transferMappings.addAll(TransferMappingDeserializer.deserializeList(globalRecords));
+            }
+            FindTransferMappingsResponse findTransferMappingsResponse = FindTransferMappingsResponse
+                    .newBuilder()
+                    .addAllMappings(transferMappings)
+                    .build();
+            responseObserver.onNext(findTransferMappingsResponse);
+            responseObserver.onCompleted();
+
+        } catch (Exception ex) {
+            String msg = "Errored while fetching transfer mappings, Message:" + ex.getMessage();
+            logger.error("Errored while fetching transfer mappings, Message: {}", ex.getMessage(), ex);
+            responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
+        }
+    }
+
+    @Override
+    public void deleteTransferMappings(DeleteTransferMappingRequest request, StreamObserver<Empty> responseObserver) {
+        try {
+            AuthenticatedUser authenticatedUser = request.getAuthToken().getAuthenticatedUser();
+            String transferMappingId = request.getId();
+            Map<String, Object> properties = new HashMap<>();
+            properties.put("username", authenticatedUser.getUsername());
+            properties.put("tenantId", authenticatedUser.getTenantId());
+            properties.put("entityId", transferMappingId);
+            String query = " MATCH (u:User)-[:HAS_TRANSFER_MAPPING]->" +
+                    "(t:TransferMapping{entityId:$entityId})" +
+                    " where u.username = $username AND u.tenantId = $tenantId detach delete t";
+            this.neo4JConnector.runTransactionalQuery(properties, query);
+            responseObserver.onNext(Empty.newBuilder().build());
+            responseObserver.onCompleted();
+
+        } catch (Exception ex) {
+            String msg = "Errored while delete transfer mappings, Message:" + ex.getMessage();
+            logger.error("Errored while delete transfer mappings, Message: {}", ex.getMessage(), ex);
+            responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
+        }
+    }
+
+
+    private String getStorageId(AnyStorage storage) {
+        if (storage.getStorageCase()
+                .equals(AnyStorage.StorageCase.S3_STORAGE)) {
+            return storage.getS3Storage().getStorageId();
+        } else {
+            return storage.getSshStorage().getStorageId();
+        }
+    }
+
+    private boolean hasAccess(String username, String tenantId, String storageId) throws Exception {
+        Map<String, Object> userProps = new HashMap<>();
+        userProps.put("username", username);
+        userProps.put("tenantId", tenantId);
+        userProps.put("entityId", storageId);
+
+        List<Record> records = this.neo4JConnector.searchNodes(userProps,
+                " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
+                        " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(s1:Storage{entityId:$entityId})<-[:CHILD_OF]->(sp1:StoragePreference)" +
+                        " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
+                        " OPTIONAL MATCH (sp2:StoragePreference)-[:CHILD_OF]->(s2:Storage{entityId:$entityId})-[:SHARED_WITH]->(cg) " +
+                        " OPTIONAL MATCH (sp3:StoragePreference )-[:CHILD_OF]->(s3:Storage{entityId:$entityId})-[:SHARED_WITH]->(g)" +
+                        " OPTIONAL MATCH (s4:Storage{entityId:$entityId})<-[:CHILD_OF]->(sp4:StoragePreference)-[:SHARED_WITH]->(u)" +
+                        " OPTIONAL MATCH (s5:Storage{entityId:$entityId})<-[:CHILD_OF]->(sp5:StoragePreference)-[:SHARED_WITH]->(cg)" +
+                        " OPTIONAL MATCH (s6:Storage{entityId:$entityId})<-[:CHILD_OF]->(sp6:StoragePreference)-[:SHARED_WITH]->(g)" +
+                        " return distinct s1, sp1, s2, sp2, s3, sp3, s4,sp4, s5,sp5, s6,sp6");
+        if (!records.isEmpty()) {
+            return true;
+        }
+        return false;
     }
 }

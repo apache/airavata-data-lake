@@ -1,7 +1,6 @@
 package org.apache.airavata.drms.core.deserializer;
 
 import org.apache.airavata.datalake.drms.storage.AnyStorage;
-import org.apache.airavata.datalake.drms.storage.AnyStoragePreference;
 import org.apache.airavata.datalake.drms.storage.TransferMapping;
 import org.apache.airavata.datalake.drms.storage.TransferScope;
 import org.neo4j.driver.Record;
@@ -20,29 +19,22 @@ public class TransferMappingDeserializer {
             InternalRecord internalRecord = (InternalRecord) record;
             List<Value> values = internalRecord.values();
 
-            if (values.size() == 5) {
+            if (values.size() == 3) {
                 Value srcStr = values.get(0);
-                Value srcSpr = values.get(1);
-                Value dstStr = values.get(2);
-                Value dstSp = values.get(3);
-                Value tm = values.get(4);
+                Value dstStr = values.get(1);
+                Value tm = values.get(2);
 
-                if (!srcStr.isNull() && !srcSpr.isNull() && !tm.isNull()
-                        && !dstStr.isNull() && !dstSp.isNull()) {
+                if (!srcStr.isNull() && !tm.isNull()
+                        && !dstStr.isNull()) {
                     AnyStorage storage = AnyStorageDeserializer.deriveStorageFromMap(srcStr.asMap());
-                    AnyStoragePreference srcPreference = AnyStoragePreferenceDeserializer
-                            .deriveStoragePrefFromMap(srcSpr.asMap(), storage);
-
                     AnyStorage dstStorage = AnyStorageDeserializer.deriveStorageFromMap(dstStr.asMap());
-                    AnyStoragePreference dstPreference = AnyStoragePreferenceDeserializer
-                            .deriveStoragePrefFromMap(dstSp.asMap(), dstStorage);
 
                     Map<String, Object> map = tm.asMap();
                     TransferMapping transferMapping = TransferMapping.newBuilder()
                             .setTransferScope(TransferScope.valueOf(map.get("scope").toString()))
                             .setId(map.get("entityId").toString())
-                            .setSourceStoragePreference(srcPreference)
-                            .setDestinationStoragePreference(dstPreference)
+                            .setSourceStorage(storage)
+                            .setDestinationStorage(dstStorage)
                             .setUserId(map.get("owner").toString())
                             .build();
 

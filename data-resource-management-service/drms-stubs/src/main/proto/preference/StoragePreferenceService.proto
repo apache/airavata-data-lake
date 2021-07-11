@@ -81,43 +81,9 @@ message StoragePreferenceSearchResponse {
     repeated AnyStoragePreference storages_preference = 2;
 }
 
-enum TransferScope {
-    UNKNOWN = 0;
-    GLOBAL = 1;
-    USER = 2;
-}
 
-message TransferMapping {
-    string id = 1;
-    string user_id = 2;
-    AnyStoragePreference source_storage_preference = 3;
-    AnyStoragePreference destination_storage_preference = 4;
-    TransferScope transfer_scope = 5;
-}
 
-message CreateTransferMappingRequest {
-    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-    TransferMapping transfer_mapping = 2;
-}
 
-message CreateTransferMappingResponse {
-    TransferMapping transfer_mapping = 1;
-}
-
-message FindTransferMappingsRequest {
-    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-    string id = 2;
-    TransferScope transfer_scope = 3;
-}
-
-message FindTransferMappingsResponse {
-    repeated TransferMapping mappings = 1;
-}
-
-message DeleteTransferMappingRequest {
-    org.apache.airavata.datalake.drms.DRMSServiceAuthToken auth_token = 1;
-    string id = 2;
-}
 
 
 service StoragePreferenceService {
@@ -152,21 +118,5 @@ service StoragePreferenceService {
     };
     }
 
-    rpc createTransferMapping (CreateTransferMappingRequest) returns (CreateTransferMappingResponse) {
-        option (google.api.http) = {
-      post: "/v1.0/api/drms/storagePreference/transferMapping"
-    };
-    }
 
-    rpc getTransferMappings (FindTransferMappingsRequest) returns (FindTransferMappingsResponse) {
-        option (google.api.http) = {
-      get: "/v1.0/api/drms/storagePreference/transferMapping"
-    };
-    }
-
-    rpc deleteTransferMappings (DeleteTransferMappingRequest) returns (google.protobuf.Empty) {
-        option (google.api.http) = {
-      delete: "/v1.0/api/drms/storagePreference/transferMapping"
-    };
-    }
 }
