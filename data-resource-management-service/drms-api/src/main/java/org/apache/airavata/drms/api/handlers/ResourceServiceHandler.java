@@ -368,7 +368,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 for (ResourceSearchQuery qry : resourceSearchQueries) {
                     if (qry.getField().equals("sharedBy")) {
                         String val = qry.getValue();
-                        String query = " Match (m)-[r:SHARED_WITH]->(l) where r.sharedBy=$sharedBy AND m.tenantId=$tenantId and l.tenantId=$tenantId " +
+                        String query = " Match (m:" + value + ")-[r:SHARED_WITH]->(l) " +
+                                "where r.sharedBy=$sharedBy AND m.tenantId=$tenantId and l.tenantId=$tenantId " +
                                 "return (m) ";
                         Map<String, Object> objectMap = new HashMap<>();
                         objectMap.put("sharedBy", val);
@@ -387,9 +388,11 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         String val = qry.getValue();
                         String query = "MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId " +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)  " +
-                                " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm) , (r)-[:SHARED_WITH]->(u) where NOT  r.owner  = '" + val + "'" +
+                                " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ") , " +
+                                "(r:" + value + ")-[:SHARED_WITH]->(u) where NOT  r.owner  = '" + val + "'" +
                                 " AND NOT rm.owner='" + val + "' " +
-                                " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg), (rg)-[:SHARED_WITH]->(g) where NOT  rg.owner  = '" + val + "'" +
+                                " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")," +
+                                " (rg:" + value + ")-[:SHARED_WITH]->(g) where NOT  rg.owner  = '" + val + "'" +
                                 " AND NOT rmg.owner='" + val + "' " +
                                 " return distinct   r, rm, rmg, rg ";
                         Map<String, Object> objectMap = new HashMap<>();
