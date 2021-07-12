@@ -72,7 +72,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
         if (!transferMappingList.isEmpty()) {
             transferMappingList.forEach(transferMapping -> {
                 if (transferMapping.getSourceStorage().getStorageCase()
-                        .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
+                        .equals(AnyStorage.StorageCase.SSH_STORAGE)) {
                     if (transferMapping.getSourceStorage().getSshStorage().getHostName().equals(hostname)) {
                             transferMappingOp.set(transferMapping);
                     }
