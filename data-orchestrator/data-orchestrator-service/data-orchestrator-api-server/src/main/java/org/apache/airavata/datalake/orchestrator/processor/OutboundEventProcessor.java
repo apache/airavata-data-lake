@@ -135,12 +135,7 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
                     destinationStorageId,
                     "FILE");
 
-            Optional<GenericResource> optionalGenericResourceDST =
-                    this.drmsConnector.createResource(repository, entity, messageId,
-                            collections[collections.length - 1], entity.getResourcePath(),
-                            destinationStorageId, "FILE");
-
-            if (optionalGenericResource.isPresent()) {
+            if (optionalGenericResource.isPresent() && destinationFile.isPresent()) {
                 this.workflowServiceConnector.invokeWorkflow(repository, entity, optionalGenericResource.get());
                 entity.setEventStatus(EventStatus.DISPATCHED_TO_WORFLOW_ENGING.name());
                 repository.save(entity);
