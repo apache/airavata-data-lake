@@ -1,6 +1,7 @@
 package org.apache.airavata.datalake.orchestrator.processor;
 
 import org.apache.airavata.datalake.drms.resource.GenericResource;
+import org.apache.airavata.datalake.drms.storage.AnyStoragePreference;
 import org.apache.airavata.datalake.drms.storage.TransferMapping;
 import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.Utils;
@@ -126,8 +127,8 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
                             parentId, "FILE");
 
             String dstResourceHost = transferMapping.getDestinationStorage().getSshStorage().getHostName();
-            String destinationResourceId = dstResourceHost+":"+ entity.getResourcePath() + ":" + entity.getResourceType();
-            String messageId  = Utils.getId(destinationResourceId);
+            String destinationResourceId = dstResourceHost + ":" + entity.getResourcePath() + ":" + entity.getResourceType();
+            String messageId = Utils.getId(destinationResourceId);
 
             Optional<GenericResource> destinationFile = this.drmsConnector.createResource(repository, entity, messageId,
                     entity.getResourceName(),
@@ -136,11 +137,42 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
                     "FILE");
 
             if (optionalGenericResource.isPresent() && destinationFile.isPresent()) {
-                this.workflowServiceConnector.invokeWorkflow(repository, entity, optionalGenericResource.get());
-                entity.setEventStatus(EventStatus.DISPATCHED_TO_WORFLOW_ENGING.name());
-                repository.save(entity);
-            } else {
+                try {
 
+                    Optional<AnyStoragePreference> storagePreferenceOptional = this.drmsConnector
+                            .getStoragePreference(entity.getAuthToken(), entity.getOwnerId(), entity.getTenantId(), sourceStorageId);
+
+                    Optional<AnyStoragePreference> destinationPreferenceOptional = this.drmsConnector
+                            .getStoragePreference(entity.getAuthToken(), entity.getOwnerId(), entity.getTenantId(), destinationStorageId);
+                    if (storagePreferenceOptional.isPresent() && destinationPreferenceOptional.isPresent()) {
+                        String sourceCredentialToken = storagePreferenceOptional.get()
+                                .getSshStoragePreference()
+                                .getCredentialToken();
+                        String destinationCredentialToken = storagePreferenceOptional.get()
+                                .getSshStoragePreference()
+                                .getCredentialToken();
+
+                        this.workflowServiceConnector.invokeWorkflow(entity.getOwnerId(),
+                                entity.getTenantId(), entity.getResourceId(), sourceCredentialToken,
+                                messageId, destinationCredentialToken);
+                        entity.setEventStatus(EventStatus.DISPATCHED_TO_WORFLOW_ENGING.name());
+                        repository.save(entity);
+                    } else {
+                        String msg = "Cannot find storage preference for storage " + sourceStorageId + " for user " + entity.getOwnerId();
+                        entity.setError(msg);
+                        entity.setEventStatus(EventStatus.ERRORED.name());
+                        repository.save(entity);
+                        LOGGER.error(msg);
+                    }
+
+
+                } catch (Exception exception) {
+                    String msg = "Error occurred while invoking workflow manager" + exception.getMessage();
+                    entity.setError("Error occurred while invoking workflow manager " + exception.getMessage());
+                    entity.setEventStatus(EventStatus.ERRORED.name());
+                    repository.save(entity);
+                    LOGGER.error(msg, exception);
+                }
             }
         } catch (Exception exception) {
             LOGGER.error("Error occurred while processing outbound data orchestrator event", exception);

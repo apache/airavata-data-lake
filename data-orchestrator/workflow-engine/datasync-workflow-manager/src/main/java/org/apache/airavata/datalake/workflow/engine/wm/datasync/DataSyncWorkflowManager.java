@@ -19,6 +19,7 @@ package org.apache.airavata.datalake.workflow.engine.wm.datasync;
 
 import org.apache.airavata.datalake.mft.listener.DataTransferEvent;
 import org.apache.airavata.datalake.mft.listener.DataTransferEventDeserializer;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowInvocationRequest;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.AbstractTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.TaskUtil;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask;
@@ -31,6 +32,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Duration;
 import java.util.*;
@@ -63,6 +65,19 @@ public class DataSyncWorkflowManager {
 
     @org.springframework.beans.factory.annotation.Value("${datasync.wm.grpc.port}")
     private int datasyncWmPort;
+
+
+    @Value("${mft.callback.url}")
+    private String callbackURL;
+    @Value("${mft.host}")
+    private String mftHost;
+    @Value("${mft.port}")
+    private int mftPort;
+    @Value("${mft.clientId}")
+    private String mftClientId;
+    @Value("${mft.clientSecret}")
+    private String mftClientSecret;
+
 
     @Autowired
     private CallbackWorkflowStore callbackWorkflowStore;
@@ -161,21 +176,22 @@ public class DataSyncWorkflowManager {
         logger.info("Successfully initialized DatasyncWorkflow Manager");
     }
 
-    public void submitDataSyncWorkflow() throws Exception {
+    public void submitDataSyncWorkflow(WorkflowInvocationRequest workflowInvocationRequest) throws Exception {
         AsyncDataTransferTask dt1 = new AsyncDataTransferTask();
-        dt1.setSourceResourceId("");
-        dt1.setDestinationResourceId("");
-        dt1.setSourceCredToken("");
-        dt1.setDestinationCredToken("");
-        dt1.setCallbackUrl("localhost:33335");
-        dt1.setMftHost("localhost");
-        dt1.setMftPort(7004);
-        dt1.setMftClientId("");
-        dt1.setMftClientSecret("");
-        dt1.setUserId("dimuthu");
+        dt1.setSourceResourceId(workflowInvocationRequest.getMessage().getSourceResourceId());
+        dt1.setDestinationResourceId(workflowInvocationRequest.getMessage().getDestinationResourceId());
+        dt1.setSourceCredToken(workflowInvocationRequest.getMessage().getSourceCredentialToken());
+        dt1.setDestinationCredToken(workflowInvocationRequest.getMessage().getDestinationCredentialToken());
+        dt1.setTenantId(workflowInvocationRequest.getMessage().getTenantId());
+        dt1.setCallbackUrl(callbackURL);
+        dt1.setMftHost(mftHost);
+        dt1.setMftPort(mftPort);
+        dt1.setMftClientId(mftClientId);
+        dt1.setMftClientSecret(mftClientSecret);
+        dt1.setUserId(workflowInvocationRequest.getMessage().getUsername());
         dt1.setCurrentSection(1);
         dt1.setTaskId("dt-" + UUID.randomUUID().toString());
-        dt1.setMftCallbackStoreHost(datasyncWmHost);
+   v     dt1.setMftCallbackStoreHost(datasyncWmHost);
         dt1.setMftCallbackStorePort(datasyncWmPort);
 
         Map<String, AbstractTask> taskMap = new HashMap<>();

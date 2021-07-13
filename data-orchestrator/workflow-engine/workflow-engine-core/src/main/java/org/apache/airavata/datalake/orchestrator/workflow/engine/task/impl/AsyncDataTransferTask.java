@@ -60,6 +60,9 @@ public class AsyncDataTransferTask extends BiSectionNonBlockingTask {
     @TaskParam(name = "MFTCallbackStorePort")
     private final ThreadLocal<Integer> mftCallbackStorePort = new ThreadLocal<>();
 
+    @TaskParam(name = "TenantId")
+    private final ThreadLocal<String> tenantId = new ThreadLocal<>();
+
 
     public TaskResult beforeSection() {
         MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = MFTApiClient.buildClient(getMftHost(), getMftPort());
@@ -176,7 +179,7 @@ public class AsyncDataTransferTask extends BiSectionNonBlockingTask {
     }
 
     public void setMftClientSecret(String mftClientSecret) {
-        this.mftClientSecret.set( mftClientSecret);
+        this.mftClientSecret.set(mftClientSecret);
     }
 
     public String getMftCallbackStoreHost() {
@@ -194,4 +197,13 @@ public class AsyncDataTransferTask extends BiSectionNonBlockingTask {
     public void setMftCallbackStorePort(Integer mftCallbackStorePort) {
         this.mftCallbackStorePort.set(mftCallbackStorePort);
     }
+
+    public String getTenantId() {
+        return tenantId.get();
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId.set(tenantId);
+    }
+
 }

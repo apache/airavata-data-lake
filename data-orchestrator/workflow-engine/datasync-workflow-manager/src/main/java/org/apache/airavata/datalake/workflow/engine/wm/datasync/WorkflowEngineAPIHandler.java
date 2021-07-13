@@ -44,7 +44,7 @@ public class WorkflowEngineAPIHandler extends WorkflowServiceGrpc.WorkflowServic
     public void invokeWorkflow(WorkflowInvocationRequest request,
                                StreamObserver<WorkflowInvocationResponse> responseObserver) {
         try {
-            dataSyncWorkflowManager.submitDataSyncWorkflow();
+            dataSyncWorkflowManager.submitDataSyncWorkflow(request);
             responseObserver.onNext(WorkflowInvocationResponse.newBuilder().setStatus(true).build());
             responseObserver.onCompleted();
         } catch (Exception ex) {

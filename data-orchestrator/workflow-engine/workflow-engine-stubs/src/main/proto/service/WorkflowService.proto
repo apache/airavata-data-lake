@@ -27,10 +27,15 @@ import "google/protobuf/empty.proto";
 message WorkflowMessage {
     string message_id = 1;
     string resource_id = 2;
+    string source_resource_id = 3;
+    string destination_resource_id = 4;
+    string username = 5;
+    string tenantId = 6;
+    string source_credential_token = 7;
+    string destination_credential_token = 8;
 }
 
 message WorkflowInvocationRequest {
-    org.apache.airavata.datalake.orchestrator.workflow.WorkflowServiceAuthToken auth_token = 1;
     WorkflowMessage message = 2;
 }
 
