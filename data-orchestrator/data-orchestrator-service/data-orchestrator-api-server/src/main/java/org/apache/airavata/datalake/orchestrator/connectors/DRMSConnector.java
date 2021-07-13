@@ -29,6 +29,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
     private ManagedChannel drmsChannel;
     private ResourceServiceGrpc.ResourceServiceBlockingStub resourceServiceBlockingStub;
     private StorageServiceGrpc.StorageServiceBlockingStub storageServiceBlockingStub;
+    private StoragePreferenceServiceGrpc.StoragePreferenceServiceBlockingStub storagePreferenceServiceBlockingStub;
 
     public DRMSConnector(Configuration configuration) throws Exception {
         this.init(configuration);
@@ -41,6 +42,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
                         configuration.getOutboundEventProcessor().getDrmsPort()).usePlaintext().build();
         this.resourceServiceBlockingStub = ResourceServiceGrpc.newBlockingStub(drmsChannel);
         this.storageServiceBlockingStub = StorageServiceGrpc.newBlockingStub(drmsChannel);
+        this.storagePreferenceServiceBlockingStub = StoragePreferenceServiceGrpc.newBlockingStub(drmsChannel);
 
     }
 
@@ -74,41 +76,12 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
                 if (transferMapping.getSourceStorage().getStorageCase()
                         .equals(AnyStorage.StorageCase.SSH_STORAGE)) {
                     if (transferMapping.getSourceStorage().getSshStorage().getHostName().equals(hostname)) {
-                            transferMappingOp.set(transferMapping);
+                        transferMappingOp.set(transferMapping);
                     }
                 }
             });
         }
         return Optional.ofNullable(transferMappingOp.get());
-    }
-
-    public Optional<String> getDestinationStorageId(DataOrchestratorEntity entity, String hostname) {
-        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
-                .setAccessToken(entity.getAuthToken())
-                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
-                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
-                        .setUsername(entity.getOwnerId())
-                        .setTenantId(entity.getTenantId())
-                        .build())
-                .build();
-        FindTransferMappingsRequest request = FindTransferMappingsRequest.newBuilder()
-                .setAuthToken(serviceAuthToken)
-                .build();
-        FindTransferMappingsResponse response = storageServiceBlockingStub.getTransferMappings(request);
-        List<TransferMapping> transferMappingList = response.getMappingsList();
-        AtomicReference<String> storagePreferenceId = new AtomicReference<>(null);
-        if (!transferMappingList.isEmpty()) {
-            transferMappingList.forEach(transferMapping -> {
-                if (transferMapping.getDestinationStorage().getStorageCase()
-                        .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
-                    if (transferMapping.getDestinationStorage().getSshStorage().getHostName().equals(hostname)) {
-                        storagePreferenceId
-                                .set(transferMapping.getDestinationStorage().getSshStorage().getStorageId());
-                    }
-                }
-            });
-        }
-        return Optional.ofNullable(storagePreferenceId.get());
     }
 
 
@@ -151,4 +124,34 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
             return Optional.empty();
         }
     }
+
+    public Optional<AnyStoragePreference> getStoragePreference(String authToken, String username, String tenantId, String storageId) {
+        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
+                .setAccessToken(authToken)
+                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
+                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
+                        .setUsername(username)
+                        .setTenantId(tenantId)
+                        .build())
+                .build();
+        StoragePreferenceSearchQuery searchQuery = StoragePreferenceSearchQuery
+                .newBuilder()
+                .setField("storageId")
+                .setValue(storageId)
+                .build();
+
+        StoragePreferenceSearchRequest storagePreferenceSearchRequest = StoragePreferenceSearchRequest
+                .newBuilder()
+                .setAuthToken(serviceAuthToken)
+                .addQueries(searchQuery)
+                .build();
+        StoragePreferenceSearchResponse response = storagePreferenceServiceBlockingStub
+                .searchStoragePreference(storagePreferenceSearchRequest);
+        List<AnyStoragePreference> preferences = response.getStoragesPreferenceList();
+        if (!preferences.isEmpty()) {
+            return Optional.ofNullable(preferences.get(0));
+        }
+        return Optional.empty();
+    }
+
 }

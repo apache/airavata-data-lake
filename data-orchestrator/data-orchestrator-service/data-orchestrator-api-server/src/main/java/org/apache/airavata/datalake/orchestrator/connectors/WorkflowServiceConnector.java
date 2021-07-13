@@ -2,13 +2,8 @@ package org.apache.airavata.datalake.orchestrator.connectors;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.core.connector.AbstractConnector;
-import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEntity;
-import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEventRepository;
-import org.apache.airavata.datalake.orchestrator.registry.persistance.EventStatus;
-import org.apache.airavata.datalake.orchestrator.workflow.WorkflowServiceAuthToken;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowInvocationRequest;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowMessage;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowServiceGrpc;
@@ -48,25 +43,23 @@ public class WorkflowServiceConnector implements AbstractConnector<Configuration
         return false;
     }
 
-    public void invokeWorkflow(DataOrchestratorEventRepository repository, DataOrchestratorEntity entity, GenericResource resource) {
+    public void invokeWorkflow(String username, String tenantId, String sourceResourceId, String sourceCredentialToken,
+                               String dstResourceId, String destinationCredentialToken) {
         try {
-            WorkflowServiceAuthToken workflowServiceAuthToken = WorkflowServiceAuthToken
-                    .newBuilder()
-                    .setAccessToken("")
-                    .build();
             WorkflowMessage workflowMessage = WorkflowMessage.newBuilder()
-                    .setResourceId(resource.getResourceId())
+                    .setSourceResourceId(sourceResourceId)
+                    .setDestinationResourceId(dstResourceId)
+                    .setUsername(username)
+                    .setTenantId(tenantId)
+                    .setSourceCredentialToken(sourceCredentialToken)
+                    .setDestinationCredentialToken(destinationCredentialToken)
                     .build();
-
             WorkflowInvocationRequest workflowInvocationRequest = WorkflowInvocationRequest
-                    .newBuilder().setMessage(workflowMessage).setAuthToken(workflowServiceAuthToken).build();
+                    .newBuilder().setMessage(workflowMessage).build();
             this.workflowServiceStub.invokeWorkflow(workflowInvocationRequest);
         } catch (Exception ex) {
-            LOGGER.error("Error occurred while invoking workflow engine", entity.getResourceId(), ex);
-            entity.setEventStatus(EventStatus.ERRORED.name());
-            entity.setError("Error occurred while invoking workflow engine" + ex.getMessage());
-            repository.save(entity);
-            return;
+            String msg = "Error occurred while invoking workflow engine " + ex.getMessage();
+            throw new RuntimeException(msg, ex);
         }
     }
 }
