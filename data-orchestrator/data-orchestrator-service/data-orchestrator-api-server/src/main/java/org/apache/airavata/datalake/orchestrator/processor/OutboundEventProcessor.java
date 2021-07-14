@@ -152,7 +152,7 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
                                 .getSshStoragePreference()
                                 .getCredentialToken();
 
-                        this.workflowServiceConnector.invokeWorkflow(entity.getOwnerId(),
+                        this.workflowServiceConnector.invokeWorkflow(entity.getAuthToken(), entity.getOwnerId(),
                                 entity.getTenantId(), entity.getResourceId(), sourceCredentialToken,
                                 messageId, destinationCredentialToken);
                         entity.setEventStatus(EventStatus.DISPATCHED_TO_WORFLOW_ENGING.name());
