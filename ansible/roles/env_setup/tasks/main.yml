@@ -58,7 +58,7 @@
              zone=public permanent=true state=enabled immediate=yes
   become: yes
 
-- name: Install Airavata pre-requireties (RedHat)
+- name: Install Datalake pre-requireties (RedHat)
   yum: name={{ item }} state=latest update_cache=yes
   with_items:
     - git
@@ -66,45 +66,11 @@
   become: yes
   when: ansible_os_family == "RedHat"
 
-- name: Install Airavata pre-requireties (Debian)
+- name: Install Datalake pre-requireties (Debian)
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - git
     - maven
   become: yes
   when: ansible_os_family == "Debian"
-
-- name: Create deployment directory {{ deployment_dir }}
-  become: yes
-  file: path={{ deployment_dir }}
-    state=directory
-    mode=0755
-    owner={{ user }}
-    group={{ group }}
-
-- name: Create source directory
-  become: yes
-  file: path={{airavata_source_dir}}
-    state=directory
-    mode=0755
-    owner={{ user }}
-    group={{ group }}
-
-- name: git checkout from airavata github repo {{ airavata_repo }} branch {{ git_branch }}
-  git: repo="{{ airavata_repo }}"
-    dest="{{ airavata_source_dir }}"
-    version="{{ git_branch }}"
-  register: checkout
-  tags: update
-  become: yes
-  become_user: "{{ user }}"
-
-- name: Run maven build
-  command: mvn clean install -Dmaven.test.skip=true chdir="{{ airavata_source_dir }}/"
-  environment:
-    MAVEN_OPTS: "-Xmx2048m"
-  register: build
-  tags: update
-  become: yes
-  become_user: "{{ user }}"
 ...

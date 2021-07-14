@@ -1,0 +1,113 @@
+- name: Create MFT deployment directory {{ mft_deployment_dir }}
+  become: yes
+  file: path={{ mft_deployment_dir }}
+    state=directory
+    mode=0755
+    owner={{ user }}
+    group={{ group }}
+
+- name: Create MFT source directory
+  become: yes
+  file: path={{mft_source_dir}}
+    state=directory
+    mode=0755
+    owner={{ user }}
+    group={{ group }}
+
+- name: open firewall ports for MFT
+  firewalld: port="{{ item }}/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  with_items:
+    - "{{ mft_default_agent_port }}"
+    - "{{ mft_consul_port }}"
+    - "{{ mft_resource_service_grpc_port }}"
+    - "{{ mft_secret_service_grpc_port }}"
+  become: yes
+
+#- name: git checkout from MFT github repo {{ mft_repo }} branch {{ mft_git_branch }}
+#  git: repo="{{ mft_repo }}"
+#    dest="{{ mft_source_dir }}"
+#    version="{{ mft_git_branch }}"
+#  register: checkout
+#  tags: update
+#  become: yes
+#  become_user: "{{ user }}"
+
+#- name: Run MFT maven build
+#  command: mvn clean install -Dmaven.test.skip=true chdir="{{ mft_source_dir }}/"
+#  environment:
+#    MAVEN_OPTS: "-Xmx2048m"
+#  register: build
+#  tags: update
+#  become: yes
+#  become_user: "{{ user }}"
+
+- name: Stop daemons if running
+  command: "{{ item.command }} chdir={{ mft_deployment_dir }}/{{ item.dir }}/"
+  with_items:
+    - { command: ./bin/controller-daemon.sh stop, dir: "MFT-Controller-{{mft_distribution_version}}" }
+    - { command: ./bin/agent-daemon.sh stop, dir: "MFT-Agent-{{mft_distribution_version}}" }
+    - { command: ./bin/api-service-daemon.sh stop, dir: "API-Service-{{mft_distribution_version}}" }
+    - { command: ./bin/resource-service-daemon.sh stop, dir: "Resource-Service-{{mft_distribution_version}}" }
+    - { command: ./bin/secret-service-daemon.sh stop, dir: "Secret-Service-{{mft_distribution_version}}" }
+  ignore_errors: yes
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Copy MFT distributions to MFT deployment directory
+  unarchive: "src={{ mft_source_dir }}/{{ item }}
+              dest={{ mft_deployment_dir }}/ copy=no"
+  with_items:
+    - "agent/target/MFT-Agent-{{mft_distribution_version}}-bin.zip"
+    - "api/service/target/API-Service-{{mft_distribution_version}}-bin.zip"
+    - "controller/target/MFT-Controller-{{mft_distribution_version}}-bin.zip"
+    - "services/resource-service/server/target/Resource-Service-{{mft_distribution_version}}-bin.zip"
+    - "services/secret-service/server/target/Secret-Service-{{mft_distribution_version}}-bin.zip"
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Copy MFT property files
+  template: "src={{ item.name }}
+            dest={{ mft_deployment_dir }}/{{ item.dir }}/conf/{{ item.target }}
+            owner={{ user }}
+            group={{ group }}
+            mode=\"u=rw,g=r,o=r\""
+  with_items:
+    - { name: agent/application.properties.j2,
+        dir: "MFT-Agent-{{mft_distribution_version}}",
+        target: application.properties}
+    - { name: api-service/application.properties.j2,
+        dir: "API-Service-{{mft_distribution_version}}",
+        target: application.properties}
+    - { name: resource-service/application.properties.j2,
+        dir: "Resource-Service-{{mft_distribution_version}}",
+        target: application.properties}
+    - { name: resource-service/applicationContext.xml.j2,
+        dir: "Resource-Service-{{mft_distribution_version}}",
+        target: applicationContext.xml}
+    - { name: secret-service/application.properties.j2,
+        dir: "Secret-Service-{{mft_distribution_version}}",
+        target: application.properties }
+    - { name: secret-service/applicationContext.xml.j2,
+        dir: "Secret-Service-{{mft_distribution_version}}",
+        target: applicationContext.xml }
+    - { name: secret-service/secrets.json.j2,
+        dir: "Secret-Service-{{mft_distribution_version}}",
+        target: secrets.json }
+    - { name: agent/application.properties.j2,
+        dir: "MFT-Controller-{{mft_distribution_version}}",
+        target: application.properties }
+  become: yes
+  become_user: "{{ user }}"
+
+
+- name: Start MFT daemons
+  command: "{{ item.command }} chdir={{ mft_deployment_dir }}/{{ item.dir }}/"
+  with_items:
+    - { command: ./bin/controller-daemon.sh start, dir: "MFT-Controller-{{mft_distribution_version}}" }
+    - { command: ./bin/agent-daemon.sh start, dir: "MFT-Agent-{{mft_distribution_version}}" }
+    - { command: ./bin/api-service-daemon.sh start, dir: "API-Service-{{mft_distribution_version}}" }
+    - { command: ./bin/resource-service-daemon.sh start, dir: "Resource-Service-{{mft_distribution_version}}" }
+    - { command: ./bin/secret-service-daemon.sh start, dir: "Secret-Service-{{mft_distribution_version}}" }
+  become: yes
+  become_user: "{{ user }}"

@@ -26,7 +26,44 @@ group: airavata
 user_home: "/home/{{ user }}"
 
 # deployment related variables
-deployment_dir: "{{ user_home }}/data-lake-deployment"
-airavata_source_dir: "{{ user_home }}/data-lake-source"
-airavata_repo: "https://github.com/apache/airavata-data-lake.git"
-git_branch: master
+datalake_deployment_dir: "{{ user_home }}/data-lake-deployment"
+datalake_source_dir: "{{ user_home }}/data-lake-source"
+datalake_repo: "https://github.com/apache/airavata-data-lake.git"
+datalake_git_branch: master
+
+mft_deployment_dir: "{{ user_home }}/mft-deployment"
+mft_source_dir: "{{ user_home }}/mft-source"
+mft_repo: "https://github.com/apache/airavata-mft.git"
+mft_git_branch: develop
+mft_distribution_version: 0.01
+
+mft_default_agent_id: agent0
+mft_default_agent_host: 149.165.157.235
+mft_default_agent_port: 3333
+
+mft_api_service_http_port: 8088
+mft_api_service_grpc_port: 7004
+mft_api_service_id: 0
+
+mft_resource_service_host: localhost
+mft_resource_service_http_port: 8089
+mft_resource_service_grpc_port: 7002
+mft_resource_service_backend: org.apache.airavata.mft.resource.server.backend.datalake.DatalakeResourceBackend
+mft_resource_service_custos_client_id: "{{ vault_mft_resource_service_custos_client_id }}"
+mft_resource_service_custos_client_secret: "{{ vault_mft_resource_service_custos_client_secret }}"
+
+mft_secret_service_host: localhost
+mft_secret_service_http_port: 8081
+mft_secret_service_grpc_port: 7003
+mft_secret_service_backend: org.apache.airavata.mft.secret.server.backend.file.FileBasedSecretBackend
+
+mft_consul_host: localhost
+mft_consul_port: 8500
+consul_version: 1.7.1
+consul_zip_file: consul_{{ consul_version }}_linux_amd64.zip
+consul_install_dir: /usr/local/bin
+consul_config_dir: /etc/consul
+consul_data_dir: /var/data
+
+datalake_drms_host: localhost
+datalake_drms_grpc_port: 7070

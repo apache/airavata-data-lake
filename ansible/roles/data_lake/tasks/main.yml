@@ -28,4 +28,37 @@
     zone=public permanent=true state=enabled immediate=yes
   become: yes
 
+- name: Create Datalake deployment directory {{ datalake_deployment_dir }}
+  become: yes
+  file: path={{ datalake_deployment_dir }}
+    state=directory
+    mode=0755
+    owner={{ user }}
+    group={{ group }}
+
+- name: Create Datalake source directory
+  become: yes
+  file: path={{datalake_source_dir}}
+    state=directory
+    mode=0755
+    owner={{ user }}
+    group={{ group }}
+
+- name: git checkout from Datalake github repo {{ datalake_repo }} branch {{ datalake_git_branch }}
+  git: repo="{{ datalake_repo }}"
+    dest="{{ datalake_source_dir }}"
+    version="{{ datalake_git_branch }}"
+  register: checkout
+  tags: update
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Run Datalake maven build
+  command: mvn clean install -Dmaven.test.skip=true chdir="{{ datalake_source_dir }}/"
+  environment:
+    MAVEN_OPTS: "-Xmx2048m"
+  register: build
+  tags: update
+  become: yes
+  become_user: "{{ user }}"
 
