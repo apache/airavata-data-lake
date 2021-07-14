@@ -168,7 +168,7 @@
                         </goals>
                         <configuration>
                             <tarLongFileMode>posix</tarLongFileMode>
-                            <finalName>orchestrator-api-service</finalName>
+                            <finalName>Orchestrator-API-Service-${project.version}</finalName>
                             <descriptors>
                                 <descriptor>src/main/dist/data-orch-api-service-assembly.xml</descriptor>
                             </descriptors>
