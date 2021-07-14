@@ -191,7 +191,7 @@ public class DataSyncWorkflowManager {
         dt1.setUserId(workflowInvocationRequest.getMessage().getUsername());
         dt1.setCurrentSection(1);
         dt1.setTaskId("dt-" + UUID.randomUUID().toString());
-   v     dt1.setMftCallbackStoreHost(datasyncWmHost);
+        dt1.setMftCallbackStoreHost(datasyncWmHost);
         dt1.setMftCallbackStorePort(datasyncWmPort);
 
         Map<String, AbstractTask> taskMap = new HashMap<>();
