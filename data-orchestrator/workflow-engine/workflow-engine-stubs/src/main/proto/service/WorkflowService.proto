@@ -33,6 +33,7 @@ message WorkflowMessage {
     string tenantId = 6;
     string source_credential_token = 7;
     string destination_credential_token = 8;
+    string auth_token = 9;
 }
 
 message WorkflowInvocationRequest {

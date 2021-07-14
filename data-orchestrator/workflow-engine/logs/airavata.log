@@ -1,0 +1,1289 @@
+2021-07-13 19:41:09,668 [main] WARN  o.s.boot.StartupInfoLogger InetAddress.getLocalHost().getHostName() took 232 milliseconds to respond. Please verify your network configuration (macOS machines may need to add entries to /etc/hosts). []
+2021-07-13 19:41:09,670 [main] INFO  o.a.a.d.w.e.w.d.APIRunner Starting APIRunner using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 19017 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager) []
+2021-07-13 19:41:09,671 [main] INFO  o.a.a.d.w.e.w.d.APIRunner No active profile set, falling back to default profiles: default []
+2021-07-13 19:41:10,514 [main] INFO  o.a.k.c.c.ConsumerConfig ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = latest
+	bootstrap.servers = [localhost:9092]
+	check.crcs = true
+	client.dns.lookup = default
+	client.id = 
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = mft-even-group
+	group.instance.id = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 20
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.mechanism = GSSAPI
+	security.protocol = PLAINTEXT
+	send.buffer.bytes = 131072
+	session.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.1, TLSv1]
+	ssl.endpoint.identification.algorithm = https
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLS
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.airavata.datalake.mft.listener.DataTransferEventDeserializer
+ []
+2021-07-13 19:41:10,564 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka version: 2.3.0 []
+2021-07-13 19:41:10,565 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka commitId: fc1aaa116b661c8a []
+2021-07-13 19:41:10,565 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka startTimeMs: 1626219670563 []
+2021-07-13 19:41:10,567 [main] INFO  o.a.k.c.consumer.KafkaConsumer [Consumer clientId=consumer-1, groupId=mft-even-group] Subscribed to topic(s): mft-status-topic []
+2021-07-13 19:41:10,567 [main] INFO  o.a.a.d.w.e.w.d.DataSyncWorkflowManager Successfully initialized DatasyncWorkflow Manager []
+2021-07-13 19:41:10,820 [main] INFO  o.a.a.d.w.e.w.d.APIRunner Started APIRunner in 1.655 seconds (JVM running for 1.984) []
+2021-07-13 19:41:10,822 [main] INFO  o.l.s.grpc.GRpcServerRunner Starting gRPC Server ... []
+2021-07-13 19:41:10,829 [pool-3-thread-1] INFO  o.a.kafka.clients.Metadata [Consumer clientId=consumer-1, groupId=mft-even-group] Cluster ID: 9uIZQw8BQt2I8jIFlxQPOg []
+2021-07-13 19:41:10,832 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Discovered group coordinator 192.168.0.2:9092 (id: 2147483647 rack: null) []
+2021-07-13 19:41:10,836 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Revoking previously assigned partitions [] []
+2021-07-13 19:41:10,836 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] (Re-)joining group []
+2021-07-13 19:41:10,851 [main] INFO  o.l.s.grpc.GRpcServerRunner 'org.apache.airavata.datalake.workflow.engine.wm.datasync.WorkflowEngineAPIHandler' service has been registered. []
+2021-07-13 19:41:10,853 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] (Re-)joining group []
+2021-07-13 19:41:10,894 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Successfully joined group with generation 1 []
+2021-07-13 19:41:10,898 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Setting newly assigned partitions: mft-status-topic-0 []
+2021-07-13 19:41:10,906 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Found no committed offset for partition mft-status-topic-0 []
+2021-07-13 19:41:10,923 [pool-3-thread-1] INFO  o.a.k.c.c.i.SubscriptionState [Consumer clientId=consumer-1, groupId=mft-even-group] Resetting offset for partition mft-status-topic-0 to offset 0. []
+2021-07-13 19:41:10,999 [main] INFO  o.l.s.grpc.GRpcServerRunner gRPC Server started, listening on port 6565. []
+2021-07-13 19:41:16,503 [SpringContextShutdownHook] INFO  o.l.s.grpc.GRpcServerRunner Shutting down gRPC server ... []
+2021-07-13 19:41:16,506 [SpringContextShutdownHook] INFO  o.l.s.grpc.GRpcServerRunner gRPC server stopped. []
+2021-07-13 19:45:08,922 [main] INFO  o.a.a.d.w.e.worker.Participant Starting Participant on Isurus-MacBook-Pro.local with PID 19129 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker) []
+2021-07-13 19:45:08,925 [main] INFO  o.a.a.d.w.e.worker.Participant No active profile set, falling back to default profiles: default []
+2021-07-13 19:45:09,225 [main] INFO  o.a.a.d.w.e.worker.Participant Started Participant in 0.482 seconds (JVM running for 0.741) []
+2021-07-13 19:45:09,226 [main] INFO  o.a.a.d.w.e.worker.Participant Staring Participant ..... []
+2021-07-13 19:45:09,248 [main] INFO  o.a.a.d.w.e.worker.Participant Loading task list file task-list.yaml from class path []
+2021-07-13 19:45:09,265 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 19:45:09,265 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 19:45:09,265 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 19:45:09,265 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 19:45:09,531 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 19:45:09,533 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 19:45:09,535 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 19:45:09,536 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 19:45:09,903 [main] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has connected to cluster: datalake []
+2021-07-13 19:45:09,934 [HelixTaskExecutor-message_handle_thread] INFO  o.a.a.d.o.w.e.t.AbstractTask Setting callback context 4932d77e-f536-4f01-aadd-61619099ba69_dt-304e3840-481b-4f7c-bf1f-ef6c4344b546 []
+2021-07-13 19:45:09,935 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.AbstractTask Running task dt-304e3840-481b-4f7c-bf1f-ef6c4344b546 []
+2021-07-13 19:45:22,963 [main] INFO  o.a.a.d.w.e.w.d.APIRunner Starting APIRunner using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 19150 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager) []
+2021-07-13 19:45:22,966 [main] INFO  o.a.a.d.w.e.w.d.APIRunner No active profile set, falling back to default profiles: default []
+2021-07-13 19:45:23,535 [main] INFO  o.a.k.c.c.ConsumerConfig ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = latest
+	bootstrap.servers = [localhost:9092]
+	check.crcs = true
+	client.dns.lookup = default
+	client.id = 
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = mft-even-group
+	group.instance.id = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 20
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.mechanism = GSSAPI
+	security.protocol = PLAINTEXT
+	send.buffer.bytes = 131072
+	session.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.1, TLSv1]
+	ssl.endpoint.identification.algorithm = https
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLS
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.airavata.datalake.mft.listener.DataTransferEventDeserializer
+ []
+2021-07-13 19:45:23,580 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka version: 2.3.0 []
+2021-07-13 19:45:23,581 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka commitId: fc1aaa116b661c8a []
+2021-07-13 19:45:23,581 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka startTimeMs: 1626219923579 []
+2021-07-13 19:45:23,582 [main] INFO  o.a.k.c.consumer.KafkaConsumer [Consumer clientId=consumer-1, groupId=mft-even-group] Subscribed to topic(s): mft-status-topic []
+2021-07-13 19:45:23,583 [main] INFO  o.a.a.d.w.e.w.d.DataSyncWorkflowManager Successfully initialized DatasyncWorkflow Manager []
+2021-07-13 19:45:23,758 [pool-3-thread-1] INFO  o.a.kafka.clients.Metadata [Consumer clientId=consumer-1, groupId=mft-even-group] Cluster ID: 9uIZQw8BQt2I8jIFlxQPOg []
+2021-07-13 19:45:23,759 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Discovered group coordinator 192.168.0.2:9092 (id: 2147483647 rack: null) []
+2021-07-13 19:45:23,767 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Revoking previously assigned partitions [] []
+2021-07-13 19:45:23,767 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] (Re-)joining group []
+2021-07-13 19:45:23,777 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] (Re-)joining group []
+2021-07-13 19:45:23,789 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Successfully joined group with generation 3 []
+2021-07-13 19:45:23,791 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Setting newly assigned partitions: mft-status-topic-0 []
+2021-07-13 19:45:23,797 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Found no committed offset for partition mft-status-topic-0 []
+2021-07-13 19:45:23,806 [pool-3-thread-1] INFO  o.a.k.c.c.i.SubscriptionState [Consumer clientId=consumer-1, groupId=mft-even-group] Resetting offset for partition mft-status-topic-0 to offset 0. []
+2021-07-13 19:45:23,822 [main] INFO  o.a.a.d.w.e.w.d.APIRunner Started APIRunner in 1.158 seconds (JVM running for 1.477) []
+2021-07-13 19:45:23,824 [main] INFO  o.l.s.grpc.GRpcServerRunner Starting gRPC Server ... []
+2021-07-13 19:45:23,849 [main] INFO  o.l.s.grpc.GRpcServerRunner 'org.apache.airavata.datalake.workflow.engine.wm.datasync.WorkflowEngineAPIHandler' service has been registered. []
+2021-07-13 19:45:24,008 [main] INFO  o.l.s.grpc.GRpcServerRunner gRPC Server started, listening on port 6565. []
+2021-07-13 19:56:31,205 [Thread-5] INFO  o.a.a.d.w.e.worker.Participant Shutting down participant. Currently available tasks 0 []
+2021-07-13 19:56:31,207 [Thread-5] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has disconnected from cluster: datalake []
+2021-07-13 19:56:39,124 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$8614df27] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) []
+2021-07-13 19:56:39,240 [main] INFO  o.s.c.c.c.ConfigServicePropertySourceLocator Fetching config from server at : http://custos-configuration-service.custos.svc.cluster.local:9000 []
+2021-07-13 19:56:44,336 [main] INFO  o.s.c.c.c.ConfigServicePropertySourceLocator Connect Timeout Exception on Url - http://custos-configuration-service.custos.svc.cluster.local:9000. Will be trying the next url if available []
+2021-07-13 19:56:44,337 [main] WARN  o.s.c.c.c.ConfigServicePropertySourceLocator Could not locate PropertySource: I/O error on GET request for "http://custos-configuration-service.custos.svc.cluster.local:9000/application/default": custos-configuration-service.custos.svc.cluster.local; nested exception is java.net.UnknownHostException: custos-configuration-service.custos.svc.cluster.local []
+2021-07-13 19:56:44,340 [main] INFO  o.a.a.d.w.e.worker.Participant The following profiles are active: default []
+2021-07-13 19:56:44,991 [main] INFO  o.s.c.c.scope.GenericScope BeanFactory id=df2fb092-7e98-3038-ae08-176d6f6cd2c1 []
+2021-07-13 19:56:45,187 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$8614df27] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) []
+2021-07-13 19:56:45,839 [main] INFO  o.a.a.d.w.e.worker.Participant Started Participant in 7.252 seconds (JVM running for 7.564) []
+2021-07-13 19:56:45,839 [main] INFO  o.a.a.d.w.e.worker.Participant Staring Participant ..... []
+2021-07-13 19:56:45,854 [main] INFO  o.a.a.d.w.e.worker.Participant Loading task list file task-list.yaml from class path []
+2021-07-13 19:56:45,871 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 19:56:45,872 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 19:56:45,872 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 19:56:45,872 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 19:56:46,098 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 19:56:46,101 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 19:56:46,101 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 19:56:46,102 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 19:56:46,331 [main] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has connected to cluster: datalake []
+2021-07-13 20:00:48,416 [SpringContextShutdownHook] INFO  o.l.s.grpc.GRpcServerRunner Shutting down gRPC server ... []
+2021-07-13 20:00:48,429 [SpringContextShutdownHook] INFO  o.l.s.grpc.GRpcServerRunner gRPC server stopped. []
+2021-07-13 20:00:57,796 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$9a89e894] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) []
+2021-07-13 20:00:57,807 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'configurationPropertiesBeans' defined in class path resource [org/springframework/cloud/autoconfigure/ConfigurationPropertiesRebinderAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata []
+2021-07-13 20:00:57,810 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled. []
+2021-07-13 20:00:57,830 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'configurationPropertiesBeans' defined in class path resource [org/springframework/cloud/autoconfigure/ConfigurationPropertiesRebinderAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:658)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:486)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1177)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:564)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:524)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:270)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:762)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:567)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:782)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:774)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:339)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:144)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.bootstrapServiceContext(BootstrapApplicationListener.java:191)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:105)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:71)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:176)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:169)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:143)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:131)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:82)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplicationRunListeners$$Lambda$53/000000000000000000.accept(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:117)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:111)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:62)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:375)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:333)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	... 35 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration.configurationPropertiesBeans(ConfigurationPropertiesRebinderAutoConfiguration.java:51)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$9a89e894.CGLIB$configurationPropertiesBeans$1(<generated>)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$9a89e894$$FastClassBySpringCGLIB$$a14ebd38.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$9a89e894.configurationPropertiesBeans(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 36 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 47 common frames omitted
+2021-07-13 20:00:57,833 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'configurationPropertiesBeans' defined in class path resource [org/springframework/cloud/autoconfigure/ConfigurationPropertiesRebinderAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:658)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:486)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1177)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:564)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:524)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:270)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:762)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:567)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:782)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:774)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:339)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:144)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.bootstrapServiceContext(BootstrapApplicationListener.java:191)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:105)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:71)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:176)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:169)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:143)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:131)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:82)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplicationRunListeners$$Lambda$53/000000000000000000.accept(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:117)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:111)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:62)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:375)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:333)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	... 35 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration.configurationPropertiesBeans(ConfigurationPropertiesRebinderAutoConfiguration.java:51)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$9a89e894.CGLIB$configurationPropertiesBeans$1(<generated>)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$9a89e894$$FastClassBySpringCGLIB$$a14ebd38.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$9a89e894.configurationPropertiesBeans(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 36 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 47 common frames omitted
+2021-07-13 20:02:48,275 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.context.annotation.AnnotationConfigApplicationContext]: Constructor threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.core.metrics.ApplicationStartup
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:225)
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:147)
+	at org.springframework.boot.SpringApplication.createApplicationContext(SpringApplication.java:588)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:311)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:140)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.bootstrapServiceContext(BootstrapApplicationListener.java:191)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:105)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:71)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:127)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:76)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:53)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:345)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:308)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: java.lang.NoClassDefFoundError: org.springframework.core.metrics.ApplicationStartup
+	at org.springframework.beans.factory.support.AbstractBeanFactory.<init>(AbstractBeanFactory.java:184)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.<init>(AbstractAutowireCapableBeanFactory.java:176)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.<init>(DefaultListableBeanFactory.java:193)
+	at org.springframework.context.support.GenericApplicationContext.<init>(GenericApplicationContext.java:112)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:65)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:212)
+	... 16 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.core.metrics.ApplicationStartup
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 26 common frames omitted
+2021-07-13 20:02:48,278 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.context.annotation.AnnotationConfigApplicationContext]: Constructor threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.core.metrics.ApplicationStartup
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:225)
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:147)
+	at org.springframework.boot.SpringApplication.createApplicationContext(SpringApplication.java:588)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:311)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:140)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.bootstrapServiceContext(BootstrapApplicationListener.java:191)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:105)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:71)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:127)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:76)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:53)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:345)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:308)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: java.lang.NoClassDefFoundError: org.springframework.core.metrics.ApplicationStartup
+	at org.springframework.beans.factory.support.AbstractBeanFactory.<init>(AbstractBeanFactory.java:184)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.<init>(AbstractAutowireCapableBeanFactory.java:176)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.<init>(DefaultListableBeanFactory.java:193)
+	at org.springframework.context.support.GenericApplicationContext.<init>(GenericApplicationContext.java:112)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:65)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:212)
+	... 16 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.core.metrics.ApplicationStartup
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 26 common frames omitted
+2021-07-13 20:06:16,939 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.context.annotation.AnnotationConfigApplicationContext]: Constructor threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.core.metrics.ApplicationStartup
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:225)
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:147)
+	at org.springframework.boot.SpringApplication.createApplicationContext(SpringApplication.java:588)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:311)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:140)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.bootstrapServiceContext(BootstrapApplicationListener.java:191)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:105)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:71)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:127)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:76)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:53)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:345)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:308)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: java.lang.NoClassDefFoundError: org.springframework.core.metrics.ApplicationStartup
+	at org.springframework.beans.factory.support.AbstractBeanFactory.<init>(AbstractBeanFactory.java:184)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.<init>(AbstractAutowireCapableBeanFactory.java:176)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.<init>(DefaultListableBeanFactory.java:193)
+	at org.springframework.context.support.GenericApplicationContext.<init>(GenericApplicationContext.java:112)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:65)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:212)
+	... 16 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.core.metrics.ApplicationStartup
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 26 common frames omitted
+2021-07-13 20:06:16,943 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.context.annotation.AnnotationConfigApplicationContext]: Constructor threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.core.metrics.ApplicationStartup
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:225)
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:147)
+	at org.springframework.boot.SpringApplication.createApplicationContext(SpringApplication.java:588)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:311)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:140)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.bootstrapServiceContext(BootstrapApplicationListener.java:191)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:105)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:71)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:172)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:165)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:139)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:127)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:76)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:53)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:345)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:308)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: java.lang.NoClassDefFoundError: org.springframework.core.metrics.ApplicationStartup
+	at org.springframework.beans.factory.support.AbstractBeanFactory.<init>(AbstractBeanFactory.java:184)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.<init>(AbstractAutowireCapableBeanFactory.java:176)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.<init>(DefaultListableBeanFactory.java:193)
+	at org.springframework.context.support.GenericApplicationContext.<init>(GenericApplicationContext.java:112)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:65)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:212)
+	... 16 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.core.metrics.ApplicationStartup
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 26 common frames omitted
+2021-07-13 20:10:12,498 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.context.annotation.AnnotationConfigApplicationContext]: Constructor threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.core.metrics.ApplicationStartup
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:225)
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:147)
+	at org.springframework.boot.SpringApplication.createApplicationContext(SpringApplication.java:588)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:311)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: java.lang.NoClassDefFoundError: org.springframework.core.metrics.ApplicationStartup
+	at org.springframework.beans.factory.support.AbstractBeanFactory.<init>(AbstractBeanFactory.java:184)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.<init>(AbstractAutowireCapableBeanFactory.java:176)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.<init>(DefaultListableBeanFactory.java:193)
+	at org.springframework.context.support.GenericApplicationContext.<init>(GenericApplicationContext.java:112)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:65)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:490)
+	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:212)
+	... 4 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.core.metrics.ApplicationStartup
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 14 common frames omitted
+2021-07-13 20:12:02,905 [main] INFO  o.a.a.d.w.e.w.d.APIRunner Starting APIRunner using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 19644 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager) []
+2021-07-13 20:12:02,908 [main] INFO  o.a.a.d.w.e.w.d.APIRunner No active profile set, falling back to default profiles: default []
+2021-07-13 20:12:07,509 [main] INFO  o.a.k.c.c.ConsumerConfig ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = latest
+	bootstrap.servers = [localhost:9092]
+	check.crcs = true
+	client.dns.lookup = default
+	client.id = 
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = mft-even-group
+	group.instance.id = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 20
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.mechanism = GSSAPI
+	security.protocol = PLAINTEXT
+	send.buffer.bytes = 131072
+	session.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.1, TLSv1]
+	ssl.endpoint.identification.algorithm = https
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLS
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.airavata.datalake.mft.listener.DataTransferEventDeserializer
+ []
+2021-07-13 20:12:07,553 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka version: 2.3.0 []
+2021-07-13 20:12:07,554 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka commitId: fc1aaa116b661c8a []
+2021-07-13 20:12:07,554 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka startTimeMs: 1626221527552 []
+2021-07-13 20:12:07,556 [main] INFO  o.a.k.c.consumer.KafkaConsumer [Consumer clientId=consumer-1, groupId=mft-even-group] Subscribed to topic(s): mft-status-topic []
+2021-07-13 20:12:07,557 [main] INFO  o.a.a.d.w.e.w.d.DataSyncWorkflowManager Successfully initialized DatasyncWorkflow Manager []
+2021-07-13 20:12:07,741 [pool-3-thread-1] INFO  o.a.kafka.clients.Metadata [Consumer clientId=consumer-1, groupId=mft-even-group] Cluster ID: 9uIZQw8BQt2I8jIFlxQPOg []
+2021-07-13 20:12:07,742 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Discovered group coordinator 192.168.0.2:9092 (id: 2147483647 rack: null) []
+2021-07-13 20:12:07,744 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Revoking previously assigned partitions [] []
+2021-07-13 20:12:07,744 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] (Re-)joining group []
+2021-07-13 20:12:07,756 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] (Re-)joining group []
+2021-07-13 20:12:07,775 [main] INFO  o.a.a.d.w.e.w.d.APIRunner Started APIRunner in 5.294 seconds (JVM running for 5.616) []
+2021-07-13 20:12:07,777 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Successfully joined group with generation 1 []
+2021-07-13 20:12:07,779 [main] INFO  o.l.s.grpc.GRpcServerRunner Starting gRPC Server ... []
+2021-07-13 20:12:07,779 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Setting newly assigned partitions: mft-status-topic-0 []
+2021-07-13 20:12:07,791 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Found no committed offset for partition mft-status-topic-0 []
+2021-07-13 20:12:07,800 [pool-3-thread-1] INFO  o.a.k.c.c.i.SubscriptionState [Consumer clientId=consumer-1, groupId=mft-even-group] Resetting offset for partition mft-status-topic-0 to offset 0. []
+2021-07-13 20:12:07,806 [main] INFO  o.l.s.grpc.GRpcServerRunner 'org.apache.airavata.datalake.workflow.engine.wm.datasync.WorkflowEngineAPIHandler' service has been registered. []
+2021-07-13 20:12:07,893 [main] INFO  o.l.s.grpc.GRpcServerRunner gRPC Server started, listening on port 6565. []
+2021-07-13 20:12:18,184 [SpringContextShutdownHook] INFO  o.l.s.grpc.GRpcServerRunner Shutting down gRPC server ... []
+2021-07-13 20:12:18,194 [SpringContextShutdownHook] INFO  o.l.s.grpc.GRpcServerRunner gRPC server stopped. []
+2021-07-13 20:16:27,385 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$29a28cc4] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) []
+2021-07-13 20:16:27,400 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'configurationPropertiesBeans' defined in class path resource [org/springframework/cloud/autoconfigure/ConfigurationPropertiesRebinderAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata []
+2021-07-13 20:16:27,403 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled. []
+2021-07-13 20:16:27,420 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'configurationPropertiesBeans' defined in class path resource [org/springframework/cloud/autoconfigure/ConfigurationPropertiesRebinderAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:658)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:486)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1177)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:564)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:524)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:270)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:762)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:567)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:782)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:774)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:339)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:144)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.bootstrapServiceContext(BootstrapApplicationListener.java:191)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:105)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:71)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:176)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:169)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:143)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:131)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:82)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplicationRunListeners$$Lambda$53/000000000000000000.accept(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:117)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:111)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:62)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:375)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:333)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	... 35 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration.configurationPropertiesBeans(ConfigurationPropertiesRebinderAutoConfiguration.java:51)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$29a28cc4.CGLIB$configurationPropertiesBeans$1(<generated>)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$29a28cc4$$FastClassBySpringCGLIB$$cbad7fb5.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$29a28cc4.configurationPropertiesBeans(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 36 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 47 common frames omitted
+2021-07-13 20:16:27,424 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'configurationPropertiesBeans' defined in class path resource [org/springframework/cloud/autoconfigure/ConfigurationPropertiesRebinderAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:658)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:486)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1177)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:564)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:524)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:270)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:762)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:567)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:782)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:774)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:339)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:144)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.bootstrapServiceContext(BootstrapApplicationListener.java:191)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:105)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:71)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:176)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:169)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:143)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:131)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:82)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplicationRunListeners$$Lambda$53/000000000000000000.accept(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:117)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:111)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:62)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:375)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:333)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	... 35 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration.configurationPropertiesBeans(ConfigurationPropertiesRebinderAutoConfiguration.java:51)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$29a28cc4.CGLIB$configurationPropertiesBeans$1(<generated>)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$29a28cc4$$FastClassBySpringCGLIB$$cbad7fb5.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$29a28cc4.configurationPropertiesBeans(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 36 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 47 common frames omitted
+2021-07-13 20:22:52,080 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$3ea6a40e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying) []
+2021-07-13 20:22:52,093 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'configurationPropertiesBeans' defined in class path resource [org/springframework/cloud/autoconfigure/ConfigurationPropertiesRebinderAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata []
+2021-07-13 20:22:52,096 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled. []
+2021-07-13 20:22:52,116 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'configurationPropertiesBeans' defined in class path resource [org/springframework/cloud/autoconfigure/ConfigurationPropertiesRebinderAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:658)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:486)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1177)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:564)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:524)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:270)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:762)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:567)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:782)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:774)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:339)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:144)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.bootstrapServiceContext(BootstrapApplicationListener.java:203)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:114)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:71)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:176)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:169)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:143)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:131)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:82)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplicationRunListeners$$Lambda$53/000000000000000000.accept(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:117)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:111)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:62)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:375)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:333)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	... 35 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration.configurationPropertiesBeans(ConfigurationPropertiesRebinderAutoConfiguration.java:56)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$3ea6a40e.CGLIB$configurationPropertiesBeans$1(<generated>)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$3ea6a40e$$FastClassBySpringCGLIB$$4b6b2690.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$3ea6a40e.configurationPropertiesBeans(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 36 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 47 common frames omitted
+2021-07-13 20:22:52,118 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'configurationPropertiesBeans' defined in class path resource [org/springframework/cloud/autoconfigure/ConfigurationPropertiesRebinderAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:658)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:486)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1177)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:564)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:524)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:270)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:762)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:567)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:782)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:774)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:339)
+	at org.springframework.boot.builder.SpringApplicationBuilder.run(SpringApplicationBuilder.java:144)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.bootstrapServiceContext(BootstrapApplicationListener.java:203)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:114)
+	at org.springframework.cloud.bootstrap.BootstrapApplicationListener.onApplicationEvent(BootstrapApplicationListener.java:71)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:176)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:169)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:143)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:131)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:82)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:63)
+	at org.springframework.boot.SpringApplicationRunListeners$$Lambda$53/000000000000000000.accept(Unknown Source)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1541)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:117)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:111)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:62)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:375)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:333)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.cloud.context.properties.ConfigurationPropertiesBeans]: Factory method 'configurationPropertiesBeans' threw exception; nested exception is java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	... 35 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration.configurationPropertiesBeans(ConfigurationPropertiesRebinderAutoConfiguration.java:56)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$3ea6a40e.CGLIB$configurationPropertiesBeans$1(<generated>)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$3ea6a40e$$FastClassBySpringCGLIB$$4b6b2690.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+	at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:331)
+	at org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$3ea6a40e.configurationPropertiesBeans(<generated>)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 36 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 47 common frames omitted
+2021-07-13 20:26:46,431 [main] INFO  o.a.a.d.w.e.w.d.APIRunner Starting APIRunner using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 20008 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager) []
+2021-07-13 20:26:46,436 [main] INFO  o.a.a.d.w.e.w.d.APIRunner No active profile set, falling back to default profiles: default []
+2021-07-13 20:26:47,146 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'meterRegistryPostProcessor' defined in class path resource [org/springframework/boot/actuate/autoconfigure/metrics/MetricsAutoConfiguration.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.cloud.sleuth.annotation.SleuthAnnotationAutoConfiguration': BeanPostProcessor before instantiation of bean failed; nested exception is java.lang.NoClassDefFoundError: org.aspectj.weaver.tools.PointcutPrimitive []
+2021-07-13 20:26:47,153 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled. []
+2021-07-13 20:26:47,168 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'meterRegistryPostProcessor' defined in class path resource [org/springframework/boot/actuate/autoconfigure/metrics/MetricsAutoConfiguration.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.cloud.sleuth.annotation.SleuthAnnotationAutoConfiguration': BeanPostProcessor before instantiation of bean failed; nested exception is java.lang.NoClassDefFoundError: org.aspectj.weaver.tools.PointcutPrimitive
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:519)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:270)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:762)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:567)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:782)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:774)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:339)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.cloud.sleuth.annotation.SleuthAnnotationAutoConfiguration': BeanPostProcessor before instantiation of bean failed; nested exception is java.lang.NoClassDefFoundError: org.aspectj.weaver.tools.PointcutPrimitive
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:519)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:410)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1177)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:564)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:524)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.aop.framework.autoproxy.BeanFactoryAdvisorRetrievalHelper.findAdvisorBeans(BeanFactoryAdvisorRetrievalHelper.java:91)
+	at org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator.findCandidateAdvisors(AbstractAdvisorAutoProxyCreator.java:111)
+	at org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator.findCandidateAdvisors(AnnotationAwareAspectJAutoProxyCreator.java:92)
+	at org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator.shouldSkip(AspectJAwareAdvisorAutoProxyCreator.java:101)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.postProcessBeforeInstantiation(AbstractAutoProxyCreator.java:252)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1142)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.resolveBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1117)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:513)
+	... 13 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: org.aspectj.weaver.tools.PointcutPrimitive
+	at org.springframework.aop.aspectj.AspectJExpressionPointcut.<clinit>(AspectJExpressionPointcut.java:91)
+	at org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory.getPointcut(ReflectiveAspectJAdvisorFactory.java:225)
+	at org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory.getAdvisor(ReflectiveAspectJAdvisorFactory.java:207)
+	at org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory.getAdvisors(ReflectiveAspectJAdvisorFactory.java:144)
+	at org.springframework.aop.aspectj.annotation.BeanFactoryAspectJAdvisorsBuilder.buildAspectJAdvisors(BeanFactoryAspectJAdvisorsBuilder.java:110)
+	at org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator.findCandidateAdvisors(AnnotationAwareAspectJAutoProxyCreator.java:95)
+	at org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator.shouldSkip(AspectJAwareAdvisorAutoProxyCreator.java:101)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.postProcessBeforeInstantiation(AbstractAutoProxyCreator.java:252)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1142)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.resolveBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1117)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:513)
+	... 36 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.aspectj.weaver.tools.PointcutPrimitive
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 47 common frames omitted
+2021-07-13 20:27:52,250 [main] INFO  o.a.a.d.w.e.w.d.APIRunner Starting APIRunner using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 20058 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager) []
+2021-07-13 20:27:52,253 [main] INFO  o.a.a.d.w.e.w.d.APIRunner No active profile set, falling back to default profiles: default []
+2021-07-13 20:27:53,038 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'meterRegistryPostProcessor' defined in class path resource [org/springframework/boot/actuate/autoconfigure/metrics/MetricsAutoConfiguration.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.cloud.sleuth.annotation.SleuthAnnotationAutoConfiguration': BeanPostProcessor before instantiation of bean failed; nested exception is java.lang.NoClassDefFoundError: org.aspectj.weaver.tools.PointcutPrimitive []
+2021-07-13 20:27:53,045 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled. []
+2021-07-13 20:27:53,062 [main] ERROR o.s.boot.SpringApplication Application run failed []
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'meterRegistryPostProcessor' defined in class path resource [org/springframework/boot/actuate/autoconfigure/metrics/MetricsAutoConfiguration.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.cloud.sleuth.annotation.SleuthAnnotationAutoConfiguration': BeanPostProcessor before instantiation of bean failed; nested exception is java.lang.NoClassDefFoundError: org.aspectj.weaver.tools.PointcutPrimitive
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:519)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.registerBeanPostProcessors(PostProcessorRegistrationDelegate.java:270)
+	at org.springframework.context.support.AbstractApplicationContext.registerBeanPostProcessors(AbstractApplicationContext.java:762)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:567)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:782)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:774)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:339)
+	at org.apache.airavata.datalake.workflow.engine.wm.datasync.APIRunner.main(APIRunner.java:40)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.cloud.sleuth.annotation.SleuthAnnotationAutoConfiguration': BeanPostProcessor before instantiation of bean failed; nested exception is java.lang.NoClassDefFoundError: org.aspectj.weaver.tools.PointcutPrimitive
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:519)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:410)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1177)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:564)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:524)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$$Lambda$204/000000000000000000.getObject(Unknown Source)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213)
+	at org.springframework.aop.framework.autoproxy.BeanFactoryAdvisorRetrievalHelper.findAdvisorBeans(BeanFactoryAdvisorRetrievalHelper.java:91)
+	at org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator.findCandidateAdvisors(AbstractAdvisorAutoProxyCreator.java:111)
+	at org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator.findCandidateAdvisors(AnnotationAwareAspectJAutoProxyCreator.java:92)
+	at org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator.shouldSkip(AspectJAwareAdvisorAutoProxyCreator.java:101)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.postProcessBeforeInstantiation(AbstractAutoProxyCreator.java:252)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1142)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.resolveBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1117)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:513)
+	... 13 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: org.aspectj.weaver.tools.PointcutPrimitive
+	at org.springframework.aop.aspectj.AspectJExpressionPointcut.<clinit>(AspectJExpressionPointcut.java:91)
+	at org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory.getPointcut(ReflectiveAspectJAdvisorFactory.java:225)
+	at org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory.getAdvisor(ReflectiveAspectJAdvisorFactory.java:207)
+	at org.springframework.aop.aspectj.annotation.ReflectiveAspectJAdvisorFactory.getAdvisors(ReflectiveAspectJAdvisorFactory.java:144)
+	at org.springframework.aop.aspectj.annotation.BeanFactoryAspectJAdvisorsBuilder.buildAspectJAdvisors(BeanFactoryAspectJAdvisorsBuilder.java:110)
+	at org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator.findCandidateAdvisors(AnnotationAwareAspectJAutoProxyCreator.java:95)
+	at org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator.shouldSkip(AspectJAwareAdvisorAutoProxyCreator.java:101)
+	at org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.postProcessBeforeInstantiation(AbstractAutoProxyCreator.java:252)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1142)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.resolveBeforeInstantiation(AbstractAutowireCapableBeanFactory.java:1117)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:513)
+	... 36 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.aspectj.weaver.tools.PointcutPrimitive
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 47 common frames omitted
+2021-07-13 20:30:05,178 [main] INFO  o.a.a.d.w.e.w.d.APIRunner Starting APIRunner using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 20148 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/datasync-workflow-manager) []
+2021-07-13 20:30:05,181 [main] INFO  o.a.a.d.w.e.w.d.APIRunner No active profile set, falling back to default profiles: default []
+2021-07-13 20:30:06,077 [main] INFO  o.a.k.c.c.ConsumerConfig ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.offset.reset = latest
+	bootstrap.servers = [localhost:9092]
+	check.crcs = true
+	client.dns.lookup = default
+	client.id = 
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = false
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = mft-even-group
+	group.instance.id = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.StringDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 20
+	metadata.max.age.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor]
+	receive.buffer.bytes = 65536
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.mechanism = GSSAPI
+	security.protocol = PLAINTEXT
+	send.buffer.bytes = 131072
+	session.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.1, TLSv1]
+	ssl.endpoint.identification.algorithm = https
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLS
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.airavata.datalake.mft.listener.DataTransferEventDeserializer
+ []
+2021-07-13 20:30:06,122 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka version: 2.3.0 []
+2021-07-13 20:30:06,123 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka commitId: fc1aaa116b661c8a []
+2021-07-13 20:30:06,123 [main] INFO  o.a.k.c.utils.AppInfoParser Kafka startTimeMs: 1626222606121 []
+2021-07-13 20:30:06,125 [main] INFO  o.a.k.c.consumer.KafkaConsumer [Consumer clientId=consumer-1, groupId=mft-even-group] Subscribed to topic(s): mft-status-topic []
+2021-07-13 20:30:06,125 [main] INFO  o.a.a.d.w.e.w.d.DataSyncWorkflowManager Successfully initialized DatasyncWorkflow Manager []
+2021-07-13 20:30:06,303 [pool-3-thread-1] INFO  o.a.kafka.clients.Metadata [Consumer clientId=consumer-1, groupId=mft-even-group] Cluster ID: 9uIZQw8BQt2I8jIFlxQPOg []
+2021-07-13 20:30:06,304 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Discovered group coordinator 192.168.0.2:9092 (id: 2147483647 rack: null) []
+2021-07-13 20:30:06,306 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Revoking previously assigned partitions [] []
+2021-07-13 20:30:06,306 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] (Re-)joining group []
+2021-07-13 20:30:06,317 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] (Re-)joining group []
+2021-07-13 20:30:06,330 [pool-3-thread-1] INFO  o.a.k.c.c.i.AbstractCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Successfully joined group with generation 1 []
+2021-07-13 20:30:06,333 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Setting newly assigned partitions: mft-status-topic-0 []
+2021-07-13 20:30:06,338 [pool-3-thread-1] INFO  o.a.k.c.c.i.ConsumerCoordinator [Consumer clientId=consumer-1, groupId=mft-even-group] Found no committed offset for partition mft-status-topic-0 []
+2021-07-13 20:30:06,350 [pool-3-thread-1] INFO  o.a.k.c.c.i.SubscriptionState [Consumer clientId=consumer-1, groupId=mft-even-group] Resetting offset for partition mft-status-topic-0 to offset 0. []
+2021-07-13 20:30:06,459 [main] INFO  o.a.a.d.w.e.w.d.APIRunner Started APIRunner in 1.719 seconds (JVM running for 2.068) []
+2021-07-13 20:30:06,460 [main] INFO  o.l.s.grpc.GRpcServerRunner Starting gRPC Server ... []
+2021-07-13 20:30:06,485 [main] INFO  o.l.s.grpc.GRpcServerRunner 'org.apache.airavata.datalake.workflow.engine.wm.datasync.WorkflowEngineAPIHandler' service has been registered. []
+2021-07-13 20:30:06,586 [main] INFO  o.l.s.grpc.GRpcServerRunner gRPC Server started, listening on port 6565. []
+2021-07-13 20:33:32,670 [grpc-default-executor-0] INFO  o.a.a.d.w.e.w.d.DataSyncWorkflowManager Launched workflow c9d6647a-167b-4e98-b963-c82b69c1ac74 []
+2021-07-13 20:33:33,302 [HelixTaskExecutor-message_handle_thread] INFO  o.a.a.d.o.w.e.t.AbstractTask Setting callback context c9d6647a-167b-4e98-b963-c82b69c1ac74_dt-4971e65b-9afd-47c3-90d0-04e04d4bd4ef []
+2021-07-13 20:33:33,310 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.AbstractTask Running task dt-4971e65b-9afd-47c3-90d0-04e04d4bd4ef []
+2021-07-13 20:33:33,335 [TaskStateModelFactory-task_thread-0] ERROR o.apache.helix.task.TaskRunner Problem running the task, report task as FAILED. []
+java.lang.NoClassDefFoundError: org.apache.airavata.datalake.orchestrator.workflow.engine.task.TaskUtil
+	at org.apache.airavata.datalake.orchestrator.workflow.engine.task.AbstractTask.run(AbstractTask.java:74)
+	at org.apache.helix.task.TaskRunner.run(TaskRunner.java:71)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:836)
+Caused by: java.lang.ClassNotFoundException: org.apache.airavata.datalake.orchestrator.workflow.engine.task.TaskUtil
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:766)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:1083)
+	... 8 common frames omitted
+2021-07-13 20:33:33,724 [HelixTaskExecutor-message_handle_thread] INFO  o.a.a.d.o.w.e.t.AbstractTask Setting callback context c9d6647a-167b-4e98-b963-c82b69c1ac74_dt-4971e65b-9afd-47c3-90d0-04e04d4bd4ef []
+2021-07-13 20:33:33,724 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.AbstractTask Running task dt-4971e65b-9afd-47c3-90d0-04e04d4bd4ef []
+2021-07-13 20:33:33,724 [TaskStateModelFactory-task_thread-0] ERROR o.apache.helix.task.TaskRunner Problem running the task, report task as FAILED. []
+java.lang.NoClassDefFoundError: org/apache/airavata/datalake/orchestrator/workflow/engine/task/TaskUtil
+	at org.apache.airavata.datalake.orchestrator.workflow.engine.task.AbstractTask.run(AbstractTask.java:74)
+	at org.apache.helix.task.TaskRunner.run(TaskRunner.java:71)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:304)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:836)
+2021-07-13 20:34:28,354 [Thread-9] INFO  o.a.a.d.w.e.worker.Participant Shutting down participant. Currently available tasks 0 []
+2021-07-13 20:34:28,355 [Thread-9] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has disconnected from cluster: datalake []
+2021-07-13 20:37:25,771 [main] INFO  o.a.a.d.w.e.worker.Participant Starting Participant using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 20199 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker) []
+2021-07-13 20:37:25,773 [main] INFO  o.a.a.d.w.e.worker.Participant No active profile set, falling back to default profiles: default []
+2021-07-13 20:37:26,487 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'messageConverters' defined in class path resource [org/springframework/boot/autoconfigure/http/HttpMessageConvertersAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.boot.autoconfigure.http.HttpMessageConverters]: Factory method 'messageConverters' threw exception; nested exception is java.lang.NoSuchMethodError: org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter.getPartConverters()Ljava/util/List; (loaded from file:/Users/isururanawaka/.m13/org/springframework/spring-web/5.2.0.RELEASE/spring-web-5.2.0.RELEASE.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@13c66c18) called from class org.springframework.boot.autoconfigure.http.HttpMessageConverters (loaded from file:/Users/isururanawaka/.m13/org/springframework/boot/spring-boot-autoconfigure/2.4.5/spring-boot-autoconfigure-2.4.5.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@13c66c18). []
+2021-07-13 20:37:26,498 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled. []
+2021-07-13 20:37:26,511 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+An attempt was made to call a method that does not exist. The attempt was made from the following location:
+
+    org.springframework.boot.autoconfigure.http.HttpMessageConverters.configurePartConverters(HttpMessageConverters.java:140)
+
+The following method did not exist:
+
+    org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter.getPartConverters()Ljava/util/List;
+
+The method's class, org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter, is available from the following locations:
+
+    jar:file:/Users/isururanawaka/.m13/org/springframework/spring-web/5.2.0.RELEASE/spring-web-5.2.0.RELEASE.jar!/org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter.class
+
+The class hierarchy was loaded from the following locations:
+
+    org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter: file:/Users/isururanawaka/.m13/org/springframework/spring-web/5.2.0.RELEASE/spring-web-5.2.0.RELEASE.jar
+    org.springframework.http.converter.FormHttpMessageConverter: file:/Users/isururanawaka/.m13/org/springframework/spring-web/5.2.0.RELEASE/spring-web-5.2.0.RELEASE.jar
+
+
+Action:
+
+Correct the classpath of your application so that it contains a single, compatible version of org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter
+ []
+2021-07-13 20:49:20,681 [main] INFO  o.a.a.d.w.e.worker.Participant Starting Participant using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 20330 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker) []
+2021-07-13 20:49:20,683 [main] INFO  o.a.a.d.w.e.worker.Participant No active profile set, falling back to default profiles: default []
+2021-07-13 20:49:21,356 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'messageConverters' defined in class path resource [org/springframework/boot/autoconfigure/http/HttpMessageConvertersAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.boot.autoconfigure.http.HttpMessageConverters]: Factory method 'messageConverters' threw exception; nested exception is java.lang.NoSuchMethodError: org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter.getPartConverters()Ljava/util/List; (loaded from file:/Users/isururanawaka/.m13/org/springframework/spring-web/5.2.0.RELEASE/spring-web-5.2.0.RELEASE.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@230a07aa) called from class org.springframework.boot.autoconfigure.http.HttpMessageConverters (loaded from file:/Users/isururanawaka/.m13/org/springframework/boot/spring-boot-autoconfigure/2.4.5/spring-boot-autoconfigure-2.4.5.jar by jdk.internal.loader.ClassLoaders$AppClassLoader@230a07aa). []
+2021-07-13 20:49:21,365 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled. []
+2021-07-13 20:49:21,377 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+An attempt was made to call a method that does not exist. The attempt was made from the following location:
+
+    org.springframework.boot.autoconfigure.http.HttpMessageConverters.configurePartConverters(HttpMessageConverters.java:140)
+
+The following method did not exist:
+
+    org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter.getPartConverters()Ljava/util/List;
+
+The method's class, org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter, is available from the following locations:
+
+    jar:file:/Users/isururanawaka/.m13/org/springframework/spring-web/5.2.0.RELEASE/spring-web-5.2.0.RELEASE.jar!/org/springframework/http/converter/support/AllEncompassingFormHttpMessageConverter.class
+
+The class hierarchy was loaded from the following locations:
+
+    org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter: file:/Users/isururanawaka/.m13/org/springframework/spring-web/5.2.0.RELEASE/spring-web-5.2.0.RELEASE.jar
+    org.springframework.http.converter.FormHttpMessageConverter: file:/Users/isururanawaka/.m13/org/springframework/spring-web/5.2.0.RELEASE/spring-web-5.2.0.RELEASE.jar
+
+
+Action:
+
+Correct the classpath of your application so that it contains a single, compatible version of org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter
+ []
+2021-07-13 20:55:31,857 [main] WARN  o.s.boot.StartupInfoLogger InetAddress.getLocalHost().getHostName() took 219 milliseconds to respond. Please verify your network configuration (macOS machines may need to add entries to /etc/hosts). []
+2021-07-13 20:55:31,860 [main] INFO  o.a.a.d.w.e.worker.Participant Starting Participant using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 20473 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker) []
+2021-07-13 20:55:31,861 [main] INFO  o.a.a.d.w.e.worker.Participant No active profile set, falling back to default profiles: default []
+2021-07-13 20:55:32,459 [main] INFO  o.a.a.d.w.e.worker.Participant Started Participant in 1.054 seconds (JVM running for 1.365) []
+2021-07-13 20:55:32,460 [main] INFO  o.a.a.d.w.e.worker.Participant Staring Participant ..... []
+2021-07-13 20:55:32,477 [main] INFO  o.a.a.d.w.e.worker.Participant Loading task list file task-list.yaml from class path []
+2021-07-13 20:55:32,493 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 20:55:32,493 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 20:55:32,493 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 20:55:32,494 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 20:55:33,771 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 20:55:33,773 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 20:55:33,774 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 20:55:33,775 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 20:55:34,005 [main] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has connected to cluster: datalake []
+2021-07-13 20:58:50,846 [grpc-default-executor-2] INFO  o.a.a.d.w.e.w.d.DataSyncWorkflowManager Launched workflow 57a3a5df-6c76-42a0-a35e-25772eb41753 []
+2021-07-13 20:58:51,196 [HelixTaskExecutor-message_handle_thread] INFO  o.a.a.d.o.w.e.t.AbstractTask Setting callback context 57a3a5df-6c76-42a0-a35e-25772eb41753_dt-ce6d0e28-0454-4317-a897-fd6b6746340a []
+2021-07-13 20:58:51,202 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.AbstractTask Running task dt-ce6d0e28-0454-4317-a897-fd6b6746340a []
+2021-07-13 21:02:41,072 [Thread-6] INFO  o.a.a.d.w.e.worker.Participant Shutting down participant. Currently available tasks 0 []
+2021-07-13 21:02:41,074 [Thread-6] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has disconnected from cluster: datalake []
+2021-07-13 21:02:48,755 [main] INFO  o.a.a.d.w.e.worker.Participant Starting Participant using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 20633 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker) []
+2021-07-13 21:02:48,757 [main] INFO  o.a.a.d.w.e.worker.Participant No active profile set, falling back to default profiles: default []
+2021-07-13 21:02:49,350 [main] INFO  o.a.a.d.w.e.worker.Participant Started Participant in 0.856 seconds (JVM running for 1.175) []
+2021-07-13 21:02:49,352 [main] INFO  o.a.a.d.w.e.worker.Participant Staring Participant ..... []
+2021-07-13 21:02:49,370 [main] INFO  o.a.a.d.w.e.worker.Participant Loading task list file task-list.yaml from class path []
+2021-07-13 21:02:49,385 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 21:02:49,385 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 21:02:49,385 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 21:02:49,385 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 21:02:50,751 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 21:02:50,755 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 21:02:50,756 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 21:02:50,757 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 21:02:50,984 [main] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has connected to cluster: datalake []
+2021-07-13 21:04:26,141 [grpc-default-executor-3] INFO  o.a.a.d.w.e.w.d.DataSyncWorkflowManager Launched workflow e8ecf68c-8fc2-4f48-880d-11b41309cc24 []
+2021-07-13 21:04:26,441 [HelixTaskExecutor-message_handle_thread] INFO  o.a.a.d.o.w.e.t.AbstractTask Setting callback context e8ecf68c-8fc2-4f48-880d-11b41309cc24_dt-df91b420-0d72-46b6-a31d-707865e306bf []
+2021-07-13 21:04:26,443 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.AbstractTask Running task dt-df91b420-0d72-46b6-a31d-707865e306bf []
+2021-07-13 21:04:28,489 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.i.DataTransferPreValidationTask validated....... []
+2021-07-13 21:30:19,351 [Thread-6] INFO  o.a.a.d.w.e.worker.Participant Shutting down participant. Currently available tasks 0 []
+2021-07-13 21:30:19,353 [Thread-6] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has disconnected from cluster: datalake []
+2021-07-13 21:30:26,019 [main] INFO  o.a.a.d.w.e.worker.Participant Starting Participant using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 20803 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker) []
+2021-07-13 21:30:26,021 [main] INFO  o.a.a.d.w.e.worker.Participant No active profile set, falling back to default profiles: default []
+2021-07-13 21:30:26,651 [main] INFO  o.a.a.d.w.e.worker.Participant Started Participant in 1.101 seconds (JVM running for 1.416) []
+2021-07-13 21:30:26,653 [main] INFO  o.a.a.d.w.e.worker.Participant Staring Participant ..... []
+2021-07-13 21:30:26,680 [main] INFO  o.a.a.d.w.e.worker.Participant Loading task list file task-list.yaml from class path []
+2021-07-13 21:30:26,694 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 21:30:26,695 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 21:30:26,695 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 21:30:26,695 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 21:30:28,064 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 21:30:28,066 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 21:30:28,067 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 21:30:28,068 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 21:30:28,293 [main] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has connected to cluster: datalake []
+2021-07-13 21:33:17,216 [grpc-default-executor-4] INFO  o.a.a.d.w.e.w.d.DataSyncWorkflowManager Launched workflow e1f55b8e-1060-417b-8f34-e47f0e014061 []
+2021-07-13 21:33:17,649 [HelixTaskExecutor-message_handle_thread] INFO  o.a.a.d.o.w.e.t.AbstractTask Setting callback context e1f55b8e-1060-417b-8f34-e47f0e014061_dt-4ed3cf41-a1dd-4f1b-92e8-b0ddf512f88d []
+2021-07-13 21:33:17,651 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.AbstractTask Running task dt-4ed3cf41-a1dd-4f1b-92e8-b0ddf512f88d []
+2021-07-13 21:33:20,261 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.i.DataTransferPreValidationTask Successfully validated credential tokens ... []
+2021-07-13 21:40:01,348 [Thread-6] INFO  o.a.a.d.w.e.worker.Participant Shutting down participant. Currently available tasks 0 []
+2021-07-13 21:40:01,350 [Thread-6] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has disconnected from cluster: datalake []
+2021-07-13 21:40:08,144 [main] INFO  o.a.a.d.w.e.worker.Participant Starting Participant using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 20951 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker) []
+2021-07-13 21:40:08,146 [main] INFO  o.a.a.d.w.e.worker.Participant No active profile set, falling back to default profiles: default []
+2021-07-13 21:40:08,783 [main] INFO  o.a.a.d.w.e.worker.Participant Started Participant in 0.925 seconds (JVM running for 1.252) []
+2021-07-13 21:40:08,784 [main] INFO  o.a.a.d.w.e.worker.Participant Staring Participant ..... []
+2021-07-13 21:40:08,803 [main] INFO  o.a.a.d.w.e.worker.Participant Loading task list file task-list.yaml from class path []
+2021-07-13 21:40:08,818 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 21:40:08,818 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 21:40:08,818 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 21:40:08,819 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 21:40:09,042 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 21:40:09,044 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 21:40:09,045 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 21:40:09,046 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 21:40:09,277 [main] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has connected to cluster: datalake []
+2021-07-13 21:41:17,392 [grpc-default-executor-5] INFO  o.a.a.d.w.e.w.d.DataSyncWorkflowManager Launched workflow e34ac6dd-f322-4e74-b16f-7af5d85169db []
+2021-07-13 21:41:17,691 [HelixTaskExecutor-message_handle_thread] INFO  o.a.a.d.o.w.e.t.AbstractTask Setting callback context e34ac6dd-f322-4e74-b16f-7af5d85169db_dt-a97bbea4-caf2-453b-88a6-d3aba69d2e72 []
+2021-07-13 21:41:17,693 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.AbstractTask Running task dt-a97bbea4-caf2-453b-88a6-d3aba69d2e72 []
+2021-07-13 21:41:19,413 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.i.DataTransferPreValidationTask Successfully validated credential tokens ... []
+2021-07-13 21:43:56,819 [Thread-6] INFO  o.a.a.d.w.e.worker.Participant Shutting down participant. Currently available tasks 0 []
+2021-07-13 21:43:56,820 [Thread-6] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has disconnected from cluster: datalake []
+2021-07-13 21:45:54,155 [main] INFO  o.a.a.d.w.e.worker.Participant Starting Participant using Java 11.0.9 on Isurus-MacBook-Pro.local with PID 21053 (/Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker/target/classes started by isururanawaka in /Users/isururanawaka/Documents/Airavata_Repository/airavata-data-lake/data-orchestrator/workflow-engine/workflow-engine-worker) []
+2021-07-13 21:45:54,158 [main] INFO  o.a.a.d.w.e.worker.Participant No active profile set, falling back to default profiles: default []
+2021-07-13 21:45:54,821 [main] INFO  o.a.a.d.w.e.worker.Participant Started Participant in 1.102 seconds (JVM running for 1.429) []
+2021-07-13 21:45:54,823 [main] INFO  o.a.a.d.w.e.worker.Participant Staring Participant ..... []
+2021-07-13 21:45:54,842 [main] INFO  o.a.a.d.w.e.worker.Participant Loading task list file task-list.yaml from class path []
+2021-07-13 21:45:54,855 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 21:45:54,856 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 21:45:54,856 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 21:45:54,856 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 21:45:55,154 [main] INFO  o.a.a.d.w.e.worker.Participant Loading blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask []
+2021-07-13 21:45:55,157 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask []
+2021-07-13 21:45:55,158 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask []
+2021-07-13 21:45:55,159 [main] INFO  o.a.a.d.w.e.worker.Participant Loading non blocking task org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask []
+2021-07-13 21:45:55,384 [main] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has connected to cluster: datalake []
+2021-07-13 21:46:59,075 [grpc-default-executor-6] INFO  o.a.a.d.w.e.w.d.DataSyncWorkflowManager Launched workflow b7fb9ff9-a89b-4b74-812b-5582d0141bed []
+2021-07-13 21:46:59,341 [HelixTaskExecutor-message_handle_thread] INFO  o.a.a.d.o.w.e.t.AbstractTask Setting callback context b7fb9ff9-a89b-4b74-812b-5582d0141bed_dt-48b4a955-c4e1-4890-a086-72d989a6041a []
+2021-07-13 21:46:59,343 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.AbstractTask Running task dt-48b4a955-c4e1-4890-a086-72d989a6041a []
+2021-07-13 21:47:01,102 [TaskStateModelFactory-task_thread-0] INFO  o.a.a.d.o.w.e.t.i.DataTransferPreValidationTask Successfully validated credential tokens ... []
+2021-07-13 22:07:05,311 [Thread-6] INFO  o.a.a.d.w.e.worker.Participant Shutting down participant. Currently available tasks 0 []
+2021-07-13 22:07:05,313 [Thread-6] INFO  o.a.a.d.w.e.worker.Participant Participant: datalake_participant, has disconnected from cluster: datalake []
+2021-07-13 22:07:10,393 [SpringContextShutdownHook] INFO  o.l.s.grpc.GRpcServerRunner Shutting down gRPC server ... []
+2021-07-13 22:07:10,432 [SpringContextShutdownHook] INFO  o.l.s.grpc.GRpcServerRunner gRPC server stopped. []

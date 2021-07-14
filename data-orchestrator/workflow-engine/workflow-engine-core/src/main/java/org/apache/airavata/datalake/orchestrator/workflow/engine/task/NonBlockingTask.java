@@ -19,7 +19,6 @@ package org.apache.airavata.datalake.orchestrator.workflow.engine.task;
 
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.NonBlockingSection;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.TaskParam;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.helix.task.TaskResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
