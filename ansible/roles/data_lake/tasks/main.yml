@@ -28,6 +28,11 @@
     zone=public permanent=true state=enabled immediate=yes
   become: yes
 
+- name: open firewall port {{ datalake_data_orch_http_port }} for Data Orchestrator HTTP connections
+  firewalld: port="{{ datalake_data_orch_http_port }}/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
 - name: Create Datalake deployment directory {{ datalake_deployment_dir }}
   become: yes
   file: path={{ datalake_deployment_dir }}
@@ -38,7 +43,7 @@
 
 - name: Create Datalake source directory
   become: yes
-  file: path={{datalake_source_dir}}
+  file: path={{ datalake_source_dir }}
     state=directory
     mode=0755
     owner={{ user }}
@@ -62,3 +67,55 @@
   become: yes
   become_user: "{{ user }}"
 
+- name: Stop daemons if running
+  command: "{{ item.command }} chdir={{ datalake_deployment_dir }}/{{ item.dir }}/"
+  with_items:
+    - { command: ./bin/drms-daemon.sh stop, dir: "DRMS-{{datalake_distribution_version}}" }
+    - { command: ./bin/drms-custos-synchronizer-daemon.sh stop, dir: "DRMS-Custos-Synchronizer-{{datalake_distribution_version}}" }
+    - { command: ./bin/orch-api-server-daemon.sh stop, dir: "Orchestrator-API-Service-{{datalake_distribution_version}}" }
+  ignore_errors: yes
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Copy Datalake distributions to Datalake deployment directory
+  unarchive: "src={{ datalake_source_dir }}/{{ item }}
+              dest={{ datalake_deployment_dir }}/ copy=no"
+  with_items:
+    - "data-resource-management-service/drms-api/target/DRMS-{{datalake_distribution_version}}-bin.zip"
+    - "data-resource-management-service/drms-custos-synchronizer/target/DRMS-Custos-Synchronizer-{{datalake_distribution_version}}-bin.zip"
+    - "data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/target/Orchestrator-API-Service-{{datalake_distribution_version}}-bin.zip"
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Copy Datalake property files
+  template: "src={{ item.name }}
+            dest={{ datalake_deployment_dir }}/{{ item.dir }}/conf/{{ item.target }}
+            owner={{ user }}
+            group={{ group }}
+            mode=\"u=rw,g=r,o=r\""
+  with_items:
+    - { name: drms/application.properties.j2,
+        dir: "DRMS-{{datalake_distribution_version}}",
+        target: application.properties}
+    - { name: custos-data-synchronizer/config.yml.j2,
+        dir: "DRMS-Custos-Synchronizer-{{datalake_distribution_version}}",
+        target: config.yml }
+    - { name: data-orchestrator/application.properties.j2,
+        dir: "Orchestrator-API-Service-{{datalake_distribution_version}}",
+        target: application.properties }
+    - { name: data-orchestrator/config.yml.j2,
+        dir: "Orchestrator-API-Service-{{datalake_distribution_version}}",
+        target: config.yml }
+  become: yes
+  become_user: "{{ user }}"
+
+
+- name: Start Datalake daemons
+  command: "{{ item.command }} chdir={{ datalake_deployment_dir }}/{{ item.dir }}/"
+  with_items:
+    - { command: ./bin/drms-daemon.sh start, dir: "DRMS-{{datalake_distribution_version}}" }
+    - { command: ./bin/drms-custos-synchronizer-daemon.sh start, dir: "DRMS-Custos-Synchronizer-{{datalake_distribution_version}}" }
+    - { command: ./bin/orch-api-server-daemon.sh start, dir: "Orchestrator-API-Service-{{datalake_distribution_version}}" }
+  ignore_errors: yes
+  become: yes
+  become_user: "{{ user }}"

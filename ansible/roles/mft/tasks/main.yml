@@ -24,23 +24,23 @@
     - "{{ mft_secret_service_grpc_port }}"
   become: yes
 
-#- name: git checkout from MFT github repo {{ mft_repo }} branch {{ mft_git_branch }}
-#  git: repo="{{ mft_repo }}"
-#    dest="{{ mft_source_dir }}"
-#    version="{{ mft_git_branch }}"
-#  register: checkout
-#  tags: update
-#  become: yes
-#  become_user: "{{ user }}"
+- name: git checkout from MFT github repo {{ mft_repo }} branch {{ mft_git_branch }}
+  git: repo="{{ mft_repo }}"
+    dest="{{ mft_source_dir }}"
+    version="{{ mft_git_branch }}"
+  register: checkout
+  tags: update
+  become: yes
+  become_user: "{{ user }}"
 
-#- name: Run MFT maven build
-#  command: mvn clean install -Dmaven.test.skip=true chdir="{{ mft_source_dir }}/"
-#  environment:
-#    MAVEN_OPTS: "-Xmx2048m"
-#  register: build
-#  tags: update
-#  become: yes
-#  become_user: "{{ user }}"
+- name: Run MFT maven build
+  command: mvn clean install -Dmaven.test.skip=true chdir="{{ mft_source_dir }}/"
+  environment:
+    MAVEN_OPTS: "-Xmx2048m"
+  register: build
+  tags: update
+  become: yes
+  become_user: "{{ user }}"
 
 - name: Stop daemons if running
   command: "{{ item.command }} chdir={{ mft_deployment_dir }}/{{ item.dir }}/"

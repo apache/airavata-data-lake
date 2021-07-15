@@ -1,0 +1,17 @@
+eventProcessorWorkers: 10
+inMemoryStorageAdaptor: "org.apache.airavata.datalake.orchestrator.db.inmemory.DefaultInMemoryStore"
+messageFilter:
+  resourceType: "FILE"
+  eventType: "CREATE,MODIFY "
+  resourceNameExclusions: "swp$"
+outboundEventProcessor:
+  pollingInterval: 5
+  workflowEngineHost: "{{ datalake_workflow_engine_host }}"
+  workflowPort: {{ datalake_workflow_engine_port }}
+  drmsHost: "{{ datalake_drms_host }}"
+  drmsPort: {{ datalake_drms_grpc_port }}
+consumer:
+  brokerURL: "{{ datalake_data_orch_broker_url }}"
+  consumerGroup: "{{ datalake_data_orch_broker_consumer_group }}"
+  topic: "{{ datalake_data_orch_broker_topic }}"
+  maxPollRecordsConfig: 10

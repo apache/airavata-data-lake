@@ -15,20 +15,12 @@
 # limitations under the License.
 #
 
-spring.main.web-application-type=NONE
-agent.id={{ mft_default_agent_id }}
-agent.secret=CHANGE_ME
-agent.host={{ mft_default_agent_host }}
-agent.advertised.host={{ mft_default_agent_advertised_host }}
-agent.user=CHANGE_ME
-agent.http.port={{ mft_default_agent_port }}
-agent.https.enabled=false
-agent.supported.protocols=SCP,LOCAL,FTP
-
-consul.host={{ mft_consul_host }}
-consul.port={{ mft_consul_port }}
-
-resource.service.host={{ mft_resource_service_host }}
-resource.service.port={{ mft_resource_service_grpc_port }}
-secret.service.host={{ mft_secret_service_host }}
-secret.service.port={{ mft_secret_service_grpc_port }}
+neo4j.server.uri={{ datalake_drms_neo4j_uri }}
+neo4j.server.user={{ datalake_drms_neo4j_user }}
+neo4j.server.password={{ datalake_drms_neo4j_password }}
+custos.id={{ datalake_drms_custos_client_id }}
+custos.secret={{ datalake_drms_custos_client_secret }}
+custos.host={{ datalake_drms_custos_host }}
+custos.port={{ datalake_drms_custos_port }}
+grpc.port={{ datalake_drms_grpc_port }}
+server.port={{ datalake_drms_http_port }}

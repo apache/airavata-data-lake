@@ -37,10 +37,16 @@ mft_repo: "https://github.com/apache/airavata-mft.git"
 mft_git_branch: develop
 mft_distribution_version: 0.01
 
+custos_source_dir: "{{ user_home }}/custos-source"
+custos_repo: "https://github.com/apache/airavata-custos.git"
+custos_git_branch: develop
+
 mft_default_agent_id: agent0
-mft_default_agent_host: 149.165.157.235
+mft_default_agent_host: 10.1.0.33
+mft_default_agent_advertised_host: 149.165.157.235
 mft_default_agent_port: 3333
 
+mft_api_service_host: localhost
 mft_api_service_http_port: 8088
 mft_api_service_grpc_port: 7004
 mft_api_service_id: 0
@@ -65,5 +71,31 @@ consul_install_dir: /usr/local/bin
 consul_config_dir: /etc/consul
 consul_data_dir: /var/data
 
+datalake_distribution_version: 0.01-SNAPSHOT
 datalake_drms_host: localhost
 datalake_drms_grpc_port: 7070
+
+datalake_drms_neo4j_uri: bolt://149.165.156.173:7687
+datalake_drms_neo4j_user: "{{ vault_datalake_drms_neo4j_user }}"
+datalake_drms_neo4j_password: "{{ vault_datalake_drms_neo4j_password }}"
+datalake_drms_custos_client_id: "{{ vault_mft_resource_service_custos_client_id }}"
+datalake_drms_custos_client_secret: "{{ vault_mft_resource_service_custos_client_secret }}"
+datalake_drms_custos_host: custos.scigap.org
+datalake_drms_custos_port: 31499
+datalake_drms_http_port: 8900
+
+datalake_synch_broker_url: 149.165.156.200:9092
+datalake_synch_broker_consumer_group: custosEventsGroup
+datalake_synch_broker_topic: 10002708-754b89b5-3a57-496c-aa34-8e2b4916fbcc
+datalake_synch_tenant_id: custos-whedmgamitu357p4wuke-10002708
+
+datalake_data_orch_datasource_url: jdbc:mysql://localhost:3306/data_orchestrator?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+datalake_data_orch_datasource_username: "{{ vault_datalake_data_orch_datasource_username }}"
+datalake_data_orch_datasource_password: "{{ vault_datalake_data_orch_datasource_password }}"
+datalake_data_orch_http_port: 8899
+datalake_data_orch_broker_url: localhost:9092
+datalake_data_orch_broker_consumer_group: DataOrchestratorGroup3
+datalake_data_orch_broker_topic: data-orchestrator-file-events
+
+datalake_workflow_engine_host: localhost
+datalake_workflow_engine_port: 6565
