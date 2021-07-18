@@ -4,3 +4,4 @@ tasks:
   nonBlocking:
     - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask
     - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask
+    - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask

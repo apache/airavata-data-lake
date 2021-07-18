@@ -22,7 +22,7 @@ import org.apache.airavata.datalake.mft.listener.DataTransferEventDeserializer;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowInvocationRequest;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.AbstractTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.TaskUtil;
-import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.wm.CallbackWorkflowEntity;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.wm.CallbackWorkflowStore;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.wm.WorkflowOperator;
@@ -77,6 +77,26 @@ public class DataSyncWorkflowManager {
     private String mftClientId;
     @Value("${mft.clientSecret}")
     private String mftClientSecret;
+
+    @Value("${custos.host}")
+    private String custosHost;
+
+    @Value("${custos.port}")
+    private int custosPort;
+
+    @Value("${custos.id}")
+    private String custosId;
+
+    @Value("${custos.secret}")
+    private String custosSecret;
+
+
+
+    @Value("${drms.host}")
+    private String drmsHost;
+
+    @Value("${drms.port}")
+    private int drmsPort;
 
 
     @Autowired
@@ -176,23 +196,40 @@ public class DataSyncWorkflowManager {
         logger.info("Successfully initialized DatasyncWorkflow Manager");
     }
 
-    public void submitDataSyncWorkflow(WorkflowInvocationRequest workflowInvocationRequest) throws Exception {
-        AsyncDataTransferTask dt1 = new AsyncDataTransferTask();
-        dt1.setSourceResourceId(workflowInvocationRequest.getMessage().getSourceResourceId());
-        dt1.setDestinationResourceId(workflowInvocationRequest.getMessage().getDestinationResourceId());
-        dt1.setSourceCredToken(workflowInvocationRequest.getMessage().getSourceCredentialToken());
-        dt1.setDestinationCredToken(workflowInvocationRequest.getMessage().getDestinationCredentialToken());
-        dt1.setTenantId(workflowInvocationRequest.getMessage().getTenantId());
-        dt1.setCallbackUrl(callbackURL);
-        dt1.setMftHost(mftHost);
-        dt1.setMftPort(mftPort);
-        dt1.setMftClientId(mftClientId);
-        dt1.setMftClientSecret(mftClientSecret);
-        dt1.setUserId(workflowInvocationRequest.getMessage().getUsername());
-        dt1.setCurrentSection(1);
+    public void submitDataSyncWorkflow(WorkflowInvocationRequest request) throws Exception {
+//        AsyncDataTransferTask dt1 = new AsyncDataTransferTask();
+//        dt1.setSourceResourceId(workflowInvocationRequest.getMessage().getSourceResourceId());
+//        dt1.setDestinationResourceId(workflowInvocationRequest.getMessage().getDestinationResourceId());
+//        dt1.setSourceCredToken(workflowInvocationRequest.getMessage().getSourceCredentialToken());
+//        dt1.setDestinationCredToken(workflowInvocationRequest.getMessage().getDestinationCredentialToken());
+//        dt1.setTenantId(workflowInvocationRequest.getMessage().getTenantId());
+//        dt1.setCallbackUrl(callbackURL);
+//        dt1.setMftHost(mftHost);
+//        dt1.setMftPort(mftPort);
+//        dt1.setMftClientId(mftClientId);
+//        dt1.setMftClientSecret(mftClientSecret);
+//        dt1.setUserId(workflowInvocationRequest.getMessage().getUsername());
+//        dt1.setCurrentSection(1);
+//        dt1.setTaskId("dt-" + UUID.randomUUID().toString());
+//        dt1.setMftCallbackStoreHost(datasyncWmHost);
+//        dt1.setMftCallbackStorePort(datasyncWmPort);
+
+        DataTransferPreValidationTask dt1 = new DataTransferPreValidationTask();
+        dt1.setTenantId(request.getMessage().getTenantId());
+        dt1.setCustosHost(custosHost);
+        dt1.setCustosPort(custosPort);
+        dt1.setSourceResourceId(request.getMessage().getSourceResourceId());
+        dt1.setSourceCredToken(request.getMessage().getSourceCredentialToken());
+        dt1.setDestinationResourceId(request.getMessage().getDestinationResourceId());
+        dt1.setDestinationCredToken(request.getMessage().getDestinationCredentialToken());
+        dt1.setDrmsHost(drmsHost);
+        dt1.setDrmsPort(drmsPort);
+        dt1.setCustosId(custosId);
+        dt1.setCustosSecret(custosSecret);
+        dt1.setAuthToken(request.getMessage().getAuthToken());
+        dt1.setUserId(request.getMessage().getUsername());
         dt1.setTaskId("dt-" + UUID.randomUUID().toString());
-        dt1.setMftCallbackStoreHost(datasyncWmHost);
-        dt1.setMftCallbackStorePort(datasyncWmPort);
+        dt1.setCurrentSection(1);
 
         Map<String, AbstractTask> taskMap = new HashMap<>();
         taskMap.put(dt1.getTaskId(), dt1);

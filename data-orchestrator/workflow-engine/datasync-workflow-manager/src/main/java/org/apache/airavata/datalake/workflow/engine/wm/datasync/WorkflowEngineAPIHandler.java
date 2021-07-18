@@ -48,7 +48,7 @@ public class WorkflowEngineAPIHandler extends WorkflowServiceGrpc.WorkflowServic
             responseObserver.onNext(WorkflowInvocationResponse.newBuilder().setStatus(true).build());
             responseObserver.onCompleted();
         } catch (Exception ex) {
-            String msg = "Error occurred while invoking blocking pipeline";
+            String msg = "Error occurred while invoking  pipeline";
             logger.error(msg, ex);
             responseObserver.onError(new Exception(msg));
         }
