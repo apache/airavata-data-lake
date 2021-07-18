@@ -1,8 +1,8 @@
 pollingInterval: 60
 dataResourceManagementService:
-  dbURI: "bolt://149.165.156.173:7687"
+  dbURI: "bolt://192.168.0.14:7687"
   dbUser: "neo4j"
-  dbPassword: "blastcovid19"
+  dbPassword: "123456"
 custos:
   host: "custos.scigap.org"
   port: 31499

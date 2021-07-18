@@ -1,0 +1,17 @@
+pollingInterval: 60
+dataResourceManagementService:
+  dbURI: "{{ datalake_drms_neo4j_uri }}"
+  dbUser: "{{ datalake_drms_neo4j_user }}"
+  dbPassword: "{{ datalake_drms_neo4j_password }}"
+custos:
+  host: "{{ datalake_drms_custos_host }}"
+  port: {{ datalake_drms_custos_port }}
+  custosId: "{{ datalake_drms_custos_client_id }}"
+  custosSec: "{{ datalake_drms_custos_client_secret }}"
+  custosBrokerURL: "{{ datalake_synch_broker_url }}"
+  consumerGroup: "{{ datalake_synch_broker_consumer_group }}"
+  maxPollRecordsConfig: 10
+  topics:
+    - "{{ datalake_synch_broker_topic }}"
+  tenantsToBeSynced:
+    - "{{ datalake_synch_tenant_id }}"

@@ -116,7 +116,7 @@
                         </goals>
                         <configuration>
                             <tarLongFileMode>posix</tarLongFileMode>
-                            <finalName>drms-custos-synchronizer</finalName>
+                            <finalName>DRMS-Custos-Synchronizer-${project.version}</finalName>
                             <descriptors>
                                 <descriptor>src/main/dist/drms-custos-synchronizer-assembly.xml</descriptor>
                             </descriptors>

@@ -1,0 +1,26 @@
+- name: Create Custos source directory
+  become: yes
+  file: path={{ custos_source_dir }}
+    state=directory
+    mode=0755
+    owner={{ user }}
+    group={{ group }}
+
+
+- name: git checkout from Custos github repo {{ custos_repo }} branch {{ custos_git_branch }}
+  git: repo="{{ custos_repo }}"
+    dest="{{ custos_source_dir }}"
+    version="{{ custos_git_branch }}"
+  register: checkout
+  tags: update
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Run Custos maven build
+  command: mvn clean install -Dmaven.test.skip=true chdir="{{ custos_source_dir }}/"
+  environment:
+    MAVEN_OPTS: "-Xmx2048m"
+  register: build
+  tags: update
+  become: yes
+  become_user: "{{ user }}"

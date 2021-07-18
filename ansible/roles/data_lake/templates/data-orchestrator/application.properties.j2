@@ -1,0 +1,21 @@
+spring.datasource.url={{ datalake_data_orch_datasource_url }}
+spring.datasource.username={{ datalake_data_orch_datasource_username }}
+spring.datasource.password={{ datalake_data_orch_datasource_password }}
+
+## Hibernate Properties
+# The SQL dialect makes Hibernate generate better SQL for the chosen database
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+spring.jpa.properties.hibernate.enable_lazy_load_no_trans=true
+# Hibernate ddl auto (create, create-drop, validate, update)
+spring.jpa.hibernate.ddl-auto = update
+spring.datasource.driver-class-name= com.mysql.cj.jdbc.Driver
+spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+config.path=${AIRAVATA_HOME}/conf/config.yml
+server.port={{ datalake_data_orch_http_port }}
+
+drms.host={{ datalake_drms_host }}
+drms.port={{ datalake_drms_grpc_port }}
+
+mft.host={{ mft_api_service_host }}
+mft.port={{ mft_api_service_grpc_port }}
