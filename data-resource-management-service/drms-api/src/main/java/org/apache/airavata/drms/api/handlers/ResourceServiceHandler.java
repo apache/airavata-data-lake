@@ -132,6 +132,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
             String parentId = request.getResource().getParentId();
 
+
             String entityId = request.getResource().getResourceId();
             Map<String, Object> serializedMap = GenericResourceSerializer.serializeToMap(request.getResource());
             Optional<Entity> exEntity = CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
@@ -150,9 +151,11 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 serializedMap.put("owner", exEntity.get().getOwnerId());
 
                 if (!parentId.isEmpty()) {
+                    String parentLabel = request.getResource().getPropertiesMap().get("PARENT_TYPE");
+                    serializedMap.remove("properties");
                     this.neo4JConnector.mergeNodesWithParentChildRelationShip(serializedMap, new HashMap<>(),
-                            request.getResource().getType(), StoragePreferenceConstants.STORAGE_PREFERENCE_LABEL,
-                            callUser.getUsername(), entityId, parentId, callUser.getTenantId());
+                            request.getResource().getType(), parentLabel, callUser.getUsername(), entityId,
+                            parentId, callUser.getTenantId());
                 } else {
                     this.neo4JConnector.mergeNode(serializedMap, request.getResource().getType(),
                             callUser.getUsername(), entityId, callUser.getTenantId());

@@ -55,8 +55,8 @@ public class Neo4JConnector {
 
     public List<Record> searchNodes(String query) {
         Session session = driver.session();
-        if(!session.isOpen()) {
-          session =  resume();
+        if (!session.isOpen()) {
+            session = resume();
         }
         Result result = session.run(query);
         return result.list();
@@ -64,8 +64,8 @@ public class Neo4JConnector {
 
     public List<Record> searchNodes(Map<String, Object> properties, String query) {
         Session session = driver.session();
-        if(!session.isOpen()) {
-            session =  resume();
+        if (!session.isOpen()) {
+            session = resume();
         }
         Result result = session.run(query, properties);
         return result.list();
@@ -74,8 +74,8 @@ public class Neo4JConnector {
     public void mergeNode(Map<String, Object> properties, String label, String userId, String entityId,
                           String tenantId) {
         Session session = driver.session();
-        if(!session.isOpen()) {
-            session =  resume();
+        if (!session.isOpen()) {
+            session = resume();
         }
         Map<String, Object> parameters = new HashMap<>();
         properties.put("entityId", entityId);
@@ -97,8 +97,8 @@ public class Neo4JConnector {
                                                       String parentEntityId,
                                                       String tenantId) {
         Session session = driver.session();
-        if(!session.isOpen()) {
-            session =  resume();
+        if (!session.isOpen()) {
+            session = resume();
         }
         Map<String, Object> parameters = new HashMap<>();
         childProperties.put("childEntityId", childEntityId);
@@ -122,11 +122,13 @@ public class Neo4JConnector {
         tx.close();
     }
 
+
+
     public void deleteNode(String label, String entityId,
                            String tenantId) {
         Session session = driver.session();
-        if(!session.isOpen()) {
-            session =  resume();
+        if (!session.isOpen()) {
+            session = resume();
         }
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("entityId", entityId);
@@ -139,16 +141,14 @@ public class Neo4JConnector {
 
     public void runTransactionalQuery(Map<String, Object> parameters, String query) {
         Session session = driver.session();
-        if(!session.isOpen()) {
-            session =  resume();
+        if (!session.isOpen()) {
+            session = resume();
         }
         Transaction tx = session.beginTransaction();
         Result result = tx.run(query, parameters);
         tx.commit();
         tx.close();
     }
-
-
 
 
     public void runTransactionalQuery(String query) {
@@ -162,8 +162,8 @@ public class Neo4JConnector {
     public void createMetadataNode(String parentLabel, String parentIdName, String parentIdValue,
                                    String userId, String key, String value) {
         Session session = driver.session();
-        if(!session.isOpen()) {
-            session =  resume();
+        if (!session.isOpen()) {
+            session = resume();
         }
 
         Transaction tx = session.beginTransaction();

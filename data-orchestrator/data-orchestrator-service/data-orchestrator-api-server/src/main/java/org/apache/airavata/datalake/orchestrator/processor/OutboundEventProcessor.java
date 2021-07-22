@@ -102,6 +102,7 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
             TransferMapping transferMapping = optionalStorPref.get();
             String sourceStorageId = transferMapping.getSourceStorage().getSshStorage().getStorageId();
             String destinationStorageId = transferMapping.getDestinationStorage().getSshStorage().getStorageId();
+            String parentType = "Storage";
 
             String parentId = sourceStorageId;
             for (int i = 1; i < collections.length - 1; i++) {
@@ -110,9 +111,10 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
                 path = path.concat(resourceName);
                 String entityId = Utils.getId(path);
                 Optional<GenericResource> optionalGenericResource =
-                        this.drmsConnector.createResource(repository, entity, entityId, resourceName, path, sourceStorageId, "COLLECTION");
+                        this.drmsConnector.createResource(repository, entity, entityId, resourceName, path, sourceStorageId, "COLLECTION", parentType);
                 if (optionalGenericResource.isPresent()) {
                     parentId = optionalGenericResource.get().getResourceId();
+                    parentType = "COLLECTION";
                 } else {
                     entity.setEventStatus(EventStatus.ERRORED.name());
                     entity.setError("Collection structure creation failed: " + entity.getHostName());
@@ -124,17 +126,16 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
             Optional<GenericResource> optionalGenericResource =
                     this.drmsConnector.createResource(repository, entity, entity.getResourceId(),
                             collections[collections.length - 1], entity.getResourcePath(),
-                            parentId, "FILE");
+                            parentId, "FILE", parentType);
 
-            String dstResourceHost = transferMapping.getDestinationStorage().getSshStorage().getHostName();
-            String destinationResourceId = dstResourceHost + ":" + entity.getResourcePath() + ":" + entity.getResourceType();
+            String destinationResourceId = destinationStorageId + ":" + entity.getResourcePath() + ":" + entity.getResourceType();
             String messageId = Utils.getId(destinationResourceId);
 
             Optional<GenericResource> destinationFile = this.drmsConnector.createResource(repository, entity, messageId,
                     entity.getResourceName(),
                     entity.getResourcePath(),
                     destinationStorageId,
-                    "FILE");
+                    "FILE", "Storage");
 
             if (optionalGenericResource.isPresent() && destinationFile.isPresent()) {
                 try {

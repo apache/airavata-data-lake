@@ -90,7 +90,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
                                                     String resourceName,
                                                     String resourcePath,
                                                     String parentId,
-                                                    String type) {
+                                                    String type, String parentType) {
         DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
                 .setAccessToken(entity.getAuthToken())
                 .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
@@ -106,6 +106,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
                 .setResourceName(resourceName)
                 .setResourcePath(resourcePath)
                 .setType(type)
+                .putProperties("PARENT_TYPE", parentType)
                 .setParentId(parentId).build();
         ResourceCreateRequest resourceCreateRequest = ResourceCreateRequest
                 .newBuilder()
