@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.airavata.datalake.orchestrator.handlers;
+package org.apache.airavata.datalake.orchestrator.handlers.mft;
 
 import com.google.protobuf.Struct;
 import io.grpc.ManagedChannel;
@@ -23,7 +23,6 @@ import io.grpc.ManagedChannelBuilder;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.*;
-import org.apache.airavata.datalake.orchestrator.handlers.mft.MFTDownloadResponse;
 import org.apache.airavata.mft.api.client.MFTApiClient;
 import org.apache.airavata.mft.api.service.HttpDownloadApiRequest;
 import org.apache.airavata.mft.api.service.HttpDownloadApiResponse;
@@ -36,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -60,6 +58,8 @@ public class MFTRequestHandler {
 
     @GetMapping("/mftdownlaod/{resourceid}")
     public MFTDownloadResponse mftDownload(@PathVariable String resourceid) throws Exception {
+
+        logger.info("MFT download request to resource {}", resourceid);
         MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = MFTApiClient.buildClient(mftHost, mftPort);
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(drmsHost, drmsPort).usePlaintext().build();
@@ -138,8 +138,8 @@ public class MFTRequestHandler {
 
             CustosClientProvider custosClientProvider = new CustosClientProvider.Builder().setServerHost("custos.scigap.org")
                     .setServerPort(31499)
-                    .setClientId("custos-whedmgamitu357p4wuke-10002708")
-                    .setClientSec("mrMdl86Ia1H94cikW7CvHoh7L0ASNXQVt2aRzSIj").build();
+                    .setClientId("ccustos-ii8g0cfwsz6ruwezykn9-10002640")
+                    .setClientSec("OxXECszt9dL4lHJQyL444UOU0lKN317D51ez067R").build();
 
             IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
             Struct struct = identityManagementClient.getToken(null, null, "isjarana@iu.edu", "IJR@circ@1", null, "password");
