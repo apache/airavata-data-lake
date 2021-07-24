@@ -18,6 +18,7 @@ package org.apache.airavata.drms.api.handlers;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.MapEntry;
 import com.google.protobuf.Struct;
 import com.google.protobuf.util.JsonFormat;
 import io.grpc.Status;
@@ -150,9 +151,16 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 serializedMap.put("lastModifiedTime", exEntity.get().getCreatedAt());
                 serializedMap.put("owner", exEntity.get().getOwnerId());
 
+                if (serializedMap.containsKey("properties") && serializedMap.get("properties") instanceof List) {
+                   List propertiesList = (List) serializedMap.get("properties");
+                   propertiesList.forEach(property-> {
+                       MapEntry entry = (MapEntry) property;
+                       serializedMap.put(entry.getKey().toString(),entry.getValue());
+                   });
+                }
+                serializedMap.remove("properties");
                 if (!parentId.isEmpty()) {
                     String parentLabel = request.getResource().getPropertiesMap().get("PARENT_TYPE");
-                    serializedMap.remove("properties");
                     this.neo4JConnector.mergeNodesWithParentChildRelationShip(serializedMap, new HashMap<>(),
                             request.getResource().getType(), parentLabel, callUser.getUsername(), entityId,
                             parentId, callUser.getTenantId());
