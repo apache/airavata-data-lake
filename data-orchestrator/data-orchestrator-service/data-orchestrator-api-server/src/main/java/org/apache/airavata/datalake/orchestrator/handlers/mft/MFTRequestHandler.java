@@ -138,7 +138,7 @@ public class MFTRequestHandler {
 
             CustosClientProvider custosClientProvider = new CustosClientProvider.Builder().setServerHost("custos.scigap.org")
                     .setServerPort(31499)
-                    .setClientId("ccustos-ii8g0cfwsz6ruwezykn9-10002640")
+                    .setClientId("custos-ii8g0cfwsz6ruwezykn9-10002640")
                     .setClientSec("OxXECszt9dL4lHJQyL444UOU0lKN317D51ez067R").build();
 
             IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
