@@ -142,7 +142,7 @@ public class MFTRequestHandler {
                     .setClientSec("OxXECszt9dL4lHJQyL444UOU0lKN317D51ez067R").build();
 
             IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
-            Struct struct = identityManagementClient.getToken(null, null, "isjarana@iu.edu", "IJR@circ@1", null, "password");
+            Struct struct = identityManagementClient.getToken(null, null, "isjarana", "emcadmin@1", null, "password");
             return struct.getFieldsMap().get("access_token").getStringValue();
         } catch (Exception ex) {
             ex.printStackTrace();
