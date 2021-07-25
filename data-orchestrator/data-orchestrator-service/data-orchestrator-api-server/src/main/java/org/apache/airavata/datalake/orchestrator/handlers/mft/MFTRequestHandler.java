@@ -56,7 +56,7 @@ public class MFTRequestHandler {
     @org.springframework.beans.factory.annotation.Value("${drms.port}")
     private int drmsPort;
 
-    @GetMapping("/mftdownlaod/{resourceid}")
+    @GetMapping("/mftdownload/{resourceid}")
     public MFTDownloadResponse mftDownload(@PathVariable String resourceid) throws Exception {
 
         logger.info("MFT download request to resource {}", resourceid);
