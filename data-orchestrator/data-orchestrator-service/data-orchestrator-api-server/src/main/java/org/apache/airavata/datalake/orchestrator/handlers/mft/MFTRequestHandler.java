@@ -33,6 +33,7 @@ import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.identity.management.client.IdentityManagementClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,6 +57,7 @@ public class MFTRequestHandler {
     @org.springframework.beans.factory.annotation.Value("${drms.port}")
     private int drmsPort;
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/mftdownload/{resourceid}")
     public MFTDownloadResponse mftDownload(@PathVariable String resourceid) throws Exception {
 
