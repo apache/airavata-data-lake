@@ -43,7 +43,7 @@ custos_git_branch: develop
 
 mft_default_agent_id: agent0
 mft_default_agent_host: 10.1.0.33
-mft_default_agent_advertised_host: 149.165.157.235
+mft_default_agent_advertised_url: https://beta.iubemcenter.scigap.org:8443/downloads
 mft_default_agent_port: 3333
 
 mft_api_service_host: localhost
@@ -87,7 +87,7 @@ datalake_drms_http_port: 8900
 datalake_synch_broker_url: 149.165.156.200:9092
 datalake_synch_broker_consumer_group: custosEventsGroup
 datalake_synch_broker_topic: 10002708-754b89b5-3a57-496c-aa34-8e2b4916fbcc
-datalake_synch_tenant_id: custos-whedmgamitu357p4wuke-10002708
+datalake_synch_tenant_id: custos-ii8g0cfwsz6ruwezykn9-10002640
 
 datalake_data_orch_datasource_url: jdbc:mysql://localhost:3306/data_orchestrator?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
 datalake_data_orch_datasource_username: "{{ vault_datalake_data_orch_datasource_username }}"
