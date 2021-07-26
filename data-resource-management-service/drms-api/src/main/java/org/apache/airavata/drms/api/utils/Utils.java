@@ -28,11 +28,16 @@ public class Utils {
     }
 
 
-    public static Optional<String> getMetadataSearchQuery(List<ResourceSearchQuery> resourceSearchQueries, String type) {
+    public static Optional<String> getMetadataSearchQuery(List<ResourceSearchQuery> resourceSearchQueries, String type, String storageId) {
         if (!resourceSearchQueries.isEmpty()) {
             String preRegex = "'(?i).*";
             String postRegex = ".*'";
-            String query = " MATCH (r:" + type + ")-[:HAS_METADATA*]->(m) WHERE ";
+            String query = "";
+            if ((type.equals("FILE") || type.equals("COLLECTION")) && !storageId.isEmpty()) {
+                query = " MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r:" + type + ")-[:HAS_METADATA*]->(m) WHERE ";
+            } else {
+                query = " MATCH (r:" + type + ")-[:HAS_METADATA*]->(m) WHERE ";
+            }
             //TODO: works only for one property
             for (ResourceSearchQuery qry : resourceSearchQueries) {
                 if (qry.getField().contains(" ")) {
@@ -52,11 +57,17 @@ public class Utils {
         return Optional.empty();
     }
 
-    public static Optional<String> getPropertySearchQuery(List<ResourceSearchQuery> resourceSearchQueries, String type) {
+    public static Optional<String> getPropertySearchQuery(List<ResourceSearchQuery> resourceSearchQueries, String type, String storageId) {
         if (!resourceSearchQueries.isEmpty()) {
             for (ResourceSearchQuery qry : resourceSearchQueries) {
-                String query = " MATCH (r:" + type +
-                        ") where r." + qry.getField() + " contains  '" + qry.getValue() + "' Return r ";
+                String query = "";
+                if ((type.equals("FILE") || type.equals("COLLECTION")) && !storageId.isEmpty()) {
+                    query = " MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r:" + type +
+                            ") where r." + qry.getField() + " contains  '" + qry.getValue() + "' Return r ";
+                } else {
+                    query = " MATCH (r:" + type +
+                            ") where r." + qry.getField() + " contains  '" + qry.getValue() + "' Return r ";
+                }
                 return Optional.ofNullable(query);
             }
         }
