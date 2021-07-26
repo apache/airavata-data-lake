@@ -57,7 +57,7 @@ public class MFTRequestHandler {
     @org.springframework.beans.factory.annotation.Value("${drms.port}")
     private int drmsPort;
 
-    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "https://gateway.iubemcenter.indiana.edu")
     @GetMapping("/mftdownload/{resourceid}")
     public MFTDownloadResponse mftDownload(@PathVariable String resourceid) throws Exception {
 
