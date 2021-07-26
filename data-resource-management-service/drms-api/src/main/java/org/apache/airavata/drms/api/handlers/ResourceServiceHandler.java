@@ -32,6 +32,7 @@ import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.core.constants.StoragePreferenceConstants;
 import org.apache.airavata.drms.core.deserializer.AnyStorageDeserializer;
 import org.apache.airavata.drms.core.deserializer.GenericResourceDeserializer;
+import org.apache.airavata.drms.core.deserializer.TransferMappingDeserializer;
 import org.apache.airavata.drms.core.serializer.GenericResourceSerializer;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.sharing.service.Entity;
@@ -152,11 +153,11 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 serializedMap.put("owner", exEntity.get().getOwnerId());
 
                 if (serializedMap.containsKey("properties") && serializedMap.get("properties") instanceof List) {
-                   List propertiesList = (List) serializedMap.get("properties");
-                   propertiesList.forEach(property-> {
-                       MapEntry entry = (MapEntry) property;
-                       serializedMap.put(entry.getKey().toString(),entry.getValue());
-                   });
+                    List propertiesList = (List) serializedMap.get("properties");
+                    propertiesList.forEach(property -> {
+                        MapEntry entry = (MapEntry) property;
+                        serializedMap.put(entry.getKey().toString(), entry.getValue());
+                    });
                 }
                 serializedMap.remove("properties");
                 if (!parentId.isEmpty()) {
@@ -375,8 +376,26 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             int depth = request.getDepth();
             String value = request.getType();
 
+            if (value == null || value.isEmpty()) {
+                logger.error("Resource type required to continue search ");
+                responseObserver
+                        .onError(Status.FAILED_PRECONDITION.withDescription("Resource type required to continue search")
+                                .asRuntimeException());
+                return;
+            }
+
+
+            String storageId = "";
+            Optional<String> globalStorage = getGlobalSourceStorage(callUser.getTenantId());
+            if (globalStorage.isPresent()) {
+                storageId = globalStorage.get();
+            }
+
             if (!resourceSearchQueries.isEmpty()) {
                 for (ResourceSearchQuery qry : resourceSearchQueries) {
+                    if (qry.getField().equals("storageId")) {
+                        storageId = qry.getValue();
+                    }
                     if (qry.getField().equals("sharedBy")) {
                         String val = qry.getValue();
                         String query = " Match (m:" + value + ")-[r:SHARED_WITH]->(l) " +
@@ -421,16 +440,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 }
             }
 
-            if (value == null || value.isEmpty()) {
-                logger.error("Errored while searching generic resources");
-                responseObserver
-                        .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
-                                .asRuntimeException());
-                return;
-            }
 
-            Optional<String> metadataSearchQueryOP = Utils.getMetadataSearchQuery(resourceSearchQueries, value);
-            Optional<String> ownPropertySearchQuery = Utils.getPropertySearchQuery(resourceSearchQueries, value);
+            Optional<String> metadataSearchQueryOP = Utils.getMetadataSearchQuery(resourceSearchQueries, value, storageId);
+            Optional<String> ownPropertySearchQuery = Utils.getPropertySearchQuery(resourceSearchQueries, value, storageId);
             if (metadataSearchQueryOP.isPresent()) {
                 String query = metadataSearchQueryOP.get();
 
@@ -482,20 +494,38 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 userProps.put("username", callUser.getUsername());
                 userProps.put("tenantId", callUser.getTenantId());
 
-                String query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
-                        " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                        " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")" +
-                        " , (r:" + value + ")-[:SHARED_WITH]->(u)" +
-                        " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")" +
-                        " , (rg:" + value + ")-[:SHARED_WITH]->(g)" +
-                        " return distinct  rm, r,rmg,rg ";
-
-                if (depth == 1) {
+                String query = "";
+                if ((value.equals("FILE") || value.equals("COLLECTION")) && !storageId.isEmpty()) {
                     query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
                             " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                            " OPTIONAL MATCH (r:" + value + ")-[:SHARED_WITH]->(u)" +
-                            " OPTIONAL MATCH (rg:" + value + ")-[:SHARED_WITH]->(g)" +
-                            " return distinct   r, rg ";
+                            " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
+                            " , (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r:" + value + ")-[:SHARED_WITH]->(u)" +
+                            " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
+                            " , (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(rg:" + value + ")-[:SHARED_WITH]->(g)" +
+                            " return distinct  rm, r,rmg,rg ";
+                    if (depth == 1) {
+                        query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
+                                " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
+                                " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r:" + value + ")-[:SHARED_WITH]->(u)" +
+                                " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(rg:" + value + ")-[:SHARED_WITH]->(g)" +
+                                " return distinct   r, rg ";
+                    }
+
+                } else {
+                    query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
+                            " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
+                            " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")" +
+                            " , (r:" + value + ")-[:SHARED_WITH]->(u)" +
+                            " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")" +
+                            " , (rg:" + value + ")-[:SHARED_WITH]->(g)" +
+                            " return distinct  rm, r,rmg,rg ";
+                    if (depth == 1) {
+                        query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
+                                " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
+                                " OPTIONAL MATCH (r:" + value + ")-[:SHARED_WITH]->(u)" +
+                                " OPTIONAL MATCH (rg:" + value + ")-[:SHARED_WITH]->(g)" +
+                                " return distinct   r, rg ";
+                    }
                 }
 
                 List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
@@ -903,6 +933,30 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
         }
         return Optional.empty();
+    }
+
+    private Optional<String> getGlobalSourceStorage(String tenantId) throws Exception {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("tenantId", tenantId);
+        properties.put("scope", TransferScope.GLOBAL.name());
+        String query = " Match (srcStr:Storage)-[:TRANSFER_OUT]->(tm:TransferMapping) where tm.tenantId=$tenantId AND tm.scope='GLOBAL' " +
+                " AND srcStr.tenantId=$tenantId return srcStr, tm";
+        List<Record> records = this.neo4JConnector.searchNodes(properties, query);
+        List<TransferMapping> sourceTransfers = TransferMappingDeserializer.deserializeListExceptDestinationStorage(records);
+        if (sourceTransfers.isEmpty()) {
+            return Optional.empty();
+        }
+        TransferMapping transferMapping = sourceTransfers.get(0);
+        return Optional.ofNullable(getStorageId(transferMapping.getSourceStorage()));
+    }
+
+    private String getStorageId(AnyStorage storage) {
+        if (storage.getStorageCase()
+                .equals(AnyStorage.StorageCase.S3_STORAGE)) {
+            return storage.getS3Storage().getStorageId();
+        } else {
+            return storage.getSshStorage().getStorageId();
+        }
     }
 
 }

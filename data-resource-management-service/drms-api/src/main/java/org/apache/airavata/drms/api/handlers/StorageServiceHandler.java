@@ -339,7 +339,7 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
                     " return srcStr,  dstStr,  t";
             List<Record> records = this.neo4JConnector.searchNodes(properties, query);
             properties.put("scope", TransferScope.GLOBAL.name());
-            String queryFetchGlobal = "Match (srcStr:Storage)<-[:TRANSFER_OUT]->(t:TransferMapping{scope:$scope, tenantId:$tenantId})-[:TRANSFER_IN]->(dstStr:Storage)" +
+            String queryFetchGlobal = "Match (srcStr:Storage)-[:TRANSFER_OUT]->(t:TransferMapping{scope:$scope, tenantId:$tenantId})-[:TRANSFER_IN]->(dstStr:Storage)" +
                     " return srcStr,  dstStr,  t";
             List<Record> globalRecords = this.neo4JConnector.searchNodes(properties, queryFetchGlobal);
             if (!records.isEmpty()) {
