@@ -1,0 +1,120 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+package org.apache.airavata.datalake.data.orchestrator.api.stub.parsing;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+message DataParserInputInterface {
+    string parserInputInterfaceId = 1;
+    string inputType = 2;
+    string inputName = 3;
+    string parserId = 4;
+}
+
+message DataParserOutputInterface {
+    string parserOutputInterfaceId = 1;
+    string outputType = 2;
+    string outputName = 3;
+    string parserId = 4;
+}
+
+message DataParser {
+    string parserId = 1;
+    string parserName = 2;
+    string dockerImage = 3;
+    string execCommand = 4;
+    string inputPath = 5;
+    string outputPath = 6;
+    repeated DataParserInputInterface inputInterfaces = 7;
+    repeated DataParserOutputInterface outputInterfaces = 8;
+}
+
+message DataParsingJobInput {
+    string id = 1;
+    string dataParserInputInterfaceId = 2;
+    string dataParsingJobId = 3;
+    string selectionQuery = 4;
+}
+
+message DataParsingJobOutput {
+    string id = 1;
+    string dataParserOutputInterfaceId = 2;
+    string dataParsingJobId = 3;
+    string outputType = 4;
+}
+
+message DataParsingJob {
+    string dataParsingJobId = 1;
+    string parserId = 2;
+    repeated DataParsingJobInput dataParsingJobInputs = 3;
+    repeated DataParsingJobOutput dataParsingJobOutputs = 4;
+}
+
+message ParserRegisterRequest {
+    DataParser parser = 1;
+}
+
+message ParserRegisterResponse {
+    string parserId = 1;
+}
+
+message ParserListRequest {
+
+}
+
+message ParserListResponse {
+    repeated DataParser parsers = 1;
+}
+
+message ParsingJobRegisterRequest {
+    DataParsingJob parsingJob = 1;
+}
+
+message ParsingJobRegisterResponse {
+    string parsingJobId = 1;
+}
+
+message ParsingJobListRequest {
+
+}
+
+message ParsingJobListResponse {
+    repeated DataParsingJob parsers = 1;
+}
+
+
+service DataParserService {
+    rpc registerParser (ParserRegisterRequest) returns (ParserRegisterResponse) {
+    }
+
+    rpc listParsers(ParserListRequest) returns (ParserListResponse) {
+
+    }
+
+    rpc registerParsingJob (ParsingJobRegisterRequest) returns (ParsingJobRegisterResponse) {
+
+    }
+
+    rpc listParsingJobs (ParsingJobListRequest) returns (ParsingJobListResponse) {
+
+    }
+}

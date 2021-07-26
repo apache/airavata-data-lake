@@ -19,6 +19,7 @@
     <modules>
         <module>data-orchestrator-api-server</module>
         <module>data-orchestrator-service-core</module>
+        <module>data-orchestrator-api-stub</module>
     </modules>
 
 </project>

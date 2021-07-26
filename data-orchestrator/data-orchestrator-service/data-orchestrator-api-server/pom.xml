@@ -120,15 +120,19 @@
         <dependency>
             <groupId>org.apache.airavata.data.lake</groupId>
             <artifactId>drms-stubs</artifactId>
-            <version>0.01-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.airavata.data.lake</groupId>
             <artifactId>drms-stubs</artifactId>
-            <version>0.01-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.airavata.data.lake</groupId>
+            <artifactId>data-orchestrator-api-stub</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.airavata</groupId>
             <artifactId>mft-api-client</artifactId>

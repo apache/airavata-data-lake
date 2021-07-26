@@ -19,7 +19,7 @@
  */
 package org.apache.airavata.datalake.orchestrator;
 
-import org.apache.airavata.datalake.orchestrator.handlers.OrchestratorEventHandler;
+import org.apache.airavata.datalake.orchestrator.handlers.async.OrchestratorEventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,6 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Optional;
 
 /**
  * TODO: Spring Boot API

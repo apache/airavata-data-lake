@@ -9,9 +9,9 @@ import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.core.connector.AbstractConnector;
-import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEntity;
-import org.apache.airavata.datalake.orchestrator.registry.persistance.DataOrchestratorEventRepository;
-import org.apache.airavata.datalake.orchestrator.registry.persistance.EventStatus;
+import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.DataOrchestratorEntity;
+import org.apache.airavata.datalake.orchestrator.registry.persistance.repository.DataOrchestratorEventRepository;
+import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.EventStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
