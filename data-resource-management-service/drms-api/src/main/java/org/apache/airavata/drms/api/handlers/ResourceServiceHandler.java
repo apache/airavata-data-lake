@@ -390,7 +390,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             if (globalStorage.isPresent()) {
                 storageId = globalStorage.get();
             }
-
+            List keyList = new ArrayList();
             if (!resourceSearchQueries.isEmpty()) {
                 for (ResourceSearchQuery qry : resourceSearchQueries) {
                     if (qry.getField().equals("storageId")) {
@@ -400,13 +400,14 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         String val = qry.getValue();
                         String query = " Match (m:" + value + ")-[r:SHARED_WITH]->(l) " +
                                 "where r.sharedBy=$sharedBy AND m.tenantId=$tenantId and l.tenantId=$tenantId " +
-                                "return (m) ";
+                                "return m, r ";
                         Map<String, Object> objectMap = new HashMap<>();
                         objectMap.put("sharedBy", val);
                         objectMap.put("tenantId", callUser.getTenantId());
                         List<Record> records = this.neo4JConnector.searchNodes(objectMap, query);
-
-                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
+                        keyList = new ArrayList();
+                        keyList.add("m:r");
+                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
                         ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
                         builder.addAllResources(genericResourceList);
                         responseObserver.onNext(builder.build());
@@ -418,19 +419,23 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         String val = qry.getValue();
                         String query = "MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId " +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)  " +
-                                " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ") , " +
-                                "(r:" + value + ")-[:SHARED_WITH]->(u) where NOT  r.owner  = '" + val + "'" +
+                                " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ") , " +
+                                "(r:" + value + ")-[rel:SHARED_WITH]->(u) where NOT  r.owner  = '" + val + "'" +
                                 " AND NOT rm.owner='" + val + "' " +
-                                " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")," +
-                                " (rg:" + value + ")-[:SHARED_WITH]->(g) where NOT  rg.owner  = '" + val + "'" +
+                                " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")," +
+                                " (rg:" + value + ")-[relRG:SHARED_WITH]->(g) where NOT  rg.owner  = '" + val + "'" +
                                 " AND NOT rmg.owner='" + val + "' " +
-                                " return distinct   r, rm, rmg, rg ";
+                                " return distinct   r,rel, rm,relRM, rmg,relRMG, rg,relRG ";
                         Map<String, Object> objectMap = new HashMap<>();
                         objectMap.put("username", val);
                         objectMap.put("tenantId", callUser.getTenantId());
                         List<Record> records = this.neo4JConnector.searchNodes(objectMap, query);
-
-                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
+                        keyList = new ArrayList();
+                        keyList.add("r:rel");
+                        keyList.add("rm:relRM");
+                        keyList.add("rmg:relRMG");
+                        keyList.add("rg:relRG");
+                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records,keyList);
                         ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
                         builder.addAllResources(genericResourceList);
                         responseObserver.onNext(builder.build());
@@ -498,39 +503,55 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 if ((value.equals("FILE") || value.equals("COLLECTION")) && !storageId.isEmpty()) {
                     query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
                             " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                            " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
-                            " , (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r:" + value + ")-[:SHARED_WITH]->(u)" +
-                            " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
-                            " , (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(rg:" + value + ")-[:SHARED_WITH]->(g)" +
-                            " return distinct  rm, r,rmg,rg ";
+                            " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
+                            " , (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                            " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
+                            " , (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
+                            " return distinct  rm,relRM, r,relR, rmg,relRMG, rg,relRG ";
+                    keyList = new ArrayList();
+                    keyList.add("rm:relRM");
+                    keyList.add("r:relR");
+                    keyList.add("rmg:relRMG");
+                    keyList.add("rg:relRG");
                     if (depth == 1) {
                         query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                                " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r:" + value + ")-[:SHARED_WITH]->(u)" +
-                                " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(rg:" + value + ")-[:SHARED_WITH]->(g)" +
-                                " return distinct   r, rg ";
+                                " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                                " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
+                                " return distinct   r,relR, rg, relRG ";
+                        keyList = new ArrayList();
+                        keyList.add("r:relR");
+                        keyList.add("rg:relRG");
                     }
 
                 } else {
                     query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
                             " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                            " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")" +
-                            " , (r:" + value + ")-[:SHARED_WITH]->(u)" +
-                            " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")" +
-                            " , (rg:" + value + ")-[:SHARED_WITH]->(g)" +
-                            " return distinct  rm, r,rmg,rg ";
+                            " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")" +
+                            " , (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                            " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")" +
+                            " , (rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
+                            " return distinct  rm,relRM, r,relR, rmg,relRMG, rg, relRG ";
+                    keyList = new ArrayList();
+                    keyList.add("rm:relRM");
+                    keyList.add("r:relR");
+                    keyList.add("rmg:relRMG");
+                    keyList.add("rg:relRG");
                     if (depth == 1) {
                         query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                                " OPTIONAL MATCH (r:" + value + ")-[:SHARED_WITH]->(u)" +
-                                " OPTIONAL MATCH (rg:" + value + ")-[:SHARED_WITH]->(g)" +
-                                " return distinct   r, rg ";
+                                " OPTIONAL MATCH (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                                " OPTIONAL MATCH (rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
+                                " return distinct   r,relR, rg, relRG ";
+                        keyList = new ArrayList();
+                        keyList.add("r:relR");
+                        keyList.add("rg:relRG");
                     }
                 }
 
                 List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
 
-                List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
+                List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records,keyList);
                 ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
                 builder.addAllResources(genericResourceList);
                 responseObserver.onNext(builder.build());
