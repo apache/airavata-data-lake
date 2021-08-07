@@ -761,7 +761,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             responseObserver.onCompleted();
         } catch (Exception ex) {
             String msg = " Error occurred while adding resource metadata " + ex.getMessage();
-            logger.error(" Error occurred while adding resource metadata: Messages {} ", ex.getMessage(), ex);
+            // Issue https://github.com/neo4j/neo4j-java-driver/issues/773
+            logger.error("Error occurred while adding resource metadata: Messages {}", ex.getMessage());
             responseObserver.onError(Status.INTERNAL.withDescription(msg).asRuntimeException());
         }
     }

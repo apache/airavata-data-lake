@@ -80,15 +80,6 @@ public class TaskUtil {
                 }
             }
         }
-
-        for (Field classField : allFields) {
-            TaskOutPort outPort = classField.getAnnotation(TaskOutPort.class);
-            if (outPort != null) {
-                classField.setAccessible(true);
-                OutPort op = new OutPort();
-                op.setNextTaskId(params.get(outPort.name()));
-            }
-        }
     }
 
     public static <T extends AbstractTask> Map<String, String> serializeTaskData(T data) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
@@ -110,14 +101,6 @@ public class TaskUtil {
                 } catch (Exception e) {
                     logger.error("Failed to serialize task parameter {} in class {}", parm.name(), data.getClass().getName());
                     throw e;
-                }
-
-                TaskOutPort outPort = classField.getAnnotation(TaskOutPort.class);
-                if (outPort != null) {
-                    classField.setAccessible(true);
-                    if (classField.get(data) != null) {
-                        result.put(outPort.name(), ((OutPort) classField.get(data)).getNextTaskId().toString());
-                    }
                 }
             }
         }

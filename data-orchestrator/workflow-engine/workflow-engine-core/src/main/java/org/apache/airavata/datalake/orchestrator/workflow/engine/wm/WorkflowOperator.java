@@ -222,8 +222,8 @@ public class WorkflowOperator {
                 TaskOutPort outPortAnnotation = field.getAnnotation(TaskOutPort.class);
                 if (outPortAnnotation != null) {
                     field.setAccessible(true);
-                    OutPort outPort = (OutPort) field.get(taskObj);
-                    outPorts.add(outPort);
+                    List<OutPort> outPort = (List<OutPort>) field.get(taskObj);
+                    outPorts.addAll(outPort);
                 }
             }
         }

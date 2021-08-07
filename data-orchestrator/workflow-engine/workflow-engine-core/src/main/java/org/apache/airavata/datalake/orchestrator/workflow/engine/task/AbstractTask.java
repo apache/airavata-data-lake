@@ -46,7 +46,7 @@ public abstract class AbstractTask extends UserContentStore implements Task {
     private BlockingQueue<TaskCallbackContext> callbackContextQueue = new LinkedBlockingQueue<>();
 
     @TaskOutPort(name = "nextTask")
-    private OutPort outPort;
+    private List<OutPort> outPorts = new ArrayList<>();
 
     @TaskParam(name = "taskId")
     private ThreadLocal<String> taskId = new ThreadLocal<>();
@@ -87,19 +87,23 @@ public abstract class AbstractTask extends UserContentStore implements Task {
 
     @Override
     public void cancel() {
-        onCancel();
+        try {
+            onCancel();
+        } catch (Exception e) {
+            logger.error("Unknown error while cancelling task {}", getTaskId(), e);
+        }
     }
 
-    public abstract TaskResult onRun();
+    public abstract TaskResult onRun() throws Exception;
 
-    public abstract void onCancel();
+    public abstract void onCancel() throws Exception;
 
-    public OutPort getOutPort() {
-        return outPort;
+    public List<OutPort> getOutPorts() {
+        return outPorts;
     }
 
-    public void setOutPort(OutPort outPort) {
-        this.outPort = outPort;
+    public void addOutPort(OutPort outPort) {
+        this.outPorts.add(outPort);
     }
 
     public int getRetryCount() {

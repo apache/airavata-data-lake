@@ -28,6 +28,7 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 @GRpcService
 public class DataParserApiHandler extends DataParserServiceGrpc.DataParserServiceImplBase {
@@ -50,30 +51,49 @@ public class DataParserApiHandler extends DataParserServiceGrpc.DataParserServic
 
     @Override
     public void listParsers(ParserListRequest request, StreamObserver<ParserListResponse> responseObserver) {
-        DozerBeanMapper mapper = new DozerBeanMapper();
 
         ParserListResponse.Builder response = ParserListResponse.newBuilder();
 
         List<DataParserEntity> allParsers = parserRepo.findAll();
         allParsers.forEach(dataParserEntity -> {
-            DataParser.Builder parserBuilder = DataParser.newBuilder();
-            mapper.map(dataParserEntity, parserBuilder);
-            dataParserEntity.getInputInterfacesList().forEach(dataParserInputInterfaceEntity -> {
-                DataParserInputInterface.Builder inputBuilder = DataParserInputInterface.newBuilder();
-                mapper.map(dataParserInputInterfaceEntity, inputBuilder);
-                parserBuilder.addInputInterfaces(inputBuilder);
-            });
 
-            dataParserEntity.getOutputInterfacesList().forEach(dataParserOutputInterfaceEntity -> {
-                DataParserOutputInterface.Builder outputBuilder = DataParserOutputInterface.newBuilder();
-                mapper.map(dataParserOutputInterfaceEntity, outputBuilder);
-                parserBuilder.addOutputInterfaces(outputBuilder);
-            });
-            response.addParsers(parserBuilder);
+            response.addParsers(mapParser(dataParserEntity));
         });
 
         responseObserver.onNext(response.build());
         responseObserver.onCompleted();
+    }
+
+    @Override
+    public void fetchParser(ParserFetchRequest request, StreamObserver<ParserFetchResponse> responseObserver) {
+        Optional<DataParserEntity> entityOp = this.parserRepo.findById(request.getParserId());
+        if (entityOp.isPresent()) {
+            responseObserver.onNext(ParserFetchResponse.newBuilder().setParser(mapParser(entityOp.get())).build());
+            responseObserver.onCompleted();
+
+        } else {
+            responseObserver.onError(new Exception("Couldn't find a parser with id " + request.getParserId()));
+        }
+    }
+
+    private DataParser.Builder mapParser(DataParserEntity dataParserEntity) {
+        DozerBeanMapper mapper = new DozerBeanMapper();
+
+        DataParser.Builder parserBuilder = DataParser.newBuilder();
+        mapper.map(dataParserEntity, parserBuilder);
+        dataParserEntity.getInputInterfacesList().forEach(dataParserInputInterfaceEntity -> {
+            DataParserInputInterface.Builder inputBuilder = DataParserInputInterface.newBuilder();
+            mapper.map(dataParserInputInterfaceEntity, inputBuilder);
+            parserBuilder.addInputInterfaces(inputBuilder);
+        });
+
+        dataParserEntity.getOutputInterfacesList().forEach(dataParserOutputInterfaceEntity -> {
+            DataParserOutputInterface.Builder outputBuilder = DataParserOutputInterface.newBuilder();
+            mapper.map(dataParserOutputInterfaceEntity, outputBuilder);
+            parserBuilder.addOutputInterfaces(outputBuilder);
+        });
+
+        return parserBuilder;
     }
 
     @Override

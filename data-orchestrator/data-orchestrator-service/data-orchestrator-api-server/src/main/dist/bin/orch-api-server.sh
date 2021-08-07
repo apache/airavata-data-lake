@@ -67,5 +67,5 @@ do
 done
 
 java ${JAVA_OPTS} -classpath "${AIRAVATA_CLASSPATH}" \
-    org.apache.airavata.datalake.orchestrator.APIServerInitializer ${AIRAVATA_COMMAND} $*
+    org.apache.airavata.datalake.orchestrator.DataOrchestratorAPIRunner ${AIRAVATA_COMMAND} $*
 

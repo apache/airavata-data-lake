@@ -215,6 +215,8 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
     @Override
     public void searchStoragePreference(StoragePreferenceSearchRequest request, StreamObserver<StoragePreferenceSearchResponse> responseObserver) {
         try {
+
+            System.out.println(request);
             AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
 
             Map<String, Object> userProps = new HashMap<>();

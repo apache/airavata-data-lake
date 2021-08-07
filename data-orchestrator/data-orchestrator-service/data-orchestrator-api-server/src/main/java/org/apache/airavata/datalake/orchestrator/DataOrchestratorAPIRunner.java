@@ -43,8 +43,8 @@ import java.io.InputStream;
 @EnableJpaAuditing
 @EnableJpaRepositories("org.apache.airavata.datalake")
 @EntityScan("org.apache.airavata.datalake")
-public class APIServerInitializer implements CommandLineRunner {
-    private static final Logger LOGGER = LoggerFactory.getLogger(APIServerInitializer.class);
+public class DataOrchestratorAPIRunner implements CommandLineRunner {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataOrchestratorAPIRunner.class);
 
     @Autowired
     private OrchestratorEventHandler orchestratorEventHandler;
@@ -53,7 +53,7 @@ public class APIServerInitializer implements CommandLineRunner {
     private String configPath;
 
     public static void main(String[] args) {
-        SpringApplication.run(APIServerInitializer.class, args);
+        SpringApplication.run(DataOrchestratorAPIRunner.class, args);
     }
 
     @Override

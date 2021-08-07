@@ -15,28 +15,23 @@
  * limitations under the License.
  */
 
-package org.apache.airavata.datalake.orchestrator.workflow.engine.task;
+package org.apache.airavata.datalake.orchestrator.workflow.engine.task.types;
 
-import org.apache.helix.task.TaskResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.gson.Gson;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.TaskParamType;
 
-public abstract class BlockingTask extends AbstractTask {
+import java.util.HashMap;
 
-    private final static Logger logger = LoggerFactory.getLogger(BlockingTask.class);
+public class StringMap extends HashMap<String, String> implements TaskParamType {
 
-    public BlockingTask() {
+    @Override
+    public String serialize() {
+        return new Gson().toJson(this);
     }
 
     @Override
-    public TaskResult onRun() throws Exception {
-        return runBlockingCode();
-    }
-
-    public abstract TaskResult runBlockingCode() throws Exception;
-
-    @Override
-    public void onCancel() throws Exception {
-
+    public void deserialize(String content) {
+        StringMap stringMap = new Gson().fromJson(content, StringMap.class);
+        this.putAll(stringMap);
     }
 }

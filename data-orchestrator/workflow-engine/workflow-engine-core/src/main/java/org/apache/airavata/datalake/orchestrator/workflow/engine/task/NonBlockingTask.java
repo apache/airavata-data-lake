@@ -36,7 +36,7 @@ public class NonBlockingTask extends AbstractTask {
     }
 
     @Override
-    public TaskResult onRun() {
+    public TaskResult onRun() throws Exception {
         Class<?> c = this.getClass();
         Method[] allMethods = c.getMethods();
         for (Method method : allMethods) {
@@ -60,7 +60,7 @@ public class NonBlockingTask extends AbstractTask {
     }
 
     @Override
-    public void onCancel() {
+    public void onCancel() throws Exception {
 
     }
 

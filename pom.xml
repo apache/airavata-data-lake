@@ -135,7 +135,7 @@
 
         <maven.surefile.plugin.version>3.0.0-M4</maven.surefile.plugin.version>
 
-        <log.back.version>1.2.3</log.back.version>
+        <log.back.version>1.2.5</log.back.version>
 
         <com.jcraft.version>0.1.55</com.jcraft.version>
 
@@ -143,8 +143,8 @@
 
         <com.codahale.version>0.7.0</com.codahale.version>
 
-        <neo4j.ogm.version>3.2.20</neo4j.ogm.version>
-        <neo4j.version>3.4.6</neo4j.version>
+        <neo4j.ogm.version>3.2.25</neo4j.ogm.version>
+        <neo4j.version>4.3.2</neo4j.version>
         <io.grpc.version>1.25.0</io.grpc.version>
         <spring-security.version>5.3.4.RELEASE</spring-security.version>
         <kafka-clients.version>1.0.0</kafka-clients.version>
@@ -153,6 +153,9 @@
         <yaml.version>1.15</yaml.version>
         <spring.boot.version>2.4.5</spring.boot.version>
         <commons.beanutils.version>1.9.4</commons.beanutils.version>
+        <docker.java.version>3.2.11</docker.java.version>
+        <jackson.version>2.11.4</jackson.version>
+        <commons.io.version>2.6</commons.io.version>
     </properties>
 
 </project>

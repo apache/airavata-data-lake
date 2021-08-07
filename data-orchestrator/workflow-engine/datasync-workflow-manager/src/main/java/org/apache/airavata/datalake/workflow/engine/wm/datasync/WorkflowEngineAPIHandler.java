@@ -40,11 +40,16 @@ public class WorkflowEngineAPIHandler extends WorkflowServiceGrpc.WorkflowServic
     @Autowired
     private DataSyncWorkflowManager dataSyncWorkflowManager;
 
+    @Autowired
+    private DataParsingWorkflowManager dataParsingWorkflowManager;
+
     @Override
     public void invokeWorkflow(WorkflowInvocationRequest request,
                                StreamObserver<WorkflowInvocationResponse> responseObserver) {
         try {
-            dataSyncWorkflowManager.submitDataSyncWorkflow(request);
+            logger.info("Invoking workflow executor for resource {}", request.getMessage().getSourceResourceId());
+            //dataSyncWorkflowManager.submitDataSyncWorkflow(request);
+            dataParsingWorkflowManager.submitDataParsingWorkflow(request);
             responseObserver.onNext(WorkflowInvocationResponse.newBuilder().setStatus(true).build());
             responseObserver.onCompleted();
         } catch (Exception ex) {

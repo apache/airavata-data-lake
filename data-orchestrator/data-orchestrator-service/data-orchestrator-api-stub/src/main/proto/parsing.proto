@@ -77,6 +77,14 @@ message ParserRegisterResponse {
     string parserId = 1;
 }
 
+message ParserFetchRequest {
+    string parserId = 1;
+}
+
+message ParserFetchResponse {
+    DataParser parser = 1;
+}
+
 message ParserListRequest {
 
 }
@@ -103,6 +111,10 @@ message ParsingJobListResponse {
 
 
 service DataParserService {
+
+    rpc fetchParser (ParserFetchRequest) returns (ParserFetchResponse) {
+    }
+
     rpc registerParser (ParserRegisterRequest) returns (ParserRegisterResponse) {
     }
 

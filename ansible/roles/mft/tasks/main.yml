@@ -18,6 +18,7 @@
   firewalld: port="{{ item }}/tcp"
     zone=public permanent=true state=enabled immediate=yes
   with_items:
+    - "{{ mft_api_service_grpc_port }}"
     - "{{ mft_default_agent_port }}"
     - "{{ mft_consul_port }}"
     - "{{ mft_resource_service_grpc_port }}"

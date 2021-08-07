@@ -33,6 +33,11 @@ public class AppConfig {
         return new DataSyncWorkflowManager();
     }
 
+    @Bean(initMethod = "init")
+    public DataParsingWorkflowManager dataParsingWorkflowManager() {
+        return new DataParsingWorkflowManager();
+    }
+
     @Bean
     public CallbackWorkflowStore callbackWorkflowStore() {
         return new CallbackWorkflowStore();
