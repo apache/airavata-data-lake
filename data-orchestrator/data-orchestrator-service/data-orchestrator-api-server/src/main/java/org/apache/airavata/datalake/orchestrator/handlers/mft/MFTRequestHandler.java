@@ -59,6 +59,19 @@ public class MFTRequestHandler {
                                            @PathVariable String resourceid) throws Exception {
 
         logger.info("MFT download request to resource {}", resourceid);
+
+        if (authTokenStr!= null || authTokenStr.isEmpty()) {
+            logger.error("Auth token can not be null");
+            throw new Exception("Auth token can not be null");
+        }
+
+        if (!authTokenStr.startsWith("Bearer")) {
+            logger.error("No bearer token provided");
+            throw new Exception("No bearer token provided");
+        }
+
+        authTokenStr = authTokenStr.substring(7).trim();
+
         MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = MFTApiClient.buildClient(mftHost, mftPort);
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(drmsHost, drmsPort).usePlaintext().build();
