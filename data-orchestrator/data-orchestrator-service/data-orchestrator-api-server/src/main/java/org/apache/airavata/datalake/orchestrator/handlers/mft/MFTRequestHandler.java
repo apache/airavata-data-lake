@@ -60,7 +60,7 @@ public class MFTRequestHandler {
 
         logger.info("MFT download request to resource {}", resourceid);
 
-        if (authTokenStr!= null || authTokenStr.isEmpty()) {
+        if (authTokenStr == null || authTokenStr.isEmpty()) {
             logger.error("Auth token can not be null");
             throw new Exception("Auth token can not be null");
         }
