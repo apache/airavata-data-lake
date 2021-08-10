@@ -17,7 +17,6 @@
 package org.apache.airavata.drms.api.handlers;
 
 import com.google.protobuf.Empty;
-import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.storage.*;
@@ -26,7 +25,6 @@ import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.core.constants.StorageConstants;
 import org.apache.airavata.drms.core.constants.StoragePreferenceConstants;
 import org.apache.airavata.drms.core.deserializer.AnyStoragePreferenceDeserializer;
-import org.apache.airavata.drms.core.deserializer.TransferMappingDeserializer;
 import org.apache.airavata.drms.core.serializer.AnyStoragePreferenceSerializer;
 import org.apache.airavata.drms.core.serializer.AnyStorageSerializer;
 import org.apache.custos.clients.CustosClientProvider;
@@ -124,6 +122,8 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
             Map<String, Object> parentPropertiesMap = null;
             if (storage.getStorageCase().equals(AnyStoragePreference.StorageCase.S3_STORAGE_PREFERENCE)) {
                 storageId = storage.getS3StoragePreference().getStorage().getStorageId();
+                serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
+                        StoragePreferenceConstants.S3_STORAGE_PREFERENCE_TYPE_LABEL);
                 parentPropertiesMap = AnyStorageSerializer.serializeToMap(AnyStorage
                         .newBuilder().setS3Storage(storage.getS3StoragePreference().getStorage()).build());
 
@@ -131,6 +131,8 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                     .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
 
                 storageId = storage.getSshStoragePreference().getStorage().getStorageId();
+                serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
+                        StoragePreferenceConstants.SSH_STORAGE_PREFERENCE_TYPE_LABEL);
                 parentPropertiesMap = AnyStorageSerializer.serializeToMap(AnyStorage
                         .newBuilder().setSshStorage(storage.getSshStoragePreference().getStorage()).build());
             }
@@ -284,9 +286,6 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
             responseObserver.onError(io.grpc.Status.INTERNAL.withDescription(msg).asRuntimeException());
         }
     }
-
-
-
 
 
 }
