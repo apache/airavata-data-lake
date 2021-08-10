@@ -174,9 +174,9 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
         List<Record> records = this.neo4JConnector.searchNodes(userProps,
                 " MATCH (u:User) where u.username = $username = $username AND u.tenantId = $tenantId" +
                         " OPTIONAL MATCH (u)<-[r2:SHARED_WITH]-(s:Storage)" +
-                        " OPTIONAL MATCH (ch:Group)-[CHILD_OF*]->(g:Group)<-[r3:MEMBER_OF]-(u)" +
+                        " OPTIONAL MATCH (ch:Group)-[CHILD_OF *0..]->(g:Group)<-[r3:MEMBER_OF]-(u)" +
                         " OPTIONAL MATCH (cs:Storage)-[SHARED_WITH]->(ch) " +
-                        " OPTIONAL MATCH (ds:Storage)-[SHARED_WITH]->(g) return distinct s, cs, ds");
+                        " return distinct s, cs");
         try {
             List<AnyStorage> storageList = AnyStorageDeserializer.deserializeList(records);
             StorageSearchResponse.Builder builder = StorageSearchResponse.newBuilder();
