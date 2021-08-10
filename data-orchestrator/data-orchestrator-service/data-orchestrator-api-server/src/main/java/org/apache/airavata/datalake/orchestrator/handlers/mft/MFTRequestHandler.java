@@ -33,10 +33,7 @@ import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.identity.management.client.IdentityManagementClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -58,7 +55,8 @@ public class MFTRequestHandler {
     private int drmsPort;
 
     @GetMapping("/mftdownload/{resourceid}")
-    public MFTDownloadResponse mftDownload(@PathVariable String resourceid) throws Exception {
+    public MFTDownloadResponse mftDownload(@RequestHeader("Authorization") String authTokenStr,
+                                           @PathVariable String resourceid) throws Exception {
 
         logger.info("MFT download request to resource {}", resourceid);
         MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = MFTApiClient.buildClient(mftHost, mftPort);
@@ -67,8 +65,8 @@ public class MFTRequestHandler {
         ResourceServiceGrpc.ResourceServiceBlockingStub resourceClient = ResourceServiceGrpc.newBlockingStub(channel);
         StoragePreferenceServiceGrpc.StoragePreferenceServiceBlockingStub stoPrefClient = StoragePreferenceServiceGrpc.newBlockingStub(channel);
 
-        String accessToken = getAccessToken();
-        DRMSServiceAuthToken authToken = DRMSServiceAuthToken.newBuilder().setAccessToken(accessToken).build();
+        logger.info("Using auth token {}", authTokenStr);
+        DRMSServiceAuthToken authToken = DRMSServiceAuthToken.newBuilder().setAccessToken(authTokenStr).build();
         ResourceFetchResponse resourceFetchResponse = resourceClient.fetchResource(ResourceFetchRequest.newBuilder()
                 .setResourceId(resourceid)
                 .setAuthToken(authToken).build());
@@ -127,7 +125,7 @@ public class MFTRequestHandler {
         }
 
         downloadRequest.setMftAuthorizationToken(AuthToken.newBuilder()
-                .setUserTokenAuth(UserTokenAuth.newBuilder().setToken(accessToken).build()).build());
+                .setUserTokenAuth(UserTokenAuth.newBuilder().setToken(authTokenStr).build()).build());
 
         HttpDownloadApiResponse downloadResponse = mftClient.submitHttpDownload(downloadRequest.build());
 
