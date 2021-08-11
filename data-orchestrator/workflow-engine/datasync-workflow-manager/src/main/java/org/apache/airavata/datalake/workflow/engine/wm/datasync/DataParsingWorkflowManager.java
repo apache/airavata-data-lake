@@ -69,9 +69,11 @@ public class DataParsingWorkflowManager {
     @org.springframework.beans.factory.annotation.Value("${drms.port}")
     private int drmsPort;
 
-    private String mftClientId = "mft-agent";
+    @org.springframework.beans.factory.annotation.Value("mft.clientId")
+    private String mftClientId;
 
-    private String mftClientSecret = "kHqH27BloDCbLvwUA8ZYRlHcJxXZyby9PB90bTdU";
+    @org.springframework.beans.factory.annotation.Value("mft.clientSecret")
+    private String mftClientSecret;
 
 
     @Autowired

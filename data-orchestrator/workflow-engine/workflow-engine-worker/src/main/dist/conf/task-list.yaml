@@ -1,0 +1,10 @@
+tasks:
+  blocking:
+    - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleBlockingTask
+    - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.SyncLocalDataDownloadTask
+    - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.GenericDataParsingTask
+    - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.MetadataPersistTask
+  nonBlocking:
+    - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.ExampleNonBlockingTask
+    - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.AsyncDataTransferTask
+    - org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataTransferPreValidationTask
