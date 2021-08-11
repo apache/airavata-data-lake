@@ -515,7 +515,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
                                 " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(r:" + value + ")-[relR:SHARED_WITH]->(u)" +
-                                " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
+                                " OPTIONAL MATCH (sp:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
                                 " return distinct   r,relR, rg, relRG ";
                         keyList = new ArrayList();
                         keyList.add("r:relR");
