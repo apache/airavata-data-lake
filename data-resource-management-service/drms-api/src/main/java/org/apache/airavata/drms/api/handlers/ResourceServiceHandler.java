@@ -419,13 +419,11 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         String val = qry.getValue();
                         String query = "MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId " +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)  " +
-                                " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ") , " +
-                                "(r:" + value + ")-[rel:SHARED_WITH]->(u) where NOT  r.owner  = '" + val + "'" +
-                                " AND NOT rm.owner='" + val + "' " +
-                                " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")," +
-                                " (rg:" + value + ")-[relRG:SHARED_WITH]->(g) where NOT  rg.owner  = '" + val + "'" +
-                                " AND NOT rmg.owner='" + val + "' " +
-                                " return distinct   r,rel, rm,relRM, rmg,relRMG, rg,relRG ";
+//                                " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ") where  NOT rm.owner='" + val + "'" +
+                                " OPTIONAL MATCH (r:" + value + ")-[rel:SHARED_WITH]->(u) where NOT  r.owner  = '" + val + "'" +
+//                                " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ") where NOT rmg.owner='" + val + "' " +
+                                " OPTIONAL MATCH (rg:" + value + ")-[relRG:SHARED_WITH]->(g) where NOT  rg.owner  = '" + val + "'" +
+                                " return distinct   r,rel,  rg,relRG ";
                         Map<String, Object> objectMap = new HashMap<>();
                         objectMap.put("username", val);
                         objectMap.put("tenantId", callUser.getTenantId());
@@ -435,7 +433,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         keyList.add("rm:relRM");
                         keyList.add("rmg:relRMG");
                         keyList.add("rg:relRG");
-                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records,keyList);
+                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
                         ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
                         builder.addAllResources(genericResourceList);
                         responseObserver.onNext(builder.build());
@@ -551,7 +549,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
                 List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
 
-                List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records,keyList);
+                List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
                 ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
                 builder.addAllResources(genericResourceList);
                 responseObserver.onNext(builder.build());

@@ -54,6 +54,7 @@
             <artifactId>javax.annotation-api</artifactId>
             <version>${javax.annotation.version}</version>
         </dependency>
+
     </dependencies>
     <build>
         <extensions>
