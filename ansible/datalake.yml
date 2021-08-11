@@ -21,6 +21,6 @@
 ---
 - hosts: data-lake
   roles:
-    - custos
-    - mft
+#    - custos
+#    - mft
     - data_lake
