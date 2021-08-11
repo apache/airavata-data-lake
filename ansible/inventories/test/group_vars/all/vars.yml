@@ -86,7 +86,7 @@ datalake_drms_http_port: 8900
 
 datalake_synch_broker_url: 149.165.156.200:9092
 datalake_synch_broker_consumer_group: custosEventsGroup
-datalake_synch_broker_topic: 10002708-754b89b5-3a57-496c-aa34-8e2b4916fbcc
+datalake_synch_broker_topic: 10002640-561b67b4-fa7d-4368-8643-dcd9d0159c1d
 datalake_synch_tenant_id: custos-ii8g0cfwsz6ruwezykn9-10002640
 
 datalake_data_orch_datasource_url: jdbc:mysql://localhost:3306/data_orchestrator?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
