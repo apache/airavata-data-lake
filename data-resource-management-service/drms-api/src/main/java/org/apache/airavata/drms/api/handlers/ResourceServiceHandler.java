@@ -528,10 +528,14 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
                                 " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(r:" + value + ")-[relR:SHARED_WITH]->(u)" +
                                 " OPTIONAL MATCH (sp:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
-                                " return distinct   r,relR, rg, relRG ";
+                                " OPTIONAL MATCH (s2:Storage{entityId:'" + storageId +"'})<-[:CHILD_OF*]-(r2:" + value + ")-[relR2:SHARED_WITH]->(u) where NOT r2.owner=$username"+
+                                " OPTIONAL MATCH (s3:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r3:" + value + ")-[relR3:SHARED_WITH]->(u) where NOT r3.owner=$username"+
+                                " return distinct   r,relR, rg,relRG, r2,relR2, r3,relR3 ";
                         keyList = new ArrayList();
                         keyList.add("r:relR");
                         keyList.add("rg:relRG");
+                        keyList.add("r2:relR2");
+                        keyList.add("r3:relR3");
                     }
 
                 } else {
