@@ -307,6 +307,14 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 serializedMap.put("lastModifiedTime", exEntity.get().getCreatedAt());
                 serializedMap.put("owner", exEntity.get().getOwnerId());
                 serializedMap.putAll(request.getResource().getPropertiesMap());
+                if (serializedMap.containsKey("properties") && serializedMap.get("properties") instanceof List) {
+                    List propertiesList = (List) serializedMap.get("properties");
+                    propertiesList.forEach(property -> {
+                        MapEntry entry = (MapEntry) property;
+                        serializedMap.put(entry.getKey().toString(), entry.getValue());
+                    });
+                }
+                serializedMap.remove("properties");
 
                 if (!parentId.isEmpty()) {
                     this.neo4JConnector.mergeNodesWithParentChildRelationShip(serializedMap, new HashMap<>(),
