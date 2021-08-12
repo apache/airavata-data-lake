@@ -1,0 +1,75 @@
+- name: Create Worfkflow deployment directory {{ workflow_deployment_dir }}
+  become: yes
+  file: path={{ workflow_deployment_dir }}
+    state=directory
+    mode=0755
+    owner={{ user }}
+    group={{ group }}
+
+- name: git checkout from Datalake github repo {{ datalake_repo }} branch {{ datalake_git_branch }}
+  git: repo="{{ datalake_repo }}"
+    dest="{{ datalake_source_dir }}"
+    version="{{ datalake_git_branch }}"
+  register: checkout
+  tags: update
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Run Datalake maven build
+  command: mvn clean install -Dmaven.test.skip=true chdir="{{ datalake_source_dir }}/"
+  environment:
+    MAVEN_OPTS: "-Xmx2048m"
+  register: build
+  tags: update
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Stop daemons if running
+  command: "{{ item.command }} chdir={{ workflow_deployment_dir }}/{{ item.dir }}/"
+  with_items:
+    - { command: ./bin/wf-controller-daemon.sh stop, dir: "WF-Controller-{{datalake_distribution_version}}" }
+    - { command: ./bin/wf-worker-daemon.sh stop, dir: "WF-Worker-{{datalake_distribution_version}}" }
+    - { command: ./bin/wf-manager-daemon.sh stop, dir: "WF-Manager-{{datalake_distribution_version}}" }
+  ignore_errors: yes
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Copy Workflow distributions to Workflow deployment directory
+  unarchive: "src={{ datalake_source_dir }}/{{ item }}
+              dest={{ workflow_deployment_dir }}/ copy=no"
+  with_items:
+    - "data-orchestrator/workflow-engine/datasync-workflow-manager/target/WF-Manager-{{datalake_distribution_version}}-bin.zip"
+    - "data-orchestrator/workflow-engine/workflow-engine-controller/target/WF-Controller-{{datalake_distribution_version}}-bin.zip"
+    - "data-orchestrator/workflow-engine/workflow-engine-worker/target/WF-Worker-{{datalake_distribution_version}}-bin.zip"
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Copy Workflow Engine property files
+  template: "src={{ item.name }}
+            dest={{ workflow_deployment_dir }}/{{ item.dir }}/conf/{{ item.target }}
+            owner={{ user }}
+            group={{ group }}
+            mode=\"u=rw,g=r,o=r\""
+  with_items:
+    - { name: wf-manager/application.properties.j2,
+        dir: "WF-Manager-{{datalake_distribution_version}}",
+        target: application.properties}
+    - { name: wf-controller/application.properties.j2,
+        dir: "WF-Controller-{{datalake_distribution_version}}",
+        target: application.properties }
+    - { name: wf-worker/application.properties.j2,
+        dir: "WF-Worker-{{datalake_distribution_version}}",
+        target: application.properties }
+
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Start workflow services
+  command: "{{ item.command }} chdir={{ workflow_deployment_dir }}/{{ item.dir }}/"
+  with_items:
+    - { command: ./bin/wf-controller-daemon.sh start, dir: "WF-Controller-{{datalake_distribution_version}}" }
+    - { command: ./bin/wf-worker-daemon.sh start, dir: "WF-Worker-{{datalake_distribution_version}}" }
+    - { command: ./bin/wf-manager-daemon.sh start, dir: "WF-Manager-{{datalake_distribution_version}}" }
+  ignore_errors: yes
+  become: yes
+  become_user: "{{ user }}"

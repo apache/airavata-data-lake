@@ -21,6 +21,8 @@
 ---
 - hosts: data-lake
   roles:
-#    - custos
-#    - mft
+    - custos
+    - consul
+    - mft
     - data_lake
+    - workflow-engine

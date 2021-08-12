@@ -1,0 +1,47 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements. See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership. The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License. You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+#
+
+cluster.name={{ workflow_helix_cluster_name }}
+zookeeper.connection={{ workflow_zookeeper_url }}
+
+datasync.wm.name={{ workflow_datasync_wm_name }}
+parsing.wm.name={{ workflow_parsing_wm_name }}
+
+kafka.url={{ workflow_worker_kafka_url }}
+kafka.mft.publisher.name={{ workflow_worker_kafka_publisher_name }}
+kafka.mft.status.publish.topic={{ workflow_worker_kafka_publish_topic }}
+kafka.mft.status.consumer.group={{ workflow_worker_kafka_consumner_group }}
+
+datasync.wm.grpc.host={{ workflow_manager_host }}
+datasync.wm.grpc.port={{ workflow_manager_grpc_port }}
+spring.config.use-legacy-processing=true
+
+mft.callback.url={{ workflow_manager_mft_callback_url }}
+mft.host={{ mft_api_service_host }}
+mft.port={{ mft_api_service_grpc_port }}
+mft.clientId={{ workflow_manager_mft_client_id }}
+mft.clientSecret={{ workflow_manager_mft_client_secret }}
+
+custos.host={{ workflow_manager_custos_host }}
+custos.port={{ workflow_manager_custos_port }}
+custos.id={{ workflow_manager_custos_id }}
+custos.secret={{ workflow_manager_custos_secret }}
+
+drms.host={{ datalake_drms_host }}
+drms.port={{ datalake_drms_grpc_port }}

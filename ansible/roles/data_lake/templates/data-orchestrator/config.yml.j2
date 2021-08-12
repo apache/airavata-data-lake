@@ -6,8 +6,8 @@ messageFilter:
   resourceNameExclusions: "swp$"
 outboundEventProcessor:
   pollingInterval: 5
-  workflowEngineHost: "{{ datalake_workflow_engine_host }}"
-  workflowPort: {{ datalake_workflow_engine_port }}
+  workflowEngineHost: "{{ workflow_manager_host }}"
+  workflowPort: {{ workflow_manager_grpc_port }}
   drmsHost: "{{ datalake_drms_host }}"
   drmsPort: {{ datalake_drms_grpc_port }}
 consumer:
