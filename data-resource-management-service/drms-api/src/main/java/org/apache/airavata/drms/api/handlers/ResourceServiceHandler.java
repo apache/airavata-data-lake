@@ -407,7 +407,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     if (qry.getField().equals("sharedBy")) {
                         String val = qry.getValue();
                         String query = " Match (m:" + value + ")-[r:SHARED_WITH]->(l) " +
-                                "where r.sharedBy=$sharedBy AND m.tenantId=$tenantId and l.tenantId=$tenantId " +
+                                "where r.sharedBy=$sharedBy AND m.tenantId=$tenantId AND  l.tenantId=$tenantId  AND NOT l.username=$sharedBy " +
                                 "return m, r ";
                         Map<String, Object> objectMap = new HashMap<>();
                         objectMap.put("sharedBy", val);
