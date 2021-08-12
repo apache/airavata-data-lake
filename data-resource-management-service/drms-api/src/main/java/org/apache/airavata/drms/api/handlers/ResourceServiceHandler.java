@@ -239,25 +239,29 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             String query = " MATCH (u:User),  (r" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
                     " r.entityId = $entityId AND r.tenantId = $tenantId" +
                     " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
-                    " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(r)<-[:CHILD_OF*]-(cr)" +
-                    " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(r)<-[:CHILD_OF*]-(chgr)" +
-                    " OPTIONAL MATCH (cg)<-[:SHARED_WITH]-(r)<-[:CHILD_OF*]-(chcgr)" +
-                    " return distinct  cr, chgr, chcgr";
+                    " OPTIONAL MATCH (u)<-[crRel:SHARED_WITH]-(r)<-[:CHILD_OF*]-(cr)" +
+                    " OPTIONAL MATCH (g)<-[chgrRel:SHARED_WITH]-(r)<-[:CHILD_OF*]-(chgr)" +
+                    " OPTIONAL MATCH (cg)<-[chcgrRel:SHARED_WITH]-(r)<-[:CHILD_OF*]-(chcgr)" +
+                    " return distinct  cr,crRel, chgr,chgrRel, chcgr,chcgrRel";
 
             if (depth == 1) {
                 query = " MATCH (u:User),  (r" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
                         " r.entityId = $entityId AND r.tenantId = $tenantId" +
                         " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
-                        " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(r)<-[:CHILD_OF]-(cr)" +
-                        " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(r)<-[:CHILD_OF]-(chgr)" +
-                        " OPTIONAL MATCH (cg)<-[:SHARED_WITH]-(r)<-[:CHILD_OF]-(chcgr)" +
-                        " return distinct  cr, chgr, chcgr";
+                        " OPTIONAL MATCH (u)<-[crRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(cr)" +
+                        " OPTIONAL MATCH (g)<-[chgrRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(chgr)" +
+                        " OPTIONAL MATCH (cg)<-[chcgrRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(chcgr)" +
+                        " return distinct  cr,crRel, chgr,chgrRel, chcgr,chcgrRel";
             }
 
             List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
 
             try {
-                List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
+               List keyList = new ArrayList();
+                keyList.add("cr:crRel");
+                keyList.add("chgr:chgrRel");
+                keyList.add("chcgr:chcgrRel");
+                List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records,keyList);
                 ChildResourceFetchResponse.Builder builder = ChildResourceFetchResponse.newBuilder();
                 builder.addAllResources(genericResourceList);
                 responseObserver.onNext(builder.build());
