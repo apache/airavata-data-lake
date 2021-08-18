@@ -9,6 +9,7 @@ import org.apache.airavata.datalake.orchestrator.connectors.DRMSConnector;
 import org.apache.airavata.datalake.orchestrator.connectors.WorkflowServiceConnector;
 import org.apache.airavata.datalake.orchestrator.core.processor.MessageProcessor;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.DataOrchestratorEntity;
+import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.OwnershipEntity;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.repository.DataOrchestratorEventRepository;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.EventStatus;
 import org.apache.airavata.dataorchestrator.messaging.model.NotificationEvent;
@@ -70,15 +71,19 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
                 entityMap.computeIfAbsent(entity.getResourceId(), list -> new ArrayList()).add(entity);
             });
             entityMap.forEach((key, value) -> {
-                DataOrchestratorEntity entity = value.remove(0);
-                processEvent(entity);
-                value.forEach(val -> {
-                    val.setEventStatus(EventStatus.DATA_ORCH_PROCESSED_AND_SKIPPED.name());
-                    repository.save(val);
-                });
+                try {
+                    DataOrchestratorEntity entity = value.remove(0);
+                    processEvent(entity);
+                    value.forEach(val -> {
+                        val.setEventStatus(EventStatus.DATA_ORCH_PROCESSED_AND_SKIPPED.name());
+                        repository.save(val);
+                    });
+                } catch (Exception e) {
+                    LOGGER.error("Errored while processing event", e);
+                }
             });
         } catch (Exception ex) {
-            LOGGER.error("Error while processing events {}", ex);
+            LOGGER.error("Error while processing events", ex);
         }
 
     }
@@ -86,9 +91,15 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
     private void processEvent(DataOrchestratorEntity entity) {
         try {
 
-            String ownerId = entity.getOwnerId();
+            // TODO move this logic to file listener as this is EMC specific
+            Optional<OwnershipEntity> adminOp = entity.getOwnershipEntities().stream().filter(o -> o.getPermissionId().equals("ADMIN")).findFirst();
+            if (adminOp.isEmpty()) {
+                throw new Exception("No admin user found");
+            }
+
             String resourcePath = entity.getResourcePath();
-            String tail = resourcePath.substring(resourcePath.indexOf(ownerId));
+            String tail = resourcePath.substring(resourcePath.indexOf(adminOp.get().getUserId()));
+
             String[] collections = tail.split("/");
 
             Optional<TransferMapping> optionalStorPref = drmsConnector.getActiveTransferMapping(entity, entity.getHostName());
@@ -105,13 +116,13 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
             String parentType = "Storage";
 
             String parentId = sourceStorageId;
-            for (int i = 1; i < collections.length - 1; i++) {
+            for (int i = 0; i < collections.length - 1; i++) {
                 String resourceName = collections[i];
                 String path = entity.getResourcePath().substring(0, entity.getResourcePath().indexOf(resourceName));
                 path = path.concat(resourceName);
                 String entityId = Utils.getId(path);
                 Optional<GenericResource> optionalGenericResource =
-                        this.drmsConnector.createResource(repository, entity, entityId, resourceName, path, sourceStorageId, "COLLECTION", parentType);
+                        this.drmsConnector.createResource(repository, entity, entityId, resourceName, path, parentId, "COLLECTION", parentType);
                 if (optionalGenericResource.isPresent()) {
                     parentId = optionalGenericResource.get().getResourceId();
                     parentType = "COLLECTION";
@@ -141,10 +152,10 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
                 try {
 
                     Optional<AnyStoragePreference> storagePreferenceOptional = this.drmsConnector
-                            .getStoragePreference(entity.getAuthToken(), entity.getOwnerId(), entity.getTenantId(), sourceStorageId);
+                            .getStoragePreference(entity.getAuthToken(), adminOp.get().getUserId(), entity.getTenantId(), sourceStorageId);
 
                     Optional<AnyStoragePreference> destinationPreferenceOptional = this.drmsConnector
-                            .getStoragePreference(entity.getAuthToken(), entity.getOwnerId(), entity.getTenantId(), destinationStorageId);
+                            .getStoragePreference(entity.getAuthToken(), adminOp.get().getUserId(), entity.getTenantId(), destinationStorageId);
                     if (storagePreferenceOptional.isPresent() && destinationPreferenceOptional.isPresent()) {
                         String sourceCredentialToken = storagePreferenceOptional.get()
                                 .getSshStoragePreference()
@@ -153,13 +164,13 @@ public class OutboundEventProcessor implements MessageProcessor<Configuration> {
                                 .getSshStoragePreference()
                                 .getCredentialToken();
 
-                        this.workflowServiceConnector.invokeWorkflow(entity.getAuthToken(), entity.getOwnerId(),
+                        this.workflowServiceConnector.invokeWorkflow(entity.getAuthToken(), adminOp.get().getUserId(),
                                 entity.getTenantId(), entity.getResourceId(), sourceCredentialToken,
                                 messageId, destinationCredentialToken);
                         entity.setEventStatus(EventStatus.DISPATCHED_TO_WORFLOW_ENGING.name());
                         repository.save(entity);
                     } else {
-                        String msg = "Cannot find storage preference for storage " + sourceStorageId + " for user " + entity.getOwnerId();
+                        String msg = "Cannot find storage preference for storage " + sourceStorageId + " for user " + adminOp.get().getUserId();
                         entity.setError(msg);
                         entity.setEventStatus(EventStatus.ERRORED.name());
                         repository.save(entity);

@@ -51,12 +51,10 @@ public class DataOrchestratorEntity {
     @Column(nullable = false)
     private Date occurredTime;
 
-
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     private Date createdAt;
-
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -68,9 +66,6 @@ public class DataOrchestratorEntity {
 
     @Column(nullable = false)
     private String eventType;
-
-    @Column(nullable = false)
-    private String ownerId;
 
     @Column(nullable = false)
     private String tenantId;
@@ -89,6 +84,9 @@ public class DataOrchestratorEntity {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataOrchestratorEntity", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<WorkflowEntity> workFlowEntities;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "dataOrchestratorEntity", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<OwnershipEntity> ownershipEntities;
 
     public String getId() {
         return id;
@@ -170,7 +168,6 @@ public class DataOrchestratorEntity {
         this.workFlowEntities = workFlowEntities;
     }
 
-
     public String getError() {
         return error;
     }
@@ -185,14 +182,6 @@ public class DataOrchestratorEntity {
 
     public void setEventType(String eventType) {
         this.eventType = eventType;
-    }
-
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
     }
 
     public String getTenantId() {
@@ -225,5 +214,13 @@ public class DataOrchestratorEntity {
 
     public void setHostName(String hostName) {
         this.hostName = hostName;
+    }
+
+    public Set<OwnershipEntity> getOwnershipEntities() {
+        return ownershipEntities;
+    }
+
+    public void setOwnershipEntities(Set<OwnershipEntity> ownershipEntities) {
+        this.ownershipEntities = ownershipEntities;
     }
 }

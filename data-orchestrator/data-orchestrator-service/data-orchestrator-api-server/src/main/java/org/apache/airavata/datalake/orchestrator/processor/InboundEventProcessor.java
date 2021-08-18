@@ -4,6 +4,7 @@ import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.Utils;
 import org.apache.airavata.datalake.orchestrator.core.processor.MessageProcessor;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.DataOrchestratorEntity;
+import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.OwnershipEntity;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.repository.DataOrchestratorEventRepository;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.EventStatus;
 import org.apache.airavata.dataorchestrator.messaging.model.NotificationEvent;
@@ -14,9 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Date;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -114,8 +113,25 @@ public class InboundEventProcessor implements MessageProcessor<Configuration> {
         String basePath = event.getContext().getBasePath();
         String removeBasePath = resourcePath.substring(basePath.length());
         String[] splitted = removeBasePath.split("/");
-        String ownerId = splitted[0];
-        entity.setOwnerId(ownerId);
+
+        OwnershipEntity owner1 = new OwnershipEntity();
+        owner1.setId(UUID.randomUUID().toString());
+        owner1.setUserId(splitted[1]);
+        owner1.setPermissionId("OWNER");
+        owner1.setDataOrchestratorEntity(entity);
+
+        OwnershipEntity owner2 = new OwnershipEntity();
+        owner2.setId(UUID.randomUUID().toString());
+        owner2.setUserId(splitted[0]);
+        owner2.setPermissionId("ADMIN");
+        owner2.setDataOrchestratorEntity(entity);
+
+
+        Set<OwnershipEntity> owners = new HashSet<>();
+        owners.add(owner1);
+        owners.add(owner2);
+
+        entity.setOwnershipEntities(owners);
 
         entity.setTenantId(event.getContext().getTenantId());
 
@@ -126,6 +142,4 @@ public class InboundEventProcessor implements MessageProcessor<Configuration> {
         entity.setResourceId(Utils.getId(event.getResourceId()));
         return entity;
     }
-
-
 }

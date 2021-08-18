@@ -6,10 +6,13 @@ import org.apache.airavata.datalake.drms.AuthCredentialType;
 import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
+import org.apache.airavata.datalake.drms.sharing.DRMSSharingServiceGrpc;
+import org.apache.airavata.datalake.drms.sharing.ShareEntityWithUserRequest;
 import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.core.connector.AbstractConnector;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.DataOrchestratorEntity;
+import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.OwnershipEntity;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.repository.DataOrchestratorEventRepository;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.EventStatus;
 import org.slf4j.Logger;
@@ -30,6 +33,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
     private ResourceServiceGrpc.ResourceServiceBlockingStub resourceServiceBlockingStub;
     private StorageServiceGrpc.StorageServiceBlockingStub storageServiceBlockingStub;
     private StoragePreferenceServiceGrpc.StoragePreferenceServiceBlockingStub storagePreferenceServiceBlockingStub;
+    private DRMSSharingServiceGrpc.DRMSSharingServiceBlockingStub sharingServiceBlockingStub;
 
     public DRMSConnector(Configuration configuration) throws Exception {
         this.init(configuration);
@@ -43,7 +47,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
         this.resourceServiceBlockingStub = ResourceServiceGrpc.newBlockingStub(drmsChannel);
         this.storageServiceBlockingStub = StorageServiceGrpc.newBlockingStub(drmsChannel);
         this.storagePreferenceServiceBlockingStub = StoragePreferenceServiceGrpc.newBlockingStub(drmsChannel);
-
+        this.sharingServiceBlockingStub = DRMSSharingServiceGrpc.newBlockingStub(drmsChannel);
     }
 
     @Override
@@ -56,12 +60,49 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
         return !this.drmsChannel.isShutdown();
     }
 
-    public Optional<TransferMapping> getActiveTransferMapping(DataOrchestratorEntity entity, String hostname) {
+    public void shareWithUser(DataOrchestratorEntity entity) throws Exception {
+
+        Optional<OwnershipEntity> adminOp = entity.getOwnershipEntities().stream().filter(o -> o.getPermissionId().equals("ADMIN")).findFirst();
+        if (adminOp.isEmpty()) {
+            throw new Exception("No admin user found");
+        }
+
         DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
                 .setAccessToken(entity.getAuthToken())
                 .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
                 .setAuthenticatedUser(AuthenticatedUser.newBuilder()
-                        .setUsername(entity.getOwnerId())
+                        .setUsername(adminOp.get().getUserId())
+                        .setTenantId(entity.getTenantId())
+                        .build())
+                .build();
+
+        for (OwnershipEntity ownershipEntity : entity.getOwnershipEntities()) {
+            if (ownershipEntity.getPermissionId().equals("ADMIN")) {
+                continue;
+            }
+            ShareEntityWithUserRequest.Builder shareBuilder = ShareEntityWithUserRequest.newBuilder()
+                    .setAuthToken(serviceAuthToken)
+                    .setEntityId(entity.getResourceId())
+                    .setSharedUserId(ownershipEntity.getUserId())
+                    .setPermissionId(ownershipEntity.getPermissionId());
+
+            this.sharingServiceBlockingStub.shareEntityWithUser(shareBuilder.build());
+        }
+
+    }
+
+    public Optional<TransferMapping> getActiveTransferMapping(DataOrchestratorEntity entity, String hostname) throws Exception {
+
+        Optional<OwnershipEntity> adminOp = entity.getOwnershipEntities().stream().filter(o -> o.getPermissionId().equals("ADMIN")).findFirst();
+        if (adminOp.isEmpty()) {
+            throw new Exception("No admin user found");
+        }
+
+        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
+                .setAccessToken(entity.getAuthToken())
+                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
+                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
+                        .setUsername(adminOp.get().getUserId())
                         .setTenantId(entity.getTenantId())
                         .build())
                 .build();
@@ -90,12 +131,18 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
                                                     String resourceName,
                                                     String resourcePath,
                                                     String parentId,
-                                                    String type, String parentType) {
+                                                    String type, String parentType) throws Exception {
+
+        Optional<OwnershipEntity> adminOp = entity.getOwnershipEntities().stream().filter(o -> o.getPermissionId().equals("ADMIN")).findFirst();
+        if (adminOp.isEmpty()) {
+            throw new Exception("No admin user found");
+        }
+
         DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
                 .setAccessToken(entity.getAuthToken())
                 .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
                 .setAuthenticatedUser(AuthenticatedUser.newBuilder()
-                        .setUsername(entity.getOwnerId())
+                        .setUsername(adminOp.get().getUserId())
                         .setTenantId(entity.getTenantId())
                         .build())
                 .build();
