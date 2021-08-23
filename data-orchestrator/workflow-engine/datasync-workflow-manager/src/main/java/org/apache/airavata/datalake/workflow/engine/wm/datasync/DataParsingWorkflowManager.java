@@ -142,6 +142,12 @@ public class DataParsingWorkflowManager {
                 return match;
             }).collect(Collectors.toList());
 
+            if (selectedPJs.isEmpty()) {
+                logger.warn("No parsing jobs available for resource {} with path {}. So ignoring the workflow",
+                        sourceResourceId, metadata.getResourcePath());
+                continue;
+            }
+
             Map<String, AbstractTask> taskMap = new HashMap<>();
 
             SyncLocalDataDownloadTask downloadTask = new SyncLocalDataDownloadTask();
@@ -201,7 +207,8 @@ public class DataParsingWorkflowManager {
             String[] startTaskIds = {downloadTask.getTaskId()};
             String workflowId = workflowOperator.buildAndRunWorkflow(taskMap, startTaskIds);
 
-            logger.info("Submitted workflow {} to parse resource {}", workflowId, sourceResourceId);
+            logger.info("Submitted workflow {} to parse resource {} with path {}", workflowId,
+                    sourceResourceId, metadata.getResourcePath());
         }
     }
 }
