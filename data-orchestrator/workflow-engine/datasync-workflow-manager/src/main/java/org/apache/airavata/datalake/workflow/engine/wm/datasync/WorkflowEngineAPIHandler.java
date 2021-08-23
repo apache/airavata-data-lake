@@ -29,8 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 @GRpcService
 public class WorkflowEngineAPIHandler extends WorkflowServiceGrpc.WorkflowServiceImplBase {
@@ -45,7 +45,7 @@ public class WorkflowEngineAPIHandler extends WorkflowServiceGrpc.WorkflowServic
     @Autowired
     private DataParsingWorkflowManager dataParsingWorkflowManager;
 
-    private final ScheduledExecutorService workflowExecutorService = Executors.newSingleThreadScheduledExecutor();
+    private final ExecutorService workflowExecutorService = Executors.newFixedThreadPool(5);
 
     @Override
     public void invokeWorkflow(WorkflowInvocationRequest request,
