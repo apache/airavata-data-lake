@@ -3,6 +3,7 @@ package org.apache.airavata.dataorchestrator.file.client.model;
 public class Configuration {
     private String listeningPath;
     private String hostName;
+    private int depth = 2;
 
     private Producer producer;
 
@@ -41,6 +42,14 @@ public class Configuration {
 
     public void setCustos(Custos custos) {
         this.custos = custos;
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
     }
 
     public static class Producer {

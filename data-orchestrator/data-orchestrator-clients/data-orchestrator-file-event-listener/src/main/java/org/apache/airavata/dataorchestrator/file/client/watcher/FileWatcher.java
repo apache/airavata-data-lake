@@ -29,15 +29,12 @@ public class FileWatcher implements Runnable {
 
     private Configuration configuration;
 
-
     public FileWatcher(File rootFolder, Configuration configuration) throws IOException {
         this.rootFolder = rootFolder;
         this.configuration = configuration;
     }
 
-
     @Override
-
     public void run() {
 
         LOGGER.info("Watcher service starting at " + rootFolder.getAbsolutePath());
@@ -51,11 +48,8 @@ public class FileWatcher implements Runnable {
         } catch (Exception e) {
             LOGGER.error("Error occurred while watching  folder " + rootFolder.getAbsolutePath(), e);
             Thread.currentThread().interrupt();
-
         }
-
     }
-
 
     protected void pollEvents(WatchService watchService) throws Exception {
 
@@ -68,10 +62,10 @@ public class FileWatcher implements Runnable {
         if (!key.reset()) {
             keyPathMap.remove(key);
         }
+
         if (keyPathMap.isEmpty()) {
             return;
         }
-
     }
 
 
@@ -82,12 +76,14 @@ public class FileWatcher implements Runnable {
 
         path = parentPath.resolve(path);
         File file = path.toFile();
-        FileEvent event = getFileEvent(file);
+        Optional<FileEvent> event = getFileEvent(file);
 
         if (kind == ENTRY_CREATE) {
 
-            for (AbstractListener listener : listeners) {
-                listener.onCreated(event);
+            if (event.isPresent()) {
+                for (AbstractListener listener : listeners) {
+                    listener.onCreated(event.get());
+                }
             }
 
             if (file.isDirectory()) {
@@ -96,22 +92,21 @@ public class FileWatcher implements Runnable {
 
         } else if (kind == ENTRY_MODIFY) {
 
-            for (AbstractListener listener : listeners) {
-
-                listener.onModified(event);
-
+            if (event.isPresent()) {
+                for (AbstractListener listener : listeners) {
+                    listener.onModified(event.get());
+                }
             }
 
         } else if (kind == ENTRY_DELETE) {
 
-            for (AbstractListener listener : listeners) {
-                listener.onDeleted(event);
+            if (event.isPresent()) {
+                for (AbstractListener listener : listeners) {
+                    listener.onDeleted(event.get());
+                }
             }
-
         }
-
     }
-
 
     public FileWatcher addListener(AbstractListener listener) {
 
@@ -152,24 +147,44 @@ public class FileWatcher implements Runnable {
      */
 
 
-    protected FileEvent getFileEvent(File file) {
+    protected Optional<FileEvent> getFileEvent(File file) {
         FileEvent event = new FileEvent();
-        if (file.isDirectory()) {
+
+
+        String absolutePath = file.getAbsolutePath();
+        if (configuration.getDepth() > 0) {
+            String relativePath = absolutePath.substring(configuration.getListeningPath().length());
+            if (relativePath.startsWith("/")) {
+                relativePath = relativePath.substring(1);
+            }
+            String[] relativeParts = relativePath.split("/");
+            if (relativeParts.length >= configuration.getDepth()) {
+                String beginPath = configuration.getListeningPath();
+                beginPath = beginPath.endsWith("/") ? beginPath.substring(0, beginPath.length()-1) : beginPath;
+                for (int step = 0; step < configuration.getDepth(); step++) {
+                    beginPath = beginPath + "/" + relativeParts[step];
+                }
+                absolutePath = beginPath;
+            } else {
+                LOGGER.warn("Depth of path {} is not greater or equal to required depth {}", absolutePath, configuration.getDepth());
+                return Optional.empty();
+            }
+        }
+
+        if (new File(absolutePath).isDirectory()) {
             event.setResourceType(Constants.FOLDER);
         } else {
             event.setResourceType(Constants.FILE);
         }
-        event.setResourceName(file.getName());
-        event.setResourcePath(file.getAbsolutePath());
-        NotificationEvent.Context context = new NotificationEvent.Context();
-        context.setOccuredTime(System.currentTimeMillis());
-        context.setAuthToken(Base64.getEncoder().encodeToString((configuration.getCustos().getServiceAccountId()
+
+        event.setResourcePath(absolutePath);
+        event.setOccuredTime(System.currentTimeMillis());
+        event.setAuthToken(Base64.getEncoder().encodeToString((configuration.getCustos().getServiceAccountId()
                 + ":" + configuration.getCustos().getServiceAccountSecret()).getBytes(StandardCharsets.UTF_8)));
-        context.setBasePath(configuration.getListeningPath());
-        context.setTenantId(configuration.getCustos().getTenantId());
-        context.setHostName(configuration.getHostName());
-        event.setContext(context);
-        return event;
+        event.setBasePath(configuration.getListeningPath());
+        event.setTenantId(configuration.getCustos().getTenantId());
+        event.setHostName(configuration.getHostName());
+        return Optional.of(event);
     }
 
     private static void registerDir(Path path, WatchService watchService) throws

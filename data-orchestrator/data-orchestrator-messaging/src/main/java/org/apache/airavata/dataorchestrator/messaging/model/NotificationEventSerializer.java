@@ -15,16 +15,14 @@ public class NotificationEventSerializer implements Serializer<NotificationEvent
 
     @Override
     public byte[] serialize(String s, NotificationEvent notificationEvent) {
-        String serializedData = notificationEvent.getId() + "," +
-                notificationEvent.getContext().getEvent().name() + "," +
-                notificationEvent.getContext().getOccuredTime() + "," +
-                notificationEvent.getContext().getAuthToken() + "," +
-                notificationEvent.getContext().getTenantId() + "," +
-                notificationEvent.getContext().getHostName() + "," +
-                notificationEvent.getContext().getBasePath() + "," +
-                notificationEvent.getResourcePath() + "," +
+        String serializedData = notificationEvent.getResourcePath() + "," +
                 notificationEvent.getResourceType() + "," +
-                notificationEvent.getResourceName();
+                notificationEvent.getOccuredTime() + "," +
+                notificationEvent.getTenantId() + "," +
+                notificationEvent.getHostName() + "," +
+                notificationEvent.getBasePath() + "," +
+                notificationEvent.getEventType() + "," +
+                notificationEvent.getAuthToken();
         return serializedData.getBytes();
     }
 

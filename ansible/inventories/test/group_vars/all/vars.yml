@@ -42,7 +42,7 @@ custos_repo: "https://github.com/apache/airavata-custos.git"
 custos_git_branch: develop
 
 mft_default_agent_id: agent0
-mft_default_agent_host: 10.1.0.33
+mft_default_agent_host: 10.1.0.42
 mft_default_agent_advertised_url: https://beta.iubemcenter.scigap.org:8443/downloads
 mft_default_agent_port: 3333
 

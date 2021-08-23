@@ -11,10 +11,6 @@ import org.apache.airavata.datalake.drms.sharing.ShareEntityWithUserRequest;
 import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.core.connector.AbstractConnector;
-import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.DataOrchestratorEntity;
-import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.OwnershipEntity;
-import org.apache.airavata.datalake.orchestrator.registry.persistance.repository.DataOrchestratorEventRepository;
-import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.EventStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,50 +56,36 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
         return !this.drmsChannel.isShutdown();
     }
 
-    public void shareWithUser(DataOrchestratorEntity entity) throws Exception {
-
-        Optional<OwnershipEntity> adminOp = entity.getOwnershipEntities().stream().filter(o -> o.getPermissionId().equals("ADMIN")).findFirst();
-        if (adminOp.isEmpty()) {
-            throw new Exception("No admin user found");
-        }
+    public void shareWithUser(String authToken, String tenantId, String admin, String user, String resourceId, String permission) throws Exception {
 
         DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
-                .setAccessToken(entity.getAuthToken())
+                .setAccessToken(authToken)
                 .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
                 .setAuthenticatedUser(AuthenticatedUser.newBuilder()
-                        .setUsername(adminOp.get().getUserId())
-                        .setTenantId(entity.getTenantId())
+                        .setUsername(admin)
+                        .setTenantId(tenantId)
                         .build())
                 .build();
 
-        for (OwnershipEntity ownershipEntity : entity.getOwnershipEntities()) {
-            if (ownershipEntity.getPermissionId().equals("ADMIN")) {
-                continue;
-            }
-            ShareEntityWithUserRequest.Builder shareBuilder = ShareEntityWithUserRequest.newBuilder()
-                    .setAuthToken(serviceAuthToken)
-                    .setEntityId(entity.getResourceId())
-                    .setSharedUserId(ownershipEntity.getUserId())
-                    .setPermissionId(ownershipEntity.getPermissionId());
+        ShareEntityWithUserRequest.Builder shareBuilder = ShareEntityWithUserRequest.newBuilder()
+                .setAuthToken(serviceAuthToken)
+                .setEntityId(resourceId)
+                .setSharedUserId(user)
+                .setPermissionId(permission);
 
-            this.sharingServiceBlockingStub.shareEntityWithUser(shareBuilder.build());
-        }
+        this.sharingServiceBlockingStub.shareEntityWithUser(shareBuilder.build());
 
     }
 
-    public Optional<TransferMapping> getActiveTransferMapping(DataOrchestratorEntity entity, String hostname) throws Exception {
-
-        Optional<OwnershipEntity> adminOp = entity.getOwnershipEntities().stream().filter(o -> o.getPermissionId().equals("ADMIN")).findFirst();
-        if (adminOp.isEmpty()) {
-            throw new Exception("No admin user found");
-        }
+    public Optional<TransferMapping> getActiveTransferMapping(String authToken, String tenantId,
+                                                              String user, String hostName) throws Exception {
 
         DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
-                .setAccessToken(entity.getAuthToken())
+                .setAccessToken(authToken)
                 .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
                 .setAuthenticatedUser(AuthenticatedUser.newBuilder()
-                        .setUsername(adminOp.get().getUserId())
-                        .setTenantId(entity.getTenantId())
+                        .setUsername(user)
+                        .setTenantId(tenantId)
                         .build())
                 .build();
         FindTransferMappingsRequest request = FindTransferMappingsRequest.newBuilder()
@@ -116,7 +98,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
             transferMappingList.forEach(transferMapping -> {
                 if (transferMapping.getSourceStorage().getStorageCase()
                         .equals(AnyStorage.StorageCase.SSH_STORAGE)) {
-                    if (transferMapping.getSourceStorage().getSshStorage().getHostName().equals(hostname)) {
+                    if (transferMapping.getSourceStorage().getSshStorage().getHostName().equals(hostName)) {
                         transferMappingOp.set(transferMapping);
                     }
                 }
@@ -126,24 +108,22 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
     }
 
 
-    public Optional<GenericResource> createResource(DataOrchestratorEventRepository repository, DataOrchestratorEntity entity,
+    public Optional<GenericResource> createResource(String authToken,
+                                                    String tenantId,
                                                     String resourceId,
                                                     String resourceName,
                                                     String resourcePath,
                                                     String parentId,
-                                                    String type, String parentType) throws Exception {
+                                                    String type, String parentType,
+                                                    String user) throws Exception {
 
-        Optional<OwnershipEntity> adminOp = entity.getOwnershipEntities().stream().filter(o -> o.getPermissionId().equals("ADMIN")).findFirst();
-        if (adminOp.isEmpty()) {
-            throw new Exception("No admin user found");
-        }
 
         DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
-                .setAccessToken(entity.getAuthToken())
+                .setAccessToken(authToken)
                 .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
                 .setAuthenticatedUser(AuthenticatedUser.newBuilder()
-                        .setUsername(adminOp.get().getUserId())
-                        .setTenantId(entity.getTenantId())
+                        .setUsername(user)
+                        .setTenantId(tenantId)
                         .build())
                 .build();
 
@@ -165,10 +145,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
             ResourceCreateResponse resourceCreateResponse = resourceServiceBlockingStub.createResource(resourceCreateRequest);
             return Optional.ofNullable(resourceCreateResponse.getResource());
         } catch (Exception ex) {
-            LOGGER.error("Error occurred while creating resource {} in DRMS", entity.getResourceId(), ex);
-            entity.setEventStatus(EventStatus.ERRORED.name());
-            entity.setError("Error occurred while creating resource in DRMS " + ex.getMessage());
-            repository.save(entity);
+            LOGGER.error("Error occurred while creating resource {} in DRMS", resourcePath, ex);
             return Optional.empty();
         }
     }

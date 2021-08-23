@@ -36,6 +36,9 @@ public class DataParsingJobOutputEntity {
     @Column(name = "OUTPUT_TYPE")
     private DataParsingJobOutputType outputType;
 
+    @Column(name = "OUTPUT_DIR_RESOURCE_ID")
+    private String outputDirectoryResourceId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DATA_PARSER_OUTPUT_INTERFACE_ID", insertable=false, updatable=false)
     private DataParserOutputInterfaceEntity dataParserOutputInterface;
@@ -90,5 +93,13 @@ public class DataParsingJobOutputEntity {
 
     public void setDataParsingJobEntity(DataParsingJobEntity dataParsingJobEntity) {
         this.dataParsingJobEntity = dataParsingJobEntity;
+    }
+
+    public String getOutputDirectoryResourceId() {
+        return outputDirectoryResourceId;
+    }
+
+    public void setOutputDirectoryResourceId(String outputDirectoryResourceId) {
+        this.outputDirectoryResourceId = outputDirectoryResourceId;
     }
 }

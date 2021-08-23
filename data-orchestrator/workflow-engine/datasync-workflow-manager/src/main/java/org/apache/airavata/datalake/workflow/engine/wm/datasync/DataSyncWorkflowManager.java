@@ -90,8 +90,6 @@ public class DataSyncWorkflowManager {
     @Value("${custos.secret}")
     private String custosSecret;
 
-
-
     @Value("${drms.host}")
     private String drmsHost;
 
@@ -214,7 +212,7 @@ public class DataSyncWorkflowManager {
 //        dt1.setMftCallbackStoreHost(datasyncWmHost);
 //        dt1.setMftCallbackStorePort(datasyncWmPort);
 
-        DataTransferPreValidationTask dt1 = new DataTransferPreValidationTask();
+        /*DataTransferPreValidationTask dt1 = new DataTransferPreValidationTask();
         dt1.setTenantId(request.getMessage().getTenantId());
         dt1.setCustosHost(custosHost);
         dt1.setCustosPort(custosPort);
@@ -239,6 +237,6 @@ public class DataSyncWorkflowManager {
         //String[] startTaskIds = {bt1.getTaskId(), bt2.getTaskId(), bt4.getTaskId()};
         String[] startTaskIds = {dt1.getTaskId()};
         String workflowId = workflowOperator.buildAndRunWorkflow(taskMap, startTaskIds);
-        logger.info("Launched workflow {}", workflowId);
+        logger.info("Launched workflow {}", workflowId);*/
     }
 }

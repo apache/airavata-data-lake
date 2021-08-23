@@ -90,115 +90,118 @@ public class DataParsingWorkflowManager {
     public void submitDataParsingWorkflow(WorkflowInvocationRequest request) throws Exception {
 
         WorkflowMessage workflowMessage = request.getMessage();
-        logger.info("Processing parsing workflow for resource {}", workflowMessage.getSourceResourceId());
 
-        MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = MFTApiClient.buildClient(mftHost, mftPort);
+        for (String sourceResourceId : workflowMessage.getSourceResourceIdsList()) {
+            logger.info("Processing parsing workflow for resource {}", sourceResourceId);
 
-        DelegateAuth delegateAuth = DelegateAuth.newBuilder()
-                .setUserId(workflowMessage.getUsername())
-                .setClientId(mftClientId)
-                .setClientSecret(mftClientSecret)
-                .putProperties("TENANT_ID", workflowMessage.getTenantId()).build();
+            MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = MFTApiClient.buildClient(mftHost, mftPort);
 
-        FileMetadataResponse metadata = mftClient.getFileResourceMetadata(FetchResourceMetadataRequest.newBuilder()
-                .setResourceType("SCP")
-                .setResourceId(workflowMessage.getSourceResourceId())
-                .setResourceToken(workflowMessage.getSourceCredentialToken())
-                .setMftAuthorizationToken(AuthToken.newBuilder().setDelegateAuth(delegateAuth).build()).build());
+            DelegateAuth delegateAuth = DelegateAuth.newBuilder()
+                    .setUserId(workflowMessage.getUsername())
+                    .setClientId(mftClientId)
+                    .setClientSecret(mftClientSecret)
+                    .putProperties("TENANT_ID", workflowMessage.getTenantId()).build();
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6566).usePlaintext().build();
-        DataParserServiceGrpc.DataParserServiceBlockingStub parserClient = DataParserServiceGrpc.newBlockingStub(channel);
+            FileMetadataResponse metadata = mftClient.getFileResourceMetadata(FetchResourceMetadataRequest.newBuilder()
+                    .setResourceType("SCP")
+                    .setResourceId(sourceResourceId)
+                    .setResourceToken(workflowMessage.getSourceCredentialToken())
+                    .setMftAuthorizationToken(AuthToken.newBuilder().setDelegateAuth(delegateAuth).build()).build());
 
-        ParsingJobListResponse parsingJobs = parserClient.listParsingJobs(ParsingJobListRequest.newBuilder().build());
+            ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6566).usePlaintext().build();
+            DataParserServiceGrpc.DataParserServiceBlockingStub parserClient = DataParserServiceGrpc.newBlockingStub(channel);
 
-        Map<String, StringMap> parserInputMappings = new HashMap<>();
-        List<DataParsingJob> selectedPJs = parsingJobs.getParsersList().stream().filter(pj -> {
-            List<DataParsingJobInput> pjis = pj.getDataParsingJobInputsList();
+            ParsingJobListResponse parsingJobs = parserClient.listParsingJobs(ParsingJobListRequest.newBuilder().build());
 
-            boolean match = true;
-            StringMap stringMap = new StringMap();
-            for (DataParsingJobInput pji : pjis) {
+            Map<String, StringMap> parserInputMappings = new HashMap<>();
+            List<DataParsingJob> selectedPJs = parsingJobs.getParsersList().stream().filter(pj -> {
+                List<DataParsingJobInput> pjis = pj.getDataParsingJobInputsList();
 
-                ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
-                Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-                bindings.put("polyglot.js.allowHostAccess", true);
-                bindings.put("polyglot.js.allowHostClassLookup", (Predicate<String>) s -> true);
-                bindings.put("metadata", metadata);
-                try {
-                    Boolean eval = (Boolean) engine.eval(pji.getSelectionQuery());
-                    stringMap.put(pji.getDataParserInputInterfaceId(), "$DOWNLOAD_PATH");
-                    match = match && eval;
-                } catch (ScriptException e) {
-                    logger.error("Failed to evaluate parsing job {}", pj.getDataParsingJobId());
-                    match = false;
+                boolean match = true;
+                StringMap stringMap = new StringMap();
+                for (DataParsingJobInput pji : pjis) {
+
+                    ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
+                    Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+                    bindings.put("polyglot.js.allowHostAccess", true);
+                    bindings.put("polyglot.js.allowHostClassLookup", (Predicate<String>) s -> true);
+                    bindings.put("metadata", metadata);
+                    try {
+                        Boolean eval = (Boolean) engine.eval(pji.getSelectionQuery());
+                        stringMap.put(pji.getDataParserInputInterfaceId(), "$DOWNLOAD_PATH");
+                        match = match && eval;
+                    } catch (ScriptException e) {
+                        logger.error("Failed to evaluate parsing job {}", pj.getDataParsingJobId());
+                        match = false;
+                    }
                 }
-            }
 
-            if (match) {
-                parserInputMappings.put(pj.getParserId(), stringMap);
-            }
-            return match;
-        }).collect(Collectors.toList());
-
-        Map<String, AbstractTask> taskMap = new HashMap<>();
-
-        SyncLocalDataDownloadTask downloadTask = new SyncLocalDataDownloadTask();
-        downloadTask.setTaskId("SLDT-" + UUID.randomUUID().toString());
-        downloadTask.setMftClientId(mftClientId);
-        downloadTask.setMftClientSecret(mftClientSecret);
-        downloadTask.setUserId(workflowMessage.getUsername());
-        downloadTask.setTenantId(workflowMessage.getTenantId());
-        downloadTask.setMftHost(mftHost);
-        downloadTask.setMftPort(mftPort);
-        downloadTask.setSourceResourceId(workflowMessage.getSourceResourceId());
-        downloadTask.setSourceCredToken(workflowMessage.getSourceCredentialToken());
-
-        taskMap.put(downloadTask.getTaskId(), downloadTask);
-
-        for(String parserId: parserInputMappings.keySet()) {
-
-            GenericDataParsingTask dataParsingTask = new GenericDataParsingTask();
-            dataParsingTask.setTaskId("DPT-" + UUID.randomUUID().toString());
-            dataParsingTask.setParserId(parserId);
-            dataParsingTask.setInputMapping(parserInputMappings.get(parserId));
-            taskMap.put(dataParsingTask.getTaskId(), dataParsingTask);
-
-            OutPort outPort = new OutPort();
-            outPort.setNextTaskId(dataParsingTask.getTaskId());
-            downloadTask.addOutPort(outPort);
-
-            DataParsingJob dataParsingJob = selectedPJs.stream().filter(pj -> pj.getParserId().equals(parserId)).findFirst().get();
-            ParserFetchResponse parser = parserClient.fetchParser(ParserFetchRequest.newBuilder().setParserId(parserId).build());
-
-            for (DataParserOutputInterface dataParserOutputInterface: parser.getParser().getOutputInterfacesList()) {
-
-                Optional<DataParsingJobOutput> dataParsingJobOutput = dataParsingJob.getDataParsingJobOutputsList().stream().filter(o ->
-                        o.getDataParserOutputInterfaceId().equals(dataParserOutputInterface.getParserOutputInterfaceId()))
-                        .findFirst();
-
-                if (dataParsingJobOutput.isPresent() && dataParsingJobOutput.get().getOutputType().equals("JSON")) {
-                    MetadataPersistTask mpt = new MetadataPersistTask();
-                    mpt.setTaskId("MPT-" + UUID.randomUUID().toString());
-                    mpt.setDrmsHost(drmsHost);
-                    mpt.setDrmsPort(drmsPort);
-                    mpt.setTenant(workflowMessage.getTenantId());
-                    mpt.setUser(workflowMessage.getUsername());
-                    mpt.setServiceAccountKey(mftClientId);
-                    mpt.setServiceAccountSecret(mftClientSecret);
-                    mpt.setResourceId(workflowMessage.getSourceResourceId());
-                    mpt.setJsonFile("$" + dataParsingTask.getTaskId() + "-" + dataParserOutputInterface.getOutputName());
-                    OutPort dpOut = new OutPort();
-                    dpOut.setNextTaskId(mpt.getTaskId());
-                    dataParsingTask.addOutPort(dpOut);
-                    taskMap.put(mpt.getTaskId(), mpt);
+                if (match) {
+                    parserInputMappings.put(pj.getParserId(), stringMap);
                 }
+                return match;
+            }).collect(Collectors.toList());
+
+            Map<String, AbstractTask> taskMap = new HashMap<>();
+
+            SyncLocalDataDownloadTask downloadTask = new SyncLocalDataDownloadTask();
+            downloadTask.setTaskId("SLDT-" + UUID.randomUUID().toString());
+            downloadTask.setMftClientId(mftClientId);
+            downloadTask.setMftClientSecret(mftClientSecret);
+            downloadTask.setUserId(workflowMessage.getUsername());
+            downloadTask.setTenantId(workflowMessage.getTenantId());
+            downloadTask.setMftHost(mftHost);
+            downloadTask.setMftPort(mftPort);
+            downloadTask.setSourceResourceId(sourceResourceId);
+            downloadTask.setSourceCredToken(workflowMessage.getSourceCredentialToken());
+
+            taskMap.put(downloadTask.getTaskId(), downloadTask);
+
+            for(String parserId: parserInputMappings.keySet()) {
+
+                GenericDataParsingTask dataParsingTask = new GenericDataParsingTask();
+                dataParsingTask.setTaskId("DPT-" + UUID.randomUUID().toString());
+                dataParsingTask.setParserId(parserId);
+                dataParsingTask.setInputMapping(parserInputMappings.get(parserId));
+                taskMap.put(dataParsingTask.getTaskId(), dataParsingTask);
+
+                OutPort outPort = new OutPort();
+                outPort.setNextTaskId(dataParsingTask.getTaskId());
+                downloadTask.addOutPort(outPort);
+
+                DataParsingJob dataParsingJob = selectedPJs.stream().filter(pj -> pj.getParserId().equals(parserId)).findFirst().get();
+                ParserFetchResponse parser = parserClient.fetchParser(ParserFetchRequest.newBuilder().setParserId(parserId).build());
+
+                for (DataParserOutputInterface dataParserOutputInterface: parser.getParser().getOutputInterfacesList()) {
+
+                    Optional<DataParsingJobOutput> dataParsingJobOutput = dataParsingJob.getDataParsingJobOutputsList().stream().filter(o ->
+                            o.getDataParserOutputInterfaceId().equals(dataParserOutputInterface.getParserOutputInterfaceId()))
+                            .findFirst();
+
+                    if (dataParsingJobOutput.isPresent() && dataParsingJobOutput.get().getOutputType().equals("JSON")) {
+                        MetadataPersistTask mpt = new MetadataPersistTask();
+                        mpt.setTaskId("MPT-" + UUID.randomUUID().toString());
+                        mpt.setDrmsHost(drmsHost);
+                        mpt.setDrmsPort(drmsPort);
+                        mpt.setTenant(workflowMessage.getTenantId());
+                        mpt.setUser(workflowMessage.getUsername());
+                        mpt.setServiceAccountKey(mftClientId);
+                        mpt.setServiceAccountSecret(mftClientSecret);
+                        mpt.setResourceId(sourceResourceId);
+                        mpt.setJsonFile("$" + dataParsingTask.getTaskId() + "-" + dataParserOutputInterface.getOutputName());
+                        OutPort dpOut = new OutPort();
+                        dpOut.setNextTaskId(mpt.getTaskId());
+                        dataParsingTask.addOutPort(dpOut);
+                        taskMap.put(mpt.getTaskId(), mpt);
+                    }
+                }
+
             }
 
+            String[] startTaskIds = {downloadTask.getTaskId()};
+            String workflowId = workflowOperator.buildAndRunWorkflow(taskMap, startTaskIds);
+
+            logger.info("Submitted workflow {} to parse resource {}", workflowId, sourceResourceId);
         }
-
-        String[] startTaskIds = {downloadTask.getTaskId()};
-        String workflowId = workflowOperator.buildAndRunWorkflow(taskMap, startTaskIds);
-
-        logger.info("Submitted workflow {} to parse resource {}", workflowId, workflowMessage.getSourceResourceId());
     }
 }

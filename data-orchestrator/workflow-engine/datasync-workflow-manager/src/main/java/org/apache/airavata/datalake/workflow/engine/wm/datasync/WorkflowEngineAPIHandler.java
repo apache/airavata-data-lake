@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @GRpcService
 public class WorkflowEngineAPIHandler extends WorkflowServiceGrpc.WorkflowServiceImplBase {
@@ -43,13 +45,22 @@ public class WorkflowEngineAPIHandler extends WorkflowServiceGrpc.WorkflowServic
     @Autowired
     private DataParsingWorkflowManager dataParsingWorkflowManager;
 
+    private final ScheduledExecutorService workflowExecutorService = Executors.newSingleThreadScheduledExecutor();
+
     @Override
     public void invokeWorkflow(WorkflowInvocationRequest request,
                                StreamObserver<WorkflowInvocationResponse> responseObserver) {
         try {
-            logger.info("Invoking workflow executor for resource {}", request.getMessage().getSourceResourceId());
-            //dataSyncWorkflowManager.submitDataSyncWorkflow(request);
-            dataParsingWorkflowManager.submitDataParsingWorkflow(request);
+
+            logger.info("Invoking workflow executor");
+            workflowExecutorService.submit(() -> {
+                try {
+                    dataParsingWorkflowManager.submitDataParsingWorkflow(request);
+                } catch (Exception e) {
+                    logger.error("Failed to submit data parsing workflow for destination resource {}",
+                            request.getMessage().getDestinationResourceId());
+                }
+            });
             responseObserver.onNext(WorkflowInvocationResponse.newBuilder().setStatus(true).build());
             responseObserver.onCompleted();
         } catch (Exception ex) {

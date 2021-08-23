@@ -30,7 +30,7 @@ public class MessageProducer {
     public void publish(String topic, NotificationEvent notificationMessage, Callback callback) throws ExecutionException, InterruptedException {
         try {
             final ProducerRecord<String, NotificationEvent> record = new ProducerRecord<>(topic,
-                    notificationMessage.getId(),
+                    notificationMessage.getResourcePath(),
                     notificationMessage);
             producer.send(record, callback).get();
         } finally {

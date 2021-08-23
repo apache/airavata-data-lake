@@ -10,6 +10,8 @@ import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowService
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * Drms connector to call DRMS services
  */
@@ -43,11 +45,11 @@ public class WorkflowServiceConnector implements AbstractConnector<Configuration
         return false;
     }
 
-    public void invokeWorkflow(String authToken, String username, String tenantId, String sourceResourceId, String sourceCredentialToken,
+    public void invokeWorkflow(String authToken, String username, String tenantId, List<String> sourceResourceIds, String sourceCredentialToken,
                                String dstResourceId, String destinationCredentialToken) {
         try {
             WorkflowMessage workflowMessage = WorkflowMessage.newBuilder()
-                    .setSourceResourceId(sourceResourceId)
+                    .addAllSourceResourceIds(sourceResourceIds)
                     .setDestinationResourceId(dstResourceId)
                     .setUsername(username)
                     .setTenantId(tenantId)

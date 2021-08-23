@@ -18,9 +18,6 @@
 package org.apache.airavata.datalake.orchestrator.handlers.async;
 
 import org.apache.airavata.datalake.orchestrator.Configuration;
-import org.apache.airavata.datalake.orchestrator.processor.InboundEventProcessor;
-import org.apache.airavata.datalake.orchestrator.processor.OutboundEventProcessor;
-import org.apache.airavata.datalake.orchestrator.registry.persistance.repository.DataOrchestratorEventRepository;
 import org.apache.airavata.dataorchestrator.messaging.consumer.MessageConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +27,6 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Orchestrator event handler
@@ -45,10 +41,6 @@ public class OrchestratorEventHandler {
     private ScheduledExecutorService ouboundExecutorService;
     private MessageConsumer messageConsumer;
 
-    @Autowired
-    private DataOrchestratorEventRepository dataOrchestratorEventRepository;
-
-
     public OrchestratorEventHandler() {
     }
 
@@ -60,20 +52,18 @@ public class OrchestratorEventHandler {
                 configuration.getConsumer().getConsumerGroup(),
                 configuration.getConsumer().getMaxPollRecordsConfig(),
                 configuration.getConsumer().getTopic());
-
     }
 
     public void startProcessing() throws Exception {
         messageConsumer.consume((notificationEvent -> {
-            LOGGER.info("Message received " + notificationEvent.getResourceName());
-            LOGGER.info("Submitting {} to process in thread pool", notificationEvent.getId());
-            this.executorService.submit(new InboundEventProcessor(configuration, notificationEvent, dataOrchestratorEventRepository));
-
+            LOGGER.info("Message received for resource path {}", notificationEvent.getResourcePath());
+            try {
+                this.executorService.submit(new OrchestratorEventProcessor(configuration, notificationEvent));
+            } catch (Exception e) {
+                LOGGER.error("Failed tu submit data orchestrator event to process on path {}",
+                        notificationEvent.getResourcePath(), e);
+            }
         }));
-
-        this.ouboundExecutorService
-                .scheduleAtFixedRate(new OutboundEventProcessor(configuration, dataOrchestratorEventRepository),
-                        0, configuration.getOutboundEventProcessor().getPollingInterval(), TimeUnit.SECONDS);
     }
 
     public Configuration getConfiguration() {

@@ -26,8 +26,7 @@ import "google/protobuf/empty.proto";
 
 message WorkflowMessage {
     string message_id = 1;
-    string resource_id = 2;
-    string source_resource_id = 3;
+    repeated string source_resource_ids = 3;
     string destination_resource_id = 4;
     string username = 5;
     string tenantId = 6;

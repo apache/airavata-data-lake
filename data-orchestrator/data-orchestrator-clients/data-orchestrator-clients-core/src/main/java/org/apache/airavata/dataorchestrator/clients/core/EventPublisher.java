@@ -1,6 +1,5 @@
 package org.apache.airavata.dataorchestrator.clients.core;
 
-import org.apache.airavata.dataorchestrator.messaging.MessagingEvents;
 import org.apache.airavata.dataorchestrator.messaging.model.NotificationEvent;
 
 import java.util.concurrent.ExecutionException;
@@ -11,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 public interface EventPublisher {
 
 
-    public void publish(NotificationEvent notificationEvent, MessagingEvents event) throws Exception;
+    public void publish(NotificationEvent notificationEvent, NotificationEvent.Type eventType) throws Exception;
 
 
 }

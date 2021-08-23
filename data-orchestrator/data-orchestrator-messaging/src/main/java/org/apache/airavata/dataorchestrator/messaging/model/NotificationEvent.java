@@ -1,26 +1,25 @@
 package org.apache.airavata.dataorchestrator.messaging.model;
 
-import org.apache.airavata.dataorchestrator.messaging.MessagingEvents;
-
-import java.io.Serializable;
-import java.util.UUID;
-
 /**
  * Notification event represents triggering messages
  */
 public class  NotificationEvent {
-    private String resourcePath;
-    private String resourceName;
-    private String resourceType;
-    private Context context;
-    private String id;
 
-
-    public NotificationEvent() {
-        this.id = UUID.randomUUID().toString();
-
+    public enum Type {
+        REGISTER,
+        CREATE,
+        MODIFY,
+        DELETE
     }
 
+    private String resourcePath;
+    private String resourceType;
+    private Long occuredTime;
+    private String authToken;
+    private String tenantId;
+    private String hostName;
+    private String basePath;
+    private Type eventType;
 
     public String getResourcePath() {
         return resourcePath;
@@ -28,14 +27,6 @@ public class  NotificationEvent {
 
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
-    }
-
-    public String getResourceName() {
-        return resourceName;
-    }
-
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
     }
 
     public String getResourceType() {
@@ -46,84 +37,51 @@ public class  NotificationEvent {
         this.resourceType = resourceType;
     }
 
-    public Context getContext() {
-        return context;
+    public Long getOccuredTime() {
+        return occuredTime;
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    public void setOccuredTime(Long occuredTime) {
+        this.occuredTime = occuredTime;
     }
 
-    public String getId() {
-        return id;
+    public String getAuthToken() {
+        return authToken;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 
-    public static class Context implements Serializable {
-
-        private MessagingEvents event;
-        private Long occuredTime;
-        private String authToken;
-        private String tenantId;
-        private String hostName;
-        private String basePath;
-
-
-        public MessagingEvents getEvent() {
-            return event;
-        }
-
-        public void setEvent(MessagingEvents event) {
-            this.event = event;
-        }
-
-        public Long getOccuredTime() {
-            return occuredTime;
-        }
-
-        public void setOccuredTime(Long occuredTime) {
-            this.occuredTime = occuredTime;
-        }
-
-        public String getAuthToken() {
-            return authToken;
-        }
-
-        public void setAuthToken(String authToken) {
-            this.authToken = authToken;
-        }
-
-        public String getTenantId() {
-            return tenantId;
-        }
-
-        public void setTenantId(String tenantId) {
-            this.tenantId = tenantId;
-        }
-
-        public String getBasePath() {
-            return basePath;
-        }
-
-        public void setBasePath(String basePath) {
-            this.basePath = basePath;
-        }
-
-        public String getHostName() {
-            return hostName;
-        }
-
-        public void setHostName(String hostName) {
-            this.hostName = hostName;
-        }
+    public String getTenantId() {
+        return tenantId;
     }
 
-    public String getResourceId() {
-        return context.hostName+ ":" + resourcePath + ":" + resourceType;
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
+    public String getHostName() {
+        return hostName;
+    }
 
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
+    }
+
+    public String getBasePath() {
+        return basePath;
+    }
+
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
+    }
+
+    public Type getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(Type eventType) {
+        this.eventType = eventType;
+    }
 }

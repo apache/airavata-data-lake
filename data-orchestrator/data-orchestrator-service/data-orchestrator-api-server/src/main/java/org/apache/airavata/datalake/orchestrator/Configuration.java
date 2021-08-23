@@ -153,6 +153,8 @@ public class Configuration {
         private String drmsHost;
         private int drmsPort;
         private int pollingInterval;
+        private String mftHost;
+        private int mftPort;
 
 
         public OutboundEventProcessorConfig() {
@@ -197,6 +199,22 @@ public class Configuration {
 
         public void setPollingInterval(int pollingInterval) {
             this.pollingInterval = pollingInterval;
+        }
+
+        public String getMftHost() {
+            return mftHost;
+        }
+
+        public void setMftHost(String mftHost) {
+            this.mftHost = mftHost;
+        }
+
+        public int getMftPort() {
+            return mftPort;
+        }
+
+        public void setMftPort(int mftPort) {
+            this.mftPort = mftPort;
         }
     }
 

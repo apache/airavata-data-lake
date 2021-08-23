@@ -10,6 +10,8 @@ outboundEventProcessor:
   workflowPort: {{ workflow_manager_grpc_port }}
   drmsHost: "{{ datalake_drms_host }}"
   drmsPort: {{ datalake_drms_grpc_port }}
+  mftHost: "{{ mft_api_service_host }}"
+  mftPort: {{ mft_api_service_grpc_port }}
 consumer:
   brokerURL: "{{ datalake_data_orch_broker_url }}"
   consumerGroup: "{{ datalake_data_orch_broker_consumer_group }}"

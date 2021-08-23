@@ -1,6 +1,5 @@
 package org.apache.airavata.dataorchestrator.messaging.model;
 
-import org.apache.airavata.dataorchestrator.messaging.MessagingEvents;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import java.util.Map;
@@ -19,18 +18,14 @@ public class NotificationEventDeserializer implements Deserializer<NotificationE
         String deserialized = new String(bytes);
         String parts[] = deserialized.split(",");
         NotificationEvent event = new NotificationEvent();
-        NotificationEvent.Context context = new NotificationEvent.Context();
-        event.setId(parts[0]);
-        context.setEvent(MessagingEvents.valueOf(parts[1]));
-        context.setOccuredTime(Long.valueOf(parts[2]));
-        context.setAuthToken(String.valueOf(parts[3]));
-        context.setTenantId(String.valueOf(parts[4]));
-        context.setHostName(parts[5]);
-        context.setBasePath(parts[6]);
-        event.setResourcePath(parts[7]);
-        event.setResourceType(parts[8]);
-        event.setResourceName(parts[9]);
-        event.setContext(context);
+        event.setResourcePath(parts[0]);
+        event.setResourceType(parts[1]);
+        event.setOccuredTime(Long.valueOf(parts[2]));
+        event.setTenantId(parts[3]);
+        event.setHostName(parts[4]);
+        event.setBasePath(parts[5]);
+        event.setEventType(NotificationEvent.Type.valueOf(parts[6]));
+        event.setAuthToken(parts[7]);
         return event;
     }
 

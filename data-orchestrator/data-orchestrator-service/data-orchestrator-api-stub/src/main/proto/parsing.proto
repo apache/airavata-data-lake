@@ -60,6 +60,7 @@ message DataParsingJobOutput {
     string dataParserOutputInterfaceId = 2;
     string dataParsingJobId = 3;
     string outputType = 4;
+    string outputDirectoryResourceId = 5;
 }
 
 message DataParsingJob {
