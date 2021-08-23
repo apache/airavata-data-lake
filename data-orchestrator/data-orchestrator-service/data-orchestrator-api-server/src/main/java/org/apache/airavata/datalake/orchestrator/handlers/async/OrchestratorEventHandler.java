@@ -21,9 +21,10 @@ import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.dataorchestrator.messaging.consumer.MessageConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -40,6 +41,7 @@ public class OrchestratorEventHandler {
     private ExecutorService executorService;
     private ScheduledExecutorService ouboundExecutorService;
     private MessageConsumer messageConsumer;
+    private final Set<String> eventCache = new HashSet<>();
 
     public OrchestratorEventHandler() {
     }
@@ -56,9 +58,18 @@ public class OrchestratorEventHandler {
 
     public void startProcessing() throws Exception {
         messageConsumer.consume((notificationEvent -> {
-            LOGGER.info("Message received for resource path {}", notificationEvent.getResourcePath());
+            LOGGER.info("Message received for resource path {} type {}", notificationEvent.getResourcePath(),
+                    notificationEvent.getEventType());
             try {
-                this.executorService.submit(new OrchestratorEventProcessor(configuration, notificationEvent));
+                if (!eventCache.contains(notificationEvent.getResourcePath() + ":" + notificationEvent.getHostName())) {
+                    eventCache.add(notificationEvent.getResourcePath() + ":" + notificationEvent.getHostName());
+                    this.executorService.submit(new OrchestratorEventProcessor(
+                            configuration, notificationEvent, eventCache));
+                } else {
+                    LOGGER.info("Event is already processing");
+                }
+
+
             } catch (Exception e) {
                 LOGGER.error("Failed tu submit data orchestrator event to process on path {}",
                         notificationEvent.getResourcePath(), e);

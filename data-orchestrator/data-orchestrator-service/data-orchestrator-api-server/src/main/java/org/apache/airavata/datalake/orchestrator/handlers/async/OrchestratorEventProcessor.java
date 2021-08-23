@@ -46,9 +46,12 @@ public class OrchestratorEventProcessor implements Runnable {
     private DRMSConnector drmsConnector;
     private Configuration configuration;
     private WorkflowServiceConnector workflowServiceConnector;
+    private final Set<String> eventCache;
 
-    public OrchestratorEventProcessor(Configuration configuration, NotificationEvent notificationEvent) throws Exception {
+    public OrchestratorEventProcessor(Configuration configuration, NotificationEvent notificationEvent,
+                                      Set<String> eventCache) throws Exception {
         this.notificationEvent = notificationEvent;
+        this.eventCache = eventCache;
         this.drmsConnector = new DRMSConnector(configuration);
         this.workflowServiceConnector = new WorkflowServiceConnector(configuration);
         this.configuration = configuration;
@@ -255,6 +258,8 @@ public class OrchestratorEventProcessor implements Runnable {
 
         } catch (Exception e) {
             logger.error("Failed to process event for resource path {}", notificationEvent.getResourcePath(), e);
+        } finally {
+            this.eventCache.remove(notificationEvent.getResourcePath() + ":" + notificationEvent.getHostName());
         }
     }
 }
