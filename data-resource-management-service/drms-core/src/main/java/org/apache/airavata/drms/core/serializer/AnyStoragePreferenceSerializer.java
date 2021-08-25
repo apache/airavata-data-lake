@@ -3,6 +3,7 @@ package org.apache.airavata.drms.core.serializer;
 import com.google.protobuf.Descriptors;
 import org.apache.airavata.datalake.drms.storage.AnyStoragePreference;
 import org.apache.airavata.datalake.drms.storage.preference.s3.S3StoragePreference;
+import org.apache.airavata.datalake.drms.storage.preference.sda.SDAStoragePreference;
 import org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference;
 import org.apache.airavata.drms.core.constants.StoragePreferenceConstants;
 
@@ -25,6 +26,11 @@ public class AnyStoragePreferenceSerializer {
                 S3StoragePreference s3Storage = anyStorage.getS3StoragePreference();
                 allFields = s3Storage.getAllFields();
                 fields.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL, StoragePreferenceConstants.S3_STORAGE_PREFERENCE_TYPE_LABEL);
+                break;
+            case SDA_STORAGE_PREFERENCE:
+                SDAStoragePreference sdaStorage = anyStorage.getSdaStoragePreference();
+                allFields = sdaStorage.getAllFields();
+                fields.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL, StoragePreferenceConstants.SDA_STORAGE_PREFERENCE_TYPE_LABEL);
                 break;
             case STORAGE_NOT_SET:
                 break;

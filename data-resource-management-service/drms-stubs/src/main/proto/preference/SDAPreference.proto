@@ -15,12 +15,20 @@
  * limitations under the License.
  */
 
-package org.apache.airavata.drms.core.constants;
 
-public final class StoragePreferenceConstants {
-    public static final String STORAGE_PREFERENCE_LABEL = "StoragePreference";
-    public static final String STORAGE_PREFERENCE_TYPE_LABEL = "type";
-    public static final String SSH_STORAGE_PREFERENCE_TYPE_LABEL = "SSH";
-    public static final String S3_STORAGE_PREFERENCE_TYPE_LABEL = "S3";
-    public static final String SDA_STORAGE_PREFERENCE_TYPE_LABEL = "SDA";
+syntax = "proto3";
+
+option java_multiple_files = true;
+package org.apache.airavata.datalake.drms.storage.preference.sda;
+
+import "google/api/annotations.proto";
+import "storage/SSHStorage.proto";
+
+message SDAStoragePreference {
+    string storage_preference_id = 1;
+    string sda_path = 2;
+    string proxy_user_name = 3;
+    string auth_type = 4;
+    org.apache.airavata.datalake.drms.storage.ssh.SSHStorage storage = 5;
+    string proxy_credential = 6;
 }
