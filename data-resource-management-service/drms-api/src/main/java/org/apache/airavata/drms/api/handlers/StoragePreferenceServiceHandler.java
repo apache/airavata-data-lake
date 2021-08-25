@@ -122,6 +122,8 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
             Map<String, Object> parentPropertiesMap = null;
             if (storage.getStorageCase().equals(AnyStoragePreference.StorageCase.S3_STORAGE_PREFERENCE)) {
                 storageId = storage.getS3StoragePreference().getStorage().getStorageId();
+
+
                 serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
                         StoragePreferenceConstants.S3_STORAGE_PREFERENCE_TYPE_LABEL);
                 parentPropertiesMap = AnyStorageSerializer.serializeToMap(AnyStorage
@@ -131,11 +133,26 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                     .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
 
                 storageId = storage.getSshStoragePreference().getStorage().getStorageId();
+                if (request.getStoragePreference().getSdaStoragePreference().isInitialized() &&
+                        !request.getStoragePreference().getSdaStoragePreference().getStoragePreferenceId().isEmpty()) {
+
+                }
+
                 serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
                         StoragePreferenceConstants.SSH_STORAGE_PREFERENCE_TYPE_LABEL);
                 parentPropertiesMap = AnyStorageSerializer.serializeToMap(AnyStorage
                         .newBuilder().setSshStorage(storage.getSshStoragePreference().getStorage()).build());
+            }else if (storage.getStorageCase()
+                    .equals(AnyStoragePreference.StorageCase.SDA_STORAGE_PREFERENCE)) {
+
+                storageId = storage.getSdaStoragePreference().getStorage().getStorageId();
+                serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
+                        StoragePreferenceConstants.SDA_STORAGE_PREFERENCE_TYPE_LABEL);
+                parentPropertiesMap = AnyStorageSerializer.serializeToMap(AnyStorage
+                        .newBuilder().setSshStorage(storage.getSshStoragePreference().getStorage()).build());
             }
+
+
             if (storageId != null) {
                 CustosUtils.
                         mergeStoragePreferenceEntity(custosClientProvider, callUser.getTenantId(),
@@ -178,7 +195,15 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                 storageId = storage.getSshStoragePreference().getStorage().getStorageId();
                 parentPropertiesMap = AnyStorageSerializer.serializeToMap(AnyStorage
                         .newBuilder().setSshStorage(storage.getSshStoragePreference().getStorage()).build());
+            } else if (storage.getStorageCase()
+                    .equals(AnyStoragePreference.StorageCase.SDA_STORAGE_PREFERENCE)) {
+
+                storageId = storage.getSdaStoragePreference().getStorage().getStorageId();
+                parentPropertiesMap = AnyStorageSerializer.serializeToMap(AnyStorage
+                        .newBuilder().setSshStorage(storage.getSdaStoragePreference().getStorage()).build());
             }
+
+
             if (storageId != null) {
                 CustosUtils.
                         mergeStoragePreferenceEntity(custosClientProvider, callUser.getTenantId(),

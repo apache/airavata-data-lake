@@ -24,12 +24,14 @@ import "google/api/annotations.proto";
 import "Common.proto";
 import "preference/SSHPreference.proto";
 import "preference/S3Preference.proto";
+import "preference/SDAPreference.proto";
 import "google/protobuf/empty.proto";
 
 message AnyStoragePreference {
     oneof storage {
         org.apache.airavata.datalake.drms.storage.preference.ssh.SSHStoragePreference ssh_storage_preference = 1;
         org.apache.airavata.datalake.drms.storage.preference.s3.S3StoragePreference s3_storage_preference = 2;
+        org.apache.airavata.datalake.drms.storage.preference.sda.SDAStoragePreference sda_storage_preference = 3;
     }
 }
 message StoragePreferenceFetchRequest {
