@@ -37,14 +37,18 @@ public class AnyStorageDeserializer {
 
     public static List<AnyStorage> deserializeList(List<Record> neo4jRecords) throws Exception {
         List<AnyStorage> storageList = new ArrayList<>();
+        List<Node> processedNodes = new ArrayList<>();
         for (Record record : neo4jRecords) {
             InternalRecord internalRecord = (InternalRecord) record;
             List<Value> values = internalRecord.values();
             for (Value value : values) {
                 if (!value.isNull()) {
                     Node node = value.asNode();
-                    if (node.hasLabel(StorageConstants.STORAGE_LABEL)) {
-                        storageList.add(deriveStorageFromMap(node.asMap()));
+                    if (!processedNodes.contains(node)) {
+                        if (node.hasLabel(StorageConstants.STORAGE_LABEL)) {
+                            storageList.add(deriveStorageFromMap(node.asMap()));
+                            processedNodes.add(node);
+                        }
                     }
                 }
             }
