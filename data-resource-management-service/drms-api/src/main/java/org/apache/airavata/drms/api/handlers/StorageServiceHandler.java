@@ -171,12 +171,14 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
         Map<String, Object> userProps = new HashMap<>();
         userProps.put("username", callUser.getUsername());
         userProps.put("tenantId", callUser.getTenantId());
+        userProps.put("scope",  TransferScope.GLOBAL.name());
         List<Record> records = this.neo4JConnector.searchNodes(userProps,
                 " MATCH (u:User) where u.username = $username = $username AND u.tenantId = $tenantId" +
                         " OPTIONAL MATCH (u)<-[r2:SHARED_WITH]-(s:Storage)" +
                         " OPTIONAL MATCH (ch:Group)-[CHILD_OF *0..]->(g:Group)<-[r3:MEMBER_OF]-(u)" +
                         " OPTIONAL MATCH (cs:Storage)-[SHARED_WITH]->(ch) " +
-                        " return distinct s, cs");
+                        " OPTIONAL Match (srcStr:Storage)-[:TRANSFER_OUT]->(t:TransferMapping{scope:$scope, tenantId:$tenantId})-[:TRANSFER_IN]->(dstStr:Storage)" +
+                        " return distinct srcStr,dstStr, s, cs");
         try {
             List<AnyStorage> storageList = AnyStorageDeserializer.deserializeList(records);
             StorageSearchResponse.Builder builder = StorageSearchResponse.newBuilder();
