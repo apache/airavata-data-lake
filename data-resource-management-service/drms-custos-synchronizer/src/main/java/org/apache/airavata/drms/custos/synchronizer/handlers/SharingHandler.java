@@ -93,28 +93,29 @@ public class SharingHandler {
 
     private void mergeEntityParentChildRelationShips(SharingManagementClient sharingManagementClient, Entity entity,
                                                      String clientId) {
+        try {
+            if (!entity.getParentId().trim().isEmpty()) {
+                Entity parentEntity = Entity.newBuilder().setId(entity.getParentId()).build();
+                Entity fullParentEntity = sharingManagementClient.getEntity(clientId, parentEntity);
+                String query = "MATCH (a:" + entity.getType() + "), (b:" + fullParentEntity.getType() + ") WHERE a.entityId = $entityId" +
+                        " AND a.tenantId = $tenantId  AND " + "b.entityId = $parentEntityId AND b.tenantId = $tenantId " +
+                        "MERGE (a)-[r:CHILD_OF]->(b) RETURN a, b";
+                Map<String, Object> map = new HashMap<>();
+                map.put("entityId", entity.getId());
+                map.put("parentEntityId", fullParentEntity.getId());
+                map.put("tenantId", clientId);
 
-        if (!entity.getParentId().trim().isEmpty()) {
-            Entity parentEntity = Entity.newBuilder().setId(entity.getParentId()).build();
-            Entity fullParentEntity = sharingManagementClient.getEntity(clientId, parentEntity);
-            String query = "MATCH (a:" + entity.getType() + "), (b:" + fullParentEntity.getType() + ") WHERE a.entityId = $entityId" +
-                    " AND a.tenantId = $tenantId  AND " + "b.entityId = $parentEntityId AND b.tenantId = $tenantId " +
-                    "MERGE (a)-[r:CHILD_OF]->(b) RETURN a, b";
-            Map<String, Object> map = new HashMap<>();
-            map.put("entityId", entity.getId());
-            map.put("parentEntityId", fullParentEntity.getId());
-            map.put("tenantId", clientId);
-            try {
                 Utils.getNeo4JConnector().runTransactionalQuery(map, query);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                String msg = "Error occurred while merging parent child relationships ";
-                LOGGER.error(msg, ex);
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            String msg = "Error occurred while merging parent child relationships ";
+            LOGGER.error(msg, ex);
         }
     }
 
     private void mergeEntitySharings(SharingMetadata metadata, String clientId) {
+        try {
         Entity entity = metadata.getEntity();
         String sourceId = metadata.getEntity().getId();
         String permissionId = metadata.getPermission().getId();
@@ -144,14 +145,15 @@ public class SharingHandler {
             props.put("sharedBy", sharedBy);
             props.put("permission", permissionId);
             map.put("props", props);
-            try {
+
                 Utils.getNeo4JConnector().runTransactionalQuery(map, query);
-            } catch (Exception ex) {
+        }
+        }
+        catch (Exception ex) {
                 ex.printStackTrace();
                 String msg = "Error occurred while merging sharings, " + ex.getMessage();
                 LOGGER.error(msg, ex);
             }
-        }
 
     }
 
