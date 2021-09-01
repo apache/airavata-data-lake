@@ -98,6 +98,8 @@ datalake_data_orch_grpc_port: 6566
 datalake_data_orch_broker_url: "{{ kafka_url }}"
 datalake_data_orch_broker_consumer_group: DataOrchestratorGroup2
 datalake_data_orch_broker_topic: data-orchestrator-file-events
+datalake_data_orch_user_group: emc-users_e8a37f6d-e3b3-4e4a-9081-265bb42b1b99
+datalake_data_orch_admin_group: admin-group_c1aac070-1512-4e98-b1d1-e06a94f03665
 
 workflow_deployment_dir: "{{ user_home }}/workflow-deployment"
 workflow_zookeeper_url: localhost:2181

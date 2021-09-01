@@ -17,3 +17,7 @@ consumer:
   consumerGroup: "{{ datalake_data_orch_broker_consumer_group }}"
   topic: "{{ datalake_data_orch_broker_topic }}"
   maxPollRecordsConfig: 10
+tenantConfigs:
+  tenantId: "{{ datalake_synch_tenant_id }}"
+  userGroup: "{{ datalake_data_orch_user_group }}"
+  adminGroup: "{{ datalake_data_orch_admin_group }}"

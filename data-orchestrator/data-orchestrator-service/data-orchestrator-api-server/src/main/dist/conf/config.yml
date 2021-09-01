@@ -5,13 +5,19 @@ messageFilter:
   eventType: "CREATE,MODIFY "
   resourceNameExclusions: "swp$"
 outboundEventProcessor:
-  pollingDelay: 10000
-  pollingInterval: 10000
-  numOfEventsPerPoll: 10
+  pollingInterval: 5
   workflowEngineHost: "localhost"
   workflowPort: 6565
+  drmsHost: "localhost"
+  drmsPort: 7070
+  mftHost: "localhost"
+  mftPort: "7004"
 consumer:
   brokerURL: "localhost:9092"
   consumerGroup: "DataOrchestratorGroup"
-  topic: "quickstart-events"
+  topic: "data-orchestrator-file-events"
   maxPollRecordsConfig: 10
+tenantConfigs:
+  tenantId: "custos-ii8g0cfwsz6ruwezykn9-10002640"
+  userGroup: "emc-users_e8a37f6d-e3b3-4e4a-9081-265bb42b1b99"
+  adminGroup: "admin-group_c1aac070-1512-4e98-b1d1-e06a94f03665"
