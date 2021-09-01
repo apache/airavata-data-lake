@@ -273,7 +273,7 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
             if (storageId != null) {
                 query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
                         " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(s1:Storage{storageId:'" + storageId + "'})<-[:CHILD_OF]->(sp1:StoragePreference)" +
-                        " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
+                        " OPTIONAL MATCH (cg:Group)-[:CHILD_OF *0..]->(g:Group)<-[:MEMBER_OF]-(u)" +
                         " OPTIONAL MATCH (sp2:StoragePreference)-[:CHILD_OF]->(s2:Storage{storageId:'" + storageId + "'})-[:SHARED_WITH]->(cg) " +
                         " OPTIONAL MATCH (sp3:StoragePreference)-[:CHILD_OF]->(s3:Storage{storageId:'" + storageId + "'})-[:SHARED_WITH]->(g)" +
                         " OPTIONAL MATCH (s4:Storage{storageId:'" + storageId + "'})<-[:CHILD_OF]-(sp4:StoragePreference)-[:SHARED_WITH]->(u)" +
