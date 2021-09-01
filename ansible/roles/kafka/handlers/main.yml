@@ -19,12 +19,15 @@
 #
 
 ---
-- hosts: data-lake
-  roles:
-    - env_setup
-    - kafka
-#    - custos
-#    - consul
-#    - mft
-#    - data_lake
-#    - workflow-engine
+# Kafka related handlers
+- name: start kafka-rest-proxy
+  service: name=kafka-rest-proxy state=started enabled=yes
+  become: yes
+
+- name: stop kafka-rest-proxy
+  service: name=kafka-rest-proxy state=stopped enabled=yes
+  become: yes
+
+- name: restart kafka-rest-proxy
+  service: name=kafka-rest-proxy state=restarted enabled=yes
+  become: yes
