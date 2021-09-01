@@ -276,9 +276,9 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                         " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
                         " OPTIONAL MATCH (sp2:StoragePreference)-[:CHILD_OF]->(s2:Storage{storageId:'" + storageId + "'})-[:SHARED_WITH]->(cg) " +
                         " OPTIONAL MATCH (sp3:StoragePreference)-[:CHILD_OF]->(s3:Storage{storageId:'" + storageId + "'})-[:SHARED_WITH]->(g)" +
-                        " OPTIONAL MATCH (s4:Storage{storageId:'" + storageId + "'})<-[:CHILD_OF]->(sp4:StoragePreference)-[:SHARED_WITH]->(u)" +
-                        " OPTIONAL MATCH (s5:Storage{storageId:'" + storageId + "'})<-[:CHILD_OF]->(sp5:StoragePreference)-[:SHARED_WITH]->(cg)" +
-                        " OPTIONAL MATCH (s6:Storage{storageId:'" + storageId + "'})<-[:CHILD_OF]->(sp6:StoragePreference)-[:SHARED_WITH]->(g)" +
+                        " OPTIONAL MATCH (s4:Storage{storageId:'" + storageId + "'})<-[:CHILD_OF]-(sp4:StoragePreference)-[:SHARED_WITH]->(u)" +
+                        " OPTIONAL MATCH (s5:Storage{storageId:'" + storageId + "'})<-[:CHILD_OF]-(sp5:StoragePreference)-[:SHARED_WITH]->(cg)" +
+                        " OPTIONAL MATCH (s6:Storage{storageId:'" + storageId + "'})<-[:CHILD_OF]-(sp6:StoragePreference)-[:SHARED_WITH]->(g)" +
                         " return distinct s1, sp1, s2, sp2, s3, sp3, s4,sp4, s5,sp5, s6,sp6";
             }
 
