@@ -20,6 +20,8 @@ public class Configuration {
         this.messageFilter = messageFilter;
     }
 
+    public TenantConfigs tenantConfigs;
+
     public Configuration() {
 
     }
@@ -58,6 +60,14 @@ public class Configuration {
 
     public void setOutboundEventProcessor(OutboundEventProcessorConfig outboundEventProcessor) {
         this.outboundEventProcessor = outboundEventProcessor;
+    }
+
+    public TenantConfigs getTenantConfigs() {
+        return tenantConfigs;
+    }
+
+    public void setTenantConfigs(TenantConfigs tenantConfigs) {
+        this.tenantConfigs = tenantConfigs;
     }
 
     public static class Consumer {
@@ -215,6 +225,38 @@ public class Configuration {
 
         public void setMftPort(int mftPort) {
             this.mftPort = mftPort;
+        }
+    }
+
+
+    public static class TenantConfigs {
+
+        private String tenantId;
+        private String userGroup;
+        private String adminGroup;
+
+        public String getTenantId() {
+            return tenantId;
+        }
+
+        public void setTenantId(String tenantId) {
+            this.tenantId = tenantId;
+        }
+
+        public String getUserGroup() {
+            return userGroup;
+        }
+
+        public void setUserGroup(String userGroup) {
+            this.userGroup = userGroup;
+        }
+
+        public String getAdminGroup() {
+            return adminGroup;
+        }
+
+        public void setAdminGroup(String adminGroup) {
+            this.adminGroup = adminGroup;
         }
     }
 
