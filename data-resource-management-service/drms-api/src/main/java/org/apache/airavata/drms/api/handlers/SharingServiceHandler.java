@@ -34,7 +34,7 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
 
             SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient();
             Entity entity = Entity.newBuilder().setId(request.getEntityId()).build();
-            PermissionType permissionTypeEditor = PermissionType.newBuilder().setId("EDITOR").build();
+            PermissionType permissionTypeEditor = PermissionType.newBuilder().setId(request.getPermissionId()).build();
             PermissionType permissionTypeAdmin = PermissionType.newBuilder().setId("ADMIN").build();
 
             SharingRequest sharingRequestEditor = SharingRequest
@@ -88,7 +88,7 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
 
             SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient();
             Entity entity = Entity.newBuilder().setId(request.getEntityId()).build();
-            PermissionType permissionTypeEditor = PermissionType.newBuilder().setId("EDITOR").build();
+            PermissionType permissionTypeEditor = PermissionType.newBuilder().setId(request.getPermissionId()).build();
             PermissionType permissionTypeAdmin = PermissionType.newBuilder().setId("ADMIN").build();
 
             SharingRequest sharingRequestEditor = SharingRequest

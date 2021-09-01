@@ -57,8 +57,9 @@ public class OrchestratorEventProcessor implements Runnable {
         this.configuration = configuration;
     }
 
-    private List<GenericResource> createResourceRecursively(String storageId, String basePath, String resourcePath, String resourceType, String user)
-            throws Exception{
+    private List<GenericResource> createResourceRecursively(String storageId, String basePath,
+                                                            String resourcePath, String resourceType, String user)
+            throws Exception {
 
         List<GenericResource> resourceList = new ArrayList<>();
 
@@ -66,7 +67,7 @@ public class OrchestratorEventProcessor implements Runnable {
 
         String[] splitted = resourcePath.substring(basePath.length()).split("/");
 
-        String currentPath = basePath.endsWith("/")? basePath.substring(0, basePath.length() -1): basePath;
+        String currentPath = basePath.endsWith("/") ? basePath.substring(0, basePath.length() - 1) : basePath;
         String parentId = storageId;
         for (int i = 0; i < splitted.length - 1; i++) {
             String resourceName = splitted[i];
@@ -86,13 +87,13 @@ public class OrchestratorEventProcessor implements Runnable {
             }
         }
 
-        currentPath = currentPath + "/" + splitted[splitted.length -1];
+        currentPath = currentPath + "/" + splitted[splitted.length - 1];
 
         Optional<GenericResource> optionalGenericResource =
                 this.drmsConnector.createResource(notificationEvent.getAuthToken(),
                         notificationEvent.getTenantId(),
                         Utils.getId(storageId + ":" + currentPath),
-                        splitted[splitted.length -1], currentPath,
+                        splitted[splitted.length - 1], currentPath,
                         parentId, resourceType, parentType, user);
 
         if (optionalGenericResource.isPresent()) {
@@ -106,11 +107,21 @@ public class OrchestratorEventProcessor implements Runnable {
     }
 
 
-    private void shareResources(List<GenericResource> resourceList, String admin, String user, String permission) throws Exception {
+    private void shareResourcesWithUsers(List<GenericResource> resourceList, String admin, String user, String permission) throws Exception {
         for (GenericResource resource : resourceList) {
             logger.info("Sharing resource {} with path {} with user {}",
                     resource.getResourceId(), resource.getResourcePath(), user);
-            this.drmsConnector.shareWithUser(notificationEvent.getAuthToken(), notificationEvent.getTenantId(), admin, user, resource.getResourceId(), permission);
+            this.drmsConnector.shareWithUser(notificationEvent.getAuthToken(), notificationEvent.getTenantId(),
+                    admin, user, resource.getResourceId(), permission);
+        }
+    }
+
+    private void shareResourcesWithGroups(List<GenericResource> resourceList, String admin, String group, String permission) throws Exception {
+        for (GenericResource resource : resourceList) {
+            logger.info("Sharing resource {} with path {} with group {}",
+                    resource.getResourceId(), resource.getResourcePath(), group);
+            this.drmsConnector.shareWithGroup(notificationEvent.getAuthToken(), notificationEvent.getTenantId(),
+                    admin, group, resource.getResourceId(), permission);
         }
     }
 
@@ -134,7 +145,7 @@ public class OrchestratorEventProcessor implements Runnable {
             String owner = splitted[1].split("_")[0];
 
             Map<String, String> ownerRules = new HashMap<>();
-            ownerRules.put(adminUser, "ADMIN");
+            ownerRules.put(adminUser, "VIEWER");
             ownerRules.put(splitted[1], "OWNER");
 
             Optional<TransferMapping> optionalTransferMapping = drmsConnector.getActiveTransferMapping(
@@ -159,9 +170,18 @@ public class OrchestratorEventProcessor implements Runnable {
                     notificationEvent.getResourcePath(),
                     "COLLECTION", adminUser);
 
-            shareResources(Collections.singletonList(resourceList.get(resourceList.size() -1)), adminUser, owner, "ADMIN");
+            shareResourcesWithUsers(Collections.singletonList(resourceList.get(resourceList.size() - 1)),
+                    adminUser, owner, "VIEWER");
 
-            GenericResource resourceObj = resourceList.get(resourceList.size() -1);
+            shareResourcesWithGroups(Collections.singletonList(resourceList.get(resourceList.size() - 1)), adminUser,
+                    configuration.getTenantConfigs().getAdminGroup(),
+                    "EDITOR");
+
+//            shareResourcesWithGroups(Collections.singletonList(resourceList.get(resourceList.size() - 1)), adminUser,
+//                    configuration.getTenantConfigs().getUserGroup(),
+//                    "VIEWER");
+
+            GenericResource resourceObj = resourceList.get(resourceList.size() - 1);
 
             Optional<AnyStoragePreference> sourceSPOp = this.drmsConnector.getStoragePreference(
                     notificationEvent.getAuthToken(), adminUser,
@@ -207,7 +227,7 @@ public class OrchestratorEventProcessor implements Runnable {
                     .setMftAuthorizationToken(mftAuth)
                     .setResourceId(resourceObj.getResourceId());
 
-            switch (sourceSP.getStorageCase()){
+            switch (sourceSP.getStorageCase()) {
                 case SSH_STORAGE_PREFERENCE:
                     resourceMetadataReq.setResourceType("SCP");
                     resourceMetadataReq.setResourceToken(sourceSP.getSshStoragePreference().getCredentialToken());
@@ -227,7 +247,7 @@ public class OrchestratorEventProcessor implements Runnable {
                 logger.info("Registering file {} for source storage {}", fileMetadata.getResourcePath(), sourceStorageId);
                 resourceList = createResourceRecursively(sourceStorageId, notificationEvent.getBasePath(),
                         fileMetadata.getResourcePath(), "FILE", adminUser);
-                GenericResource fileResource = resourceList.get(resourceList.size() -1);
+                GenericResource fileResource = resourceList.get(resourceList.size() - 1);
 
                 resourceIDsToProcess.add(fileResource.getResourceId());
             }
@@ -244,7 +264,7 @@ public class OrchestratorEventProcessor implements Runnable {
             resourceList = createResourceRecursively(destinationStorageId, notificationEvent.getBasePath(),
                     notificationEvent.getResourcePath(), "FILE", adminUser);
 
-            GenericResource destinationResource = resourceList.get(resourceList.size() -1);
+            GenericResource destinationResource = resourceList.get(resourceList.size() - 1);
 
             System.out.println(destinationResource);
 

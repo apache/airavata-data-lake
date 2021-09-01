@@ -7,6 +7,7 @@ import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.sharing.DRMSSharingServiceGrpc;
+import org.apache.airavata.datalake.drms.sharing.ShareEntityWithGroupRequest;
 import org.apache.airavata.datalake.drms.sharing.ShareEntityWithUserRequest;
 import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.airavata.datalake.orchestrator.Configuration;
@@ -74,6 +75,29 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
                 .setPermissionId(permission);
 
         this.sharingServiceBlockingStub.shareEntityWithUser(shareBuilder.build());
+
+    }
+
+
+    public void shareWithGroup(String authToken, String tenantId, String admin, String groupId, String resourceId,
+                               String permission) throws Exception {
+
+        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
+                .setAccessToken(authToken)
+                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
+                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
+                        .setUsername(admin)
+                        .setTenantId(tenantId)
+                        .build())
+                .build();
+
+        ShareEntityWithGroupRequest.Builder shareBuilder = ShareEntityWithGroupRequest.newBuilder()
+                .setAuthToken(serviceAuthToken)
+                .setEntityId(resourceId)
+                .setSharedGroupId(groupId)
+                .setPermissionId(permission);
+
+        this.sharingServiceBlockingStub.shareEntityWithGroup(shareBuilder.build());
 
     }
 
