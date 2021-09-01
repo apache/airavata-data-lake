@@ -30,7 +30,7 @@ datalake_deployment_dir: "{{ user_home }}/data-lake-deployment"
 datalake_source_dir: "{{ user_home }}/data-lake-source"
 datalake_repo: "https://github.com/apache/airavata-data-lake.git"
 datalake_git_branch: master
-kafka_url: 149.165.156.200:9092
+kafka_url: 149.165.157.235:9092
 
 mft_deployment_dir: "{{ user_home }}/mft-deployment"
 mft_source_dir: "{{ user_home }}/mft-source"
