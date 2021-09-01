@@ -841,7 +841,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
                 " OPTIONAL MATCH (l)<-[:CHILD_OF*]-(r)"+
                 " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR exists((u)<-[:SHARED_WITH]-(l)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
-                " exists((g)<-[:SHARED_WITH]-(l)) OR exists((cg)<-[:SHARED_WITH]-(r) OR  exists((cg)<-[:SHARED_WITH]-(l)) then r  else NULL end as value";
+                " exists((g)<-[:SHARED_WITH]-(l)) OR exists((cg)<-[:SHARED_WITH]-(r)) OR  exists((cg)<-[:SHARED_WITH]-(l)) then r  else NULL end as value";
 
         List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
 
