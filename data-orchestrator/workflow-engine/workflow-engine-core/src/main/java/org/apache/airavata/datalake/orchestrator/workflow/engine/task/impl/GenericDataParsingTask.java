@@ -113,11 +113,12 @@ public class GenericDataParsingTask extends BlockingTask {
             }
 
             if (path.startsWith("$")) {
-                path = getUserContent(path.substring(1), Scope.WORKFLOW);
-                if (path == null) {
+                String derivedPath = getUserContent(path.substring(1), Scope.WORKFLOW);
+                if (derivedPath == null) {
                     logger.error("No value in context to path {} for {}", path, dpi.getParserInputInterfaceId());
                     return new TaskResult(TaskResult.Status.FAILED, "No value specified in context for path");
                 }
+                path = derivedPath;
             }
 
             try {
