@@ -63,6 +63,12 @@ public class DataParsingWorkflowManager {
     @org.springframework.beans.factory.annotation.Value("${mft.port}")
     private int mftPort;
 
+    @org.springframework.beans.factory.annotation.Value("${orch.host}")
+    private String orchHost;
+
+    @org.springframework.beans.factory.annotation.Value("${orch.port}")
+    private int orchPort;
+
     @org.springframework.beans.factory.annotation.Value("${drms.host}")
     private String drmsHost;
 
@@ -168,6 +174,8 @@ public class DataParsingWorkflowManager {
                 GenericDataParsingTask dataParsingTask = new GenericDataParsingTask();
                 dataParsingTask.setTaskId("DPT-" + UUID.randomUUID().toString());
                 dataParsingTask.setParserId(parserId);
+                dataParsingTask.setParserServiceHost(orchHost);
+                dataParsingTask.setParserServicePort(orchPort);
                 dataParsingTask.setInputMapping(parserInputMappings.get(parserId));
                 taskMap.put(dataParsingTask.getTaskId(), dataParsingTask);
 

@@ -63,14 +63,31 @@ public class GenericDataParsingTask extends BlockingTask {
     @TaskParam(name = "InputMapping")
     private ThreadLocal<StringMap> inputMapping = new ThreadLocal<>();
 
+    @TaskParam(name = "ParserServiceHost")
+    private ThreadLocal<String> parserServiceHost = new ThreadLocal<>();
+
+    @TaskParam(name = "ParserServicePort")
+    private ThreadLocal<Integer> parserServicePort = new ThreadLocal<>();
+
     @Override
     public TaskResult runBlockingCode() {
 
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6566).usePlaintext().build();
-        DataParserServiceGrpc.DataParserServiceBlockingStub parserClient = DataParserServiceGrpc.newBlockingStub(channel);
-        ParserFetchResponse parserFetchResponse = parserClient
-                .fetchParser(ParserFetchRequest.newBuilder()
-                        .setParserId(getParserId()).build());
+        ParserFetchResponse parserFetchResponse;
+        ManagedChannel channel = null;
+        try {
+            channel = ManagedChannelBuilder.forAddress(getParserServiceHost(), getParserServicePort()).usePlaintext().build();
+            DataParserServiceGrpc.DataParserServiceBlockingStub parserClient = DataParserServiceGrpc.newBlockingStub(channel);
+            parserFetchResponse = parserClient
+                    .fetchParser(ParserFetchRequest.newBuilder()
+                            .setParserId(getParserId()).build());
+
+        } finally {
+
+            if (channel!= null) {
+                channel.shutdown();
+            }
+        }
+
 
         DataParser parser = parserFetchResponse.getParser();
         List<DataParserInputInterface> inputInterfaces = parser.getInputInterfacesList();
@@ -236,5 +253,21 @@ public class GenericDataParsingTask extends BlockingTask {
 
     public void setInputMapping(StringMap inputMapping) {
         this.inputMapping.set(inputMapping);
+    }
+
+    public String getParserServiceHost() {
+        return parserServiceHost.get();
+    }
+
+    public void setParserServiceHost(String parserServiceHost) {
+        this.parserServiceHost.set(parserServiceHost);
+    }
+
+    public Integer getParserServicePort() {
+        return parserServicePort.get();
+    }
+
+    public void setParserServicePort(Integer parserServicePort) {
+        this.parserServicePort.set(parserServicePort);
     }
 }

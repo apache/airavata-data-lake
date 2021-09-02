@@ -93,6 +93,7 @@ datalake_synch_tenant_id: custos-ii8g0cfwsz6ruwezykn9-10002640
 datalake_data_orch_datasource_url: jdbc:mysql://localhost:3306/data_orchestrator?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
 datalake_data_orch_datasource_username: "{{ vault_datalake_data_orch_datasource_username }}"
 datalake_data_orch_datasource_password: "{{ vault_datalake_data_orch_datasource_password }}"
+datalake_data_orch_host: localhost
 datalake_data_orch_http_port: 8899
 datalake_data_orch_grpc_port: 6566
 datalake_data_orch_broker_url: "{{ kafka_url }}"
