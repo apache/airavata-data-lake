@@ -77,7 +77,7 @@ public class MFTRequestHandler {
         ResourceServiceGrpc.ResourceServiceBlockingStub resourceClient = ResourceServiceGrpc.newBlockingStub(channel);
         StoragePreferenceServiceGrpc.StoragePreferenceServiceBlockingStub stoPrefClient = StoragePreferenceServiceGrpc.newBlockingStub(channel);
 
-        logger.info("Using auth token {}", authTokenStr);
+        logger.debug("Using auth token {}", authTokenStr);
         DRMSServiceAuthToken authToken = DRMSServiceAuthToken.newBuilder().setAccessToken(authTokenStr).build();
         ResourceFetchResponse resourceFetchResponse = resourceClient.fetchResource(ResourceFetchRequest.newBuilder()
                 .setResourceId(resourceid)
