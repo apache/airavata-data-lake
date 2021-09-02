@@ -1,7 +1,9 @@
 package org.apache.airavata.dataorchestrator.messaging.model;
 
+import com.google.gson.Gson;
 import org.apache.kafka.common.serialization.Serializer;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -15,15 +17,9 @@ public class NotificationEventSerializer implements Serializer<NotificationEvent
 
     @Override
     public byte[] serialize(String s, NotificationEvent notificationEvent) {
-        String serializedData = notificationEvent.getResourcePath() + "," +
-                notificationEvent.getResourceType() + "," +
-                notificationEvent.getOccuredTime() + "," +
-                notificationEvent.getTenantId() + "," +
-                notificationEvent.getHostName() + "," +
-                notificationEvent.getBasePath() + "," +
-                notificationEvent.getEventType() + "," +
-                notificationEvent.getAuthToken();
-        return serializedData.getBytes();
+
+        Gson gson = new Gson();
+        return gson.toJson(notificationEvent).getBytes(StandardCharsets.UTF_8);
     }
 
     @Override
