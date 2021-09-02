@@ -65,7 +65,7 @@ public class AsyncDataTransferTask extends BiSectionNonBlockingTask {
 
 
     public TaskResult beforeSection() {
-        MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = MFTApiClient.buildClient(getMftHost(), getMftPort());
+        MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = new MFTApiClient(getMftHost(), getMftPort()).get();
         TransferApiResponse submitResponse = mftClient.submitTransfer(TransferApiRequest.newBuilder()
                 .setMftAuthorizationToken(AuthToken.newBuilder()
                         .setDelegateAuth(

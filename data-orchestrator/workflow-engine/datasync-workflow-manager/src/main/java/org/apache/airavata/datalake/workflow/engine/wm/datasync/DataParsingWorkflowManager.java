@@ -100,19 +100,22 @@ public class DataParsingWorkflowManager {
         for (String sourceResourceId : workflowMessage.getSourceResourceIdsList()) {
             logger.info("Processing parsing workflow for resource {}", sourceResourceId);
 
-            MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = MFTApiClient.buildClient(mftHost, mftPort);
+            FileMetadataResponse metadata;
+            try (MFTApiClient mftClient = new MFTApiClient(mftHost, mftPort)) {
+                MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClientStub = mftClient.get();
 
-            DelegateAuth delegateAuth = DelegateAuth.newBuilder()
-                    .setUserId(workflowMessage.getUsername())
-                    .setClientId(mftClientId)
-                    .setClientSecret(mftClientSecret)
-                    .putProperties("TENANT_ID", workflowMessage.getTenantId()).build();
+                DelegateAuth delegateAuth = DelegateAuth.newBuilder()
+                        .setUserId(workflowMessage.getUsername())
+                        .setClientId(mftClientId)
+                        .setClientSecret(mftClientSecret)
+                        .putProperties("TENANT_ID", workflowMessage.getTenantId()).build();
 
-            FileMetadataResponse metadata = mftClient.getFileResourceMetadata(FetchResourceMetadataRequest.newBuilder()
-                    .setResourceType("SCP")
-                    .setResourceId(sourceResourceId)
-                    .setResourceToken(workflowMessage.getSourceCredentialToken())
-                    .setMftAuthorizationToken(AuthToken.newBuilder().setDelegateAuth(delegateAuth).build()).build());
+                metadata = mftClientStub.getFileResourceMetadata(FetchResourceMetadataRequest.newBuilder()
+                        .setResourceType("SCP")
+                        .setResourceId(sourceResourceId)
+                        .setResourceToken(workflowMessage.getSourceCredentialToken())
+                        .setMftAuthorizationToken(AuthToken.newBuilder().setDelegateAuth(delegateAuth).build()).build());
+            }
 
             ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6566).usePlaintext().build();
             DataParserServiceGrpc.DataParserServiceBlockingStub parserClient = DataParserServiceGrpc.newBlockingStub(channel);

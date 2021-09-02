@@ -72,7 +72,6 @@ public class MFTRequestHandler {
 
         authTokenStr = authTokenStr.substring(7).trim();
 
-        MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = MFTApiClient.buildClient(mftHost, mftPort);
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(drmsHost, drmsPort).usePlaintext().build();
         ResourceServiceGrpc.ResourceServiceBlockingStub resourceClient = ResourceServiceGrpc.newBlockingStub(channel);
@@ -140,7 +139,11 @@ public class MFTRequestHandler {
         downloadRequest.setMftAuthorizationToken(AuthToken.newBuilder()
                 .setUserTokenAuth(UserTokenAuth.newBuilder().setToken(authTokenStr).build()).build());
 
-        HttpDownloadApiResponse downloadResponse = mftClient.submitHttpDownload(downloadRequest.build());
+        HttpDownloadApiResponse downloadResponse;
+        try (MFTApiClient mftApiClient = new MFTApiClient(mftHost, mftPort)) {
+            MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClientStub = mftApiClient.get();
+            downloadResponse = mftClientStub.submitHttpDownload(downloadRequest.build());
+        }
 
         return new MFTDownloadResponse().setUrl(downloadResponse.getUrl()).setAgentId(downloadResponse.getTargetAgent());
     }

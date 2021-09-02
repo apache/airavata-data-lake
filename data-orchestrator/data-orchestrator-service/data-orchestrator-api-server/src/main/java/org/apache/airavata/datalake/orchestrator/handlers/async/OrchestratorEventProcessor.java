@@ -204,10 +204,6 @@ public class OrchestratorEventProcessor implements Runnable {
             AnyStoragePreference sourceSP = sourceSPOp.get();
             AnyStoragePreference destSP = destSPOp.get();
 
-            MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = MFTApiClient.buildClient(
-                    this.configuration.getOutboundEventProcessor().getMftHost(),
-                    this.configuration.getOutboundEventProcessor().getMftPort());
-
             String decodedAuth = new String(Base64.getDecoder().decode(notificationEvent.getAuthToken()));
             String[] authParts = decodedAuth.split(":");
 
@@ -240,7 +236,14 @@ public class OrchestratorEventProcessor implements Runnable {
 
             // Fetching file list for parent resource
 
-            DirectoryMetadataResponse directoryResourceMetadata = mftClient.getDirectoryResourceMetadata(resourceMetadataReq.build());
+            DirectoryMetadataResponse directoryResourceMetadata;
+
+            try (MFTApiClient mftApiClient = new MFTApiClient(
+                    this.configuration.getOutboundEventProcessor().getMftHost(),
+                    this.configuration.getOutboundEventProcessor().getMftPort())) {
+                MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClientStub = mftApiClient.get();
+                directoryResourceMetadata = mftClientStub.getDirectoryResourceMetadata(resourceMetadataReq.build());
+            }
 
             List<String> resourceIDsToProcess = new ArrayList<>();
             for (FileMetadataResponse fileMetadata : directoryResourceMetadata.getFilesList()) {

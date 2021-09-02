@@ -82,7 +82,6 @@ public class SyncLocalDataDownloadTask extends BlockingTask {
     @Override
     public TaskResult runBlockingCode() {
 
-        MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClient = MFTApiClient.buildClient(getMftHost(), getMftPort());
 
         DelegateAuth delegateAuth = DelegateAuth.newBuilder()
                 .setUserId(getUserId())
@@ -90,20 +89,32 @@ public class SyncLocalDataDownloadTask extends BlockingTask {
                 .setClientSecret(getMftClientSecret())
                 .putProperties("TENANT_ID", getTenantId()).build();
 
-        HttpDownloadApiResponse httpDownloadApiResponse = mftClient.submitHttpDownload(HttpDownloadApiRequest
-                .newBuilder()
-                .setMftAuthorizationToken(AuthToken.newBuilder().setDelegateAuth(delegateAuth).build())
-                .setSourceResourceId(getSourceResourceId())
-                .setSourceToken(getSourceCredToken())
-                .setSourceType("SCP")
-                .setSourceResourceChildPath("")
-                .build());
+        HttpDownloadApiResponse httpDownloadApiResponse;
+        FileMetadataResponse metadata;
 
-        FileMetadataResponse metadata = mftClient.getFileResourceMetadata(FetchResourceMetadataRequest.newBuilder()
-                .setResourceType("SCP")
-                .setResourceId(getSourceResourceId())
-                .setResourceToken(getSourceCredToken())
-                .setMftAuthorizationToken(AuthToken.newBuilder().setDelegateAuth(delegateAuth).build()).build());
+        try (MFTApiClient mftClient = new MFTApiClient(getMftHost(), getMftPort())) {
+
+            MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClientStub = mftClient.get();
+
+            httpDownloadApiResponse = mftClientStub.submitHttpDownload(HttpDownloadApiRequest
+                    .newBuilder()
+                    .setMftAuthorizationToken(AuthToken.newBuilder().setDelegateAuth(delegateAuth).build())
+                    .setSourceResourceId(getSourceResourceId())
+                    .setSourceToken(getSourceCredToken())
+                    .setSourceType("SCP")
+                    .setSourceResourceChildPath("")
+                    .build());
+
+            metadata = mftClientStub.getFileResourceMetadata(FetchResourceMetadataRequest.newBuilder()
+                    .setResourceType("SCP")
+                    .setResourceId(getSourceResourceId())
+                    .setResourceToken(getSourceCredToken())
+                    .setMftAuthorizationToken(AuthToken.newBuilder().setDelegateAuth(delegateAuth).build()).build());
+
+        } catch (IOException e) {
+            logger.error("Failed to create the mft client", e);
+            return new TaskResult(TaskResult.Status.FAILED, "Failed to create the mft client");
+        }
 
         String downloadUrl = httpDownloadApiResponse.getUrl();
         logger.info("Using download URL {}", downloadUrl);
