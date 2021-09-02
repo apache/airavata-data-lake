@@ -45,16 +45,16 @@ public class WorkflowServiceConnector implements AbstractConnector<Configuration
         return false;
     }
 
-    public void invokeWorkflow(String authToken, String username, String tenantId, List<String> sourceResourceIds, String sourceCredentialToken,
-                               String dstResourceId, String destinationCredentialToken) {
+    public void invokeWorkflow(String authToken, String username, String tenantId, List<String> sourceResourceIds,
+                               String sourceSecretId, String dstResourceId, String destinationSecretId) {
         try {
             WorkflowMessage workflowMessage = WorkflowMessage.newBuilder()
                     .addAllSourceResourceIds(sourceResourceIds)
                     .setDestinationResourceId(dstResourceId)
                     .setUsername(username)
                     .setTenantId(tenantId)
-                    .setSourceCredentialToken(sourceCredentialToken)
-                    .setDestinationCredentialToken(destinationCredentialToken)
+                    .setSourceCredentialToken(sourceSecretId)
+                    .setDestinationCredentialToken(destinationSecretId)
                     .setAuthToken(authToken)
                     .build();
             WorkflowInvocationRequest workflowInvocationRequest = WorkflowInvocationRequest

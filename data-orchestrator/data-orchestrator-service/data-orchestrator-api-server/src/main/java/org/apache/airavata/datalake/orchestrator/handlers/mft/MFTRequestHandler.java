@@ -125,11 +125,11 @@ public class MFTRequestHandler {
         switch (fistPref.getStorageCase()) {
             case S3_STORAGE_PREFERENCE:
                 downloadRequest.setSourceType("S3");
-                downloadRequest.setSourceToken(fistPref.getS3StoragePreference().getCredentialToken());
+                downloadRequest.setSourceToken(fistPref.getS3StoragePreference().getStoragePreferenceId());
                 break;
             case SSH_STORAGE_PREFERENCE:
                 downloadRequest.setSourceType("SCP");
-                downloadRequest.setSourceToken(fistPref.getSshStoragePreference().getCredentialToken());
+                downloadRequest.setSourceToken(fistPref.getSshStoragePreference().getStoragePreferenceId());
                 break;
             case STORAGE_NOT_SET:
                 logger.error("Not storage preference type found for resource {}", resourceid);

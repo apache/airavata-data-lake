@@ -273,8 +273,8 @@ public class OrchestratorEventProcessor implements Runnable {
 
             logger.info("Submitting resources to workflow manager");
             this.workflowServiceConnector.invokeWorkflow(notificationEvent.getAuthToken(), adminUser,
-                    notificationEvent.getTenantId(), resourceIDsToProcess, sourceSP.getSshStoragePreference().getCredentialToken(),
-                    destinationResource.getResourceId(), destSP.getSshStoragePreference().getCredentialToken());
+                    notificationEvent.getTenantId(), resourceIDsToProcess, sourceSP.getSshStoragePreference().getStoragePreferenceId(),
+                    destinationResource.getResourceId(), destSP.getSshStoragePreference().getStoragePreferenceId());
 
 
             logger.info("Completed processing path {}", notificationEvent.getResourcePath());
