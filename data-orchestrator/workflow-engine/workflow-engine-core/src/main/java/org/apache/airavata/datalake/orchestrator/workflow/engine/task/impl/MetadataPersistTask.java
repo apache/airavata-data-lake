@@ -70,21 +70,6 @@ public class MetadataPersistTask extends BlockingTask {
     @Override
     public TaskResult runBlockingCode() throws Exception {
 
-        ManagedChannel channel = ManagedChannelBuilder
-                .forAddress(getDrmsHost(), getDrmsPort()).usePlaintext().build();
-
-        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
-                .setAccessToken(Base64.getEncoder()
-                        .encodeToString((getServiceAccountKey() + ":" + getServiceAccountSecret()).getBytes(StandardCharsets.UTF_8)))
-                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
-                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
-                        .setUsername(getUser())
-                        .setTenantId(getTenant())
-                        .build())
-                .build();
-
-        ResourceServiceGrpc.ResourceServiceBlockingStub resourceClient = ResourceServiceGrpc.newBlockingStub(channel);
-
         String derivedFilePath = getJsonFile();
         if (derivedFilePath.startsWith("$")) {
             derivedFilePath = getUserContent(derivedFilePath.substring(1), Scope.WORKFLOW);
@@ -99,12 +84,36 @@ public class MetadataPersistTask extends BlockingTask {
         JsonFormat.parser().merge(jsonString, structBuilder);
 
         logger.info("Adding metadata to resource {}", getResourceId());
-        resourceClient.addResourceMetadata(AddResourceMetadataRequest.newBuilder()
-                .setResourceId(getResourceId())
-                .setAuthToken(serviceAuthToken)
-                .setType("FILE")
-                .setMetadata(structBuilder.build()).build());
-        return new TaskResult(TaskResult.Status.COMPLETED, "Completed");
+
+        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
+                .setAccessToken(Base64.getEncoder()
+                        .encodeToString((getServiceAccountKey() + ":" + getServiceAccountSecret()).getBytes(StandardCharsets.UTF_8)))
+                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
+                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
+                        .setUsername(getUser())
+                        .setTenantId(getTenant())
+                        .build())
+                .build();
+
+        ManagedChannel channel = null;
+        try {
+
+            channel = ManagedChannelBuilder.forAddress(getDrmsHost(), getDrmsPort()).usePlaintext().build();
+
+            ResourceServiceGrpc.ResourceServiceBlockingStub resourceClient = ResourceServiceGrpc.newBlockingStub(channel);
+
+            resourceClient.addResourceMetadata(AddResourceMetadataRequest.newBuilder()
+                    .setResourceId(getResourceId())
+                    .setAuthToken(serviceAuthToken)
+                    .setType("FILE")
+                    .setMetadata(structBuilder.build()).build());
+
+            return new TaskResult(TaskResult.Status.COMPLETED, "Completed");
+        } finally {
+            if (channel != null) {
+                channel.shutdown();
+            }
+        }
     }
 
     public String getJsonFile() {
