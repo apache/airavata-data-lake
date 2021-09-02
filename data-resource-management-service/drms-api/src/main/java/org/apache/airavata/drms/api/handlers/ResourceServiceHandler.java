@@ -16,6 +16,7 @@
  */
 package org.apache.airavata.drms.api.handlers;
 
+import com.google.gson.Gson;
 import com.google.protobuf.Empty;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.MapEntry;
@@ -257,11 +258,11 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
 
             try {
-               List keyList = new ArrayList();
+                List keyList = new ArrayList();
                 keyList.add("cr:crRel");
                 keyList.add("chgr:chgrRel");
                 keyList.add("chcgr:chcgrRel");
-                List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records,keyList);
+                List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
                 ChildResourceFetchResponse.Builder builder = ChildResourceFetchResponse.newBuilder();
                 builder.addAllResources(genericResourceList);
                 responseObserver.onNext(builder.build());
@@ -528,8 +529,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
                                 " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(r:" + value + ")-[relR:SHARED_WITH]->(u)" +
                                 " OPTIONAL MATCH (sp:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
-                                " OPTIONAL MATCH (s2:Storage{entityId:'" + storageId +"'})<-[:CHILD_OF*]-(r2:" + value + ")-[relR2:SHARED_WITH]->(u) where NOT r2.owner=$username"+
-                                " OPTIONAL MATCH (s3:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r3:" + value + ")-[relR3:SHARED_WITH]->(u) where NOT r3.owner=$username"+
+                                " OPTIONAL MATCH (s2:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r2:" + value + ")-[relR2:SHARED_WITH]->(u) where NOT r2.owner=$username" +
+                                " OPTIONAL MATCH (s3:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r3:" + value + ")-[relR3:SHARED_WITH]->(u) where NOT r3.owner=$username" +
                                 " return distinct   r,relR, rg,relRG, r2,relR2, r3,relR3 ";
                         keyList = new ArrayList();
                         keyList.add("r:relR");
@@ -750,6 +751,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             String parentResourceId = request.getResourceId();
             String type = request.getType();
 
+
+
             Struct struct = request.getMetadata();
             String message = JsonFormat.printer().print(struct);
             JSONObject json = new JSONObject(message);
@@ -760,15 +763,28 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
             Map<String, Object> parameters = new HashMap<>();
             Map<String, Object> properties = new HashMap<>();
-            properties.put("metadata", message);
-            parameters.put("props", properties);
+
+//            parameters.put("props", properties);
             parameters.put("parentResourceId", parentResourceId);
             parameters.put("resourceId", UUID.randomUUID().toString());
             parameters.put("tenantId", callUser.getTenantId());
 
-            String query = " MATCH (r:" + type + ") where r.entityId= $parentResourceId AND r.tenantId= $tenantId " +
-                    " MERGE (cr:FULL_METADATA_NODE {entityId: $resourceId,tenantId: $tenantId})" +
-                    " MERGE (r)-[:HAS_FULL_METADATA]->(cr) SET cr += $props  return cr";
+            if (type == null || type.isEmpty()) {
+                type = "";
+            } else {
+                type = ":" + type;
+            }
+            Optional<List<String>> jsonList = readMetadata(parentResourceId, type, callUser.getTenantId());
+
+            if (jsonList.isPresent() && !jsonList.get().isEmpty()) {
+
+                String oldJSON = jsonList.get().get(0);
+                message = mergeJSON(oldJSON, message);
+            }
+            parameters.put("metadata",message);
+            String query = " MATCH (r" + type + ") where r.entityId= $parentResourceId AND r.tenantId= $tenantId " +
+                    " MERGE (r)-[:HAS_FULL_METADATA]->(cr:FULL_METADATA_NODE{tenantId: $tenantId}) ON CREATE SET cr.metadata= $metadata " +
+                    " ON MATCH SET cr.metadata = $metadata";
             this.neo4JConnector.runTransactionalQuery(parameters, query);
 
             responseObserver.onNext(Empty.getDefaultInstance());
@@ -839,7 +855,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
         String query = " MATCH (u:User),  (r) where u.username = $username AND u.tenantId = $tenantId AND " +
                 " r.entityId = $entityId AND r.tenantId = $tenantId" +
                 " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
-                " OPTIONAL MATCH (l)<-[:CHILD_OF*]-(r)"+
+                " OPTIONAL MATCH (l)<-[:CHILD_OF*]-(r)" +
                 " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR exists((u)<-[:SHARED_WITH]-(l)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
                 " exists((g)<-[:SHARED_WITH]-(l)) OR exists((cg)<-[:SHARED_WITH]-(r)) OR  exists((cg)<-[:SHARED_WITH]-(l)) then r  else NULL end as value";
 
@@ -995,5 +1011,19 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             return storage.getSshStorage().getStorageId();
         }
     }
+
+    private String mergeJSON(String oldJSON, String newJSON) {
+        Gson gson = new Gson();
+//read both jsons
+        Map<String, Object> json1 = gson.fromJson(oldJSON, Map.class);
+        Map<String, Object> json2 = gson.fromJson(newJSON, Map.class);
+//create combined json with contents of first json
+        Map<String, Object> combined = new HashMap<>(json1);
+//Add the contents of first json. It will overwrite the values of keys are
+//same. e.g. "foo" of json2 will take precedence if both json1 and json2 have "foo"
+        combined.putAll(json2);
+        return gson.toJson(combined);
+    }
+
 
 }
