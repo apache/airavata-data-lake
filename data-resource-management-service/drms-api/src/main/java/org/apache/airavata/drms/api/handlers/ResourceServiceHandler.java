@@ -470,7 +470,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
                 genericResourceList.forEach(res -> {
                     try {
-                        if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
+                        if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), value)) {
                             allowedResourceList.add(res);
                         }
                     } catch (Exception exception) {
@@ -487,7 +487,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     List<GenericResource> genericResources = GenericResourceDeserializer.deserializeList(ownPropertySearchRecords);
                     genericResources.forEach(res -> {
                         try {
-                            if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
+                            if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), value)) {
                                 allowedResourceList.add(res);
                             }
                         } catch (Exception exception) {
@@ -752,6 +752,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             String type = request.getType();
 
 
+
             Struct struct = request.getMetadata();
             String message = JsonFormat.printer().print(struct);
             JSONObject json = new JSONObject(message);
@@ -780,7 +781,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 String oldJSON = jsonList.get().get(0);
                 message = mergeJSON(oldJSON, message);
             }
-            parameters.put("metadata", message);
+            parameters.put("metadata",message);
             String query = " MATCH (r" + type + ") where r.entityId= $parentResourceId AND r.tenantId= $tenantId " +
                     " MERGE (r)-[:HAS_FULL_METADATA]->(cr:FULL_METADATA_NODE{tenantId: $tenantId}) ON CREATE SET cr.metadata= $metadata " +
                     " ON MATCH SET cr.metadata = $metadata";
@@ -844,13 +845,12 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
     }
 
 
-    private boolean hasAccessForResource(String username, String tenantId, String resourceId, String parentResourceType) throws
+    private boolean hasAccessForResource(String username, String tenantId, String resourceId, String type) throws
             Exception {
         Map<String, Object> userProps = new HashMap<>();
         userProps.put("username", username);
         userProps.put("tenantId", tenantId);
         userProps.put("entityId", resourceId);
-
 
         String query = " MATCH (u:User),  (r) where u.username = $username AND u.tenantId = $tenantId AND " +
                 " r.entityId = $entityId AND r.tenantId = $tenantId" +
@@ -858,17 +858,6 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 " OPTIONAL MATCH (l)<-[:CHILD_OF*]-(r)" +
                 " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR exists((u)<-[:SHARED_WITH]-(l)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
                 " exists((g)<-[:SHARED_WITH]-(l)) OR exists((cg)<-[:SHARED_WITH]-(r)) OR  exists((cg)<-[:SHARED_WITH]-(l)) then r  else NULL end as value";
-
-
-        if (parentResourceType != null) {
-            query = " MATCH (u:User),  (r) where u.username = $username AND u.tenantId = $tenantId AND " +
-                    " r.entityId = $entityId AND r.tenantId = $tenantId" +
-                    " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
-                    " OPTIONAL MATCH (l:" + parentResourceType + ")<-[:CHILD_OF*]-(r)" +
-                    " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR exists((u)<-[:SHARED_WITH]-(l)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
-                    " exists((g)<-[:SHARED_WITH]-(l)) OR exists((cg)<-[:SHARED_WITH]-(r)) OR  exists((cg)<-[:SHARED_WITH]-(l)) then r  else NULL end as value";
-        }
-
 
         List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
 
