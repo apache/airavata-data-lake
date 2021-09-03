@@ -109,6 +109,8 @@ public class MetadataPersistTask extends BlockingTask {
                     .setType("FILE")
                     .setMetadata(structBuilder.build()).build());
 
+            logger.info("Successfully added metadata to resource {}", getResourceId());
+
             return new TaskResult(TaskResult.Status.COMPLETED, "Completed");
         } finally {
             if (channel != null) {
