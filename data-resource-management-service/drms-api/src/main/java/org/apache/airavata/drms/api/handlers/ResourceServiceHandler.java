@@ -402,18 +402,22 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                                 .asRuntimeException());
                 return;
             }
-
-
-            String storageId = "";
-            Optional<String> globalStorage = getGlobalSourceStorage(callUser.getTenantId());
-            if (globalStorage.isPresent()) {
-                storageId = globalStorage.get();
+            List<GenericResource> allowedResourceList = new ArrayList<>();
+            List<String> storageList = new ArrayList<>();
+            Optional<List<String>> globalStorages = getGlobalSourceStorage(callUser.getTenantId());
+            if (globalStorages.isPresent()) {
+                globalStorages.get().forEach(str -> {
+                    storageList.add(str);
+                });
             }
+
             List keyList = new ArrayList();
             if (!resourceSearchQueries.isEmpty()) {
+
                 for (ResourceSearchQuery qry : resourceSearchQueries) {
                     if (qry.getField().equals("storageId")) {
-                        storageId = qry.getValue();
+                        storageList.clear();
+                        storageList.add(qry.getValue());
                     }
                     if (qry.getField().equals("sharedBy")) {
                         String val = qry.getValue();
@@ -460,51 +464,52 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         return;
                     }
                 }
-            }
 
 
-            Optional<String> metadataSearchQueryOP = Utils.getMetadataSearchQuery(resourceSearchQueries, value, storageId);
-            Optional<String> ownPropertySearchQuery = Utils.getPropertySearchQuery(resourceSearchQueries, value, storageId);
-            if (metadataSearchQueryOP.isPresent()) {
-                String query = metadataSearchQueryOP.get();
+                for (String strId : storageList) {
 
-                List<Record> records = this.neo4JConnector.searchNodes(query);
-                List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
+                    Optional<String> metadataSearchQueryOP = Utils.getMetadataSearchQuery(resourceSearchQueries, value, strId);
+                    Optional<String> ownPropertySearchQuery = Utils.getPropertySearchQuery(resourceSearchQueries, value, strId);
+                    if (metadataSearchQueryOP.isPresent()) {
+                        String query = metadataSearchQueryOP.get();
+
+                        List<Record> records = this.neo4JConnector.searchNodes(query);
+                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
 
 
-                List<GenericResource> allowedResourceList = new ArrayList<>();
-
-                genericResourceList.forEach(res -> {
-                    try {
-                        if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), value)) {
-                            allowedResourceList.add(res);
-                        }
-                    } catch (Exception exception) {
-                        logger.error("Errored while searching generic resources");
-                        responseObserver
-                                .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
-                                        .asRuntimeException());
-                        return;
-                    }
-                });
-
-                if (ownPropertySearchQuery.isPresent()) {
-                    List<Record> ownPropertySearchRecords = this.neo4JConnector.searchNodes(ownPropertySearchQuery.get());
-                    List<GenericResource> genericResources = GenericResourceDeserializer.deserializeList(ownPropertySearchRecords);
-                    genericResources.forEach(res -> {
-                        try {
-                            if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), value)) {
-                                allowedResourceList.add(res);
+                        genericResourceList.forEach(res -> {
+                            try {
+                                if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), value)) {
+                                    allowedResourceList.add(res);
+                                }
+                            } catch (Exception exception) {
+                                logger.error("Errored while searching generic resources");
+                                responseObserver
+                                        .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
+                                                .asRuntimeException());
+                                return;
                             }
-                        } catch (Exception exception) {
-                            logger.error("Errored while searching generic resources");
-                            responseObserver
-                                    .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
-                                            .asRuntimeException());
-                            return;
-                        }
-                    });
+                        });
 
+                        if (ownPropertySearchQuery.isPresent()) {
+                            List<Record> ownPropertySearchRecords = this.neo4JConnector.searchNodes(ownPropertySearchQuery.get());
+                            List<GenericResource> genericResources = GenericResourceDeserializer.deserializeList(ownPropertySearchRecords);
+                            genericResources.forEach(res -> {
+                                try {
+                                    if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), value)) {
+                                        allowedResourceList.add(res);
+                                    }
+                                } catch (Exception exception) {
+                                    logger.error("Errored while searching generic resources");
+                                    responseObserver
+                                            .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
+                                                    .asRuntimeException());
+                                    return;
+                                }
+                            });
+
+                        }
+                    }
                 }
                 ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
                 builder.addAllResources(allowedResourceList);
@@ -512,71 +517,75 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 responseObserver.onCompleted();
                 return;
             } else {
-                Map<String, Object> userProps = new HashMap<>();
-                userProps.put("username", callUser.getUsername());
-                userProps.put("tenantId", callUser.getTenantId());
 
-                String query = "";
-                if ((value.equals("FILE") || value.equals("COLLECTION")) && !storageId.isEmpty()) {
-                    query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
-                            " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                            " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
-                            " , (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r:" + value + ")-[relR:SHARED_WITH]->(u)" +
-                            " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
-                            " , (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
-                            " return distinct  rm,relRM, r,relR, rmg,relRMG, rg,relRG ";
-                    keyList = new ArrayList();
-                    keyList.add("rm:relRM");
-                    keyList.add("r:relR");
-                    keyList.add("rmg:relRMG");
-                    keyList.add("rg:relRG");
-                    if (depth == 1) {
+                for (String storageId : storageList) {
+                    Map<String, Object> userProps = new HashMap<>();
+                    userProps.put("username", callUser.getUsername());
+                    userProps.put("tenantId", callUser.getTenantId());
+
+                    String query = "";
+                    if ((value.equals("FILE") || value.equals("COLLECTION")) && !storageId.isEmpty()) {
                         query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                                " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(r:" + value + ")-[relR:SHARED_WITH]->(u)" +
-                                " OPTIONAL MATCH (sp:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
-                                " OPTIONAL MATCH (s2:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r2:" + value + ")-[relR2:SHARED_WITH]->(u) where NOT r2.owner=$username" +
-                                " OPTIONAL MATCH (s3:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r3:" + value + ")-[relR3:SHARED_WITH]->(u) where NOT r3.owner=$username" +
-                                " return distinct   r,relR, rg,relRG, r2,relR2, r3,relR3 ";
+                                " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
+                                " , (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                                " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
+                                " , (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
+                                " return distinct  rm,relRM, r,relR, rmg,relRMG, rg,relRG ";
                         keyList = new ArrayList();
+                        keyList.add("rm:relRM");
                         keyList.add("r:relR");
+                        keyList.add("rmg:relRMG");
                         keyList.add("rg:relRG");
-                        keyList.add("r2:relR2");
-                        keyList.add("r3:relR3");
-                    }
+                        if (depth == 1) {
+                            query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
+                                    " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
+                                    " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(r:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                                    " OPTIONAL MATCH (sp:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
+                                    " OPTIONAL MATCH (s2:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r2:" + value + ")-[relR2:SHARED_WITH]->(u) where NOT r2.owner=$username" +
+                                    " OPTIONAL MATCH (s3:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r3:" + value + ")-[relR3:SHARED_WITH]->(u) where NOT r3.owner=$username" +
+                                    " return distinct   r,relR, rg,relRG, r2,relR2, r3,relR3 ";
+                            keyList = new ArrayList();
+                            keyList.add("r:relR");
+                            keyList.add("rg:relRG");
+                            keyList.add("r2:relR2");
+                            keyList.add("r3:relR3");
+                        }
 
-                } else {
-                    query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
-                            " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                            " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")" +
-                            " , (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
-                            " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")" +
-                            " , (rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
-                            " return distinct  rm,relRM, r,relR, rmg,relRMG, rg, relRG ";
-                    keyList = new ArrayList();
-                    keyList.add("rm:relRM");
-                    keyList.add("r:relR");
-                    keyList.add("rmg:relRMG");
-                    keyList.add("rg:relRG");
-                    if (depth == 1) {
+                    } else {
                         query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                                " OPTIONAL MATCH (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
-                                " OPTIONAL MATCH (rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
-                                " return distinct   r,relR, rg, relRG ";
+                                " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")" +
+                                " , (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                                " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")" +
+                                " , (rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
+                                " return distinct  rm,relRM, r,relR, rmg,relRMG, rg, relRG ";
                         keyList = new ArrayList();
+                        keyList.add("rm:relRM");
                         keyList.add("r:relR");
+                        keyList.add("rmg:relRMG");
                         keyList.add("rg:relRG");
+                        if (depth == 1) {
+                            query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
+                                    " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
+                                    " OPTIONAL MATCH (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                                    " OPTIONAL MATCH (rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
+                                    " return distinct   r,relR, rg, relRG ";
+                            keyList = new ArrayList();
+                            keyList.add("r:relR");
+                            keyList.add("rg:relRG");
+                        }
                     }
+
+                    logger.debug("Search query {}", query);
+
+                    List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
+
+                    List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
+                    allowedResourceList.addAll(genericResourceList);
                 }
-
-                logger.debug("Search query {}", query);
-
-                List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
-
-                List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
                 ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
-                builder.addAllResources(genericResourceList);
+                builder.addAllResources(allowedResourceList);
                 responseObserver.onNext(builder.build());
                 responseObserver.onCompleted();
             }
@@ -760,7 +769,6 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             String type = request.getType();
 
 
-
             Struct struct = request.getMetadata();
             String message = JsonFormat.printer().print(struct);
             JSONObject json = new JSONObject(message);
@@ -789,7 +797,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 String oldJSON = jsonList.get().get(0);
                 message = mergeJSON(oldJSON, message);
             }
-            parameters.put("metadata",message);
+            parameters.put("metadata", message);
             String query = " MATCH (r" + type + ") where r.entityId= $parentResourceId AND r.tenantId= $tenantId " +
                     " MERGE (r)-[:HAS_FULL_METADATA]->(cr:FULL_METADATA_NODE{tenantId: $tenantId}) ON CREATE SET cr.metadata= $metadata " +
                     " ON MATCH SET cr.metadata = $metadata";
@@ -996,7 +1004,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
         return Optional.empty();
     }
 
-    private Optional<String> getGlobalSourceStorage(String tenantId) throws Exception {
+    private Optional<List<String>> getGlobalSourceStorage(String tenantId) throws Exception {
         Map<String, Object> properties = new HashMap<>();
         properties.put("tenantId", tenantId);
         properties.put("scope", TransferScope.GLOBAL.name());
@@ -1004,11 +1012,17 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 " AND srcStr.tenantId=$tenantId return srcStr, tm";
         List<Record> records = this.neo4JConnector.searchNodes(properties, query);
         List<TransferMapping> sourceTransfers = TransferMappingDeserializer.deserializeListExceptDestinationStorage(records);
+        List<String> arrayList = new ArrayList<>();
         if (sourceTransfers.isEmpty()) {
             return Optional.empty();
         }
-        TransferMapping transferMapping = sourceTransfers.get(0);
-        return Optional.ofNullable(getStorageId(transferMapping.getSourceStorage()));
+        sourceTransfers.forEach(transfer -> {
+            if (!arrayList.contains(getStorageId(transfer.getSourceStorage()))) {
+                arrayList.add(getStorageId(transfer.getSourceStorage()));
+            }
+
+        });
+        return Optional.ofNullable(arrayList);
     }
 
     private String getStorageId(AnyStorage storage) {
