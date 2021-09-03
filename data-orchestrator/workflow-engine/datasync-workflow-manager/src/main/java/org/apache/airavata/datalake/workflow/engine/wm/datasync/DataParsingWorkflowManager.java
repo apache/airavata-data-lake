@@ -122,6 +122,8 @@ public class DataParsingWorkflowManager {
 
             ParsingJobListResponse parsingJobs = parserClient.listParsingJobs(ParsingJobListRequest.newBuilder().build());
 
+            String tempDownloadPath = "/tmp/" + UUID.randomUUID().toString();
+
             Map<String, StringMap> parserInputMappings = new HashMap<>();
             List<DataParsingJob> selectedPJs = parsingJobs.getParsersList().stream().filter(pj -> {
                 List<DataParsingJobInput> pjis = pj.getDataParsingJobInputsList();
@@ -137,7 +139,7 @@ public class DataParsingWorkflowManager {
                     bindings.put("metadata", metadata);
                     try {
                         Boolean eval = (Boolean) engine.eval(pji.getSelectionQuery());
-                        stringMap.put(pji.getDataParserInputInterfaceId(), "$DOWNLOAD_PATH");
+                        stringMap.put(pji.getDataParserInputInterfaceId(), tempDownloadPath);
                         match = match && eval;
                     } catch (ScriptException e) {
                         logger.error("Failed to evaluate parsing job {}", pj.getDataParsingJobId());
@@ -169,6 +171,7 @@ public class DataParsingWorkflowManager {
             downloadTask.setMftPort(mftPort);
             downloadTask.setSourceResourceId(sourceResourceId);
             downloadTask.setSourceCredToken(workflowMessage.getSourceCredentialToken());
+            downloadTask.setDownloadPath(tempDownloadPath);
 
             taskMap.put(downloadTask.getTaskId(), downloadTask);
 
@@ -205,7 +208,8 @@ public class DataParsingWorkflowManager {
                         mpt.setServiceAccountKey(mftClientId);
                         mpt.setServiceAccountSecret(mftClientSecret);
                         mpt.setResourceId(sourceResourceId);
-                        mpt.setJsonFile("$" + dataParsingTask.getTaskId() + "-" + dataParserOutputInterface.getOutputName());
+                        mpt.setJsonFile("$" + dataParsingTask.getTaskId() +
+                                "-" + dataParserOutputInterface.getOutputName());
                         OutPort dpOut = new OutPort();
                         dpOut.setNextTaskId(mpt.getTaskId());
                         dataParsingTask.addOutPort(dpOut);

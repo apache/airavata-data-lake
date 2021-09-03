@@ -63,6 +63,9 @@ public class SyncLocalDataDownloadTask extends BlockingTask {
     @TaskParam(name = "SourceCredToken")
     private final ThreadLocal<String> sourceCredToken = new ThreadLocal<>();
 
+    @TaskParam(name = "DownloadPath")
+    private final ThreadLocal<String> downloadPath = new ThreadLocal<>();
+
     public static void main(String args[]) {
 
 
@@ -117,11 +120,10 @@ public class SyncLocalDataDownloadTask extends BlockingTask {
         }
 
         String downloadUrl = httpDownloadApiResponse.getUrl();
-        logger.info("Using download URL {}", downloadUrl);
+        logger.info("Using download URL {} to download file {}", downloadUrl, metadata.getFriendlyName());
 
-        String downloadPath = "/tmp/" + metadata.getFriendlyName();
         try (BufferedInputStream in = new BufferedInputStream(new URL(downloadUrl).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream(downloadPath)) {
+             FileOutputStream fileOutputStream = new FileOutputStream(getDownloadPath())) {
                 byte dataBuffer[] = new byte[1024];
                 int bytesRead;
                 while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
@@ -132,9 +134,8 @@ public class SyncLocalDataDownloadTask extends BlockingTask {
             return new TaskResult(TaskResult.Status.FAILED, "Failed to download file");
         }
 
-        logger.info("Downloaded to path {}", downloadPath);
+        logger.info("Downloaded filr {} to path {}", metadata.getFriendlyName(), getDownloadPath());
 
-        putUserContent("DOWNLOAD_PATH", downloadPath, Scope.WORKFLOW);
         return new TaskResult(TaskResult.Status.COMPLETED, "Success");
     }
 
@@ -200,5 +201,13 @@ public class SyncLocalDataDownloadTask extends BlockingTask {
 
     public void setTenantId(String tenantId) {
         this.tenantId.set(tenantId);
+    }
+
+    public String getDownloadPath() {
+        return downloadPath.get();
+    }
+
+    public void setDownloadPath(String downloadPath) {
+        this.downloadPath.set(downloadPath);
     }
 }
