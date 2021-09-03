@@ -12,12 +12,9 @@ import org.apache.airavata.datalake.drms.sharing.ShareEntityWithUserRequest;
 import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.core.connector.AbstractConnector;
-import org.bouncycastle.util.encoders.UTF8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -205,7 +202,5 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
         }
         return Optional.empty();
     }
-
-
 
 }
