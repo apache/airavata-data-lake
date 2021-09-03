@@ -87,6 +87,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
                     "exists((cg)<-[:SHARED_WITH]-(r)) then r  else NULL end as value";
 
+            logger.debug("Fetch resource query {}", query);
 
             List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
             try {
@@ -188,6 +189,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
                     "exists((cg)<-[:SHARED_WITH]-(r)) then r  else NULL end as value";
 
+            logger.debug("Create resource query {}", query);
 
             List<Record> records = this.neo4JConnector.searchNodes(exProps, query);
 
@@ -254,6 +256,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         " OPTIONAL MATCH (cg)<-[chcgrRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(chcgr)" +
                         " return distinct  cr,crRel, chgr,chgrRel, chcgr,chcgrRel";
             }
+
+            logger.debug("Fetch child query {}", query);
 
             List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
 
@@ -347,6 +351,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
                     "exists((cg)<-[:SHARED_WITH]-(r)) then r  else NULL end as value";
 
+
+            logger.debug("Update query {}", query);
 
             List<Record> records = this.neo4JConnector.searchNodes(exProps, query);
 
@@ -563,6 +569,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         keyList.add("rg:relRG");
                     }
                 }
+
+                logger.debug("Search query {}", query);
 
                 List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
 
