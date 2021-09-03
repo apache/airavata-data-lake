@@ -44,8 +44,6 @@ public class MessageConsumer {
                     LOGGER.info("Received data orchestrator records {}", partitionRecords.size());
 
                     for (ConsumerRecord<String, NotificationEvent> record : partitionRecords) {
-
-
                         try {
                             callback.process(record.value());
                         } catch (Exception exception) {
@@ -53,8 +51,6 @@ public class MessageConsumer {
                         }finally {
                             consumer.commitSync(Collections.singletonMap(partition, new OffsetAndMetadata(record.offset() + 1)));
                         }
-
-
                     }
                 }
             }
