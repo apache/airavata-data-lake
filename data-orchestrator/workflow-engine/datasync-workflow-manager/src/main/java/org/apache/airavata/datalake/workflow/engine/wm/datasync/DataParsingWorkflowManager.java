@@ -41,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.script.*;
+import java.io.File;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -177,12 +178,15 @@ public class DataParsingWorkflowManager {
 
             for(String parserId: parserInputMappings.keySet()) {
 
+                String parserWorkingDir = "/tmp/" + UUID.randomUUID();
+
                 GenericDataParsingTask dataParsingTask = new GenericDataParsingTask();
                 dataParsingTask.setTaskId("DPT-" + UUID.randomUUID().toString());
                 dataParsingTask.setParserId(parserId);
                 dataParsingTask.setParserServiceHost(orchHost);
                 dataParsingTask.setParserServicePort(orchPort);
                 dataParsingTask.setInputMapping(parserInputMappings.get(parserId));
+                dataParsingTask.setWorkingDirectory(parserWorkingDir);
                 taskMap.put(dataParsingTask.getTaskId(), dataParsingTask);
 
                 OutPort outPort = new OutPort();
@@ -208,8 +212,8 @@ public class DataParsingWorkflowManager {
                         mpt.setServiceAccountKey(mftClientId);
                         mpt.setServiceAccountSecret(mftClientSecret);
                         mpt.setResourceId(sourceResourceId);
-                        mpt.setJsonFile("$" + dataParsingTask.getTaskId() +
-                                "-" + dataParserOutputInterface.getOutputName());
+                        mpt.setJsonFile(parserWorkingDir +
+                                File.separator + "outputs" + File.separator + dataParserOutputInterface.getOutputName());
                         OutPort dpOut = new OutPort();
                         dpOut.setNextTaskId(mpt.getTaskId());
                         dataParsingTask.addOutPort(dpOut);

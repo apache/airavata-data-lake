@@ -69,6 +69,9 @@ public class GenericDataParsingTask extends BlockingTask {
     @TaskParam(name = "ParserServicePort")
     private ThreadLocal<Integer> parserServicePort = new ThreadLocal<>();
 
+    @TaskParam(name = "WorkingDirectory")
+    private ThreadLocal<String> workingDirectory = new ThreadLocal<>();
+
     @Override
     public TaskResult runBlockingCode() {
 
@@ -92,16 +95,15 @@ public class GenericDataParsingTask extends BlockingTask {
         DataParser parser = parserFetchResponse.getParser();
         List<DataParserInputInterface> inputInterfaces = parser.getInputInterfacesList();
 
-        String tempWorkDir = "/tmp/" + UUID.randomUUID();
-        String tempInputDir = tempWorkDir + File.separator + "inputs";
-        String tempOutputDir = tempWorkDir + File.separator + "outputs";
-        logger.info("Using temp working directory {}", tempWorkDir);
+        String tempInputDir = getWorkingDirectory() + File.separator + "inputs";
+        String tempOutputDir = getWorkingDirectory() + File.separator + "outputs";
+        logger.info("Using temp working directory {}", getWorkingDirectory());
         try {
-            Files.createDirectory(Paths.get(tempWorkDir));
+            Files.createDirectory(Paths.get(getWorkingDirectory()));
             Files.createDirectory(Paths.get(tempInputDir));
             Files.createDirectory(Paths.get(tempOutputDir));
         } catch (IOException e) {
-            logger.error("Failed to create temp working directories in {}", tempWorkDir, e);
+            logger.error("Failed to create temp working directories in {}", getWorkingDirectory(), e);
             return new TaskResult(TaskResult.Status.FAILED, "Failed to create temp working directories");
         }
 
@@ -238,6 +240,14 @@ public class GenericDataParsingTask extends BlockingTask {
 
             logger.info("Container logs " + dockerLogs.toString());
         }
+    }
+
+    public String getWorkingDirectory() {
+        return workingDirectory.get();
+    }
+
+    public void setWorkingDirectory(String workingDirectory) {
+        this.workingDirectory.set(workingDirectory);
     }
 
     public String getParserId() {
