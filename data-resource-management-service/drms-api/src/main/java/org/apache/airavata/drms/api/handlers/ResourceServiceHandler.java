@@ -465,7 +465,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     }
                 }
 
-
+                //TODO: replace with proper neo4j query
                 for (String strId : storageList) {
 
                     Optional<String> metadataSearchQueryOP = Utils.getMetadataSearchQuery(resourceSearchQueries, value, strId);
@@ -479,7 +479,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
                         genericResourceList.forEach(res -> {
                             try {
-                                if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), value)) {
+                                if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
                                     allowedResourceList.add(res);
                                 }
                             } catch (Exception exception) {
@@ -496,7 +496,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                             List<GenericResource> genericResources = GenericResourceDeserializer.deserializeList(ownPropertySearchRecords);
                             genericResources.forEach(res -> {
                                 try {
-                                    if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), value)) {
+                                    if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
                                         allowedResourceList.add(res);
                                     }
                                 } catch (Exception exception) {
@@ -614,7 +614,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             //TODO: can create raise conditions please move to DB level logic
             allResources.forEach(res -> {
                 try {
-                    if (!hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), res.getType())) {
+                    if (!hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId())) {
                         String msg = " Don't have access to change memberships";
                         responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
                         return;
@@ -666,7 +666,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             //TODO: can create raise conditions please move to DB level logic
             allResources.forEach(res -> {
                 try {
-                    if (!hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), res.getType())) {
+                    if (!hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId())) {
                         String msg = " Don't have access to change memberships";
                         responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
                         return;
@@ -723,7 +723,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 type = ":" + type;
             }
 
-            if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), resourseId, type)) {
+            if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), resourseId)) {
                 Map<String, Object> userProps = new HashMap<>();
                 userProps.put("tenantId", callUser.getTenantId());
                 userProps.put("entityId", resourseId);
@@ -827,7 +827,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 type = ":" + type;
             }
 
-            if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), resourceId, type)) {
+            if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), resourceId)) {
                 Optional<List<String>> metadataArray = readMetadata(resourceId, type, callUser.getTenantId());
                 FetchResourceMetadataResponse.Builder builder = FetchResourceMetadataResponse.newBuilder();
                 if (metadataArray.isPresent()) {
@@ -861,7 +861,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
     }
 
 
-    private boolean hasAccessForResource(String username, String tenantId, String resourceId, String type) throws
+    private boolean hasAccessForResource(String username, String tenantId, String resourceId) throws
             Exception {
         Map<String, Object> userProps = new HashMap<>();
         userProps.put("username", username);
@@ -872,6 +872,30 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 " r.entityId = $entityId AND r.tenantId = $tenantId" +
                 " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
                 " OPTIONAL MATCH (l)<-[:CHILD_OF*]-(r)" +
+                " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR exists((u)<-[:SHARED_WITH]-(l)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
+                " exists((g)<-[:SHARED_WITH]-(l)) OR exists((cg)<-[:SHARED_WITH]-(r)) OR  exists((cg)<-[:SHARED_WITH]-(l)) then r  else NULL end as value";
+
+        List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
+
+        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
+        if (genericResourceList.isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean hasAccessForResource(String username, String tenantId, String resourceId, String parentType) throws
+            Exception {
+        Map<String, Object> userProps = new HashMap<>();
+        userProps.put("username", username);
+        userProps.put("tenantId", tenantId);
+        userProps.put("entityId", resourceId);
+
+        String query = " MATCH (u:User),  (r) where u.username = $username AND u.tenantId = $tenantId AND " +
+                " r.entityId = $entityId AND r.tenantId = $tenantId" +
+                " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
+                " OPTIONAL MATCH (l:" + parentType + ")<-[:CHILD_OF*]-(r)" +
                 " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR exists((u)<-[:SHARED_WITH]-(l)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
                 " exists((g)<-[:SHARED_WITH]-(l)) OR exists((cg)<-[:SHARED_WITH]-(r)) OR  exists((cg)<-[:SHARED_WITH]-(l)) then r  else NULL end as value";
 
