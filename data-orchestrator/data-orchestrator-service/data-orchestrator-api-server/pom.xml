@@ -82,6 +82,11 @@
         </dependency>
         <dependency>
             <groupId>org.apache.airavata.data.lake</groupId>
+            <artifactId>data-orchestrator-clients-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.airavata.data.lake</groupId>
             <artifactId>data-orchestrator-registry</artifactId>
             <version>${project.version}</version>
         </dependency>

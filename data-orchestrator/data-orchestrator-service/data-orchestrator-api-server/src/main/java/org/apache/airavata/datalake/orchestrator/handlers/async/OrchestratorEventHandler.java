@@ -17,17 +17,21 @@
 
 package org.apache.airavata.datalake.orchestrator.handlers.async;
 
+import org.apache.airavata.datalake.data.orchestrator.api.stub.notification.Notification;
+import org.apache.airavata.datalake.data.orchestrator.api.stub.notification.NotificationRegisterRequest;
 import org.apache.airavata.datalake.orchestrator.Configuration;
+import org.apache.airavata.dataorchestrator.clients.core.NotificationClient;
 import org.apache.airavata.dataorchestrator.messaging.consumer.MessageConsumer;
+import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Orchestrator event handler
@@ -39,9 +43,9 @@ public class OrchestratorEventHandler {
     private Configuration configuration;
 
     private ExecutorService executorService;
-    private ScheduledExecutorService ouboundExecutorService;
     private MessageConsumer messageConsumer;
     private final Set<String> eventCache = new HashSet<>();
+    private NotificationClient notificationClient;
 
     public OrchestratorEventHandler() {
     }
@@ -49,11 +53,13 @@ public class OrchestratorEventHandler {
     public void init(Configuration configuration) throws Exception {
         this.configuration = configuration;
         this.executorService = Executors.newFixedThreadPool(configuration.getEventProcessorWorkers());
-        this.ouboundExecutorService = Executors.newSingleThreadScheduledExecutor();
         messageConsumer = new MessageConsumer(configuration.getConsumer().getBrokerURL(),
                 configuration.getConsumer().getConsumerGroup(),
                 configuration.getConsumer().getMaxPollRecordsConfig(),
                 configuration.getConsumer().getTopic());
+        this.notificationClient = new NotificationClient(
+                configuration.getOutboundEventProcessor().getNotificationServiceHost(),
+                configuration.getOutboundEventProcessor().getNotificationServicePort());
     }
 
     public void startProcessing() throws Exception {
@@ -63,8 +69,19 @@ public class OrchestratorEventHandler {
             try {
                 if (!eventCache.contains(notificationEvent.getResourcePath() + ":" + notificationEvent.getHostName())) {
                     eventCache.add(notificationEvent.getResourcePath() + ":" + notificationEvent.getHostName());
+
+                    Notification.Builder notificationBuilder = Notification.newBuilder();
+                    DozerBeanMapper mapper = new DozerBeanMapper();
+                    mapper.map(notificationEvent, notificationBuilder);
+                    notificationBuilder.setNotificationId(UUID.randomUUID().toString());
+
+                    Notification notification = notificationBuilder.build();
+                    LOGGER.info("Registering notification in the database");
+                    this.notificationClient.get().registerNotification(NotificationRegisterRequest
+                            .newBuilder().setNotification(notification).build());
+
                     this.executorService.submit(new OrchestratorEventProcessor(
-                            configuration, notificationEvent, eventCache));
+                            configuration, notification, eventCache, notificationClient));
                 } else {
                     LOGGER.info("Event is already processing");
                 }

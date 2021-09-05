@@ -1,0 +1,96 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+package org.apache.airavata.datalake.data.orchestrator.api.stub.notification;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+message Notification {
+    string notificationId = 1;
+    string resourcePath = 2;
+    string resourceType = 3;
+    int64 occuredTime = 4;
+    string authToken = 5;
+    string tenantId = 6;
+    string hostName = 7;
+    string basePath = 8;
+    string eventType = 9;
+}
+
+message NotificationStatus {
+    string statusId = 1;
+    enum StatusType {
+        DATA_ORCH_RECEIVED = 0;
+        DISPATCHED_TO_WORFLOW_ENGING = 1;
+        DATA_ORCH_PROCESSED_AND_SKIPPED = 2;
+        PARSING = 3;
+        COMPLETED = 4;
+        ERRORED = 5;
+    }
+    StatusType status = 2;
+    int64 publishedTime = 3;
+    string notificationId = 4;
+    string description = 5;
+
+}
+
+message NotificationRegisterRequest {
+    Notification notification = 1;
+}
+
+message NotificationRegisterResponse {
+}
+
+message NotificationListRequest {
+}
+
+message NotificationListResponse {
+    repeated Notification notifications = 1;
+}
+
+message NotificationStatusRegisterRequest {
+    NotificationStatus status = 1;
+}
+
+message NotificationStatusRegisterResponse {
+}
+
+message NotificationStatusListRequest {
+}
+
+message NotificationStatusListResponse {
+    repeated NotificationStatus statuses = 1;
+}
+
+service NotificationService {
+
+    rpc registerNotification (NotificationRegisterRequest) returns (NotificationRegisterResponse) {
+    }
+
+    rpc listNotifications (NotificationListRequest) returns (NotificationListResponse) {
+    }
+
+    rpc registerNotificationStatus (NotificationStatusRegisterRequest) returns (NotificationStatusRegisterResponse) {
+    }
+
+    rpc listNotificationStatus(NotificationStatusListRequest) returns (NotificationStatusListResponse) {
+    }
+}
