@@ -17,6 +17,9 @@
 
 package org.apache.airavata.datalake.orchestrator.handlers.async;
 
+import org.apache.airavata.datalake.data.orchestrator.api.stub.notification.Notification;
+import org.apache.airavata.datalake.data.orchestrator.api.stub.notification.NotificationStatus;
+import org.apache.airavata.datalake.data.orchestrator.api.stub.notification.NotificationStatusRegisterRequest;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.AnyStoragePreference;
 import org.apache.airavata.datalake.drms.storage.TransferMapping;
@@ -24,7 +27,7 @@ import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.Utils;
 import org.apache.airavata.datalake.orchestrator.connectors.DRMSConnector;
 import org.apache.airavata.datalake.orchestrator.connectors.WorkflowServiceConnector;
-import org.apache.airavata.dataorchestrator.messaging.model.NotificationEvent;
+import org.apache.airavata.dataorchestrator.clients.core.NotificationClient;
 import org.apache.airavata.mft.api.client.MFTApiClient;
 import org.apache.airavata.mft.api.service.DirectoryMetadataResponse;
 import org.apache.airavata.mft.api.service.FetchResourceMetadataRequest;
@@ -41,20 +44,22 @@ public class OrchestratorEventProcessor implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(OrchestratorEventProcessor.class);
 
-    private NotificationEvent notificationEvent;
+    private final Notification notification;
 
-    private DRMSConnector drmsConnector;
-    private Configuration configuration;
-    private WorkflowServiceConnector workflowServiceConnector;
+    private final DRMSConnector drmsConnector;
+    private final Configuration configuration;
+    private final WorkflowServiceConnector workflowServiceConnector;
     private final Set<String> eventCache;
+    private final NotificationClient notificationClient;
 
-    public OrchestratorEventProcessor(Configuration configuration, NotificationEvent notificationEvent,
-                                      Set<String> eventCache) throws Exception {
-        this.notificationEvent = notificationEvent;
+    public OrchestratorEventProcessor(Configuration configuration, Notification notificationEvent,
+                                      Set<String> eventCache, NotificationClient notificationClient) throws Exception {
+        this.notification = notificationEvent;
         this.eventCache = eventCache;
         this.drmsConnector = new DRMSConnector(configuration);
         this.workflowServiceConnector = new WorkflowServiceConnector(configuration);
         this.configuration = configuration;
+        this.notificationClient = notificationClient;
     }
 
     private List<GenericResource> createResourceRecursively(String storageId, String basePath,
@@ -74,8 +79,8 @@ public class OrchestratorEventProcessor implements Runnable {
             currentPath = currentPath + "/" + resourceName;
             String resourceId = Utils.getId(storageId + ":" + currentPath);
             Optional<GenericResource> optionalGenericResource =
-                    this.drmsConnector.createResource(notificationEvent.getAuthToken(),
-                            notificationEvent.getTenantId(),
+                    this.drmsConnector.createResource(notification.getAuthToken(),
+                            notification.getTenantId(),
                             resourceId, resourceName, currentPath, parentId, "COLLECTION", parentType, user);
             if (optionalGenericResource.isPresent()) {
                 parentId = optionalGenericResource.get().getResourceId();
@@ -90,8 +95,8 @@ public class OrchestratorEventProcessor implements Runnable {
         currentPath = currentPath + "/" + splitted[splitted.length - 1];
 
         Optional<GenericResource> optionalGenericResource =
-                this.drmsConnector.createResource(notificationEvent.getAuthToken(),
-                        notificationEvent.getTenantId(),
+                this.drmsConnector.createResource(notification.getAuthToken(),
+                        notification.getTenantId(),
                         Utils.getId(storageId + ":" + currentPath),
                         splitted[splitted.length - 1], currentPath,
                         parentId, resourceType, parentType, user);
@@ -111,7 +116,7 @@ public class OrchestratorEventProcessor implements Runnable {
         for (GenericResource resource : resourceList) {
             logger.info("Sharing resource {} with path {} with user {}",
                     resource.getResourceId(), resource.getResourcePath(), user);
-            this.drmsConnector.shareWithUser(notificationEvent.getAuthToken(), notificationEvent.getTenantId(),
+            this.drmsConnector.shareWithUser(notification.getAuthToken(), notification.getTenantId(),
                     admin, user, resource.getResourceId(), permission);
         }
     }
@@ -120,25 +125,34 @@ public class OrchestratorEventProcessor implements Runnable {
         for (GenericResource resource : resourceList) {
             logger.info("Sharing resource {} with path {} with group {}",
                     resource.getResourceId(), resource.getResourcePath(), group);
-            this.drmsConnector.shareWithGroup(notificationEvent.getAuthToken(), notificationEvent.getTenantId(),
+            this.drmsConnector.shareWithGroup(notification.getAuthToken(), notification.getTenantId(),
                     admin, group, resource.getResourceId(), permission);
         }
     }
 
     @Override
     public void run() {
-        logger.info("Processing resource path {} on storage {}", notificationEvent.getResourcePath(),
-                notificationEvent.getBasePath());
+        logger.info("Processing resource path {} on storage {}", notification.getResourcePath(),
+                notification.getBasePath());
 
         try {
 
-            if (!"FOLDER".equals(notificationEvent.getResourceType())) {
+            this.notificationClient.get().registerNotificationStatus(NotificationStatusRegisterRequest.newBuilder()
+                    .setStatus(NotificationStatus.newBuilder()
+                            .setStatusId(UUID.randomUUID().toString())
+                            .setNotificationId(notification.getNotificationId())
+                            .setStatus(NotificationStatus.StatusType.DATA_ORCH_RECEIVED)
+                            .setDescription("Notification Received")
+                            .setPublishedTime(System.currentTimeMillis())
+                            .build()).build());
+
+            if (!"FOLDER".equals(notification.getResourceType())) {
                 logger.error("Resource {} should be a Folder type but got {}",
-                        notificationEvent.getResourcePath(),
-                        notificationEvent.getResourceType());
+                        notification.getResourcePath(),
+                        notification.getResourceType());
                 logger.error("Resource should be a Folder type");
             }
-            String removeBasePath = notificationEvent.getResourcePath().substring(notificationEvent.getBasePath().length());
+            String removeBasePath = notification.getResourcePath().substring(notification.getBasePath().length());
             String[] splitted = removeBasePath.split("/");
 
             String adminUser = splitted[0];
@@ -149,12 +163,12 @@ public class OrchestratorEventProcessor implements Runnable {
             ownerRules.put(splitted[1], "OWNER");
 
             Optional<TransferMapping> optionalTransferMapping = drmsConnector.getActiveTransferMapping(
-                    notificationEvent.getAuthToken(),
-                    notificationEvent.getTenantId(), adminUser,
-                    notificationEvent.getHostName());
+                    notification.getAuthToken(),
+                    notification.getTenantId(), adminUser,
+                    notification.getHostName());
 
             if (optionalTransferMapping.isEmpty()) {
-                logger.error("Could not find a transfer mapping for user {} and host {}", adminUser, notificationEvent.getHostName());
+                logger.error("Could not find a transfer mapping for user {} and host {}", adminUser, notification.getHostName());
                 throw new Exception("Could not find a transfer mapping");
             }
 
@@ -166,8 +180,8 @@ public class OrchestratorEventProcessor implements Runnable {
             // Creating parent resource
 
             List<GenericResource> resourceList = createResourceRecursively(sourceStorageId,
-                    notificationEvent.getBasePath(),
-                    notificationEvent.getResourcePath(),
+                    notification.getBasePath(),
+                    notification.getResourcePath(),
                     "COLLECTION", adminUser);
 
             shareResourcesWithUsers(Collections.singletonList(resourceList.get(resourceList.size() - 1)),
@@ -180,8 +194,8 @@ public class OrchestratorEventProcessor implements Runnable {
             GenericResource resourceObj = resourceList.get(resourceList.size() - 1);
 
             Optional<AnyStoragePreference> sourceSPOp = this.drmsConnector.getStoragePreference(
-                    notificationEvent.getAuthToken(), adminUser,
-                    notificationEvent.getTenantId(), sourceStorageId);
+                    notification.getAuthToken(), adminUser,
+                    notification.getTenantId(), sourceStorageId);
 
             if (sourceSPOp.isEmpty()) {
                 logger.error("No storage preference found for source storage {} and user {}", sourceStorageId, adminUser);
@@ -189,8 +203,8 @@ public class OrchestratorEventProcessor implements Runnable {
             }
 
             Optional<AnyStoragePreference> destSPOp = this.drmsConnector.getStoragePreference(
-                    notificationEvent.getAuthToken(), adminUser,
-                    notificationEvent.getTenantId(), destinationStorageId);
+                    notification.getAuthToken(), adminUser,
+                    notification.getTenantId(), destinationStorageId);
 
             if (destSPOp.isEmpty()) {
                 logger.error("No storage preference found for destination storage {} and user {}", sourceStorageId, adminUser);
@@ -200,7 +214,7 @@ public class OrchestratorEventProcessor implements Runnable {
             AnyStoragePreference sourceSP = sourceSPOp.get();
             AnyStoragePreference destSP = destSPOp.get();
 
-            String decodedAuth = new String(Base64.getDecoder().decode(notificationEvent.getAuthToken()));
+            String decodedAuth = new String(Base64.getDecoder().decode(notification.getAuthToken()));
             String[] authParts = decodedAuth.split(":");
 
             if (authParts.length != 2) {
@@ -211,7 +225,7 @@ public class OrchestratorEventProcessor implements Runnable {
                     .setUserId(adminUser)
                     .setClientId(authParts[0])
                     .setClientSecret(authParts[1])
-                    .putProperties("TENANT_ID", notificationEvent.getTenantId()).build();
+                    .putProperties("TENANT_ID", notification.getTenantId()).build();
 
             AuthToken mftAuth = AuthToken.newBuilder().setDelegateAuth(delegateAuth).build();
 
@@ -244,7 +258,7 @@ public class OrchestratorEventProcessor implements Runnable {
             List<String> resourceIDsToProcess = new ArrayList<>();
             for (FileMetadataResponse fileMetadata : directoryResourceMetadata.getFilesList()) {
                 logger.info("Registering file {} for source storage {}", fileMetadata.getResourcePath(), sourceStorageId);
-                resourceList = createResourceRecursively(sourceStorageId, notificationEvent.getBasePath(),
+                resourceList = createResourceRecursively(sourceStorageId, notification.getBasePath(),
                         fileMetadata.getResourcePath(), "FILE", adminUser);
                 GenericResource fileResource = resourceList.get(resourceList.size() - 1);
 
@@ -253,32 +267,48 @@ public class OrchestratorEventProcessor implements Runnable {
 
             for (DirectoryMetadataResponse directoryMetadata : directoryResourceMetadata.getDirectoriesList()) {
                 logger.info("Registering directory {} for source storage {}", directoryMetadata.getResourcePath(), sourceStorageId);
-                createResourceRecursively(sourceStorageId, notificationEvent.getBasePath(),
+                createResourceRecursively(sourceStorageId, notification.getBasePath(),
                         directoryMetadata.getResourcePath(),
                         "COLLECTION", adminUser);
                 // TODO scan directories
             }
 
-            logger.info("Creating destination zip resource for directory {}", notificationEvent.getResourcePath());
-            resourceList = createResourceRecursively(destinationStorageId, notificationEvent.getBasePath(),
-                    notificationEvent.getResourcePath(), "FILE", adminUser);
+            logger.info("Creating destination zip resource for directory {}", notification.getResourcePath());
+            resourceList = createResourceRecursively(destinationStorageId, notification.getBasePath(),
+                    notification.getResourcePath(), "FILE", adminUser);
 
             GenericResource destinationResource = resourceList.get(resourceList.size() - 1);
 
-            System.out.println(destinationResource);
-
             logger.info("Submitting resources to workflow manager");
-            this.workflowServiceConnector.invokeWorkflow(notificationEvent.getAuthToken(), adminUser,
-                    notificationEvent.getTenantId(), resourceIDsToProcess, sourceSP.getSshStoragePreference().getStoragePreferenceId(),
+            this.workflowServiceConnector.invokeWorkflow(notification.getAuthToken(), adminUser,
+                    notification.getTenantId(), resourceIDsToProcess, sourceSP.getSshStoragePreference().getStoragePreferenceId(),
                     destinationResource.getResourceId(), destSP.getSshStoragePreference().getStoragePreferenceId());
 
 
-            logger.info("Completed processing path {}", notificationEvent.getResourcePath());
+            this.notificationClient.get().registerNotificationStatus(NotificationStatusRegisterRequest.newBuilder()
+                    .setStatus(NotificationStatus.newBuilder()
+                            .setStatusId(UUID.randomUUID().toString())
+                            .setNotificationId(notification.getNotificationId())
+                            .setStatus(NotificationStatus.StatusType.DISPATCHED_TO_WORFLOW_ENGING)
+                            .setDescription("Notification successfully processed at the orchestrator. " +
+                                    "Sending to workflow manager")
+                            .setPublishedTime(System.currentTimeMillis())
+                            .build()).build());
+
+            logger.info("Completed processing path {}", notification.getResourcePath());
 
         } catch (Exception e) {
-            logger.error("Failed to process event for resource path {}", notificationEvent.getResourcePath(), e);
+            logger.error("Failed to process event for resource path {}", notification.getResourcePath(), e);
+            this.notificationClient.get().registerNotificationStatus(NotificationStatusRegisterRequest.newBuilder()
+                    .setStatus(NotificationStatus.newBuilder()
+                            .setStatusId(UUID.randomUUID().toString())
+                            .setNotificationId(notification.getNotificationId())
+                            .setStatus(NotificationStatus.StatusType.ERRORED)
+                            .setDescription("Notification failed due to : " + e.getMessage())
+                            .setPublishedTime(System.currentTimeMillis())
+                            .build()).build());
         } finally {
-            this.eventCache.remove(notificationEvent.getResourcePath() + ":" + notificationEvent.getHostName());
+            this.eventCache.remove(notification.getResourcePath() + ":" + notification.getHostName());
         }
     }
 }

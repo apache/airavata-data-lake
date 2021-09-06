@@ -72,6 +72,7 @@ public class MetadataPersistTask extends BlockingTask {
 
         String derivedFilePath = getJsonFile();
         if (derivedFilePath.startsWith("$")) {
+            logger.info("Fetching json file path from cotext for key {}", derivedFilePath);
             derivedFilePath = getUserContent(derivedFilePath.substring(1), Scope.WORKFLOW);
         }
 
@@ -107,6 +108,8 @@ public class MetadataPersistTask extends BlockingTask {
                     .setAuthToken(serviceAuthToken)
                     .setType("FILE")
                     .setMetadata(structBuilder.build()).build());
+
+            logger.info("Successfully added metadata to resource {}", getResourceId());
 
             return new TaskResult(TaskResult.Status.COMPLETED, "Completed");
         } finally {

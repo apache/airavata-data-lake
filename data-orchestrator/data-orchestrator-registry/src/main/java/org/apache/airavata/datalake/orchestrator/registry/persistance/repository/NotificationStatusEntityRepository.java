@@ -15,14 +15,10 @@
  * limitations under the License.
  */
 
-package org.apache.airavata.datalake.orchestrator.registry.persistance.entity;
+package org.apache.airavata.datalake.orchestrator.registry.persistance.repository;
 
-public enum EventStatus {
-    DATA_ORCH_RECEIVED,
-    DISPATCHED_TO_WORFLOW_ENGING,
-    DATA_ORCH_PROCESSED_AND_SKIPPED,
-    MFT_CALLBACK_RECEIVED,
-    COMPLETED,
-    ERRORED,
+import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.notification.NotificationStatusEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
+public interface NotificationStatusEntityRepository extends JpaRepository<NotificationStatusEntity, String> {
 }

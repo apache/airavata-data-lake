@@ -165,11 +165,10 @@ public class Configuration {
         private int pollingInterval;
         private String mftHost;
         private int mftPort;
+        private String notificationServiceHost;
+        private int notificationServicePort;
 
-
-        public OutboundEventProcessorConfig() {
-        }
-
+        public OutboundEventProcessorConfig() {}
 
         public String getWorkflowEngineHost() {
             return workflowEngineHost;
@@ -225,6 +224,22 @@ public class Configuration {
 
         public void setMftPort(int mftPort) {
             this.mftPort = mftPort;
+        }
+
+        public String getNotificationServiceHost() {
+            return notificationServiceHost;
+        }
+
+        public void setNotificationServiceHost(String notificationServiceHost) {
+            this.notificationServiceHost = notificationServiceHost;
+        }
+
+        public int getNotificationServicePort() {
+            return notificationServicePort;
+        }
+
+        public void setNotificationServicePort(int notificationServicePort) {
+            this.notificationServicePort = notificationServicePort;
         }
     }
 

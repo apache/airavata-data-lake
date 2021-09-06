@@ -15,6 +15,13 @@
   become: yes
   become_user: "{{ user }}"
 
+- name: open firewall ports for Workflow Engine
+  firewalld: port="{{ item }}/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  with_items:
+    - "{{ workflow_manager_grpc_port }}"
+  become: yes
+
 - name: Run Datalake maven build
   command: mvn clean install -Dmaven.test.skip=true chdir="{{ datalake_source_dir }}/"
   environment:
