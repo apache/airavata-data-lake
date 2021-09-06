@@ -187,13 +187,9 @@ public class OrchestratorEventProcessor implements Runnable {
             shareResourcesWithUsers(Collections.singletonList(resourceList.get(resourceList.size() - 1)),
                     adminUser, owner, "VIEWER");
 
-            shareResourcesWithGroups(Collections.singletonList(resourceList.get(resourceList.size() - 1)), adminUser,
+            shareResourcesWithGroups(Collections.singletonList(resourceList.get(0)), adminUser,
                     configuration.getTenantConfigs().getAdminGroup(),
                     "EDITOR");
-
-//            shareResourcesWithGroups(Collections.singletonList(resourceList.get(resourceList.size() - 1)), adminUser,
-//                    configuration.getTenantConfigs().getUserGroup(),
-//                    "VIEWER");
 
             GenericResource resourceObj = resourceList.get(resourceList.size() - 1);
 

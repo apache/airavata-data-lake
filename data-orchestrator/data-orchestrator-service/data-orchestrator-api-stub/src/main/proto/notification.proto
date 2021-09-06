@@ -83,14 +83,26 @@ message NotificationStatusListResponse {
 service NotificationService {
 
     rpc registerNotification (NotificationRegisterRequest) returns (NotificationRegisterResponse) {
+        option (google.api.http) = {
+      post: "/v1.0/api/dataorch/notification"
+    };
     }
 
     rpc listNotifications (NotificationListRequest) returns (NotificationListResponse) {
+        option (google.api.http) = {
+      get: "/v1.0/api/dataorch/notifications"
+    };
     }
 
     rpc registerNotificationStatus (NotificationStatusRegisterRequest) returns (NotificationStatusRegisterResponse) {
+        option (google.api.http) = {
+      post: "/v1.0/api/dataorch/notification/status"
+    };
     }
 
     rpc listNotificationStatus(NotificationStatusListRequest) returns (NotificationStatusListResponse) {
+        option (google.api.http) = {
+      get: "/v1.0/api/dataorch/notification/status"
+    };
     }
 }
