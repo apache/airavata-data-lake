@@ -20,10 +20,10 @@ static_resources:
                     - name: local_service
                       domains: ["*"]
                       routes:
-                        - match: { prefix: "/drms/" }
-                          route: { cluster: grpc-drms-service, timeout: { seconds: 60 } }
-                        - match: { prefix: "/dataorch/" }
+                        - match: { prefix: "/org.apache.airavata.datalake.data.orchestrator.api.stub.notification.NotificationService" }
                           route: { cluster: grpc-dataorch-service, timeout: { seconds: 60 } }
+                        - match: { prefix: "/" }
+                          route: { cluster: grpc-drms-service, timeout: { seconds: 60 } }
                 http_filters:
                   - name: envoy.grpc_json_transcoder
                     config:
