@@ -55,6 +55,20 @@
   become: yes
   become_user: "{{ user }}"
 
+- name: Delete lib directories of the distributions
+  file:
+    state: absent
+    path: "{{ mft_deployment_dir }}/{{ item }}"
+  with_items:
+    - "MFT-Controller-{{mft_distribution_version}}/lib"
+    - "MFT-Agent-{{mft_distribution_version}}/lib"
+    - "API-Service-{{mft_distribution_version}}/lib"
+    - "Resource-Service-{{mft_distribution_version}}/lib"
+    - "Secret-Service-{{mft_distribution_version}}/lib"
+  become: yes
+  become_user: "{{ user }}"
+  ignore_errors: yes
+
 - name: Copy MFT distributions to MFT deployment directory
   unarchive: "src={{ mft_source_dir }}/{{ item }}
               dest={{ mft_deployment_dir }}/ copy=no"

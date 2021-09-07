@@ -33,6 +33,11 @@
     zone=public permanent=true state=enabled immediate=yes
   become: yes
 
+- name: open firewall port {{ datalake_data_orch_grpc_port }} for Data Orchestrator gRPC connections
+  firewalld: port="{{ datalake_data_orch_grpc_port }}/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
 - name: Create Datalake deployment directory {{ datalake_deployment_dir }}
   become: yes
   file: path={{ datalake_deployment_dir }}
@@ -76,6 +81,18 @@
   ignore_errors: yes
   become: yes
   become_user: "{{ user }}"
+
+- name: Delete lib directories of the distributions
+  file:
+    state: absent
+    path: "{{ datalake_deployment_dir }}/{{ item }}"
+  with_items:
+    - "DRMS-{{datalake_distribution_version}}/lib"
+    - "DRMS-Custos-Synchronizer-{{datalake_distribution_version}}/lib"
+    - "Orchestrator-API-Service-{{datalake_distribution_version}}/lib"
+  become: yes
+  become_user: "{{ user }}"
+  ignore_errors: yes
 
 - name: Copy Datalake distributions to Datalake deployment directory
   unarchive: "src={{ datalake_source_dir }}/{{ item }}

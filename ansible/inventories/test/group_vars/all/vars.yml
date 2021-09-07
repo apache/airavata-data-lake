@@ -30,7 +30,10 @@ datalake_deployment_dir: "{{ user_home }}/data-lake-deployment"
 datalake_source_dir: "{{ user_home }}/data-lake-source"
 datalake_repo: "https://github.com/apache/airavata-data-lake.git"
 datalake_git_branch: master
-kafka_url: 149.165.157.235:9092
+kafka_listener_port: 9092
+kafka_url: "{{ groups['data-lake'][0] }}:9092"
+zookeeper_client_port: 2181
+zookeeper_connection_url: localhost:2181
 
 mft_deployment_dir: "{{ user_home }}/mft-deployment"
 mft_source_dir: "{{ user_home }}/mft-source"
@@ -43,7 +46,7 @@ custos_repo: "https://github.com/apache/airavata-custos.git"
 custos_git_branch: develop
 
 mft_default_agent_id: agent0
-mft_default_agent_host: 10.1.0.42
+mft_default_agent_host: "{{ ansible_default_ipv4.address }}"
 mft_default_agent_advertised_url: https://beta.iubemcenter.scigap.org:8443/downloads
 mft_default_agent_port: 3333
 
@@ -62,7 +65,9 @@ mft_resource_service_custos_client_secret: "{{ vault_mft_resource_service_custos
 mft_secret_service_host: localhost
 mft_secret_service_http_port: 8081
 mft_secret_service_grpc_port: 7003
-mft_secret_service_backend: org.apache.airavata.mft.secret.server.backend.file.FileBasedSecretBackend
+mft_secret_service_backend: org.apache.airavata.mft.secret.server.backend.custos.CustosSecretBackend
+mft_secret_service_custos_client_id: "{{ vault_mft_resource_service_custos_client_id }}"
+mft_secret_service_custos_client_secret: "{{ vault_mft_resource_service_custos_client_secret }}"
 
 mft_consul_host: localhost
 mft_consul_port: 8500
@@ -103,7 +108,7 @@ datalake_data_orch_user_group: emc-users_e8a37f6d-e3b3-4e4a-9081-265bb42b1b99
 datalake_data_orch_admin_group: admin-group_c1aac070-1512-4e98-b1d1-e06a94f03665
 
 workflow_deployment_dir: "{{ user_home }}/workflow-deployment"
-workflow_zookeeper_url: localhost:2181
+workflow_zookeeper_url: "{{ zookeeper_connection_url }}"
 workflow_helix_cluster_name: datalake
 
 workflow_datasync_wm_name: datasync_wf
@@ -117,7 +122,7 @@ workflow_worker_kafka_consumner_group: mft-even-group
 workflow_manager_host: localhost
 workflow_manager_grpc_port: 6565
 
-workflow_manager_mft_callback_url: 149.165.157.235:33335
+workflow_manager_mft_callback_url: "{{ groups['data-lake'][0] }}:33335"
 workflow_manager_mft_client_id: "{{ vault_workflow_manager_mft_client_id }}"
 workflow_manager_mft_client_secret: "{{ vault_workflow_manager_mft_client_secret }}"
 
