@@ -47,6 +47,10 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-tcnative-boringssl-static</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -55,7 +59,7 @@
             <version>${spring.boot.data.jpa}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
+                      <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-to-slf4j</artifactId>
                 </exclusion>
             </exclusions>
