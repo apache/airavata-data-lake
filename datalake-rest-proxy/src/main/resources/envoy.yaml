@@ -20,13 +20,15 @@ static_resources:
                     - name: local_service
                       domains: ["*"]
                       routes:
-                        - match: { prefix: "/", grpc: {} }
-                          route: { cluster: grpc-backend-services, timeout: { seconds: 60 } }
+                        - match: { prefix: "/v1.0/api/drms/", grpc: {} }
+                          route: { cluster: grpc-drms-service, timeout: { seconds: 60 } }
+                        - match: { prefix: "/v1.0/api/dataorch/", grpc: { } }
+                          route: { cluster: grpc-dataorch-service, timeout: { seconds: 60 } }
                 http_filters:
                   - name: envoy.grpc_json_transcoder
                     config:
                       proto_descriptor: "/data/drms.pb"
-                      services: ["org.apache.airavata.datalake.drms.storage.StoragePreferenceService",
+                      services: ["org.apache.airavata.datalake.drms.storage.StoragePreferenceService","org.apache.airavata.datalake.data.orchestrator.api.stub.notification.NotificationService",
                                  "org.apache.airavata.datalake.drms.storage.ResourceService","org.apache.airavata.datalake.drms.storage.StorageService"]
                       convert_grpc_status: true
                       print_options:
@@ -36,7 +38,7 @@ static_resources:
                         preserve_proto_field_names: false
                   - name: envoy.router
   clusters:
-    - name: grpc-backend-services
+    - name: grpc-drms-service
       connect_timeout: 1.25s
       type: logical_dns
       lb_policy: round_robin
@@ -46,3 +48,13 @@ static_resources:
         - socket_address:
             address: host.docker.internal
             port_value: 7070
+    - name: grpc-dataorch-service
+        connect_timeout: 1.25s
+        type: logical_dns
+        lb_policy: round_robin
+        dns_lookup_family: V4_ONLY
+        http2_protocol_options: { }
+        hosts:
+          - socket_address:
+              address: host.docker.internal
+              port_value: 8899
