@@ -80,6 +80,10 @@ message NotificationStatusListResponse {
     repeated NotificationStatus statuses = 1;
 }
 
+message NotificationStatusFetchRequest {
+    string notificationId = 1;
+}
+
 service NotificationService {
 
     rpc registerNotification (NotificationRegisterRequest) returns (NotificationRegisterResponse) {
@@ -103,6 +107,12 @@ service NotificationService {
     rpc listNotificationStatus(NotificationStatusListRequest) returns (NotificationStatusListResponse) {
         option (google.api.http) = {
       get: "/v1.0/api/dataorch/notification/status"
+    };
+    }
+
+    rpc fetchNotificationStatus(NotificationStatusFetchRequest) returns (NotificationStatusListResponse) {
+        option (google.api.http) = {
+      get: "/v1.0/api/dataorch/notification/status/{notificationId}"
     };
     }
 }

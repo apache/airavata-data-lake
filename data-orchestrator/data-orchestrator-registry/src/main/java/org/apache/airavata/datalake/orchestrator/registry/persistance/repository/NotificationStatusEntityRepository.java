@@ -20,5 +20,9 @@ package org.apache.airavata.datalake.orchestrator.registry.persistance.repositor
 import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.notification.NotificationStatusEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface NotificationStatusEntityRepository extends JpaRepository<NotificationStatusEntity, String> {
+
+    public List<NotificationStatusEntity> findByNotificationId(String notificationId);
 }

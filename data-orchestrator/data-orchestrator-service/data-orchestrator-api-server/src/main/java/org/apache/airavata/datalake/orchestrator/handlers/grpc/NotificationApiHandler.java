@@ -85,4 +85,18 @@ public class NotificationApiHandler extends NotificationServiceGrpc.Notification
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
     }
+
+    @Override
+    public void fetchNotificationStatus(NotificationStatusFetchRequest request, StreamObserver<NotificationStatusListResponse> responseObserver) {
+        List<NotificationStatusEntity> allEntities = notificationStatusRepository.findByNotificationId(request.getNotificationId());
+        DozerBeanMapper mapper = new DozerBeanMapper();
+        NotificationStatusListResponse.Builder responseBuilder = NotificationStatusListResponse.newBuilder();
+        for (NotificationStatusEntity e : allEntities) {
+            NotificationStatus.Builder builder = NotificationStatus.newBuilder();
+            mapper.map(e, builder);
+            responseBuilder.addStatuses(builder.build());
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+    }
 }
