@@ -20,8 +20,8 @@ static_resources:
                     - name: local_service
                       domains: ["*"]
                       routes:
-#                        - match: { prefix: "/org.apache.airavata.datalake.data.orchestrator.api.stub.notification.NotificationService" }
-#                          route: { cluster: grpc-dataorch-service, timeout: { seconds: 60 } }
+                        - match: { prefix: "/org.apache.airavata.datalake.data.orchestrator.api.stub.notification.NotificationService" }
+                          route: { cluster: grpc-dataorch-service, timeout: { seconds: 60 } }
                         - match: { prefix: "/" }
                           route: { cluster: grpc-drms-service, timeout: { seconds: 60 } }
                 http_filters:
@@ -48,13 +48,13 @@ static_resources:
         - socket_address:
             address: host.docker.internal
             port_value: 7070
-#    - name: grpc-dataorch-service
-#      connect_timeout: 1.25s
-#      type: logical_dns
-#      lb_policy: round_robin
-#      dns_lookup_family: V4_ONLY
-#      http2_protocol_options: { }
-#        hosts:
-#          - socket_address:
-#              address: host.docker.internal
-#              port_value: 8899
+    - name: grpc-dataorch-service
+      connect_timeout: 1.25s
+      type: logical_dns
+      lb_policy: round_robin
+      dns_lookup_family: V4_ONLY
+      http2_protocol_options: { }
+      hosts:
+          - socket_address:
+              address: host.docker.internal
+              port_value: 8899
