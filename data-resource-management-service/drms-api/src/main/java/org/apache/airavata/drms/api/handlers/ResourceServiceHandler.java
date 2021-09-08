@@ -153,6 +153,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 serializedMap.put("entityType", exEntity.get().getType());
                 serializedMap.put("lastModifiedTime", exEntity.get().getCreatedAt());
                 serializedMap.put("owner", exEntity.get().getOwnerId());
+                serializedMap.put("firstName", callUser.getFirstName());
+                serializedMap.put("lastName", callUser.getLastName());
 
                 if (serializedMap.containsKey("properties") && serializedMap.get("properties") instanceof List) {
                     List propertiesList = (List) serializedMap.get("properties");
@@ -164,6 +166,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 serializedMap.remove("properties");
                 if (!parentId.isEmpty()) {
                     String parentLabel = request.getResource().getPropertiesMap().get("PARENT_TYPE");
+                    if (parentLabel == null || parentLabel.isEmpty()) {
+                        parentLabel = request.getResource().getPropertiesMap().get("parentType");
+                    }
                     this.neo4JConnector.mergeNodesWithParentChildRelationShip(serializedMap, new HashMap<>(),
                             request.getResource().getType(), parentLabel, callUser.getUsername(), entityId,
                             parentId, callUser.getTenantId());
