@@ -49,12 +49,12 @@ static_resources:
             address: host.docker.internal
             port_value: 7070
     - name: grpc-dataorch-service
-        connect_timeout: 1.25s
-        type: logical_dns
-        lb_policy: round_robin
-        dns_lookup_family: V4_ONLY
-        http2_protocol_options: { }
-        hosts:
+      connect_timeout: 1.25s
+      type: logical_dns
+      lb_policy: round_robin
+      dns_lookup_family: V4_ONLY
+      http2_protocol_options: { }
+      hosts:
           - socket_address:
               address: host.docker.internal
               port_value: 8899

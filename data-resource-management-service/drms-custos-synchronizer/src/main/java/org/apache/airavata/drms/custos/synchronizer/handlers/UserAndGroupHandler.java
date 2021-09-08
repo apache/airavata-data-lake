@@ -29,7 +29,6 @@ public class UserAndGroupHandler {
             mergeGroups(groupManagementClient, clientIds);
             mergeUserAndGroupMemberships(groupManagementClient, userManagementClient, clientIds);
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Exception occurred while merging user" + ex.getMessage();
             LOGGER.error(msg, ex);
         }
@@ -63,7 +62,6 @@ public class UserAndGroupHandler {
 
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             LOGGER.error("Error occurred while merging user ", ex);
         }
     }
@@ -96,7 +94,6 @@ public class UserAndGroupHandler {
                 });
             });
         } catch (Exception ex) {
-            ex.printStackTrace();
             LOGGER.error("Error occurred while merging groups ", ex);
         }
     }
@@ -120,7 +117,6 @@ public class UserAndGroupHandler {
                 });
             });
         } catch (Exception ex) {
-            ex.printStackTrace();
             LOGGER.error("Error occurred while merging groups ", ex);
         }
     }
@@ -137,7 +133,6 @@ public class UserAndGroupHandler {
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
-            ex.printStackTrace();
             LOGGER.error("Error occurred while merging UserGroupMembership ", ex);
         }
 
@@ -154,7 +149,6 @@ public class UserAndGroupHandler {
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
-            ex.printStackTrace();
             LOGGER.error("Error occurred while merging Group memberships ", ex);
         }
 
@@ -170,7 +164,6 @@ public class UserAndGroupHandler {
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Error occurred while deleting user ";
             LOGGER.error(msg, ex);
         }
@@ -187,7 +180,6 @@ public class UserAndGroupHandler {
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Error occurred while deleting group ";
             LOGGER.error(msg, ex);
         }
@@ -204,7 +196,6 @@ public class UserAndGroupHandler {
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Error occurred while deleting user group membership from user " +
                     "" + username + " in group " + groupId;
             LOGGER.error(msg, ex);
@@ -223,7 +214,6 @@ public class UserAndGroupHandler {
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Error occurred while deleting  group memberships from "
                     + parentGroupId + " to " + childGroupId;
             LOGGER.error(msg, ex);

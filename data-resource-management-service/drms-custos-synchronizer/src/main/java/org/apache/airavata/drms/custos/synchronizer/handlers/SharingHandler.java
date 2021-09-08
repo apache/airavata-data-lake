@@ -30,7 +30,6 @@ public class SharingHandler {
             mergeSharings(sharingManagementClient, configuration.getCustos().getTenantsToBeSynced());
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Exception occurred while merging user, " + ex.getMessage();
             LOGGER.error(msg, ex);
         }
@@ -56,7 +55,6 @@ public class SharingHandler {
             });
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Error occurred while merging sharings from Custos, " + ex.getMessage();
             LOGGER.error(msg, ex);
         }
@@ -84,7 +82,6 @@ public class SharingHandler {
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(parameters, query);
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Error occurred while merging entities, " + ex.getMessage();
             LOGGER.error(msg, ex);
         }
@@ -108,7 +105,6 @@ public class SharingHandler {
                 Utils.getNeo4JConnector().runTransactionalQuery(map, query);
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Error occurred while merging parent child relationships ";
             LOGGER.error(msg, ex);
         }
@@ -150,7 +146,6 @@ public class SharingHandler {
         }
         }
         catch (Exception ex) {
-                ex.printStackTrace();
                 String msg = "Error occurred while merging sharings, " + ex.getMessage();
                 LOGGER.error(msg, ex);
             }
@@ -166,7 +161,6 @@ public class SharingHandler {
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Error occurred while deleting entity, " + ex.getMessage();
             LOGGER.error(msg, ex);
         }
@@ -194,7 +188,6 @@ public class SharingHandler {
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(map, query);
         } catch (Exception ex) {
-            ex.printStackTrace();
             String msg = "Error occurred while deleting entity, " + ex.getMessage();
             LOGGER.error(msg, ex);
         }
