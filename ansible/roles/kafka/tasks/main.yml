@@ -49,6 +49,17 @@
   file: path="{{ kafka_dir }}/logs" state=directory owner={{ user }} group={{ group }}
   become: yes
 
+
+# Config kafka server and start
+- name: Copy kafka server properties file
+  template: src=server.properties.j2
+    dest="{{ kafka_dir }}/etc/kafka/server.properties"
+    owner={{ user }}
+    group={{ group }}
+    mode="u=rw,g=r,o=r"
+  notify: restart kafka
+  become: yes
+
 # Config rest proxy and start
 - name: Copy kafka rest proxy properties file
   template: src=kafka-rest.properties.j2
@@ -58,9 +69,23 @@
     mode="u=rw,g=r,o=r"
   become: yes
 
+- name: open kafka proxy port
+  firewalld: port="{{ kafka_listener_port }}/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
 - name: open kafka rest proxy port
   firewalld: port="{{ kafka_rest_proxy_listener_port }}/tcp"
     zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
+- name: systemd install kafka service script
+  template: src=kafka.service.j2
+    dest=/usr/lib/systemd/system/kafka.service
+    owner={{ user }}
+    group={{ group }}
+    mode="u=rw,g=r,o=r"
+  notify: start kafka
   become: yes
 
 - name: systemd install kafka rest proxy service script
@@ -69,6 +94,11 @@
     owner={{ user }}
     group={{ group }}
     mode="u=rw,g=r,o=r"
+  become: yes
+
+- name: Reload systemd daemons
+  command: systemctl daemon-reload
+  notify: restart kafka
   become: yes
 
 - name: Reload systemd daemons
