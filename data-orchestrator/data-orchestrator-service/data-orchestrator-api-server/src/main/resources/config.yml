@@ -6,18 +6,12 @@ messageFilter:
   resourceNameExclusions: "swp$"
 outboundEventProcessor:
   pollingInterval: 5
-  workflowEngineHost: "149.165.157.235"
+  workflowEngineHost: "localhost"
   workflowPort: 6565
-  drmsHost: "149.165.157.235"
+  drmsHost: "localhost"
   drmsPort: 7070
-  mftHost: "149.165.157.235"
-  mftPort: 7004
 consumer:
   brokerURL: "149.165.157.235:9092"
   consumerGroup: "DataOrchestratorGroup2"
   topic: "data-orchestrator-file-events"
   maxPollRecordsConfig: 10
-tenantConfigs:
-  tenantId: "custos-ii8g0cfwsz6ruwezykn9-10002640"
-  userGroup: "emc-users_e8a37f6d-e3b3-4e4a-9081-265bb42b1b99"
-  adminGroup: "admin-group_c1aac070-1512-4e98-b1d1-e06a94f03665"

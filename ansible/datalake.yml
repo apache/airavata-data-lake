@@ -21,10 +21,10 @@
 ---
 - hosts: data-lake
   roles:
- #   - env_setup
- #   - kafka
+    - env_setup
+    - kafka
 #    - custos
 #    - consul
 #    - mft
-    - data_lake
+#    - data_lake
 #    - workflow-engine
