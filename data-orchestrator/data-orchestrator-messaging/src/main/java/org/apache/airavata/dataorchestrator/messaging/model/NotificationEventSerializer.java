@@ -25,6 +25,7 @@ public class NotificationEventSerializer implements Serializer<NotificationEvent
 
         try {
             Gson gson = new Gson();
+            notificationEvent.setOccuredTime(System.currentTimeMillis());
             return gson.toJson(notificationEvent).getBytes(StandardCharsets.UTF_8);
         } catch (Exception e) {
             LOGGER.error("Failed to serialize message {}. So returning null", s, e);
