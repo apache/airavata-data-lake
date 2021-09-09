@@ -191,7 +191,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
             String query = " MATCH (u:User),  (r:" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
                     " r.entityId = $entityId AND r.tenantId = $tenantId" +
-                    " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
+                    "  OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
+                    " OPTIONAL MATCH (cg:Group)-[:CHILD_OF]->(g)" +
                     " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
                     "exists((cg)<-[:SHARED_WITH]-(r)) then r  else NULL end as value";
 
@@ -353,7 +354,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
             String query = " MATCH (u:User),  (r:" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
                     " r.entityId = $entityId AND r.tenantId = $tenantId" +
-                    " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
+                    "  OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
+                    " OPTIONAL MATCH (cg:Group)-[:CHILD_OF]->(g)" +
                     " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
                     "exists((cg)<-[:SHARED_WITH]-(r)) then r  else NULL end as value";
 
