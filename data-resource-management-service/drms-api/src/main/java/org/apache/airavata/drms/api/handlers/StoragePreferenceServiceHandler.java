@@ -67,13 +67,14 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
 
             List<Record> records = this.neo4JConnector.searchNodes(userProps,
                     " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
-                            " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(s1:Storage)<-[:CHILD_OF]->(sp1:StoragePreference) where sp1.storagePreferenceId = $storagePreferenceId" +
-                            " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
+                            " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(s1:Storage)<-[:CHILD_OF]-(sp1:StoragePreference) where sp1.storagePreferenceId = $storagePreferenceId" +
+                            " OPTIONAL MATCH  (g:Group)<-[:MEMBER_OF]-(u)" +
+                            " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g)" +
                             " OPTIONAL MATCH (sp2:StoragePreference)-[:CHILD_OF]->(s2:Storage)-[:SHARED_WITH]->(cg) where sp2.storagePreferenceId = $storagePreferenceId" +
                             " OPTIONAL MATCH (sp3:StoragePreference)-[:CHILD_OF]->(s3:Storage)-[:SHARED_WITH]->(g) where sp3.storagePreferenceId = $storagePreferenceId" +
-                            " OPTIONAL MATCH (s4:Storage)<-[:CHILD_OF]->(sp4:StoragePreference)-[:SHARED_WITH]->(u) where sp4.storagePreferenceId = $storagePreferenceId" +
-                            " OPTIONAL MATCH (s5:Storage)<-[:CHILD_OF]->(sp5:StoragePreference)-[:SHARED_WITH]->(cg) where sp5.storagePreferenceId = $storagePreferenceId" +
-                            " OPTIONAL MATCH (s6:Storage)<-[:CHILD_OF]->(sp6:StoragePreference)-[:SHARED_WITH]->(g) where sp6.storagePreferenceId = $storagePreferenceId" +
+                            " OPTIONAL MATCH (s4:Storage)<-[:CHILD_OF]-(sp4:StoragePreference)-[:SHARED_WITH]->(u) where sp4.storagePreferenceId = $storagePreferenceId" +
+                            " OPTIONAL MATCH (s5:Storage)<-[:CHILD_OF]-(sp5:StoragePreference)-[:SHARED_WITH]->(cg) where sp5.storagePreferenceId = $storagePreferenceId" +
+                            " OPTIONAL MATCH (s6:Storage)<-[:CHILD_OF]-(sp6:StoragePreference)-[:SHARED_WITH]->(g) where sp6.storagePreferenceId = $storagePreferenceId" +
                             " return distinct s1, sp1, s2, sp2, s3, sp3, s4,sp4, s5,sp5, s6,sp6");
 
             if (!records.isEmpty()) {
