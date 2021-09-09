@@ -62,7 +62,7 @@ public class OrchestratorEventProcessor implements Runnable {
         this.notificationClient = notificationClient;
     }
 
-    private List<GenericResource> createResourceRecursively(String storageId, String basePath,
+    private List<GenericResource> createResourceRecursively(String hostName, String storageId, String basePath,
                                                             String resourcePath, String resourceType, String user)
             throws Exception {
 
@@ -84,6 +84,13 @@ public class OrchestratorEventProcessor implements Runnable {
                             resourceId, resourceName, currentPath, parentId, "COLLECTION", parentType, user);
             if (optionalGenericResource.isPresent()) {
                 parentId = optionalGenericResource.get().getResourceId();
+
+                Map<String, String> metadata = new HashMap<>();
+                metadata.put("resourcePath", currentPath);
+                metadata.put("hostName", hostName);
+                this.drmsConnector.addResourceMetadata(notification.getAuthToken(),
+                        notification.getTenantId(), parentId, user, metadata);
+
                 parentType = "COLLECTION";
                 resourceList.add(optionalGenericResource.get());
             } else {
@@ -102,7 +109,15 @@ public class OrchestratorEventProcessor implements Runnable {
                         parentId, resourceType, parentType, user);
 
         if (optionalGenericResource.isPresent()) {
-            resourceList.add(optionalGenericResource.get());
+            GenericResource genericResource = optionalGenericResource.get();
+
+            Map<String, String> metadata = new HashMap<>();
+            metadata.put("resourcePath", currentPath);
+            metadata.put("hostName", hostName);
+            this.drmsConnector.addResourceMetadata(notification.getAuthToken(),
+                    notification.getTenantId(), genericResource.getResourceId(), user, metadata);
+
+            resourceList.add(genericResource);
         } else {
             logger.error("Could not create a resource for path {}", currentPath);
             throw new Exception("Could not create a resource for path " + currentPath);
@@ -175,11 +190,13 @@ public class OrchestratorEventProcessor implements Runnable {
             TransferMapping transferMapping = optionalTransferMapping.get();
 
             String sourceStorageId = transferMapping.getSourceStorage().getSshStorage().getStorageId();
+            String sourceHostName = transferMapping.getSourceStorage().getSshStorage().getHostName();
             String destinationStorageId = transferMapping.getDestinationStorage().getSshStorage().getStorageId();
+            String destinationHostName = transferMapping.getDestinationStorage().getSshStorage().getHostName();
 
             // Creating parent resource
 
-            List<GenericResource> resourceList = createResourceRecursively(sourceStorageId,
+            List<GenericResource> resourceList = createResourceRecursively(sourceHostName, sourceStorageId,
                     notification.getBasePath(),
                     notification.getResourcePath(),
                     "COLLECTION", adminUser);
@@ -258,7 +275,7 @@ public class OrchestratorEventProcessor implements Runnable {
             List<String> resourceIDsToProcess = new ArrayList<>();
             for (FileMetadataResponse fileMetadata : directoryResourceMetadata.getFilesList()) {
                 logger.info("Registering file {} for source storage {}", fileMetadata.getResourcePath(), sourceStorageId);
-                resourceList = createResourceRecursively(sourceStorageId, notification.getBasePath(),
+                resourceList = createResourceRecursively(sourceHostName, sourceStorageId, notification.getBasePath(),
                         fileMetadata.getResourcePath(), "FILE", adminUser);
                 GenericResource fileResource = resourceList.get(resourceList.size() - 1);
 
@@ -267,14 +284,14 @@ public class OrchestratorEventProcessor implements Runnable {
 
             for (DirectoryMetadataResponse directoryMetadata : directoryResourceMetadata.getDirectoriesList()) {
                 logger.info("Registering directory {} for source storage {}", directoryMetadata.getResourcePath(), sourceStorageId);
-                createResourceRecursively(sourceStorageId, notification.getBasePath(),
+                createResourceRecursively(sourceHostName, sourceStorageId, notification.getBasePath(),
                         directoryMetadata.getResourcePath(),
                         "COLLECTION", adminUser);
                 // TODO scan directories
             }
 
             logger.info("Creating destination zip resource for directory {}", notification.getResourcePath());
-            resourceList = createResourceRecursively(destinationStorageId, notification.getBasePath(),
+            resourceList = createResourceRecursively(destinationHostName, destinationStorageId, notification.getBasePath(),
                     notification.getResourcePath(), "FILE", adminUser);
 
             GenericResource destinationResource = resourceList.get(resourceList.size() - 1);

@@ -1,5 +1,7 @@
 package org.apache.airavata.datalake.orchestrator.connectors;
 
+import com.google.protobuf.Struct;
+import com.google.protobuf.Value;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.apache.airavata.datalake.drms.AuthCredentialType;
@@ -16,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -173,6 +176,33 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
             return Optional.empty();
         }
     }
+
+    public void addResourceMetadata(String authToken,
+                                    String tenantId,
+                                    String resourceId,
+                                    String user,
+                                    Map<String, String> metadata) {
+
+        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
+                .setAccessToken(authToken)
+                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
+                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
+                        .setUsername(user)
+                        .setTenantId(tenantId)
+                        .build())
+                .build();
+
+        Struct.Builder structBuilder = Struct.newBuilder();
+        metadata.forEach((key, value) -> structBuilder.putFields(key,
+                Value.newBuilder().setStringValue(value).build()));
+
+        resourceServiceBlockingStub.addResourceMetadata(AddResourceMetadataRequest.newBuilder()
+                .setResourceId(resourceId)
+                .setAuthToken(serviceAuthToken)
+                .setType("FILE")
+                .setMetadata(structBuilder.build()).build());
+    }
+
 
     public Optional<AnyStoragePreference> getStoragePreference(String authToken, String username, String tenantId, String storageId) {
         DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
