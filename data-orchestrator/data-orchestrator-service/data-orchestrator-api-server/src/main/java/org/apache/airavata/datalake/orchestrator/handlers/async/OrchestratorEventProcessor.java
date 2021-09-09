@@ -84,14 +84,14 @@ public class OrchestratorEventProcessor implements Runnable {
                             resourceId, resourceName, currentPath, parentId, "COLLECTION", parentType, user);
             if (optionalGenericResource.isPresent()) {
                 parentId = optionalGenericResource.get().getResourceId();
+                parentType = "COLLECTION";
 
                 Map<String, String> metadata = new HashMap<>();
                 metadata.put("resourcePath", currentPath);
                 metadata.put("hostName", hostName);
                 this.drmsConnector.addResourceMetadata(notification.getAuthToken(),
-                        notification.getTenantId(), parentId, user, metadata);
+                        notification.getTenantId(), parentId, user, parentType, metadata);
 
-                parentType = "COLLECTION";
                 resourceList.add(optionalGenericResource.get());
             } else {
                 logger.error("Could not create a resource for path {}", currentPath);
@@ -115,7 +115,7 @@ public class OrchestratorEventProcessor implements Runnable {
             metadata.put("resourcePath", currentPath);
             metadata.put("hostName", hostName);
             this.drmsConnector.addResourceMetadata(notification.getAuthToken(),
-                    notification.getTenantId(), genericResource.getResourceId(), user, metadata);
+                    notification.getTenantId(), genericResource.getResourceId(), user, resourceType, metadata);
 
             resourceList.add(genericResource);
         } else {

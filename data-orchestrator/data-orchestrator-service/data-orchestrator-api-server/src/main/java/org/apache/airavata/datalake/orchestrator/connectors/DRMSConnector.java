@@ -181,6 +181,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
                                     String tenantId,
                                     String resourceId,
                                     String user,
+                                    String type,
                                     Map<String, String> metadata) {
 
         DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
@@ -199,7 +200,7 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
         resourceServiceBlockingStub.addResourceMetadata(AddResourceMetadataRequest.newBuilder()
                 .setResourceId(resourceId)
                 .setAuthToken(serviceAuthToken)
-                .setType("FILE")
+                .setType(type)
                 .setMetadata(structBuilder.build()).build());
     }
 
