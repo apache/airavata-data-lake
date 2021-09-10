@@ -250,20 +250,22 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
             String query = " MATCH (u:User),  (r" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
                     " r.entityId = $entityId AND r.tenantId = $tenantId" +
-                    " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
+                    " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)" +
                     " OPTIONAL MATCH (u)<-[crRel:SHARED_WITH]-(r)<-[:CHILD_OF*]-(cr)" +
                     " OPTIONAL MATCH (g)<-[chgrRel:SHARED_WITH]-(r)<-[:CHILD_OF*]-(chgr)" +
-                    " OPTIONAL MATCH (cg)<-[chcgrRel:SHARED_WITH]-(r)<-[:CHILD_OF*]-(chcgr)" +
-                    " return distinct  cr,crRel, chgr,chgrRel, chcgr,chcgrRel";
+                    " OPTIONAL MATCH (u)<-[prRelU:SHARED_WITH]-(pr:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(x)" +
+                    " OPTIONAL MATCH (g)<-[prRelG:SHARED_WITH]-(prg:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(y)" +
+                    " return distinct  cr,crRel, chgr,chgrRel, x, prRelU,y,prRelG";
 
             if (depth == 1) {
                 query = " MATCH (u:User),  (r" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
                         " r.entityId = $entityId AND r.tenantId = $tenantId" +
-                        " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g:Group)<-[:MEMBER_OF]-(u)" +
+                        " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)" +
                         " OPTIONAL MATCH (u)<-[crRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(cr)" +
                         " OPTIONAL MATCH (g)<-[chgrRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(chgr)" +
-                        " OPTIONAL MATCH (cg)<-[chcgrRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(chcgr)" +
-                        " return distinct  cr,crRel, chgr,chgrRel, chcgr,chcgrRel";
+                        " OPTIONAL MATCH (u)<-[prRelU:SHARED_WITH]-(pr:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(x)" +
+                        " OPTIONAL MATCH (g)<-[prRelG:SHARED_WITH]-(prg:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(y)" +
+                        " return distinct  cr,crRel, chgr,chgrRel, x, prRelU,y,prRelG";
             }
 
             logger.debug("Fetch child query {}", query);
@@ -275,6 +277,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 keyList.add("cr:crRel");
                 keyList.add("chgr:chgrRel");
                 keyList.add("chcgr:chcgrRel");
+                keyList.add("x:prRelU");
+                keyList.add("y:prRelG");
                 List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
                 ChildResourceFetchResponse.Builder builder = ChildResourceFetchResponse.newBuilder();
                 builder.addAllResources(genericResourceList);
