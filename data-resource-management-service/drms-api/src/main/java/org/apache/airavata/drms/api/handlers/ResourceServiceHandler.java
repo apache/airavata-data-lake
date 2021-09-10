@@ -255,7 +255,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     " OPTIONAL MATCH (g)<-[chgrRel:SHARED_WITH]-(r)<-[:CHILD_OF*]-(chgr)" +
                     " OPTIONAL MATCH (u)<-[prRelU:SHARED_WITH]-(pr:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(x)" +
                     " OPTIONAL MATCH (g)<-[prRelG:SHARED_WITH]-(prg:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(y)" +
-                    " return distinct  cr,crRel, chgr,chgrRel";
+                    " return distinct  cr,crRel, chgr,chgrRel, x, prRelU,y,prRelG";
 
             if (depth == 1) {
                 query = " MATCH (u:User),  (r" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
