@@ -464,7 +464,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                                 " OPTIONAL MATCH (rg:" + value + ")-[relRG:SHARED_WITH]->(g) where NOT  rg.owner  = '" + val + "'" +
                                 " OPTIONAL MATCH (rgr:" + value + ")-[relRGR:SHARED_WITH]->(g) where NOT  rgr.owner  = '" + val + "'" +
                                 "  AND NOT (rgr)-[:CHILD_OF*]->(rg) " +
-                                " return distinct   x, relR, r,rel,  rg,relRG, rgr,relRGR ";
+                                " return distinct   r,rel,  rgr,relRGR ";
                         Map<String, Object> objectMap = new HashMap<>();
                         objectMap.put("username", val);
                         objectMap.put("tenantId", callUser.getTenantId());
