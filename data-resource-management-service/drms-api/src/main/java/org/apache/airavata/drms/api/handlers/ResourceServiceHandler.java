@@ -456,11 +456,15 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         String val = qry.getValue();
                         String query = "MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId " +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)  " +
+                                "  OPTIONAL MATCH (x:" + value + ")-[relR:SHARED_WITH]->(u) where NOT  x.owner  = '" + val + "'" +
 //                                " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ") where  NOT rm.owner='" + val + "'" +
                                 " OPTIONAL MATCH (r:" + value + ")-[rel:SHARED_WITH]->(u) where NOT  r.owner  = '" + val + "'" +
+                                "  AND NOT (r)-[:CHILD_OF*]->(x) " +
 //                                " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ") where NOT rmg.owner='" + val + "' " +
                                 " OPTIONAL MATCH (rg:" + value + ")-[relRG:SHARED_WITH]->(g) where NOT  rg.owner  = '" + val + "'" +
-                                " return distinct   r,rel,  rg,relRG ";
+                                " OPTIONAL MATCH (rgr:" + value + ")-[relRGR:SHARED_WITH]->(g) where NOT  rgr.owner  = '" + val + "'" +
+                                "  AND NOT (rgr)-[:CHILD_OF*]->(rg) " +
+                                " return distinct   r,rel,  rgr,relRGR ";
                         Map<String, Object> objectMap = new HashMap<>();
                         objectMap.put("username", val);
                         objectMap.put("tenantId", callUser.getTenantId());
