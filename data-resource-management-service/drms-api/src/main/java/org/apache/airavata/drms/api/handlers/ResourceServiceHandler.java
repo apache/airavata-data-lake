@@ -456,20 +456,18 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         String val = qry.getValue();
                         String query = "MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId " +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)  " +
-                                " OPTIONAL MATCH (u)<-[:SHARED_WITH]-(p:COLLECTION)<-[:CHILD_OF*] -(x:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                                " OPTIONAL MATCH (u)<-[pRel:SHARED_WITH]-(p:COLLECTION)<-[:CHILD_OF*] -(x:" + value + ")-[relR:SHARED_WITH]->(u)" +
                                 " where NOT  x.owner  = '" + val + "'  " +
-                                " OPTIONAL MATCH (g)<-[:SHARED_WITH]-(pr:COLLECTION)<-[:CHILD_OF*] -(px:" + value + ")-[relR:SHARED_WITH]->(g)" +
+                                " OPTIONAL MATCH (g)<-[pxRel:SHARED_WITH]-(pr:COLLECTION)<-[:CHILD_OF*] -(px:" + value + ")-[relR:SHARED_WITH]->(g)" +
                                 " where NOT  px.owner  = '" + val + "'" +
-                                " return distinct  p, px";
+                                " return distinct  p,pRel, px,pxRel";
                         Map<String, Object> objectMap = new HashMap<>();
                         objectMap.put("username", val);
                         objectMap.put("tenantId", callUser.getTenantId());
                         List<Record> records = this.neo4JConnector.searchNodes(objectMap, query);
                         keyList = new ArrayList();
-                        keyList.add("r:rel");
-                        keyList.add("rm:relRM");
-                        keyList.add("rmg:relRMG");
-                        keyList.add("rg:relRG");
+                        keyList.add("p:pRel");
+                        keyList.add("px:pxRel");
                         List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
                         ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
                         builder.addAllResources(genericResourceList);
