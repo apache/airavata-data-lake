@@ -67,7 +67,7 @@ public class CustosSynchronizer implements CommandLineRunner {
         custosEventListener.consume(new ConsumerCallback() {
             @Override
             public void process(Message notificationEvent) throws Exception {
-                LOGGER.debug("Message Id" + notificationEvent.getMessageId());
+                LOGGER.info("Process from kafka message  Id" + notificationEvent.getMessageId());
                 EventDemux.delegateEvents(notificationEvent);
             }
         });
