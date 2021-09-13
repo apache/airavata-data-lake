@@ -529,14 +529,13 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 responseObserver.onCompleted();
                 return;
             } else {
+                String query = "";
+                Map<String, Object> userProps = new HashMap<>();
+                userProps.put("username", callUser.getUsername());
+                userProps.put("tenantId", callUser.getTenantId());
+                if ((value.equals("FILE") || value.equals("COLLECTION"))) {
+                    for (String storageId : storageList) {
 
-                for (String storageId : storageList) {
-                    Map<String, Object> userProps = new HashMap<>();
-                    userProps.put("username", callUser.getUsername());
-                    userProps.put("tenantId", callUser.getTenantId());
-
-                    String query = "";
-                    if ((value.equals("FILE") || value.equals("COLLECTION")) && !storageId.isEmpty()) {
                         query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
                                 " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
@@ -563,51 +562,56 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                             keyList.add("r2:relR2");
                             keyList.add("r3:relR3");
                         }
+                        logger.debug("Search query {}", query);
 
-                    } else {
+                        List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
+
+                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
+                        allowedResourceList.addAll(genericResourceList);
+                    }
+                } else {
+                    query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
+                            " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
+                            " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")" +
+                            " , (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                            " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")" +
+                            " , (rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
+                            " return distinct  rm,relRM, r,relR, rmg,relRMG, rg, relRG ";
+                    keyList = new ArrayList();
+                    keyList.add("rm:relRM");
+                    keyList.add("r:relR");
+                    keyList.add("rmg:relRMG");
+                    keyList.add("rg:relRG");
+                    if (depth == 1) {
                         query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                                " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")" +
-                                " , (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
-                                " OPTIONAL MATCH (g)<-[relRMG:SHARED_WITH]-(mg)<-[:CHILD_OF*]-(rmg:" + value + ")" +
-                                " , (rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
-                                " return distinct  rm,relRM, r,relR, rmg,relRMG, rg, relRG ";
+                                " OPTIONAL MATCH (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                                " OPTIONAL MATCH (rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
+                                " return distinct   r,relR, rg, relRG ";
                         keyList = new ArrayList();
-                        keyList.add("rm:relRM");
                         keyList.add("r:relR");
-                        keyList.add("rmg:relRMG");
                         keyList.add("rg:relRG");
-                        if (depth == 1) {
-                            query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
-                                    " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
-                                    " OPTIONAL MATCH (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
-                                    " OPTIONAL MATCH (rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
-                                    " return distinct   r,relR, rg, relRG ";
-                            keyList = new ArrayList();
-                            keyList.add("r:relR");
-                            keyList.add("rg:relRG");
-                        }
                     }
-
-                    logger.debug("Search query {}", query);
-
                     List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
 
                     List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
                     allowedResourceList.addAll(genericResourceList);
                 }
-                ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
-                builder.addAllResources(allowedResourceList);
-                responseObserver.onNext(builder.build());
-                responseObserver.onCompleted();
+
+
             }
+            ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
+            builder.addAllResources(allowedResourceList);
+            responseObserver.onNext(builder.build());
+            responseObserver.onCompleted();
 
-
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             logger.error("Errored while searching generic resources; Message: {}", e.getMessage(), e);
             responseObserver.onError(Status.INTERNAL.withDescription("Errored while searching generic resources "
                     + e.getMessage()).asRuntimeException());
         }
+
     }
 
 

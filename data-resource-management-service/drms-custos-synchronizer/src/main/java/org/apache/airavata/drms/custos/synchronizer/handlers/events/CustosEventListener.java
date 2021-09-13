@@ -51,7 +51,7 @@ public class CustosEventListener {
                         try {
                             callback.process(record.value());
                         } catch (Exception exception) {
-                            exception.printStackTrace();
+                            LOGGER.info("Exception occurred in kafka listener ",exception.getMessage());
                         } finally {
                             consumer.commitSync(Collections.singletonMap(partition, new OffsetAndMetadata(record.offset() + 1)));
                         }
