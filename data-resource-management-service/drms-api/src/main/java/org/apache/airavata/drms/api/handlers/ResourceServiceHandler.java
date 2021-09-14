@@ -428,72 +428,146 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             List keyList = new ArrayList();
             if (!resourceSearchQueries.isEmpty()) {
 
+                keyList = new ArrayList();
+                Map<String, Map<String, String>> searchParameterMap = new HashMap<>();
+
                 for (ResourceSearchQuery qry : resourceSearchQueries) {
                     if (qry.getField().equals("storageId")) {
                         storageList.clear();
                         storageList.add(qry.getValue());
+                    } else if (qry.getField().equals("sharedBy")) {
+                        searchParameterMap.computeIfAbsent("sharedBy", map -> new HashMap<>()).put("username", qry.getValue());
+                    } else if (qry.getField().equals("sharedWith")) {
+                        searchParameterMap.computeIfAbsent("sharedWith", map -> new HashMap<>()).put("username", qry.getValue());
+                    } else {
+                        searchParameterMap.computeIfAbsent("searchParams", map -> new HashMap<>()).put(qry.getField(), qry.getValue());
                     }
-                    if (qry.getField().equals("sharedBy")) {
-                        String val = qry.getValue();
-                        String query = " Match (m:" + value + ")-[r:SHARED_WITH]->(l) " +
-                                "where r.sharedBy=$sharedBy AND m.tenantId=$tenantId AND  l.tenantId=$tenantId  AND NOT l.username=$sharedBy " +
-                                "return m, r ";
-                        Map<String, Object> objectMap = new HashMap<>();
-                        objectMap.put("sharedBy", val);
-                        objectMap.put("tenantId", callUser.getTenantId());
-                        List<Record> records = this.neo4JConnector.searchNodes(objectMap, query);
-                        keyList = new ArrayList();
-                        keyList.add("m:r");
-                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
-                        ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
-                        builder.addAllResources(genericResourceList);
-                        responseObserver.onNext(builder.build());
-                        responseObserver.onCompleted();
-                        return;
-                    }
+                }
 
-                    if (qry.getField().equals("sharedWith")) {
-                        String val = qry.getValue();
-                        String query = "MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId " +
-                                " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)  " +
-                                " OPTIONAL MATCH (u)<-[pRel:SHARED_WITH]-(p:COLLECTION)<-[:CHILD_OF*] -(x:" + value + ")-[relR:SHARED_WITH]->(u)" +
-                                " where NOT  x.owner  = '" + val + "'  " +
-                                " OPTIONAL MATCH (g)<-[pxRel:SHARED_WITH]-(pr:COLLECTION)<-[:CHILD_OF*] -(px:" + value + ")-[relR:SHARED_WITH]->(g)" +
-                                " where NOT  px.owner  = '" + val + "'" +
-                                " return distinct  p,pRel, px,pxRel";
-                        Map<String, Object> objectMap = new HashMap<>();
-                        objectMap.put("username", val);
-                        objectMap.put("tenantId", callUser.getTenantId());
-                        List<Record> records = this.neo4JConnector.searchNodes(objectMap, query);
-                        keyList = new ArrayList();
-                        keyList.add("p:pRel");
-                        keyList.add("px:pxRel");
-                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
-                        ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
-                        builder.addAllResources(genericResourceList);
-                        responseObserver.onNext(builder.build());
-                        responseObserver.onCompleted();
-                        return;
-                    }
+                if (searchParameterMap.containsKey("sharedBy") &&
+                        (!searchParameterMap.containsKey("searchParams") || searchParameterMap.get("searchParams").isEmpty())) {
+                    String val = searchParameterMap.get("sharedBy").get("username");
+                    String query = " Match (m:" + value + ")-[r:SHARED_WITH]->(l) " +
+                            "where r.sharedBy=$sharedBy AND m.tenantId=$tenantId AND  l.tenantId=$tenantId  AND NOT l.username=$sharedBy " +
+                            "return m, r ";
+                    Map<String, Object> objectMap = new HashMap<>();
+                    objectMap.put("sharedBy", val);
+                    objectMap.put("tenantId", callUser.getTenantId());
+                    List<Record> records = this.neo4JConnector.searchNodes(objectMap, query);
+                    keyList.add("m:r");
+                    List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
+                    ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
+                    builder.addAllResources(genericResourceList);
+                    responseObserver.onNext(builder.build());
+                    responseObserver.onCompleted();
+                    return;
+                } else if (searchParameterMap.containsKey("sharedWith") &&
+                        (!searchParameterMap.containsKey("searchParams") || searchParameterMap.get("searchParams").isEmpty())) {
+                    String val = searchParameterMap.get("sharedWith").get("username");
+                    String query = "MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId " +
+                            " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)  " +
+                            " OPTIONAL MATCH (u)<-[pRel:SHARED_WITH]-(p:COLLECTION)<-[:CHILD_OF*] -(x:" + value + ")-[relR:SHARED_WITH]->(u)" +
+                            " where NOT  x.owner  = '" + val + "'  " +
+                            " OPTIONAL MATCH (g)<-[pxRel:SHARED_WITH]-(pr:COLLECTION)<-[:CHILD_OF*] -(px:" + value + ")-[relR:SHARED_WITH]->(g)" +
+                            " where NOT  px.owner  = '" + val + "'" +
+                            " return distinct  p,pRel, px,pxRel";
+                    Map<String, Object> objectMap = new HashMap<>();
+                    objectMap.put("username", val);
+                    objectMap.put("tenantId", callUser.getTenantId());
+                    List<Record> records = this.neo4JConnector.searchNodes(objectMap, query);
+                    keyList.add("p:pRel");
+                    keyList.add("px:pxRel");
+                    List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
+                    ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
+                    builder.addAllResources(genericResourceList);
+                    responseObserver.onNext(builder.build());
+                    responseObserver.onCompleted();
+                    return;
                 }
 
                 //TODO: replace with proper neo4j query
                 for (String strId : storageList) {
 
-                    Optional<String> metadataSearchQueryOP = Utils.getMetadataSearchQuery(resourceSearchQueries, value, strId);
-                    Optional<String> ownPropertySearchQuery = Utils.getPropertySearchQuery(resourceSearchQueries, value, strId);
-                    if (metadataSearchQueryOP.isPresent()) {
-                        String query = metadataSearchQueryOP.get();
-
-                        List<Record> records = this.neo4JConnector.searchNodes(query);
-                        List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
-
-
-                        genericResourceList.forEach(res -> {
+                    if (searchParameterMap.containsKey("sharedBy") && (searchParameterMap.containsKey("searchParams")
+                            && !searchParameterMap.get("searchParams").isEmpty())) {
+                        String username = searchParameterMap.get("sharedBy").get("username");
+                        searchParameterMap.get("searchParams").forEach((key, val) -> {
                             try {
-                                if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
-                                    allowedResourceList.add(res);
-                                }
+                                List<GenericResource> genericResourceList = Utils
+                                        .getMetadataSearchQueryForSharedByMe(value, key, val, strId, username, callUser.getTenantId(), neo4JConnector);
+                                genericResourceList.forEach(res -> {
+                                    try {
+                                        if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
+                                            allowedResourceList.add(res);
+                                        }
+                                    } catch (Exception exception) {
+                                        logger.error("Errored while searching generic resources");
+                                        responseObserver
+                                                .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
+                                                        .asRuntimeException());
+                                        return;
+                                    }
+                                });
+
+                                List<GenericResource> genericResources = Utils
+                                        .getPropertySearchQueryForSharedByMe(value, key, val, strId, username, callUser.getTenantId(), neo4JConnector);
+                                genericResources.forEach(res -> {
+                                    try {
+                                        if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
+                                            allowedResourceList.add(res);
+                                        }
+                                    } catch (Exception exception) {
+                                        logger.error("Errored while searching generic resources");
+                                        responseObserver
+                                                .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
+                                                        .asRuntimeException());
+                                        return;
+                                    }
+                                });
+                            } catch (Exception exception) {
+                                logger.error("Errored while searching generic resources");
+                                responseObserver
+                                        .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
+                                                .asRuntimeException());
+                                return;
+                            }
+                        });
+                    } else if (searchParameterMap.containsKey("sharedWith") && (searchParameterMap.containsKey("searchParams")
+                            && !searchParameterMap.get("searchParams").isEmpty())) {
+                        String username = searchParameterMap.get("sharedWith").get("username");
+                        searchParameterMap.get("searchParams").forEach((key, val) -> {
+                            try {
+                                List<GenericResource> genericResourceList = Utils
+                                        .getMetadataSearchQueryForSharedWithMe(value, key, val, strId, username, callUser.getTenantId(), neo4JConnector);
+                                genericResourceList.forEach(res -> {
+                                    try {
+                                        if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
+                                            allowedResourceList.add(res);
+                                        }
+                                    } catch (Exception exception) {
+                                        logger.error("Errored while searching generic resources");
+                                        responseObserver
+                                                .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
+                                                        .asRuntimeException());
+                                        return;
+                                    }
+                                });
+
+                                List<GenericResource> genericResources = Utils
+                                        .getPropertySearchQueryForSharedWithMe(value, key, val, strId, username, callUser.getTenantId(), neo4JConnector);
+                                genericResources.forEach(res -> {
+                                    try {
+                                        if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
+                                            allowedResourceList.add(res);
+                                        }
+                                    } catch (Exception exception) {
+                                        logger.error("Errored while searching generic resources");
+                                        responseObserver
+                                                .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
+                                                        .asRuntimeException());
+                                        return;
+                                    }
+                                });
                             } catch (Exception exception) {
                                 logger.error("Errored while searching generic resources");
                                 responseObserver
@@ -503,10 +577,18 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                             }
                         });
 
-                        if (ownPropertySearchQuery.isPresent()) {
-                            List<Record> ownPropertySearchRecords = this.neo4JConnector.searchNodes(ownPropertySearchQuery.get());
-                            List<GenericResource> genericResources = GenericResourceDeserializer.deserializeList(ownPropertySearchRecords);
-                            genericResources.forEach(res -> {
+                    } else {
+
+                        Optional<String> metadataSearchQueryOP = Utils.getMetadataSearchQuery(resourceSearchQueries, value, strId);
+                        Optional<String> ownPropertySearchQuery = Utils.getPropertySearchQuery(resourceSearchQueries, value, strId);
+                        if (metadataSearchQueryOP.isPresent()) {
+                            String query = metadataSearchQueryOP.get();
+
+                            List<Record> records = this.neo4JConnector.searchNodes(query);
+                            List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records);
+
+
+                            genericResourceList.forEach(res -> {
                                 try {
                                     if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
                                         allowedResourceList.add(res);
@@ -520,14 +602,33 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                                 }
                             });
 
+                            if (ownPropertySearchQuery.isPresent()) {
+                                List<Record> ownPropertySearchRecords = this.neo4JConnector.searchNodes(ownPropertySearchQuery.get());
+                                List<GenericResource> genericResources = GenericResourceDeserializer.deserializeList(ownPropertySearchRecords);
+                                genericResources.forEach(res -> {
+                                    try {
+                                        if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
+                                            allowedResourceList.add(res);
+                                        }
+                                    } catch (Exception exception) {
+                                        logger.error("Errored while searching generic resources");
+                                        responseObserver
+                                                .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
+                                                        .asRuntimeException());
+                                        return;
+                                    }
+                                });
+
+                            }
                         }
+
                     }
+                    ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
+                    builder.addAllResources(allowedResourceList);
+                    responseObserver.onNext(builder.build());
+                    responseObserver.onCompleted();
+                    return;
                 }
-                ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
-                builder.addAllResources(allowedResourceList);
-                responseObserver.onNext(builder.build());
-                responseObserver.onCompleted();
-                return;
             } else {
                 String query = "";
                 Map<String, Object> userProps = new HashMap<>();
