@@ -623,12 +623,13 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         }
 
                     }
-                    ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
-                    builder.addAllResources(allowedResourceList);
-                    responseObserver.onNext(builder.build());
-                    responseObserver.onCompleted();
-                    return;
                 }
+                ResourceSearchResponse.Builder builder = ResourceSearchResponse.newBuilder();
+                builder.addAllResources(allowedResourceList);
+                responseObserver.onNext(builder.build());
+                responseObserver.onCompleted();
+                return;
+
             } else {
                 String query = "";
                 Map<String, Object> userProps = new HashMap<>();
