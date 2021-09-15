@@ -240,6 +240,9 @@ public class GenericDataParsingTask extends BlockingTask {
 
             logger.info("Container logs " + dockerLogs.toString());
         }
+
+        dockerClient.removeContainerCmd(containerResponse.getId()).exec();
+        logger.info("Successfully removed container with id " + containerResponse.getId());
     }
 
     public String getWorkingDirectory() {
