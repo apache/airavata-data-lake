@@ -111,7 +111,7 @@ public class Utils {
     }
 
 
-    public static List<GenericResource> getPropertySearchQueryForSharedByMe(String type, String key, String value, String storageId,
+    public static List<GenericResource> getPropertySearchQueryForSharedByMe(String type, String key, String value,
                                                                             String sharedBy, String tenantId, Neo4JConnector neo4JConnector) throws Exception {
         String query = " match (m)-[r:SHARED_WITH]-(l) where r.sharedBy=$sharedBy AND m.tenantId=$tenantId AND " +
                 " l.tenantId=$tenantId  AND NOT l.username=$sharedBy " +
@@ -182,7 +182,7 @@ public class Utils {
     }
 
 
-    public static List<GenericResource> getPropertySearchQueryForSharedWithMe(String type, String key, String value, String storageId,
+    public static List<GenericResource> getPropertySearchQueryForSharedWithMe(String type, String key, String value,
                                                                               String sharedWith, String tenantId, Neo4JConnector neo4JConnector) throws Exception {
         String query = "MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId " +
                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)  " +
