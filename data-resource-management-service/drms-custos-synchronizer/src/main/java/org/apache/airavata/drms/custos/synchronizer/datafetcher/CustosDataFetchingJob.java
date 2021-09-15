@@ -24,13 +24,13 @@ public class CustosDataFetchingJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
             LOGGER.debug("Executing CustosDataFetchingJob ....... ");
-//            JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
-//            String path = jobDataMap.getString("configurationPath");
-//            Configuration configuration = loadConfiguration(path);
-//            UserAndGroupHandler userAndGroupHandler = new UserAndGroupHandler();
-//            userAndGroupHandler.mergeUserAndGroups(configuration);
-//            SharingHandler sharingHandler = new SharingHandler();
-//            sharingHandler.mergeSharings(configuration);
+            JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
+            String path = jobDataMap.getString("configurationPath");
+            Configuration configuration = loadConfiguration(path);
+            UserAndGroupHandler userAndGroupHandler = new UserAndGroupHandler();
+            userAndGroupHandler.mergeUserAndGroups(configuration);
+            SharingHandler sharingHandler = new SharingHandler();
+            sharingHandler.mergeSharings(configuration);
         } catch (Exception ex) {
             String msg = "Error occurred while executing job" + ex.getMessage();
             LOGGER.error(msg, ex);
