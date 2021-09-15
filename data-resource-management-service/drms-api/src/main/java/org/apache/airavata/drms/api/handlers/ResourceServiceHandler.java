@@ -486,31 +486,33 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 }
 
                 //TODO: replace with proper neo4j query
-                for (String strId : storageList) {
+
 
                     if (searchParameterMap.containsKey("sharedBy") && (searchParameterMap.containsKey("searchParams")
                             && !searchParameterMap.get("searchParams").isEmpty())) {
                         String username = searchParameterMap.get("sharedBy").get("username");
                         searchParameterMap.get("searchParams").forEach((key, val) -> {
                             try {
-                                List<GenericResource> genericResourceList = Utils
-                                        .getMetadataSearchQueryForSharedByMe(value, key, val, strId, username, callUser.getTenantId(), neo4JConnector);
-                                genericResourceList.forEach(res -> {
-                                    try {
-                                        if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
-                                            allowedResourceList.add(res);
+                                for (String strId : storageList) {
+                                    List<GenericResource> genericResourceList = Utils
+                                            .getMetadataSearchQueryForSharedByMe(value, key, val, strId, username, callUser.getTenantId(), neo4JConnector);
+                                    genericResourceList.forEach(res -> {
+                                        try {
+                                            if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
+                                                allowedResourceList.add(res);
+                                            }
+                                        } catch (Exception exception) {
+                                            logger.error("Errored while searching generic resources");
+                                            responseObserver
+                                                    .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
+                                                            .asRuntimeException());
+                                            return;
                                         }
-                                    } catch (Exception exception) {
-                                        logger.error("Errored while searching generic resources");
-                                        responseObserver
-                                                .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
-                                                        .asRuntimeException());
-                                        return;
-                                    }
-                                });
+                                    });
+                                }
 
                                 List<GenericResource> genericResources = Utils
-                                        .getPropertySearchQueryForSharedByMe(value, key, val, strId, username, callUser.getTenantId(), neo4JConnector);
+                                        .getPropertySearchQueryForSharedByMe(value, key, val, username, callUser.getTenantId(), neo4JConnector);
                                 genericResources.forEach(res -> {
                                     try {
                                         if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
@@ -524,6 +526,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                                         return;
                                     }
                                 });
+
                             } catch (Exception exception) {
                                 logger.error("Errored while searching generic resources");
                                 responseObserver
@@ -537,24 +540,26 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         String username = searchParameterMap.get("sharedWith").get("username");
                         searchParameterMap.get("searchParams").forEach((key, val) -> {
                             try {
-                                List<GenericResource> genericResourceList = Utils
-                                        .getMetadataSearchQueryForSharedWithMe(value, key, val, strId, username, callUser.getTenantId(), neo4JConnector);
-                                genericResourceList.forEach(res -> {
-                                    try {
-                                        if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
-                                            allowedResourceList.add(res);
+                                for (String strId : storageList) {
+                                    List<GenericResource> genericResourceList = Utils
+                                            .getMetadataSearchQueryForSharedWithMe(value, key, val, strId, username, callUser.getTenantId(), neo4JConnector);
+                                    genericResourceList.forEach(res -> {
+                                        try {
+                                            if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
+                                                allowedResourceList.add(res);
+                                            }
+                                        } catch (Exception exception) {
+                                            logger.error("Errored while searching generic resources");
+                                            responseObserver
+                                                    .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
+                                                            .asRuntimeException());
+                                            return;
                                         }
-                                    } catch (Exception exception) {
-                                        logger.error("Errored while searching generic resources");
-                                        responseObserver
-                                                .onError(Status.INTERNAL.withDescription("Errored while searching generic resources ")
-                                                        .asRuntimeException());
-                                        return;
-                                    }
-                                });
+                                    });
+                                }
 
                                 List<GenericResource> genericResources = Utils
-                                        .getPropertySearchQueryForSharedWithMe(value, key, val, strId, username, callUser.getTenantId(), neo4JConnector);
+                                        .getPropertySearchQueryForSharedWithMe(value, key, val,  username, callUser.getTenantId(), neo4JConnector);
                                 genericResources.forEach(res -> {
                                     try {
                                         if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), res.getResourceId(), "COLLECTION")) {
@@ -578,7 +583,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         });
 
                     } else {
-
+                        for (String strId : storageList) {
                         Optional<String> metadataSearchQueryOP = Utils.getMetadataSearchQuery(resourceSearchQueries, value, strId);
                         Optional<String> ownPropertySearchQuery = Utils.getPropertySearchQuery(resourceSearchQueries, value, strId);
                         if (metadataSearchQueryOP.isPresent()) {
