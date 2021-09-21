@@ -26,8 +26,9 @@ public class EventDemux {
                         case "DELETE_GROUP":
                             deleteGroup(message);
                             break;
-
-
+                        case "REMOVE_USER_FROM_GROUP":
+                            deleteGroupMembership(message);
+                            break;
                     }
                     break;
                 case "SHARING_MANAGEMENT_SERVICE":
@@ -45,8 +46,8 @@ public class EventDemux {
                     break;
                 default:
             }
-        }catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            LOGGER.error("Error occurred while decoding custos event ",ex);
         }
 
     }
@@ -92,7 +93,8 @@ public class EventDemux {
         UserAndGroupHandler userAndGroupHandler = new UserAndGroupHandler();
         String clientId = message.getClientId();
         String groupId = message.getPropertiesMap().get("GROUP_ID");
-        userAndGroupHandler.deleteGroup(groupId, clientId);
+        String userId = message.getPropertiesMap().get("USER_ID");
+        userAndGroupHandler.deleteUserGroupMembership(userId, clientId, groupId);
     }
 
 }
