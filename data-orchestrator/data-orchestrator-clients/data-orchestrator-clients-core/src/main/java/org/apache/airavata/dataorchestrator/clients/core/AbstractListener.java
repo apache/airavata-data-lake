@@ -1,6 +1,6 @@
 package org.apache.airavata.dataorchestrator.clients.core;
 
-import org.apache.airavata.dataorchestrator.messaging.model.NotificationEvent;
+import org.apache.airavata.datalake.data.orchestrator.api.stub.notification.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,30 +19,30 @@ public abstract class AbstractListener implements EventListener {
         this.eventPublisher = eventPublisher;
     }
 
-    public void onRegistered(NotificationEvent event) throws Exception {
+    public void onRegistered(Notification event) throws Exception {
         LOGGER.info(" Registration event received for path " + event.getResourcePath());
-        eventPublisher.publish(event, NotificationEvent.Type.REGISTER);
+        eventPublisher.publish(event, Notification.NotificationType.REGISTER);
 
     }
 
-    public void onCreated(NotificationEvent event) throws Exception {
+    public void onCreated(Notification event) throws Exception {
         LOGGER.info(event.getResourceType() + " " +
                 event.getResourcePath() + ":" + event.getResourcePath() + " Created");
-        eventPublisher.publish(event, NotificationEvent.Type.CREATE);
+        eventPublisher.publish(event, Notification.NotificationType.CREATE);
 
     }
 
-    public void onModified(NotificationEvent event) throws Exception {
+    public void onModified(Notification event) throws Exception {
         LOGGER.info(event.getResourceType() + " " +
                 event.getResourcePath() + ":" + event.getResourcePath() + " Created");
-        eventPublisher.publish(event, NotificationEvent.Type.MODIFY);
+        eventPublisher.publish(event, Notification.NotificationType.MODIFY);
 
     }
 
-    public void onDeleted(NotificationEvent event) throws Exception {
+    public void onDeleted(Notification event) throws Exception {
         LOGGER.info(event.getResourceType() + " " +
                 event.getResourcePath() + ":" + event.getBasePath() + " Created");
-        eventPublisher.publish(event, NotificationEvent.Type.DELETE);
+        eventPublisher.publish(event, Notification.NotificationType.DELETE);
 
     }
 

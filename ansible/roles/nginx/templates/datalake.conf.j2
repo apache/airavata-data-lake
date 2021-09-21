@@ -1,0 +1,68 @@
+upstream drms {
+  server localhost:10000;
+}
+
+upstream dataorch {
+  server localhost:{{ datalake_data_orch_http_port }};
+}
+
+upstream mft {
+  server {{ mft_default_agent_host }}:{{ mft_default_agent_port }};
+}
+
+server {
+    listen 8443 ssl;
+
+    # The host name to respond to
+    server_name  beta.iubemcenter.scigap.org;
+    ssl_certificate    /etc/letsencrypt/live/beta.iubemcenter.scigap.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/beta.iubemcenter.scigap.org/privkey.pem;
+
+    add_header 'Access-Control-Allow-Origin' '*' always;
+    add_header 'Access-Control-Allow_Credentials' 'true';
+    add_header 'Access-Control-Allow-Headers' 'Authorization,authorization, Access-Control-Allow-Origin, Accept,Origin,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range,user-token';
+    add_header  'Access-Control-Allow-Methods' 'GET,POST,OPTIONS,PUT,DELETE,PATCH';
+    rewrite_log on;
+    error_log   /var/log/nginx/error.log debug;
+
+    if ($request_method = 'OPTIONS') {
+      return 204;
+    }
+
+location / {
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_pass         http://drms;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_ssl_verify   off;
+}
+
+location /dataorch {
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      rewrite           /dataorch(.*)  $1 break;
+      proxy_pass         http://dataorch;
+      proxy_redirect     off;
+      proxy_no_cache      1;
+      proxy_cache_bypass  1;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_ssl_verify   off;
+}
+
+location /downloads  {
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_pass         http://mft;
+      proxy_redirect     off;
+      proxy_no_cache      1;
+      proxy_cache_bypass  1;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_ssl_verify   off;
+    }
+}

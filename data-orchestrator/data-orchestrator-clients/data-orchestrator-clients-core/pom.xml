@@ -27,7 +27,6 @@
             <artifactId>data-orchestrator-api-stub</artifactId>
             <version>${project.version}</version>
         </dependency>
-
     </dependencies>
 
 </project>

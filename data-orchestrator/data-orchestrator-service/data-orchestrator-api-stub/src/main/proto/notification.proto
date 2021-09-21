@@ -32,7 +32,23 @@ message Notification {
     string tenantId = 6;
     string hostName = 7;
     string basePath = 8;
-    string eventType = 9;
+    enum NotificationType {
+        REGISTER = 0;
+        CREATE = 1;
+        MODIFY = 2;
+        DELETE = 3;
+    }
+    NotificationType eventType = 9;
+    repeated ReplicaLocation replicas = 10;
+}
+
+message ReplicaLocation {
+    string baseDirectoryResourceId = 1;
+    enum ReplicaMode {
+        ARCHIVE = 0;
+        ORIGINAL = 1;
+    }
+    ReplicaMode replicaMode = 2;
 }
 
 message NotificationStatus {
