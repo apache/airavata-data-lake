@@ -188,7 +188,7 @@ public class UserAndGroupHandler {
 
     public void deleteUserGroupMembership(String username, String tenantId, String groupId) {
         String query = "MATCH (a:User)-[r:MEMBER_OF]->(b:Group) WHERE a.username = $username AND a.tenantId = $tenantId " +
-                "AND " + "b.groupId =$groupId AND b.tenantId =$tenantId Delete r";
+                "AND " + "b.groupId =$groupId AND b.tenantId =$tenantId DETACH DELETE r";
         Map<String, Object> map = new HashMap<>();
         map.put("username", username);
         map.put("groupId", groupId);
