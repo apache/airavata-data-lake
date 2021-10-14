@@ -79,10 +79,13 @@ public class OrchestratorEventProcessor implements Runnable {
             String resourceName = splitted[i];
             currentPath = currentPath + "/" + resourceName;
 
-            if (resourceCache.containsKey(currentPath)) {
+            /*if (resourceCache.containsKey(currentPath)) {
                 resourceList.add(resourceCache.get(currentPath));
+                parentId = resourceCache.get(currentPath).getResourceId();
+                logger.info("Using cached resource with path {} for path {}", currentPath,
+                        resourceCache.get(currentPath).getResourcePath());
                 continue;
-            }
+            }*/
 
             String resourceId = Utils.getId(storageId + ":" + currentPath);
             Optional<GenericResource> optionalGenericResource =
@@ -327,6 +330,11 @@ public class OrchestratorEventProcessor implements Runnable {
                 this.configuration.getOutboundEventProcessor().getMftPort())) {
             MFTApiServiceGrpc.MFTApiServiceBlockingStub mftClientStub = mftApiClient.get();
             directoryResourceMetadata = mftClientStub.getDirectoryResourceMetadata(resourceMetadataReq.build());
+
+        } catch (Exception e) {
+            logger.error("Failed to fetch dir metadata for resource {} with path {}",
+                    resourceObj.getResourceId(), resourceObj.getResourcePath(), e);
+            throw e;
         }
 
         for (FileMetadataResponse fileMetadata : directoryResourceMetadata.getFilesList()) {
