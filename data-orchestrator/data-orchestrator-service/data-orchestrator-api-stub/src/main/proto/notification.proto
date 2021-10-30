@@ -43,12 +43,13 @@ message Notification {
 }
 
 message ReplicaLocation {
-    string baseDirectoryResourceId = 1;
+    string storageId = 1;
     enum ReplicaMode {
         ARCHIVE = 0;
         ORIGINAL = 1;
     }
     ReplicaMode replicaMode = 2;
+    string resourcePath = 3;
 }
 
 message NotificationStatus {

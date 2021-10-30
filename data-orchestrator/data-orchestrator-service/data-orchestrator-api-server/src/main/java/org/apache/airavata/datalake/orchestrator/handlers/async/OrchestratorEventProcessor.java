@@ -179,8 +179,14 @@ public class OrchestratorEventProcessor implements Runnable {
                         notification.getResourceType());
                 logger.error("Resource should be a Folder type");
             }
+
             String removeBasePath = notification.getResourcePath().substring(notification.getBasePath().length());
             String[] splitted = removeBasePath.split("/");
+
+            if (splitted.length < 2) {
+                logger.error("Invalid path. Need at least two folder levels from base. {}", removeBasePath);
+                throw new Exception("Invalid path. Need at least two folder levels from base");
+            }
 
             String adminUser = splitted[0];
             String owner = splitted[1].split("_")[0];
