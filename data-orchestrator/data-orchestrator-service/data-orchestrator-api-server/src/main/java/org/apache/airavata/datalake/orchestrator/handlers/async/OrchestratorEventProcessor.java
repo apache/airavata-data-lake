@@ -25,6 +25,7 @@ import org.apache.airavata.datalake.drms.storage.AnyStoragePreference;
 import org.apache.airavata.datalake.drms.storage.TransferMapping;
 import org.apache.airavata.datalake.orchestrator.Configuration;
 import org.apache.airavata.datalake.orchestrator.Utils;
+import org.apache.airavata.datalake.orchestrator.connectors.CustosConnector;
 import org.apache.airavata.datalake.orchestrator.connectors.DRMSConnector;
 import org.apache.airavata.datalake.orchestrator.connectors.WorkflowServiceConnector;
 import org.apache.airavata.dataorchestrator.clients.core.NotificationClient;
@@ -35,6 +36,7 @@ import org.apache.airavata.mft.api.service.FileMetadataResponse;
 import org.apache.airavata.mft.api.service.MFTApiServiceGrpc;
 import org.apache.airavata.mft.common.AuthToken;
 import org.apache.airavata.mft.common.DelegateAuth;
+import org.apache.custos.iam.service.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +53,7 @@ public class OrchestratorEventProcessor implements Runnable {
     private final WorkflowServiceConnector workflowServiceConnector;
     private final Set<String> eventCache;
     private final NotificationClient notificationClient;
+    private final CustosConnector custosConnector;
 
     public OrchestratorEventProcessor(Configuration configuration, Notification notificationEvent,
                                       Set<String> eventCache, NotificationClient notificationClient) throws Exception {
@@ -60,6 +63,7 @@ public class OrchestratorEventProcessor implements Runnable {
         this.workflowServiceConnector = new WorkflowServiceConnector(configuration);
         this.configuration = configuration;
         this.notificationClient = notificationClient;
+        this.custosConnector = new CustosConnector(configuration);
     }
 
     private List<GenericResource> createResourceWithParentDirectories(String hostName, String storageId, String basePath,
@@ -156,6 +160,20 @@ public class OrchestratorEventProcessor implements Runnable {
         }
     }
 
+    private String verifyUser(String userName) throws Exception {
+        if (custosConnector.findUserByUserName(userName).isEmpty()) {
+            Optional<UserRepresentation> userByEmail = custosConnector.findUserByEmail(userName);
+            if (userByEmail.isPresent()) {
+                return userByEmail.get().getUsername();
+            } else {
+                logger.error("No user {} by email or user name", userName);
+                throw new Exception("Could not find the user " + userName);
+            }
+        } else {
+            return userName;
+        }
+    }
+
     @Override
     public void run() {
         logger.info("Processing resource path {} on storage {}", notification.getResourcePath(),
@@ -188,8 +206,8 @@ public class OrchestratorEventProcessor implements Runnable {
                 throw new Exception("Invalid path. Need at least two folder levels from base");
             }
 
-            String adminUser = splitted[0];
-            String owner = splitted[1].split("_")[0];
+            String adminUser = verifyUser(splitted[0]);
+            String owner = verifyUser(splitted[1].split("_")[0]);
 
             Map<String, String> ownerRules = new HashMap<>();
             ownerRules.put(adminUser, "VIEWER");

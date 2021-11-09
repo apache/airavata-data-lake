@@ -22,6 +22,8 @@ public class Configuration {
 
     public TenantConfigs tenantConfigs;
 
+    private CustosConfigs custosConfigs;
+
     public Configuration() {
 
     }
@@ -68,6 +70,14 @@ public class Configuration {
 
     public void setTenantConfigs(TenantConfigs tenantConfigs) {
         this.tenantConfigs = tenantConfigs;
+    }
+
+    public CustosConfigs getCustosConfigs() {
+        return custosConfigs;
+    }
+
+    public void setCustosConfigs(CustosConfigs custosConfigs) {
+        this.custosConfigs = custosConfigs;
     }
 
     public static class Consumer {
@@ -275,5 +285,44 @@ public class Configuration {
         }
     }
 
+    public static class CustosConfigs {
+
+        private String serverHost;
+        private int serverPort;
+        private String clientId;
+        private String clientSec;
+
+        public String getServerHost() {
+            return serverHost;
+        }
+
+        public void setServerHost(String serverHost) {
+            this.serverHost = serverHost;
+        }
+
+        public int getServerPort() {
+            return serverPort;
+        }
+
+        public void setServerPort(int serverPort) {
+            this.serverPort = serverPort;
+        }
+
+        public String getClientId() {
+            return clientId;
+        }
+
+        public void setClientId(String clientId) {
+            this.clientId = clientId;
+        }
+
+        public String getClientSec() {
+            return clientSec;
+        }
+
+        public void setClientSec(String clientSec) {
+            this.clientSec = clientSec;
+        }
+    }
 
 }
