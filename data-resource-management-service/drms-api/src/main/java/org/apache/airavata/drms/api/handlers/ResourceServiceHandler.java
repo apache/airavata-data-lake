@@ -119,8 +119,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
         } catch (
                 Exception ex) {
-            logger.error("Error occurred while fetching child resource {}", request.getResourceId());
-            String msg = "Error occurred while creating resource with id" + request.getResourceId();
+            logger.error("Error occurred while fetching child resource {}", request.getResourceId(), ex);
+            String msg = "Error occurred while fetching child resource with id" + request.getResourceId();
             responseObserver.onError(Status.INTERNAL.withDescription(msg).asRuntimeException());
         }
 
@@ -223,7 +223,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
 
         } catch (Exception ex) {
-            logger.error("Error occurred while creating resource {}", request.getResource().getResourceId());
+            logger.error("Error occurred while creating resource {}", request.getResource().getResourceId(), ex);
             String msg = "Error occurred while creating resource" + ex.getMessage();
             responseObserver.onError(Status.INTERNAL.withDescription(msg).asRuntimeException());
         }
@@ -295,7 +295,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             }
 
         } catch (Exception ex) {
-            logger.error("Error occurred while fetching child resource {}", request.getResourceId());
+            logger.error("Error occurred while fetching child resource {}", request.getResourceId(), ex);
             responseObserver.onError(Status.INTERNAL.withDescription("Error occurred while fetching child resource"
                     + ex.getMessage()).asRuntimeException());
         }
@@ -391,7 +391,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
 
         } catch (Exception ex) {
-            logger.error("Error occurred while creating resource {}", request.getResource().getResourceId());
+            logger.error("Error occurred while creating resource {}", request.getResource().getResourceId(), ex);
             String msg = "Error occurred while creating resource" + ex.getMessage();
             responseObserver.onError(Status.INTERNAL.withDescription(msg).asRuntimeException());
         }
