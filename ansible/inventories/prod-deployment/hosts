@@ -1,0 +1,2 @@
+[data-lake]
+scigap12.sciencegateways.iu.edu ansible_user=airavata
