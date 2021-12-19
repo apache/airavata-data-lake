@@ -12,10 +12,6 @@
     <artifactId>data-orchestrator-service</artifactId>
     <packaging>pom</packaging>
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
     <modules>
         <module>data-orchestrator-api-server</module>
         <module>data-orchestrator-service-core</module>

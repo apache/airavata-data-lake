@@ -35,6 +35,8 @@ kafka_url: "{{ groups['data-lake'][0] }}:9092"
 custos_kafka_url: custos07.sciencegateways.iu.edu:9092
 zookeeper_client_port: 2181
 zookeeper_connection_url: localhost:2181
+custos_host: services.usecustos.org
+custos_port: 31161
 
 mft_deployment_dir: "{{ user_home }}/mft-deployment"
 mft_source_dir: "{{ user_home }}/mft-source"

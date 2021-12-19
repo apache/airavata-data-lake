@@ -33,14 +33,4 @@
         <module>drms-api</module>
         <module>drms-custos-synchronizer</module>
     </modules>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>${log4j.over.slf4j}</version>
-        </dependency>
-    </dependencies>
-
-
 </project>

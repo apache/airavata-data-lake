@@ -36,6 +36,9 @@ custos_kafka_url: 149.165.156.200:9092
 zookeeper_client_port: 2181
 zookeeper_connection_url: localhost:2181
 
+custos_host: custos.scigap.org
+custos_port: 31499
+
 mft_deployment_dir: "{{ user_home }}/mft-deployment"
 mft_source_dir: "{{ user_home }}/mft-source"
 mft_repo: "https://github.com/apache/airavata-mft.git"

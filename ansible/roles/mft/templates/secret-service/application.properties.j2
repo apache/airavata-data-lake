@@ -26,8 +26,8 @@ airavata.backend.credential.server.port=8960
 file.backend.secret.file=secrets.json
 
 # Configurations for Custos Backend
-custos.host=custos.scigap.org
-custos.port=31499
+custos.host={{ custos_host }}
+custos.port={{ custos_port }}
 custos.id={{ mft_secret_service_custos_client_id }}
 custos.secret={{ mft_secret_service_custos_client_secret }}
 custos.backend.drms.host={{ datalake_drms_host }}

@@ -54,7 +54,7 @@
             <outputDirectory>conf</outputDirectory>
             <includes>
                 <include>application.properties</include>
-                <include>logback.xml</include>
+                <include>log4j2.xml</include>
                 <include>config.yml</include>
             </includes>
         </fileSet>
