@@ -50,7 +50,7 @@ custos_git_branch: develop
 
 mft_default_agent_id: agent0
 mft_default_agent_host: "{{ ansible_default_ipv4.address }}"
-mft_default_agent_advertised_url: https://beta.iubemcenter.scigap.org:8443/downloads
+mft_default_agent_advertised_url: https://scigap12.sciencegateways.iu.edu:8443/downloads
 mft_default_agent_port: 3333
 
 mft_api_service_host: localhost

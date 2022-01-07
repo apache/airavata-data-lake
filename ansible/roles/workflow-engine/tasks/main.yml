@@ -41,6 +41,18 @@
   become: yes
   become_user: "{{ user }}"
 
+- name: Delete lib directories of the distributions
+  file:
+    state: absent
+    path: "{{ workflow_deployment_dir }}/{{ item }}"
+  with_items:
+    - "WF-Manager-{{datalake_distribution_version}}/lib"
+    - "WF-Controller-{{datalake_distribution_version}}/lib"
+    - "WF-Worker-{{datalake_distribution_version}}/lib"
+  become: yes
+  become_user: "{{ user }}"
+  ignore_errors: yes
+
 - name: Copy Workflow distributions to Workflow deployment directory
   unarchive: "src={{ datalake_source_dir }}/{{ item }}
               dest={{ workflow_deployment_dir }}/ copy=no"
