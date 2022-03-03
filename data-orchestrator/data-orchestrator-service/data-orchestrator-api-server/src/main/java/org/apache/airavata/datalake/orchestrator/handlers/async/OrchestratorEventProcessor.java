@@ -179,6 +179,8 @@ public class OrchestratorEventProcessor implements Runnable {
         logger.info("Processing resource path {} on storage {}", notification.getResourcePath(),
                 notification.getBasePath());
 
+        long start = System.currentTimeMillis();
+
         Map<String, GenericResource> resourceCache = new HashMap<>();
         try {
 
@@ -309,7 +311,8 @@ public class OrchestratorEventProcessor implements Runnable {
                             .setPublishedTime(System.currentTimeMillis())
                             .build()).build());
 
-            logger.info("Completed processing path {}", notification.getResourcePath());
+            logger.info("Completed processing path {}. Time taken {} ms",
+                    notification.getResourcePath(), System.currentTimeMillis() - start);
 
         } catch (Exception e) {
             logger.error("Failed to process event for resource path {}", notification.getResourcePath(), e);
@@ -363,15 +366,19 @@ public class OrchestratorEventProcessor implements Runnable {
 
         for (FileMetadataResponse fileMetadata : directoryResourceMetadata.getFilesList()) {
             logger.info("Registering file {} for source storage {}", fileMetadata.getResourcePath(), sourceStorageId);
+            long start = System.currentTimeMillis();
             List<GenericResource> resourceList = createResourceWithParentDirectories(sourceHostName, sourceStorageId, notification.getBasePath(),
                     fileMetadata.getResourcePath(), "FILE", adminUser, resourceCache);
             GenericResource fileResource = resourceList.get(resourceList.size() - 1);
 
             resourceIDsToProcess.add(fileResource.getResourceId());
+            logger.info("Completed registering the file {} for source storage {}. Time taken {} ms",
+                    fileMetadata.getResourcePath(), sourceStorageId, System.currentTimeMillis() - start);
         }
 
         for (DirectoryMetadataResponse directoryMetadata : directoryResourceMetadata.getDirectoriesList()) {
             logger.info("Registering directory {} for source storage {}", directoryMetadata.getResourcePath(), sourceStorageId);
+            long start = System.currentTimeMillis();
             List<GenericResource> createResources = createResourceWithParentDirectories(sourceHostName, sourceStorageId, notification.getBasePath(),
                     directoryMetadata.getResourcePath(),
                     "COLLECTION", adminUser, resourceCache);
@@ -382,6 +389,8 @@ public class OrchestratorEventProcessor implements Runnable {
                 scanResourceForChildResources(dirResource, mftAuth, sourceSP, sourceStorageId, sourceHostName, adminUser,
                         resourceIDsToProcess, resourceCache, scanDepth - 1);
             }
+            logger.info("Completed registering directory {} for source storage {}. Time taken {} ms",
+                    directoryMetadata.getResourcePath(), sourceStorageId, sourceStorageId, System.currentTimeMillis() - start);
         }
     }
 }
