@@ -133,3 +133,4 @@ workflow_manager_custos_host: services.usecustos.org
 workflow_manager_custos_port: 31161
 workflow_manager_custos_id: "{{ vault_workflow_manager_custos_id }}"
 workflow_manager_custos_secret: "{{ vault_workflow_manager_custos_secret }}"
+workflow_manager_work_dir: /home/airavata/tmp_data

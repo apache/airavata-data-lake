@@ -82,6 +82,9 @@ public class DataParsingWorkflowManager {
     @org.springframework.beans.factory.annotation.Value("${mft.clientSecret}")
     private String mftClientSecret;
 
+    @org.springframework.beans.factory.annotation.Value("${base.work.dir}")
+    private String baseWorkingDir;
+
 
     @Autowired
     private CallbackWorkflowStore callbackWorkflowStore;
@@ -91,6 +94,11 @@ public class DataParsingWorkflowManager {
     public void init() throws Exception {
         workflowOperator = new WorkflowOperator();
         workflowOperator.init(clusterName, workflowManagerName, zkAddress, callbackWorkflowStore);
+
+        if (! baseWorkingDir.endsWith(File.separator)) {
+            baseWorkingDir = baseWorkingDir + File.separator;
+        }
+
         logger.info("Successfully initialized Data Parsing Workflow Manager");
     }
 
@@ -123,7 +131,7 @@ public class DataParsingWorkflowManager {
 
             ParsingJobListResponse parsingJobs = parserClient.listParsingJobs(ParsingJobListRequest.newBuilder().build());
 
-            String tempDownloadPath = "/tmp/" + UUID.randomUUID().toString();
+            String tempDownloadPath = baseWorkingDir + UUID.randomUUID().toString();
 
             Map<String, StringMap> parserInputMappings = new HashMap<>();
             List<DataParsingJob> selectedPJs = parsingJobs.getParsersList().stream().filter(pj -> {
@@ -178,7 +186,7 @@ public class DataParsingWorkflowManager {
 
             for(String parserId: parserInputMappings.keySet()) {
 
-                String parserWorkingDir = "/tmp/" + UUID.randomUUID();
+                String parserWorkingDir = baseWorkingDir + UUID.randomUUID();
 
                 GenericDataParsingTask dataParsingTask = new GenericDataParsingTask();
                 dataParsingTask.setTaskId("DPT-" + UUID.randomUUID().toString());
