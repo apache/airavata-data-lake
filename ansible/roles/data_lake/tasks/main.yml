@@ -7,6 +7,8 @@
   firewalld: port="7070/tcp"
     zone=public permanent=true state=enabled immediate=yes
   become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
 
 - name: open firewall port 80 for HTTP connections
   firewalld: port="80/tcp"
@@ -22,21 +24,29 @@
   firewalld: port="9092/tcp"
     zone=public permanent=true state=enabled immediate=yes
   become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
 
 - name: open firewall port 6060 for Data Orchestrator Grpc connections
   firewalld: port="6060/tcp"
     zone=public permanent=true state=enabled immediate=yes
   become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
 
 - name: open firewall port {{ datalake_data_orch_http_port }} for Data Orchestrator HTTP connections
   firewalld: port="{{ datalake_data_orch_http_port }}/tcp"
     zone=public permanent=true state=enabled immediate=yes
   become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
 
 - name: open firewall port {{ datalake_data_orch_grpc_port }} for Data Orchestrator gRPC connections
   firewalld: port="{{ datalake_data_orch_grpc_port }}/tcp"
     zone=public permanent=true state=enabled immediate=yes
   become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
 
 - name: Create Datalake deployment directory {{ datalake_deployment_dir }}
   become: yes
