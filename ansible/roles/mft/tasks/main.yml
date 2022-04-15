@@ -14,16 +14,60 @@
     owner={{ user }}
     group={{ group }}
 
-- name: open firewall ports for MFT
-  firewalld: port="{{ item }}/tcp"
-    zone=public permanent=true state=enabled immediate=yes
-  with_items:
-    - "{{ mft_api_service_grpc_port }}"
-    - "{{ mft_default_agent_port }}"
-    - "{{ mft_consul_port }}"
-    - "{{ mft_resource_service_grpc_port }}"
-    - "{{ mft_secret_service_grpc_port }}"
+- name: open firewall ports for MFT grpc service api
+  firewalld:
+    zone: public
+    permanent: yes
+    state: enabled
+    immediate: yes
+    rich_rule: rule family=ipv4 source address="{{ item }}" port port="{{ mft_api_service_grpc_port }}" protocol=tcp accept
   become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
+
+- name: open firewall ports for MFT default agent
+  firewalld:
+    zone: public
+    permanent: yes
+    state: enabled
+    immediate: yes
+    rich_rule: rule family=ipv4 source address="{{ item }}" port port="{{ mft_default_agent_port }}" protocol=tcp accept
+  become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
+
+- name: open firewall ports for MFT consul
+  firewalld:
+    zone: public
+    permanent: yes
+    state: enabled
+    immediate: yes
+    rich_rule: rule family=ipv4 source address="{{ item }}" port port="{{ mft_consul_port }}" protocol=tcp accept
+  become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
+
+- name: open firewall ports for MFT grpc resource service
+  firewalld:
+    zone: public
+    permanent: yes
+    state: enabled
+    immediate: yes
+    rich_rule: rule family=ipv4 source address="{{ item }}" port port="{{ mft_resource_service_grpc_port }}" protocol=tcp accept
+  become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
+
+- name: open firewall ports for MFT grpc secret service
+  firewalld:
+    zone: public
+    permanent: yes
+    state: enabled
+    immediate: yes
+    rich_rule: rule family=ipv4 source address="{{ item }}" port port="{{ mft_secret_service_grpc_port }}" protocol=tcp accept
+  become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
 
 - name: git checkout from MFT github repo {{ mft_repo }} branch {{ mft_git_branch }}
   git: repo="{{ mft_repo }}"
