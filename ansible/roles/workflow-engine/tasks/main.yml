@@ -16,11 +16,15 @@
   become_user: "{{ user }}"
 
 - name: open firewall ports for Workflow Engine
-  firewalld: port="{{ item }}/tcp"
-    zone=public permanent=true state=enabled immediate=yes
-  with_items:
-    - "{{ workflow_manager_grpc_port }}"
+  firewalld:
+    zone: public
+    permanent: yes
+    state: enabled
+    immediate: yes
+    rich_rule: rule family=ipv4 source address="{{ item }}" port port="{{ workflow_manager_grpc_port }}" protocol=tcp accept
   become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
 
 - name: Run Datalake maven build
   command: mvn clean install -Dmaven.test.skip=true chdir="{{ datalake_source_dir }}/"
