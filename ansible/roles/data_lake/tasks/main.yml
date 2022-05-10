@@ -166,3 +166,9 @@
   ignore_errors: yes
   become: yes
   become_user: "{{ user }}"
+
+- name: Start Envoy  proxy
+  command: systemctl daemon-reload
+  notify: start envoy
+  become: yes
+
