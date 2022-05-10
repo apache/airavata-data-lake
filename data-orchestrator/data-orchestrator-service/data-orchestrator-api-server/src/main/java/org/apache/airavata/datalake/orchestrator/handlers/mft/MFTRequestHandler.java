@@ -17,7 +17,6 @@
 
 package org.apache.airavata.datalake.orchestrator.handlers.mft;
 
-import com.google.protobuf.Struct;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
@@ -29,11 +28,12 @@ import org.apache.airavata.mft.api.service.HttpDownloadApiResponse;
 import org.apache.airavata.mft.api.service.MFTApiServiceGrpc;
 import org.apache.airavata.mft.common.AuthToken;
 import org.apache.airavata.mft.common.UserTokenAuth;
-import org.apache.custos.clients.CustosClientProvider;
-import org.apache.custos.identity.management.client.IdentityManagementClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -108,10 +108,10 @@ public class MFTRequestHandler {
 
         StoragePreferenceSearchResponse stoPrefResults = stoPrefClient
                 .searchStoragePreference(StoragePreferenceSearchRequest.newBuilder()
-                    .setAuthToken(authToken)
-                    .addQueries(StoragePreferenceSearchQuery.newBuilder()
-                            .setField("storageId")
-                            .setValue(storageId).build()).build());
+                        .setAuthToken(authToken)
+                        .addQueries(StoragePreferenceSearchQuery.newBuilder()
+                                .setField("storageId")
+                                .setValue(storageId).build()).build());
 
         List<AnyStoragePreference> storagesPreferenceList = stoPrefResults.getStoragesPreferenceList();
 
@@ -148,21 +148,5 @@ public class MFTRequestHandler {
         return new MFTDownloadResponse().setUrl(downloadResponse.getUrl()).setAgentId(downloadResponse.getTargetAgent());
     }
 
-    private static String getAccessToken() {
-        try {
-
-            CustosClientProvider custosClientProvider = new CustosClientProvider.Builder().setServerHost("custos.scigap.org")
-                    .setServerPort(31499)
-                    .setClientId("custos-ii8g0cfwsz6ruwezykn9-10002640")
-                    .setClientSec("OxXECszt9dL4lHJQyL444UOU0lKN317D51ez067R").build();
-
-            IdentityManagementClient identityManagementClient = custosClientProvider.getIdentityManagementClient();
-            Struct struct = identityManagementClient.getToken(null, null, "isjarana", "emcadmin@1", null, "password");
-            return struct.getFieldsMap().get("access_token").getStringValue();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
 
 }

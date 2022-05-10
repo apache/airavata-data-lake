@@ -32,42 +32,44 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
             String username = authenticatedUser.getUsername();
             String tenantId = authenticatedUser.getTenantId();
 
-            SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient();
-            Entity entity = Entity.newBuilder().setId(request.getEntityId()).build();
-            PermissionType permissionTypeEditor = PermissionType.newBuilder().setId(request.getPermissionId()).build();
-            PermissionType permissionTypeAdmin = PermissionType.newBuilder().setId("ADMIN").build();
+            try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
+                ;
+                Entity entity = Entity.newBuilder().setId(request.getEntityId()).build();
+                PermissionType permissionTypeEditor = PermissionType.newBuilder().setId(request.getPermissionId()).build();
+                PermissionType permissionTypeAdmin = PermissionType.newBuilder().setId("ADMIN").build();
 
-            SharingRequest sharingRequestEditor = SharingRequest
-                    .newBuilder()
-                    .setClientId(tenantId)
-                    .setEntity(entity)
-                    .setPermissionType(permissionTypeEditor)
-                    .addOwnerId(username).build();
-            org.apache.custos.sharing.service.Status status = sharingManagementClient
-                    .userHasAccess(tenantId, sharingRequestEditor);
-            SharingRequest sharingRequestAdmin = SharingRequest
-                    .newBuilder()
-                    .setClientId(tenantId)
-                    .setEntity(entity)
-                    .setPermissionType(permissionTypeAdmin)
-                    .addOwnerId(username).build();
-            org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
-                    .userHasAccess(tenantId, sharingRequestAdmin);
-            if (status.getStatus() || statusAdmin.getStatus()) {
-                SharingRequest shrRequest = SharingRequest
+                SharingRequest sharingRequestEditor = SharingRequest
                         .newBuilder()
                         .setClientId(tenantId)
                         .setEntity(entity)
-                        .setPermissionType(PermissionType.newBuilder().setId(request.getPermissionId()).build())
-                        .addOwnerId(request.getSharedUserId()).build();
-                sharingManagementClient.shareEntityWithUsers(tenantId, shrRequest);
-                responseObserver.onNext(Empty.newBuilder().build());
-                responseObserver.onCompleted();
+                        .setPermissionType(permissionTypeEditor)
+                        .addOwnerId(username).build();
+                org.apache.custos.sharing.service.Status status = sharingManagementClient
+                        .userHasAccess(tenantId, sharingRequestEditor);
+                SharingRequest sharingRequestAdmin = SharingRequest
+                        .newBuilder()
+                        .setClientId(tenantId)
+                        .setEntity(entity)
+                        .setPermissionType(permissionTypeAdmin)
+                        .addOwnerId(username).build();
+                org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
+                        .userHasAccess(tenantId, sharingRequestAdmin);
+                if (status.getStatus() || statusAdmin.getStatus()) {
+                    SharingRequest shrRequest = SharingRequest
+                            .newBuilder()
+                            .setClientId(tenantId)
+                            .setEntity(entity)
+                            .setPermissionType(PermissionType.newBuilder().setId(request.getPermissionId()).build())
+                            .addOwnerId(request.getSharedUserId()).build();
+                    sharingManagementClient.shareEntityWithUsers(tenantId, shrRequest);
+                    responseObserver.onNext(Empty.newBuilder().build());
+                    responseObserver.onCompleted();
 
-            } else {
-                String msg = "You don't have permission to manage sharing";
-                LOGGER.error(msg);
-                responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
+                } else {
+                    String msg = "You don't have permission to manage sharing";
+                    LOGGER.error(msg);
+                    responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
+                }
             }
 
         } catch (Exception ex) {
@@ -86,44 +88,44 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
             String username = authenticatedUser.getUsername();
             String tenantId = authenticatedUser.getTenantId();
 
-            SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient();
-            Entity entity = Entity.newBuilder().setId(request.getEntityId()).build();
-            PermissionType permissionTypeEditor = PermissionType.newBuilder().setId(request.getPermissionId()).build();
-            PermissionType permissionTypeAdmin = PermissionType.newBuilder().setId("ADMIN").build();
+            try(SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
+                Entity entity = Entity.newBuilder().setId(request.getEntityId()).build();
+                PermissionType permissionTypeEditor = PermissionType.newBuilder().setId(request.getPermissionId()).build();
+                PermissionType permissionTypeAdmin = PermissionType.newBuilder().setId("ADMIN").build();
 
-            SharingRequest sharingRequestEditor = SharingRequest
-                    .newBuilder()
-                    .setClientId(tenantId)
-                    .setEntity(entity)
-                    .setPermissionType(permissionTypeEditor)
-                    .addOwnerId(username).build();
-            org.apache.custos.sharing.service.Status status = sharingManagementClient
-                    .userHasAccess(tenantId, sharingRequestEditor);
-            SharingRequest sharingRequestAdmin = SharingRequest
-                    .newBuilder()
-                    .setClientId(tenantId)
-                    .setEntity(entity)
-                    .setPermissionType(permissionTypeAdmin)
-                    .addOwnerId(username).build();
-            org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
-                    .userHasAccess(tenantId, sharingRequestAdmin);
-            if (status.getStatus() || statusAdmin.getStatus()) {
-                SharingRequest shrRequest = SharingRequest
+                SharingRequest sharingRequestEditor = SharingRequest
                         .newBuilder()
                         .setClientId(tenantId)
                         .setEntity(entity)
-                        .setPermissionType(PermissionType.newBuilder().setId(request.getPermissionId()).build())
-                        .addOwnerId(request.getSharedGroupId()).build();
-                sharingManagementClient.shareEntityWithGroups(tenantId, shrRequest);
-                responseObserver.onNext(Empty.newBuilder().build());
-                responseObserver.onCompleted();
+                        .setPermissionType(permissionTypeEditor)
+                        .addOwnerId(username).build();
+                org.apache.custos.sharing.service.Status status = sharingManagementClient
+                        .userHasAccess(tenantId, sharingRequestEditor);
+                SharingRequest sharingRequestAdmin = SharingRequest
+                        .newBuilder()
+                        .setClientId(tenantId)
+                        .setEntity(entity)
+                        .setPermissionType(permissionTypeAdmin)
+                        .addOwnerId(username).build();
+                org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
+                        .userHasAccess(tenantId, sharingRequestAdmin);
+                if (status.getStatus() || statusAdmin.getStatus()) {
+                    SharingRequest shrRequest = SharingRequest
+                            .newBuilder()
+                            .setClientId(tenantId)
+                            .setEntity(entity)
+                            .setPermissionType(PermissionType.newBuilder().setId(request.getPermissionId()).build())
+                            .addOwnerId(request.getSharedGroupId()).build();
+                    sharingManagementClient.shareEntityWithGroups(tenantId, shrRequest);
+                    responseObserver.onNext(Empty.newBuilder().build());
+                    responseObserver.onCompleted();
 
-            } else {
-                String msg = "You don't have permission to manage sharing";
-                LOGGER.error(msg);
-                responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
+                } else {
+                    String msg = "You don't have permission to manage sharing";
+                    LOGGER.error(msg);
+                    responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
+                }
             }
-
 
         } catch (Exception ex) {
             LOGGER.error("Error occurred while sharing entity with group {}", request.getSharedGroupId());
@@ -139,45 +141,45 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
             String username = authenticatedUser.getUsername();
             String tenantId = authenticatedUser.getTenantId();
 
-            SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient();
-            Entity entity = Entity.newBuilder().setId(request.getEntityId()).build();
-            PermissionType permissionTypeEditor = PermissionType.newBuilder().setId("EDITOR").build();
-            PermissionType permissionTypeAdmin = PermissionType.newBuilder().setId("ADMIN").build();
+            try(SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
+                Entity entity = Entity.newBuilder().setId(request.getEntityId()).build();
+                PermissionType permissionTypeEditor = PermissionType.newBuilder().setId("EDITOR").build();
+                PermissionType permissionTypeAdmin = PermissionType.newBuilder().setId("ADMIN").build();
 
-            SharingRequest sharingRequestEditor = SharingRequest
-                    .newBuilder()
-                    .setClientId(tenantId)
-                    .setEntity(entity)
-                    .setPermissionType(permissionTypeEditor)
-                    .addOwnerId(username).build();
-            org.apache.custos.sharing.service.Status status = sharingManagementClient
-                    .userHasAccess(tenantId, sharingRequestEditor);
-            SharingRequest sharingRequestAdmin = SharingRequest
-                    .newBuilder()
-                    .setClientId(tenantId)
-                    .setEntity(entity)
-                    .setPermissionType(permissionTypeAdmin)
-                    .addOwnerId(username).build();
-            org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
-                    .userHasAccess(tenantId, sharingRequestAdmin);
-            if (status.getStatus() || statusAdmin.getStatus()) {
-                SharingRequest shrRequest = SharingRequest
+                SharingRequest sharingRequestEditor = SharingRequest
                         .newBuilder()
                         .setClientId(tenantId)
                         .setEntity(entity)
-                        .setPermissionType(PermissionType.newBuilder().setId(request.getPermissionId()).build())
-                        .addOwnerId(request.getRevokedUserId()).build();
-                sharingManagementClient.revokeEntitySharingFromUsers(tenantId, shrRequest);
-                responseObserver.onNext(Empty.newBuilder().build());
-                responseObserver.onCompleted();
+                        .setPermissionType(permissionTypeEditor)
+                        .addOwnerId(username).build();
+                org.apache.custos.sharing.service.Status status = sharingManagementClient
+                        .userHasAccess(tenantId, sharingRequestEditor);
+                SharingRequest sharingRequestAdmin = SharingRequest
+                        .newBuilder()
+                        .setClientId(tenantId)
+                        .setEntity(entity)
+                        .setPermissionType(permissionTypeAdmin)
+                        .addOwnerId(username).build();
+                org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
+                        .userHasAccess(tenantId, sharingRequestAdmin);
+                if (status.getStatus() || statusAdmin.getStatus()) {
+                    SharingRequest shrRequest = SharingRequest
+                            .newBuilder()
+                            .setClientId(tenantId)
+                            .setEntity(entity)
+                            .setPermissionType(PermissionType.newBuilder().setId(request.getPermissionId()).build())
+                            .addOwnerId(request.getRevokedUserId()).build();
+                    sharingManagementClient.revokeEntitySharingFromUsers(tenantId, shrRequest);
+                    responseObserver.onNext(Empty.newBuilder().build());
+                    responseObserver.onCompleted();
 
-            } else {
-                String msg = "You don't have permission to manage sharing";
-                LOGGER.error(msg);
-                responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
+                } else {
+                    String msg = "You don't have permission to manage sharing";
+                    LOGGER.error(msg);
+                    responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
+                }
+
             }
-
-
         } catch (Exception ex) {
             LOGGER.error("Error occurred while revoking entity with user {}", request.getRevokedUserId());
             String msg = "Error occurred while revoking entity with user {}" + request.getRevokedUserId();
@@ -192,44 +194,44 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
             String username = authenticatedUser.getUsername();
             String tenantId = authenticatedUser.getTenantId();
 
-            SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient();
-            Entity entity = Entity.newBuilder().setId(request.getEntityId()).build();
-            PermissionType permissionTypeEditor = PermissionType.newBuilder().setId("EDITOR").build();
-            PermissionType permissionTypeAdmin = PermissionType.newBuilder().setId("ADMIN").build();
+            try(SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
+                Entity entity = Entity.newBuilder().setId(request.getEntityId()).build();
+                PermissionType permissionTypeEditor = PermissionType.newBuilder().setId("EDITOR").build();
+                PermissionType permissionTypeAdmin = PermissionType.newBuilder().setId("ADMIN").build();
 
-            SharingRequest sharingRequestEditor = SharingRequest
-                    .newBuilder()
-                    .setClientId(tenantId)
-                    .setEntity(entity)
-                    .setPermissionType(permissionTypeEditor)
-                    .addOwnerId(username).build();
-            org.apache.custos.sharing.service.Status status = sharingManagementClient
-                    .userHasAccess(tenantId, sharingRequestEditor);
-            SharingRequest sharingRequestAdmin = SharingRequest
-                    .newBuilder()
-                    .setClientId(tenantId)
-                    .setEntity(entity)
-                    .setPermissionType(permissionTypeAdmin)
-                    .addOwnerId(username).build();
-            org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
-                    .userHasAccess(tenantId, sharingRequestAdmin);
-            if (status.getStatus() || statusAdmin.getStatus()) {
-                SharingRequest shrRequest = SharingRequest
+                SharingRequest sharingRequestEditor = SharingRequest
                         .newBuilder()
                         .setClientId(tenantId)
                         .setEntity(entity)
-                        .setPermissionType(PermissionType.newBuilder().setId(request.getPermissionId()).build())
-                        .addOwnerId(request.getRevokedGroupId()).build();
-                sharingManagementClient.revokeEntitySharingFromGroups(tenantId, shrRequest);
-                responseObserver.onNext(Empty.newBuilder().build());
-                responseObserver.onCompleted();
+                        .setPermissionType(permissionTypeEditor)
+                        .addOwnerId(username).build();
+                org.apache.custos.sharing.service.Status status = sharingManagementClient
+                        .userHasAccess(tenantId, sharingRequestEditor);
+                SharingRequest sharingRequestAdmin = SharingRequest
+                        .newBuilder()
+                        .setClientId(tenantId)
+                        .setEntity(entity)
+                        .setPermissionType(permissionTypeAdmin)
+                        .addOwnerId(username).build();
+                org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
+                        .userHasAccess(tenantId, sharingRequestAdmin);
+                if (status.getStatus() || statusAdmin.getStatus()) {
+                    SharingRequest shrRequest = SharingRequest
+                            .newBuilder()
+                            .setClientId(tenantId)
+                            .setEntity(entity)
+                            .setPermissionType(PermissionType.newBuilder().setId(request.getPermissionId()).build())
+                            .addOwnerId(request.getRevokedGroupId()).build();
+                    sharingManagementClient.revokeEntitySharingFromGroups(tenantId, shrRequest);
+                    responseObserver.onNext(Empty.newBuilder().build());
+                    responseObserver.onCompleted();
 
-            } else {
-                String msg = "You don't have permission to manage sharing";
-                LOGGER.error(msg);
-                responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
+                } else {
+                    String msg = "You don't have permission to manage sharing";
+                    LOGGER.error(msg);
+                    responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
+                }
             }
-
         } catch (Exception ex) {
             LOGGER.error("Error occurred while revoking entity with user {}", request.getRevokedGroupId());
             String msg = "Error occurred while revoking entity with user {}" + request.getRevokedGroupId();
