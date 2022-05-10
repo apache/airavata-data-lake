@@ -29,6 +29,8 @@ public class SharingHandler {
             SharingManagementClient sharingManagementClient = Utils.getSharingManagementClient();
             mergeSharings(sharingManagementClient, configuration.getCustos().getTenantsToBeSynced());
 
+        } catch (UnsupportedOperationException exception) {
+            LOGGER.debug("Error occurred while merging", exception);
         } catch (Exception ex) {
             String msg = "Exception occurred while merging user, " + ex.getMessage();
             LOGGER.error(msg, ex);
@@ -54,6 +56,8 @@ public class SharingHandler {
                 });
             });
 
+        } catch (UnsupportedOperationException exception) {
+            LOGGER.debug("Error occurred while merging", exception);
         } catch (Exception ex) {
             String msg = "Error occurred while merging sharings from Custos, " + ex.getMessage();
             LOGGER.error(msg, ex);
@@ -81,6 +85,8 @@ public class SharingHandler {
         parameters.put("entityId", entity.getId());
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(parameters, query);
+        } catch (UnsupportedOperationException exception) {
+            LOGGER.debug("Error occurred while merging", exception);
         } catch (Exception ex) {
             String msg = "Error occurred while merging entities, " + ex.getMessage();
             LOGGER.error(msg, ex);
@@ -104,6 +110,8 @@ public class SharingHandler {
 
                 Utils.getNeo4JConnector().runTransactionalQuery(map, query);
             }
+        } catch (UnsupportedOperationException exception) {
+            LOGGER.debug("Error occurred while merging", exception);
         } catch (Exception ex) {
             String msg = "Error occurred while merging parent child relationships ";
             LOGGER.error(msg, ex);
@@ -112,43 +120,44 @@ public class SharingHandler {
 
     private void mergeEntitySharings(SharingMetadata metadata, String clientId) {
         try {
-        Entity entity = metadata.getEntity();
-        String sourceId = metadata.getEntity().getId();
-        String permissionId = metadata.getPermission().getId();
-        String userId = metadata.getOwnerId();
-        String type = metadata.getOwnerType();
-        String sharedBy = metadata.getSharedBy();
-        userId = userId.replaceAll("'", "`'");
-        String query = null;
-        if (type.equalsIgnoreCase("USER")) {
-            query = "MATCH (a:" + entity.getType() + "), (b:User) WHERE a.entityId = $sourceId  AND a.tenantId = $clientId" +
-                    " AND  b.username = $userId  AND b.tenantId = $clientId " +
-                    "MERGE (a)-[r:SHARED_WITH]->(b) SET r += $props RETURN a, b";
+            Entity entity = metadata.getEntity();
+            String sourceId = metadata.getEntity().getId();
+            String permissionId = metadata.getPermission().getId();
+            String userId = metadata.getOwnerId();
+            String type = metadata.getOwnerType();
+            String sharedBy = metadata.getSharedBy();
+            userId = userId.replaceAll("'", "`'");
+            String query = null;
+            if (type.equalsIgnoreCase("USER")) {
+                query = "MATCH (a:" + entity.getType() + "), (b:User) WHERE a.entityId = $sourceId  AND a.tenantId = $clientId" +
+                        " AND  b.username = $userId  AND b.tenantId = $clientId " +
+                        "MERGE (a)-[r:SHARED_WITH]->(b) SET r += $props RETURN a, b";
 
-        } else if (type.equalsIgnoreCase("GROUP")) {
-            query = "MATCH (a:" + entity.getType() + "), (b:Group) WHERE a.entityId = $sourceId " +
-                    " AND a.tenantId = $clientId  AND b.groupId = $userId  AND b.tenantId = $clientId " +
-                    "MERGE (a)-[r:SHARED_WITH]->(b) SET r += $props RETURN a, b";
-        }
-        if (query != null) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("sourceId", sourceId);
-            map.put("clientId", clientId);
-            map.put("permissionId", permissionId);
-            map.put("userId", userId);
-            map.put("sharedBy", sharedBy);
-            Map<String, Object> props = new HashMap<>();
-            props.put("sharedBy", sharedBy);
-            props.put("permission", permissionId);
-            map.put("props", props);
+            } else if (type.equalsIgnoreCase("GROUP")) {
+                query = "MATCH (a:" + entity.getType() + "), (b:Group) WHERE a.entityId = $sourceId " +
+                        " AND a.tenantId = $clientId  AND b.groupId = $userId  AND b.tenantId = $clientId " +
+                        "MERGE (a)-[r:SHARED_WITH]->(b) SET r += $props RETURN a, b";
+            }
+            if (query != null) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("sourceId", sourceId);
+                map.put("clientId", clientId);
+                map.put("permissionId", permissionId);
+                map.put("userId", userId);
+                map.put("sharedBy", sharedBy);
+                Map<String, Object> props = new HashMap<>();
+                props.put("sharedBy", sharedBy);
+                props.put("permission", permissionId);
+                map.put("props", props);
 
                 Utils.getNeo4JConnector().runTransactionalQuery(map, query);
-        }
-        }
-        catch (Exception ex) {
-                String msg = "Error occurred while merging sharings, " + ex.getMessage();
-                LOGGER.error(msg, ex);
             }
+        } catch (UnsupportedOperationException exception) {
+            LOGGER.debug("Error occurred while merging", exception);
+        } catch (Exception ex) {
+            String msg = "Error occurred while merging sharings, " + ex.getMessage();
+            LOGGER.error(msg, ex);
+        }
 
     }
 
@@ -160,6 +169,8 @@ public class SharingHandler {
         map.put("tenantId", clientId);
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(map, query);
+        } catch (UnsupportedOperationException exception) {
+            LOGGER.debug("Error occurred while merging", exception);
         } catch (Exception ex) {
             String msg = "Error occurred while deleting entity, " + ex.getMessage();
             LOGGER.error(msg, ex);
@@ -187,6 +198,8 @@ public class SharingHandler {
         map.put("userId", userId);
         try {
             Utils.getNeo4JConnector().runTransactionalQuery(map, query);
+        } catch (UnsupportedOperationException exception) {
+            LOGGER.debug("Error occurred while merging", exception);
         } catch (Exception ex) {
             String msg = "Error occurred while deleting entity, " + ex.getMessage();
             LOGGER.error(msg, ex);

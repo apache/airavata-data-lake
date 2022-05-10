@@ -19,13 +19,8 @@
 #
 
 ---
-- hosts: data-lake
-  roles:
-#    - env_setup
-#    - zookeeper
-#    - kafka
-#    - custos
-    - consul
-    - data_lake
-    - mft
-    - workflow-engine
+# datalake related handlers
+- name: start envoy
+  service: name=envoy state=started enabled=yes
+  become: yes
+
