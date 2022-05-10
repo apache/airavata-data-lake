@@ -68,6 +68,17 @@
   with_items:
     - "{{ sharing_subnets }}"
 
+- name: open firewall port {{ datalake_data_drms_rest_port }} for DRMS REST connections
+  firewalld:
+    zone: public
+    permanent: yes
+    state: enabled
+    immediate: yes
+    rich_rule: rule family=ipv4 source address="{{ item }}" port port="{{ datalake_data_drms_rest_port }}" protocol=tcp accept
+  become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
+
 - name: Create Datalake deployment directory {{ datalake_deployment_dir }}
   become: yes
   file: path={{ datalake_deployment_dir }}
