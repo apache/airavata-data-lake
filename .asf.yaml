@@ -33,7 +33,7 @@ github:
     - apache
     - data
     - lake
-    - MFT
+    - mft
 
   features:
     wiki: true
