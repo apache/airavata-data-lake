@@ -1,3 +1,17 @@
+- name: Install Datalake pre-requireties (RedHat)
+  yum: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - maven
+  become: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Install Datalake pre-requireties (Debian)
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - maven
+  become: yes
+  when: ansible_os_family == "Debian"
+
 - name: open firewall port 8443 for DRMS REST connections
   firewalld: port="8443/tcp"
     zone=public permanent=true state=enabled immediate=yes

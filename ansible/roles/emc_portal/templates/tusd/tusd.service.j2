@@ -1,0 +1,21 @@
+[Unit]
+Description=TUSD Service
+
+[Service]
+User=airavata
+
+# The configuration file application.properties should be here:
+#change this to your workspace
+WorkingDirectory={{ emc_portal_tusd_source_dir }}/tusd_linux_amd64
+
+#path to executable.
+#executable is a bash script which calls jar file
+ExecStart={{ emc_portal_tusd_source_dir }}/tusd_linux_amd64/tusd
+
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

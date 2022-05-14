@@ -1,0 +1,132 @@
+- name: Install nginx certbot python3-certbot-nginx
+  apt:
+    name:
+      - nginx
+      - certbot
+      - python3-certbot-nginx
+    state: latest
+    update_cache: yes
+  become: yes
+
+- name: Download NodeJS 16.x
+  get_url:
+    url: https://deb.nodesource.com/setup_16.x
+    dest: /tmp
+    mode: '0755'
+    force: true
+
+- name: Install NodeJS 16.x
+  command: "{{ item }} chdir=/tmp"
+  with_items:
+    - bash /tmp/nodesource_setup.sh
+    - apt install nodejs
+    - npm install yarn -g
+  become: yes
+
+- name: Create tusd source directory
+  become: yes
+  file: path={{ emc_portal_tusd_source_dir }}
+    state=directory
+    mode=0755
+    owner={{ user }}
+    group={{ group }}
+
+- name: Download tusd
+  get_url:
+    url: https://github.com/tus/tusd/releases/download/v1.9.0/tusd_linux_amd64.tar.gz
+    dest: "{{ emc_portal_tusd_source_dir }}"
+    mode: '0755'
+
+- name: Extract tusd tusd_linux_amd64.tar.gz
+  ansible.builtin.unarchive:
+    src: "{{ emc_portal_tusd_source_dir }}/tusd_linux_amd64.tar.gz"
+    dest: "{{ emc_portal_tusd_source_dir }}"
+    remote_src: yes
+
+- name: Add the tusd service config
+  template:
+    dest: /etc/systemd/system/tusd.service
+    src: tusd/tusd.service.j2
+    force: yes
+    mode: 0755
+  become: yes
+
+- name: Enable tusd service
+  command: "{{ item }}"
+  with_items:
+    - systemctl daemon-reload
+    - systemctl enable tusd.service
+    - systemctl restart tusd
+  become: yes
+
+- name: open firewall port 1080 for tusd
+  firewalld:
+    zone: public
+    permanent: yes
+    state: enabled
+    immediate: yes
+    rich_rule: rule family=ipv4 source address="{{ item }}" port port="1080" protocol=tcp accept
+  become: yes
+  with_items:
+    - "{{ sharing_subnets }}"
+
+- name: Update the default nginx
+  template:
+    dest: /etc/nginx/sites-available/default
+    src: nginx/default.j2
+    force: yes
+    mode: 0755
+  become: yes
+
+- name: Restart nginx
+  command: "{{ item }}"
+  with_items:
+    - systemctl restart nginx
+  become: yes
+
+- name: open firewall port 80 for HTTP connections
+  firewalld: port="80/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
+- name: open firewall port 443 for HTTPS connections
+  firewalld: port="443/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
+- name: Create EMC portal source directory
+  become: yes
+  file: path={{ emc_portal_source_dir }}
+    state=directory
+    mode=0755
+    owner={{ user }}
+    group={{ group }}
+
+- name: git checkout from EMC portal github repo {{ emc_portal_repo }} branch {{ emc_portal_git_branch }}
+  git: repo="{{ emc_portal_repo }}"
+    dest="{{ emc_portal_source_dir }}"
+    version="{{ emc_portal_git_branch }}"
+  register: checkout
+  tags: update
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Run EMC portal yarn install
+  command: "yarn install chdir={{emc_portal_source_dir}}"
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Run EMC portal yarn build
+  command: "yarn build chdir={{emc_portal_source_dir}}"
+  environment:
+    VUE_APP_CLIENT_ID: "{{ emc_portal_client_id }}"
+    VUE_APP_CLIENT_SEC: "{{ emc_portal_client_sec }}"
+    VUE_APP_CLIENT_USERS_GROUP_ID: "{{ emc_portal_client_users_group_id }}"
+    VUE_APP_CLIENT_ADMIN_GROUP_ID: "{{ emc_portal_client_admin_group_id }}"
+    VUE_APP_REDIRECT_URI: "{{ emc_portal_client_redirect_uri }}"
+    VUE_APP_DATA_LAKE_DRMS_URL: "{{ emc_portal_datalake_drms_url }}"
+    VUE_APP_RESOURCE_IMAGE_REGISTRY_URL: "{{ emc_portal_resource_image_registry_url }}"
+    VUE_APP_CUSTOS_API_URL: "{{ emc_portal_custos_api_url }}"
+    VUE_APP_SUPER_CLIENT_ID: "{{ emc_portal_custos_super_client_id }}"
+  become: yes
+  become_user: "{{ user }}"
