@@ -18,6 +18,7 @@ import org.apache.custos.user.management.client.UserManagementClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -32,8 +33,16 @@ public class Authenticator implements ServiceInterceptor {
     private CustosClientProvider custosClientProvider;
 
 
+    @Value("${custos.authentication.skip}")
+    private boolean skipAuthentication;
+
+
     @Override
     public <ReqT> ReqT intercept(String method, Metadata headers, ReqT msg) throws IOException {
+
+         if (skipAuthentication) {
+             return  msg;
+         }
         Optional<AuthenticatedUser> authenticatorOptional = getAuthenticatedUser(msg, headers);
         if (authenticatorOptional.isPresent()) {
             return (ReqT) setAuthenticatedUser(msg, authenticatorOptional.get());
