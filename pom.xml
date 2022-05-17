@@ -31,6 +31,7 @@
     <modules>
         <module>data-orchestrator</module>
         <module>data-resource-management-service</module>
+        <module>loadtesting-utilities</module>
     </modules>
 
     <parent>
