@@ -16,7 +16,7 @@ server {
 	#
 	# include snippets/snakeoil.conf;
 
-	root /home/airavata/emcenter-gateway/dist;
+	root {{ emc_portal_source_dir }}/dist;
     index index.html;
     location ~ ^/(css|js)/ {
         # These assets include a digest in the filename, so they will never change
@@ -32,7 +32,7 @@ server {
     }
 
     location /resource-images/ {
-        root /home/airavata/emcenter-gateway/;
+        root {{ emc_portal_source_dir }};
         try_files $uri $uri/ =404;
         expires max;
     }
