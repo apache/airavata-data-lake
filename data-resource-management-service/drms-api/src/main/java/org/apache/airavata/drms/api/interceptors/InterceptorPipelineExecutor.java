@@ -27,7 +27,7 @@ public class InterceptorPipelineExecutor implements ServerInterceptor {
         String methodName = fullMethod.split("/")[1];
         String serviceName = fullMethod.split("/")[0];
 
-        LOGGER.info("Calling method : " + serverCall.getMethodDescriptor().getFullMethodName());
+        LOGGER.debug("Calling method : " + serverCall.getMethodDescriptor().getFullMethodName());
         metadata.put(Metadata.Key.of("service-name", Metadata.ASCII_STRING_MARSHALLER), serviceName);
 
         return new ForwardingServerCallListener.SimpleForwardingServerCallListener<ReqT>(serverCallHandler.startCall(serverCall, metadata)) {
