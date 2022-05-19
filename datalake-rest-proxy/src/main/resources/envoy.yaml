@@ -24,6 +24,10 @@ static_resources:
                           route: { cluster: grpc-dataorch-service, timeout: { seconds: 60 } }
                         - match: { prefix: "/" }
                           route: { cluster: grpc-drms-service, timeout: { seconds: 60 } }
+                access_log:
+                  - name: envoy.file_access_log
+                    config:
+                      path: "/dev/stdout"
                 http_filters:
                   - name: envoy.grpc_json_transcoder
                     config:
