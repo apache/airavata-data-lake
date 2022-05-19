@@ -113,15 +113,15 @@
   become: yes
   become_user: "{{ user }}"
 
-#- name: Stop daemons if running
-#  command: "{{ item.command }} chdir={{ datalake_deployment_dir }}/{{ item.dir }}/"
-#  with_items:
-#    - { command: ./bin/drms-daemon.sh stop, dir: "DRMS-{{datalake_distribution_version}}" }
-#    - { command: ./bin/drms-custos-synchronizer-daemon.sh stop, dir: "DRMS-Custos-Synchronizer-{{datalake_distribution_version}}" }
-#    - { command: ./bin/orch-api-server-daemon.sh stop, dir: "Orchestrator-API-Service-{{datalake_distribution_version}}" }
-#  ignore_errors: yes
-#  become: yes
-#  become_user: "{{ user }}"
+- name: Stop daemons if running
+  command: "{{ item.command }} chdir={{ datalake_deployment_dir }}/{{ item.dir }}/"
+  with_items:
+    - { command: ./bin/drms-daemon.sh stop, dir: "DRMS-{{datalake_distribution_version}}" }
+    - { command: ./bin/drms-custos-synchronizer-daemon.sh stop, dir: "DRMS-Custos-Synchronizer-{{datalake_distribution_version}}" }
+    - { command: ./bin/orch-api-server-daemon.sh stop, dir: "Orchestrator-API-Service-{{datalake_distribution_version}}" }
+  ignore_errors: yes
+  become: yes
+  become_user: "{{ user }}"
 
 - name: Delete lib directories of the distributions
   file:
