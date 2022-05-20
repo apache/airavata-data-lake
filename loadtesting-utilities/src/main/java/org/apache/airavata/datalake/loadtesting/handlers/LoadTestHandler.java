@@ -299,6 +299,75 @@ public class LoadTestHandler {
     }
 
 
+
+    @RequestMapping(value = "/testFetchMetadata", method = RequestMethod.GET)
+    @ResponseBody
+    public String testFetchMetadata(@RequestParam("username") String username,
+                                     @RequestParam("tenantId") String tenantId,
+                                     @RequestParam("totalIterations") int iterations,
+                                     @RequestParam("reportChunkSize") int reportChunkSize,
+                                     @RequestParam("filePath") String filePath,
+                                     @RequestParam("entityId") String resourceId) {
+
+
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(serviceHost, servicePort).usePlaintext().build();
+        ResourceServiceGrpc.ResourceServiceBlockingStub resourceClient = ResourceServiceGrpc.newBlockingStub(channel);
+
+
+
+        int successRequests = 0;
+        int failureRequests = 0;
+        long sum = 0;
+
+        Map<String, String> latencyMap = new HashMap<>();
+
+        int chunkSize = 1;
+
+        for (int i = 0; i < iterations; i++) {
+            try {
+                long beginLatency = System.currentTimeMillis();
+                FetchResourceMetadataRequest request = FetchResourceMetadataRequest
+                        .newBuilder()
+                        .setAuthToken(DRMSServiceAuthToken.newBuilder()
+                                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
+                                        .setTenantId(tenantId)
+                                        .setUsername(username)
+                                        .build()))
+                        .setResourceId(resourceId)
+                        .build();
+                FetchResourceMetadataResponse response = resourceClient.fetchResourceMetadata(request);
+                long endLatency = System.currentTimeMillis();
+
+                long diff = endLatency - beginLatency;
+                latencyMap.put(String.valueOf(i), String.valueOf(diff));
+                sum += diff;
+                if (response.getMetadataCount()!= 0) {
+                    successRequests++;
+                }
+            } catch (Exception ex) {
+                failureRequests++;
+            }
+
+            if (chunkSize % reportChunkSize == 0) {
+                long avgSuccessRate = (successRequests / chunkSize) * 100;
+                long avgFailureRare = (failureRequests / chunkSize) * 100;
+
+                writeToAFile(latencyMap, avgSuccessRate, avgFailureRare, filePath, "testResourceCreateRequest");
+                latencyMap.clear();
+                successRequests = 0;
+                failureRequests = 0;
+                chunkSize = 1;
+            } else {
+                chunkSize++;
+            }
+        }
+        return "load test completed";
+
+
+
+    }
+
+
     private void writeToAFile(Map<String, String> valuesMap, long avgSuccessRate, long avgFailureRate, String resultPath,
                               String methodName) {
 
