@@ -37,6 +37,11 @@
             <artifactId>opencsv</artifactId>
             <version>3.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.custos</groupId>
+            <artifactId>custos-java-sdk</artifactId>
+            <version>${custos.clients.version}</version>
+        </dependency>
 
     </dependencies>
 

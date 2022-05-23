@@ -19,49 +19,51 @@
 #
 
 ---
-# datalake related handlers
-- name: start envoy
-  service: name=envoy state=started enabled=yes
+- name: start mft-controller
+  service: name=mft-controller state=started enabled=yes
   become: yes
 
 
-- name: stop envoy
-  service: name=envoy state=stopped enabled=yes
+- name: stop mft-controller
+  service: name=mft-controller state=stopped enabled=yes
   become: yes
 
-- name: start drms-service
-  service: name=drms-service state=started enabled=yes
-  become: yes
-
-
-- name: stop drms-service
-  service: name=drms-service state=stopped enabled=yes
+- name: start mft-api
+  service: name=mft-api state=started enabled=yes
   become: yes
 
 
-- name: start drms-custos-sync
-  service: name=drms-custos-sync state=started enabled=yes
+- name: stop mft-api
+  service: name=mft-api state=stopped enabled=yes
   become: yes
 
 
-- name: stop drms-custos-sync
-  service: name=drms-custos-sync state=stopped enabled=yes
-  become: yes
-
-- name: start orch-service
-  service: name=orch-service state=started enabled=yes
+- name: start mft-resource
+  service: name=mft-resource state=started enabled=yes
   become: yes
 
 
-- name: stop orch-service
-  service: name=orch-service state=stopped enabled=yes
+- name: stop mft-resource
+  service: name=mft-resource state=stopped enabled=yes
   become: yes
 
 
+- name: start mft-secret
+  service: name=mft-secret state=started enabled=yes
+  become: yes
 
 
+- name: stop mft-secret
+  service: name=mft-secret state=stopped enabled=yes
+  become: yes
 
 
+- name: start mft-agent
+  service: name=mft-agent state=started enabled=yes
+  become: yes
 
 
+- name: stop mft-agent
+  service: name=mft-agent state=stopped enabled=yes
+  become: yes
 

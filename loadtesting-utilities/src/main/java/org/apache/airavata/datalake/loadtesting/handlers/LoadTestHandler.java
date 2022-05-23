@@ -3,10 +3,12 @@ package org.apache.airavata.datalake.loadtesting.handlers;
 import com.opencsv.CSVWriter;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.stub.MetadataUtils;
 import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.DRMSServiceAuthToken;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.*;
+import org.apache.custos.clients.core.ClientUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,22 +99,34 @@ public class LoadTestHandler {
                                      @RequestParam("reportChunkSize") int reportChunkSize,
                                      @RequestParam("filePath") String filePath,
                                      @RequestParam("depth") int depth,
-                                     @RequestParam("type") String type) {
+                                     @RequestParam("type") String type,
+                                     @RequestParam("token") String token) {
 
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(serviceHost, servicePort).usePlaintext().build();
         ResourceServiceGrpc.ResourceServiceBlockingStub resourceClient = ResourceServiceGrpc.newBlockingStub(channel);
+        ResourceSearchRequest request = null;
+        if (token.isEmpty()) {
+            request = ResourceSearchRequest
+                    .newBuilder()
+                    .setType(type)
+                    .setDepth(depth)
+                    .setAuthToken(DRMSServiceAuthToken.newBuilder()
+                            .setAuthenticatedUser(AuthenticatedUser.newBuilder()
+                                    .setTenantId(tenantId)
+                                    .setUsername(username)
+                                    .build()))
+                    .build();
+        } else {
+            request = ResourceSearchRequest
+                    .newBuilder()
+                    .setType(type)
+                    .setDepth(depth)
+                    .build();
+            resourceClient =  MetadataUtils.attachHeaders(resourceClient, ClientUtils.getAuthorizationHeader(token));
 
-        ResourceSearchRequest request = ResourceSearchRequest
-                .newBuilder()
-                .setType(type)
-                .setDepth(depth)
-                .setAuthToken(DRMSServiceAuthToken.newBuilder()
-                        .setAuthenticatedUser(AuthenticatedUser.newBuilder()
-                                .setTenantId(tenantId)
-                                .setUsername(username)
-                                .build()))
-                .build();
+        }
+
 
         int successRequests = 0;
         int failureRequests = 0;
@@ -156,17 +170,16 @@ public class LoadTestHandler {
     }
 
 
-
     @RequestMapping(value = "/testFetchChildResource", method = RequestMethod.GET)
     @ResponseBody
     public String testFetchChildResource(@RequestParam("username") String username,
-                                     @RequestParam("tenantId") String tenantId,
-                                     @RequestParam("totalIterations") int iterations,
-                                     @RequestParam("reportChunkSize") int reportChunkSize,
-                                     @RequestParam("filePath") String filePath,
-                                     @RequestParam("entityId") String resourceId,
-                                     @RequestParam("depth") int depth,
-                                     @RequestParam("type") String type) {
+                                         @RequestParam("tenantId") String tenantId,
+                                         @RequestParam("totalIterations") int iterations,
+                                         @RequestParam("reportChunkSize") int reportChunkSize,
+                                         @RequestParam("filePath") String filePath,
+                                         @RequestParam("entityId") String resourceId,
+                                         @RequestParam("depth") int depth,
+                                         @RequestParam("type") String type) {
 
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(serviceHost, servicePort).usePlaintext().build();
@@ -241,7 +254,6 @@ public class LoadTestHandler {
         ResourceServiceGrpc.ResourceServiceBlockingStub resourceClient = ResourceServiceGrpc.newBlockingStub(channel);
 
 
-
         int successRequests = 0;
         int failureRequests = 0;
         long sum = 0;
@@ -261,8 +273,8 @@ public class LoadTestHandler {
                                         .setUsername(username)
                                         .build()))
                         .setResource(GenericResource.newBuilder()
-                                .setResourceName(resourceName+"_"+i)
-                                .setResourceId(resourceId+"_"+i)
+                                .setResourceName(resourceName + "_" + i)
+                                .setResourceId(resourceId + "_" + i)
                                 .setType(type)
                                 .build())
                         .build();
@@ -295,24 +307,21 @@ public class LoadTestHandler {
         return "load test completed";
 
 
-
     }
-
 
 
     @RequestMapping(value = "/testFetchMetadata", method = RequestMethod.GET)
     @ResponseBody
     public String testFetchMetadata(@RequestParam("username") String username,
-                                     @RequestParam("tenantId") String tenantId,
-                                     @RequestParam("totalIterations") int iterations,
-                                     @RequestParam("reportChunkSize") int reportChunkSize,
-                                     @RequestParam("filePath") String filePath,
-                                     @RequestParam("entityId") String resourceId) {
+                                    @RequestParam("tenantId") String tenantId,
+                                    @RequestParam("totalIterations") int iterations,
+                                    @RequestParam("reportChunkSize") int reportChunkSize,
+                                    @RequestParam("filePath") String filePath,
+                                    @RequestParam("entityId") String resourceId) {
 
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress(serviceHost, servicePort).usePlaintext().build();
         ResourceServiceGrpc.ResourceServiceBlockingStub resourceClient = ResourceServiceGrpc.newBlockingStub(channel);
-
 
 
         int successRequests = 0;
@@ -341,7 +350,7 @@ public class LoadTestHandler {
                 long diff = endLatency - beginLatency;
                 latencyMap.put(String.valueOf(i), String.valueOf(diff));
                 sum += diff;
-                if (response.getMetadataCount()!= 0) {
+                if (response.getMetadataCount() != 0) {
                     successRequests++;
                 }
             } catch (Exception ex) {
@@ -362,7 +371,6 @@ public class LoadTestHandler {
             }
         }
         return "load test completed";
-
 
 
     }
