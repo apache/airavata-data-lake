@@ -35,15 +35,21 @@
   become: yes
   become_user: "{{ user }}"
 
-- name: Stop daemons if running
-  command: "{{ item.command }} chdir={{ workflow_deployment_dir }}/{{ item.dir }}/"
-  with_items:
-    - { command: ./bin/wf-controller-daemon.sh stop, dir: "WF-Controller-{{datalake_distribution_version}}" }
-    - { command: ./bin/wf-worker-daemon.sh stop, dir: "WF-Worker-{{datalake_distribution_version}}" }
-    - { command: ./bin/wf-manager-daemon.sh stop, dir: "WF-Manager-{{datalake_distribution_version}}" }
-  ignore_errors: yes
+- name: Stop wf-controller
+  command: systemctl daemon-reload
+  notify: stop wf-controller
   become: yes
-  become_user: "{{ user }}"
+
+- name: Stop wf-manager
+  command: systemctl daemon-reload
+  notify: stop wf-manager
+  become: yes
+
+- name: Stop wf-worker
+  command: systemctl daemon-reload
+  notify: stop wf-worker
+  become: yes
+
 
 - name: Delete lib directories of the distributions
   file:
@@ -87,12 +93,17 @@
   become: yes
   become_user: "{{ user }}"
 
-- name: Start workflow services
-  command: "{{ item.command }} chdir={{ workflow_deployment_dir }}/{{ item.dir }}/"
-  with_items:
-    - { command: ./bin/wf-controller-daemon.sh start, dir: "WF-Controller-{{datalake_distribution_version}}" }
-    - { command: ./bin/wf-worker-daemon.sh start, dir: "WF-Worker-{{datalake_distribution_version}}" }
-    - { command: ./bin/wf-manager-daemon.sh start, dir: "WF-Manager-{{datalake_distribution_version}}" }
-  ignore_errors: yes
+- name: Start wf-controller
+  command: systemctl daemon-reload
+  notify: start wf-controller
   become: yes
-  become_user: "{{ user }}"
+
+- name: Start wf-manager
+  command: systemctl daemon-reload
+  notify: start wf-manager
+  become: yes
+
+- name: Start wf-worker
+  command: systemctl daemon-reload
+  notify: start wf-worker
+  become: yes

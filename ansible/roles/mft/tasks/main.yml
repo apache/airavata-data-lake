@@ -87,17 +87,30 @@
   become: yes
   become_user: "{{ user }}"
 
-- name: Stop daemons if running
-  command: "{{ item.command }} chdir={{ mft_deployment_dir }}/{{ item.dir }}/"
-  with_items:
-    - { command: ./bin/controller-daemon.sh stop, dir: "MFT-Controller-{{mft_distribution_version}}" }
-    - { command: ./bin/agent-daemon.sh stop, dir: "MFT-Agent-{{mft_distribution_version}}" }
-    - { command: ./bin/api-service-daemon.sh stop, dir: "API-Service-{{mft_distribution_version}}" }
-    - { command: ./bin/resource-service-daemon.sh stop, dir: "Resource-Service-{{mft_distribution_version}}" }
-    - { command: ./bin/secret-service-daemon.sh stop, dir: "Secret-Service-{{mft_distribution_version}}" }
-  ignore_errors: yes
+- name: Stop mft  controller
+  command: systemctl daemon-reload
+  notify: stop mft-controller
   become: yes
-  become_user: "{{ user }}"
+
+- name: Stop mft  resource service
+  command: systemctl daemon-reload
+  notify: stop mft-resource
+  become: yes
+
+- name: Stop mft  secret service
+  command: systemctl daemon-reload
+  notify: stop mft-secret
+  become: yes
+
+- name: Stop mft  api service
+  command: systemctl daemon-reload
+  notify: stop mft-api
+  become: yes
+
+- name: Stop mft  agent service
+  command: systemctl daemon-reload
+  notify: stop mft-agent
+  become: yes
 
 - name: Delete lib directories of the distributions
   file:
@@ -159,14 +172,27 @@
   become: yes
   become_user: "{{ user }}"
 
-
-- name: Start MFT daemons
-  command: "{{ item.command }} chdir={{ mft_deployment_dir }}/{{ item.dir }}/"
-  with_items:
-    - { command: ./bin/controller-daemon.sh start, dir: "MFT-Controller-{{mft_distribution_version}}" }
-    - { command: ./bin/agent-daemon.sh start, dir: "MFT-Agent-{{mft_distribution_version}}" }
-    - { command: ./bin/api-service-daemon.sh start, dir: "API-Service-{{mft_distribution_version}}" }
-    - { command: ./bin/resource-service-daemon.sh start, dir: "Resource-Service-{{mft_distribution_version}}" }
-    - { command: ./bin/secret-service-daemon.sh start, dir: "Secret-Service-{{mft_distribution_version}}" }
+- name: Start mft  controller
+  command: systemctl daemon-reload
+  notify: start mft-controller
   become: yes
-  become_user: "{{ user }}"
+
+- name: Start mft  resource service
+  command: systemctl daemon-reload
+  notify: start mft-resource
+  become: yes
+
+- name: Start mft  secret service
+  command: systemctl daemon-reload
+  notify: start mft-secret
+  become: yes
+
+- name: Start mft api service
+  command: systemctl daemon-reload
+  notify: start mft-api
+  become: yes
+
+- name: Start mft  agent service
+  command: systemctl daemon-reload
+  notify: start mft-agent
+  become: yes

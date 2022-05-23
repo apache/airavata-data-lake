@@ -113,15 +113,21 @@
   become: yes
   become_user: "{{ user }}"
 
-- name: Stop daemons if running
-  command: "{{ item.command }} chdir={{ datalake_deployment_dir }}/{{ item.dir }}/"
-  with_items:
-    - { command: ./bin/drms-daemon.sh stop, dir: "DRMS-{{datalake_distribution_version}}" }
-    - { command: ./bin/drms-custos-synchronizer-daemon.sh stop, dir: "DRMS-Custos-Synchronizer-{{datalake_distribution_version}}" }
-    - { command: ./bin/orch-api-server-daemon.sh stop, dir: "Orchestrator-API-Service-{{datalake_distribution_version}}" }
-  ignore_errors: yes
+- name: Stop drms  service
+  command: systemctl daemon-reload
+  notify: stop drms-service
   become: yes
-  become_user: "{{ user }}"
+
+- name: Stop custos synchronizer  service
+  command: systemctl daemon-reload
+  notify: stop drms-custos-sync
+  become: yes
+
+- name: Stop orchestrator  service
+  command: systemctl daemon-reload
+  notify: stop orch-service
+  become: yes
+
 
 - name: Delete lib directories of the distributions
   file:
@@ -167,16 +173,21 @@
   become: yes
   become_user: "{{ user }}"
 
-
-- name: Start Datalake daemons
-  command: "{{ item.command }} chdir={{ datalake_deployment_dir }}/{{ item.dir }}/"
-  with_items:
-    - { command: ./bin/drms-daemon.sh start, dir: "DRMS-{{datalake_distribution_version}}" }
-    - { command: ./bin/drms-custos-synchronizer-daemon.sh start, dir: "DRMS-Custos-Synchronizer-{{datalake_distribution_version}}" }
-    - { command: ./bin/orch-api-server-daemon.sh start, dir: "Orchestrator-API-Service-{{datalake_distribution_version}}" }
-  ignore_errors: yes
+- name: Start drms  service
+  command: systemctl daemon-reload
+  notify: start drms-service
   become: yes
-  become_user: "{{ user }}"
+
+- name: Start custos synchronizer  service
+  command: systemctl daemon-reload
+  notify: start drms-custos-sync
+  become: yes
+
+- name: Start orchestrator  service
+  command: systemctl daemon-reload
+  notify: start orch-service
+  become: yes
+
 
 - name: Start Envoy  proxy
   command: systemctl daemon-reload
