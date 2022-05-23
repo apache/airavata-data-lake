@@ -54,6 +54,7 @@ public class Neo4JConnector {
     }
 
     public List<Record> searchNodes(String query) {
+        driver.verifyConnectivity();
         try (Session session = driver.session()) {
             Result result = session.run(query);
             return result.list();
@@ -61,6 +62,7 @@ public class Neo4JConnector {
     }
 
     public List<Record> searchNodes(Map<String, Object> properties, String query) {
+        driver.verifyConnectivity();
         try (Session session = driver.session()) {
             Result result = session.run(query, properties);
             return result.list();
@@ -69,6 +71,7 @@ public class Neo4JConnector {
 
     public void mergeNode(Map<String, Object> properties, String label, String userId, String entityId,
                           String tenantId) {
+        driver.verifyConnectivity();
         try (Session session = driver.session()) {
             Map<String, Object> parameters = new HashMap<>();
             properties.put("entityId", entityId);
@@ -90,6 +93,7 @@ public class Neo4JConnector {
                                                       String childLabel, String parentLablel, String userId, String childEntityId,
                                                       String parentEntityId,
                                                       String tenantId) {
+        driver.verifyConnectivity();
         try (Session session = driver.session()) {
             Map<String, Object> parameters = new HashMap<>();
             childProperties.put("childEntityId", childEntityId);
@@ -117,6 +121,7 @@ public class Neo4JConnector {
 
     public void deleteNode(String label, String entityId,
                            String tenantId) {
+        driver.verifyConnectivity();
         try (Session session = driver.session()) {
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("entityId", entityId);
@@ -129,6 +134,7 @@ public class Neo4JConnector {
     }
 
     public void runTransactionalQuery(Map<String, Object> parameters, String query) {
+        driver.verifyConnectivity();
         try (Session session = driver.session()) {
             Transaction tx = session.beginTransaction();
             Result result = tx.run(query, parameters);
@@ -139,6 +145,7 @@ public class Neo4JConnector {
 
 
     public void runTransactionalQuery(String query) {
+        driver.verifyConnectivity();
         try (Session session = driver.session()) {
             Transaction tx = session.beginTransaction();
             Result result = tx.run(query);
@@ -149,6 +156,7 @@ public class Neo4JConnector {
 
     public void createMetadataNode(String parentLabel, String parentIdName, String parentIdValue,
                                    String userId, String key, String value) {
+        driver.verifyConnectivity();
         try(Session session = driver.session()) {
             Transaction tx = session.beginTransaction();
             tx.run("match (u:User)-[r1:MEMBER_OF]->(g:Group)<-[r2:SHARED_WITH]-(s:" + parentLabel + ") where u.userId='" + userId +
@@ -160,6 +168,7 @@ public class Neo4JConnector {
     }
 
     public boolean isOpen() {
+        driver.verifyConnectivity();
         return driver.session().isOpen();
     }
 
