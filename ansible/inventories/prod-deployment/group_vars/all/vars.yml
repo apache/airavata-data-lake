@@ -136,6 +136,21 @@ workflow_manager_custos_id: "{{ vault_workflow_manager_custos_id }}"
 workflow_manager_custos_secret: "{{ vault_workflow_manager_custos_secret }}"
 workflow_manager_work_dir: /home/airavata/tmp_data
 
+emc_portal_source_dir: /home/airavata/emcenter-gateway
+emc_portal_repo: https://github.com/SciGaP/emcenter-gateway.git
+emc_portal_git_branch: master
+emc_portal_tusd_source_dir: /home/airavata/tusd
+emc_portal_host: "gateway.iubemcenter.indiana.edu"
+emc_portal_client_id: "{{ vault_emc_portal_client_id }}"
+emc_portal_client_sec: "{{ vault_emc_portal_client_sec }}"
+emc_portal_client_users_group_id: "{{ vault_emc_portal_client_users_group_id }}"
+emc_portal_client_admin_group_id: "{{ vault_emc_portal_client_admin_group_id }}"
+emc_portal_client_redirect_uri: "https://{{ emc_portal_host }}/callback"
+emc_portal_datalake_drms_url: "https://{{ groups['data-lake'][0] }}:8443"
+emc_portal_resource_image_registry_url: "https://{{ emc_portal_host }}/resource-images"
+emc_portal_custos_api_url: "https://{{ custos_host }}/apiserver/"
+emc_portal_custos_super_client_id: "{{ vault_emc_portal_custos_super_client_id }}"
+
 sharing_subnets:
   - "149.163.0.0/16"
   - "140.182.0.0/16"
