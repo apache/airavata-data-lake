@@ -24,6 +24,7 @@ import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowInvocat
 import org.apache.airavata.datalake.orchestrator.workflow.engine.WorkflowMessage;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.AbstractTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.OutPort;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.DataParsingWorkflowResourceCleanUpTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.GenericDataParsingTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.MetadataPersistTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl.SyncLocalDataDownloadTask;
@@ -184,10 +185,14 @@ public class DataParsingWorkflowManager {
 
             taskMap.put(downloadTask.getTaskId(), downloadTask);
 
+            DataParsingWorkflowResourceCleanUpTask cleanUpTask = new DataParsingWorkflowResourceCleanUpTask();
+            cleanUpTask.setDownloadPath(tempDownloadPath);
+            cleanUpTask.setTaskId("DPT-"+UUID.randomUUID().toString());
+            taskMap.put(cleanUpTask.getTaskId(),cleanUpTask);
+
             for(String parserId: parserInputMappings.keySet()) {
 
                 String parserWorkingDir = baseWorkingDir + UUID.randomUUID();
-
                 GenericDataParsingTask dataParsingTask = new GenericDataParsingTask();
                 dataParsingTask.setTaskId("DPT-" + UUID.randomUUID().toString());
                 dataParsingTask.setParserId(parserId);
@@ -197,6 +202,8 @@ public class DataParsingWorkflowManager {
                 dataParsingTask.setWorkingDirectory(parserWorkingDir);
                 taskMap.put(dataParsingTask.getTaskId(), dataParsingTask);
 
+                cleanUpTask.addParsingDir(parserWorkingDir);
+
                 OutPort outPort = new OutPort();
                 outPort.setNextTaskId(dataParsingTask.getTaskId());
                 downloadTask.addOutPort(outPort);
@@ -204,6 +211,7 @@ public class DataParsingWorkflowManager {
                 DataParsingJob dataParsingJob = selectedPJs.stream().filter(pj -> pj.getParserId().equals(parserId)).findFirst().get();
                 ParserFetchResponse parser = parserClient.fetchParser(ParserFetchRequest.newBuilder().setParserId(parserId).build());
 
+                MetadataPersistTask finalTask = null;
                 for (DataParserOutputInterface dataParserOutputInterface: parser.getParser().getOutputInterfacesList()) {
 
                     Optional<DataParsingJobOutput> dataParsingJobOutput = dataParsingJob.getDataParsingJobOutputsList().stream().filter(o ->
@@ -226,11 +234,19 @@ public class DataParsingWorkflowManager {
                         dpOut.setNextTaskId(mpt.getTaskId());
                         dataParsingTask.addOutPort(dpOut);
                         taskMap.put(mpt.getTaskId(), mpt);
+                        finalTask = mpt;
                     }
                 }
 
+                OutPort dpOut = new OutPort();
+                dpOut.setNextTaskId(cleanUpTask.getTaskId());
+                if (finalTask != null) {
+                    finalTask.addOutPort(dpOut);
+                }else {
+                    dataParsingTask.addOutPort(dpOut);
+                }
             }
-
+            
             String[] startTaskIds = {downloadTask.getTaskId()};
             String workflowId = workflowOperator.buildAndRunWorkflow(taskMap, startTaskIds);
 
