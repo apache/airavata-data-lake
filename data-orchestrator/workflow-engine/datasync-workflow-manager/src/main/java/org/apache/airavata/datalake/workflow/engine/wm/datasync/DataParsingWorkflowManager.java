@@ -193,7 +193,6 @@ public class DataParsingWorkflowManager {
             for(String parserId: parserInputMappings.keySet()) {
 
                 String parserWorkingDir = baseWorkingDir + UUID.randomUUID();
-
                 GenericDataParsingTask dataParsingTask = new GenericDataParsingTask();
                 dataParsingTask.setTaskId("DPT-" + UUID.randomUUID().toString());
                 dataParsingTask.setParserId(parserId);
@@ -205,12 +204,9 @@ public class DataParsingWorkflowManager {
 
                 cleanUpTask.addParsingDir(parserWorkingDir);
 
-
                 OutPort outPort = new OutPort();
                 outPort.setNextTaskId(dataParsingTask.getTaskId());
                 downloadTask.addOutPort(outPort);
-
-
 
                 DataParsingJob dataParsingJob = selectedPJs.stream().filter(pj -> pj.getParserId().equals(parserId)).findFirst().get();
                 ParserFetchResponse parser = parserClient.fetchParser(ParserFetchRequest.newBuilder().setParserId(parserId).build());
@@ -239,8 +235,6 @@ public class DataParsingWorkflowManager {
                         dataParsingTask.addOutPort(dpOut);
                         taskMap.put(mpt.getTaskId(), mpt);
                         finalTask = mpt;
-
-
                     }
                 }
 
@@ -251,7 +245,6 @@ public class DataParsingWorkflowManager {
                 }else {
                     dataParsingTask.addOutPort(dpOut);
                 }
-
             }
             
             String[] startTaskIds = {downloadTask.getTaskId()};
