@@ -29,3 +29,8 @@
     - data_lake
     - mft
     - workflow-engine
+
+- hosts: emc-portal
+  roles:
+    - env_setup
+    - emc_portal

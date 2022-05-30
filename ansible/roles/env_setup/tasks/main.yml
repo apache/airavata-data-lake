@@ -49,34 +49,46 @@
 #     - iptables
 #     - ip6tables
 
+- name: Install Git (RedHat)
+  yum:
+    name:
+    - git
+    state: latest
+    update_cache: yes
+  become: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Install Git (Debian)
+  apt:
+    name:
+      - git
+    state: latest
+    update_cache: yes
+  become: yes
+  when: ansible_os_family == "Debian"
+
+- name: Ansible flush zone=public
+  ansible.builtin.file:
+    path:
+      - /etc/firewalld/zones/public.xml
+      - /etc/firewalld/zones/public.xml.old
+    state: absent
+
+#- name: Ansible flush zone=public public.xml
+#  shell: rm -rf /etc/firewalld/zones/public.xml
+#  become: yes
+#
+#- name: Ansible flush zone=public public.xml.old
+#  shell: rm -rf /etc/firewalld/zones/public.xml.old
+#  become: yes
+
+- name: open firewall port 22 for SSH connections
+  firewalld: port="22/tcp"
+    zone=public permanent=true state=enabled immediate=yes
+  become: yes
+
 - name: Start firewalld service
   service: name=firewalld state=started
   become: yes
 
-- name: open firewall port 22 for SSH connections
-  firewalld:
-    zone: public
-    permanent: yes
-    state: enabled
-    immediate: yes
-    rich_rule: rule family=ipv4 source address="{{ item }}" port port="22" protocol=tcp accept
-  become: yes
-  with_items:
-    - "{{ sharing_subnets }}"
-
-- name: Install Datalake pre-requireties (RedHat)
-  yum: name={{ item }} state=latest update_cache=yes
-  with_items:
-    - git
-    - maven
-  become: yes
-  when: ansible_os_family == "RedHat"
-
-- name: Install Datalake pre-requireties (Debian)
-  apt: name={{ item }} state=latest update_cache=yes
-  with_items:
-    - git
-    - maven
-  become: yes
-  when: ansible_os_family == "Debian"
 ...
