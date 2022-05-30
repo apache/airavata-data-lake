@@ -20,13 +20,16 @@
 
 ---
 
+- name: stop wf-controller
+  service: name=wf-controller state=stopped enabled=yes
+  become: yes
+
 - name: start wf-controller
   service: name=wf-controller state=started enabled=yes
   become: yes
 
-
-- name: stop wf-controller
-  service: name=wf-controller state=stopped enabled=yes
+- name: stop wf-manager
+  service: name=wf-manager state=stopped enabled=yes
   become: yes
 
 
@@ -34,17 +37,12 @@
   service: name=wf-manager state=started enabled=yes
   become: yes
 
-
-- name: stop wf-manager
-  service: name=wf-manager state=stopped enabled=yes
+- name: stop wf-worker
+  service: name=wf-worker state=stopped enabled=yes
   become: yes
-
 
 - name: start wf-worker
   service: name=wf-worker state=started enabled=yes
   become: yes
 
 
-- name: stop wf-worker
-  service: name=wf-worker state=stopped enabled=yes
-  become: yes

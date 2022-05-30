@@ -19,42 +19,41 @@
 #
 
 ---
+
+- name: stop mft-controller
+  service: name=mft-controller state=stopped enabled=yes
+  become: yes
+
 - name: start mft-controller
   service: name=mft-controller state=started enabled=yes
   become: yes
 
-
-- name: stop mft-controller
-  service: name=mft-controller state=stopped enabled=yes
+- name: stop mft-api
+  service: name=mft-api state=stopped enabled=yes
   become: yes
 
 - name: start mft-api
   service: name=mft-api state=started enabled=yes
   become: yes
 
-
-- name: stop mft-api
-  service: name=mft-api state=stopped enabled=yes
+- name: stop mft-resource
+  service: name=mft-resource state=stopped enabled=yes
   become: yes
-
 
 - name: start mft-resource
   service: name=mft-resource state=started enabled=yes
   become: yes
 
-
-- name: stop mft-resource
-  service: name=mft-resource state=stopped enabled=yes
+- name: stop mft-secret
+  service: name=mft-secret state=stopped enabled=yes
   become: yes
-
 
 - name: start mft-secret
   service: name=mft-secret state=started enabled=yes
   become: yes
 
-
-- name: stop mft-secret
-  service: name=mft-secret state=stopped enabled=yes
+- name: stop mft-agent
+  service: name=mft-agent state=stopped enabled=yes
   become: yes
 
 
@@ -63,7 +62,5 @@
   become: yes
 
 
-- name: stop mft-agent
-  service: name=mft-agent state=stopped enabled=yes
-  become: yes
+
 
