@@ -20,32 +20,36 @@
 
 ---
 # datalake related handlers
-- name: start envoy
-  service: name=envoy state=started enabled=yes
-  become: yes
+
 
 
 - name: stop envoy
   service: name=envoy state=stopped enabled=yes
   become: yes
 
-- name: start drms-service
-  service: name=drms-service state=started enabled=yes
+- name: start envoy
+  service: name=envoy state=started enabled=yes
   become: yes
-
 
 - name: stop drms-service
   service: name=drms-service state=stopped enabled=yes
   become: yes
 
+- name: start drms-service
+  service: name=drms-service state=started enabled=yes
+  become: yes
+
+- name: stop drms-custos-sync
+  service: name=drms-custos-sync state=stopped enabled=yes
+  become: yes
 
 - name: start drms-custos-sync
   service: name=drms-custos-sync state=started enabled=yes
   become: yes
 
 
-- name: stop drms-custos-sync
-  service: name=drms-custos-sync state=stopped enabled=yes
+- name: stop orch-service
+  service: name=orch-service state=stopped enabled=yes
   become: yes
 
 - name: start orch-service
@@ -53,9 +57,6 @@
   become: yes
 
 
-- name: stop orch-service
-  service: name=orch-service state=stopped enabled=yes
-  become: yes
 
 
 

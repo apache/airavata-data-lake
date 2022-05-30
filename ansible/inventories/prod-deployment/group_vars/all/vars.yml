@@ -71,6 +71,8 @@ mft_secret_service_grpc_port: 7003
 mft_secret_service_backend: org.apache.airavata.mft.secret.server.backend.custos.CustosSecretBackend
 mft_secret_service_custos_client_id: "{{ vault_mft_resource_service_custos_client_id }}"
 mft_secret_service_custos_client_secret: "{{ vault_mft_resource_service_custos_client_secret }}"
+mft_custos_agent_secret: "{{ vault_mft_custos_agent_secret }}"
+mft_custos_agent: "{{ vault_mft_custos_agent }}"
 
 mft_consul_host: localhost
 mft_consul_port: 8500
