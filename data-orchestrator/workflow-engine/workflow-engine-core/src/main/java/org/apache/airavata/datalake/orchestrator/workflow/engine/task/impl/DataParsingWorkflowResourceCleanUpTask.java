@@ -1,7 +1,6 @@
 package org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl;
 
-import org.apache.airavata.datalake.orchestrator.workflow.engine.task.NonBlockingTask;
-import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.NonBlockingSection;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.BlockingTask;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.NonBlockingTaskDef;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.TaskParam;
 import org.apache.helix.task.TaskResult;
@@ -10,11 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 @NonBlockingTaskDef(name = "DataParsingWorkflowResourceCleanUpTask")
-public class DataParsingWorkflowResourceCleanUpTask extends NonBlockingTask {
+public class DataParsingWorkflowResourceCleanUpTask extends BlockingTask {
 
     private final static Logger logger = LoggerFactory.getLogger(DataParsingWorkflowResourceCleanUpTask.class);
 
@@ -24,40 +21,6 @@ public class DataParsingWorkflowResourceCleanUpTask extends NonBlockingTask {
 
     @TaskParam(name = "parsingDir")
     private final ThreadLocal<String> parsingDir = new ThreadLocal<>();
-
-
-    @NonBlockingSection(sectionIndex = 1)
-    public TaskResult section1() {
-        try {
-            logger.info("Running donwload file cleanup");
-
-            Files.deleteIfExists(Paths.get(downloadPath.get()));
-
-
-        } catch (Exception ex) {
-            String msg = " downloaded file clean up failed Reason: " + ex.getMessage();
-            logger.error(msg, ex);
-            return new TaskResult(TaskResult.Status.FAILED, msg);
-        }
-        return new TaskResult(TaskResult.Status.FAILED, " downloaded file clean up failed");
-    }
-
-    @NonBlockingSection(sectionIndex = 2)
-    public TaskResult section2() {
-        try {
-            logger.info("Running parsing directory cleanup");
-            if (!parsingDir.get().isEmpty()) {
-                Files.deleteIfExists(Paths.get(parsingDir.get()));
-            }
-
-
-        } catch (Exception exception) {
-            String msg = "parsing directory folder clean up failed Reason : " + exception.getMessage();
-            logger.error(msg, exception);
-            return new TaskResult(TaskResult.Status.FAILED, msg);
-        }
-        return new TaskResult(TaskResult.Status.FAILED, "parsing directory folder clean up failed");
-    }
 
 
     public String getDownloadPath() {
@@ -76,4 +39,25 @@ public class DataParsingWorkflowResourceCleanUpTask extends NonBlockingTask {
         this.parsingDir.set(parsingDir);
     }
 
+    @Override
+    public TaskResult runBlockingCode() throws Exception {
+        try {
+            logger.info("Running download file cleanup");
+
+            Files.deleteIfExists(Paths.get(downloadPath.get()));
+
+            logger.info("Running parsing directory cleanup");
+            if (!parsingDir.get().isEmpty()) {
+                Files.deleteIfExists(Paths.get(parsingDir.get()));
+            }
+
+            return new TaskResult(TaskResult.Status.COMPLETED, "Completed");
+
+        } catch (Exception ex) {
+            String msg = " files clean up failed Reason: " + ex.getMessage();
+            logger.error(msg, ex);
+            return new TaskResult(TaskResult.Status.FAILED, msg);
+        }
+
+    }
 }

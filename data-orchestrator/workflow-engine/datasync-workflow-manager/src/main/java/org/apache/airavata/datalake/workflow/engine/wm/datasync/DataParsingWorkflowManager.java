@@ -188,7 +188,6 @@ public class DataParsingWorkflowManager {
             DataParsingWorkflowResourceCleanUpTask cleanUpTask = new DataParsingWorkflowResourceCleanUpTask();
             cleanUpTask.setDownloadPath(tempDownloadPath);
             cleanUpTask.setTaskId("DPT-"+UUID.randomUUID().toString());
-            cleanUpTask.setCurrentSection(1);
             taskMap.put(cleanUpTask.getTaskId(),cleanUpTask);
 
             for(String parserId: parserInputMappings.keySet()) {
