@@ -188,6 +188,7 @@ public class DataParsingWorkflowManager {
             DataParsingWorkflowResourceCleanUpTask cleanUpTask = new DataParsingWorkflowResourceCleanUpTask();
             cleanUpTask.setDownloadPath(tempDownloadPath);
             cleanUpTask.setTaskId("DPT-"+UUID.randomUUID().toString());
+            cleanUpTask.setCurrentSection(1);
             taskMap.put(cleanUpTask.getTaskId(),cleanUpTask);
 
             for(String parserId: parserInputMappings.keySet()) {
@@ -202,7 +203,8 @@ public class DataParsingWorkflowManager {
                 dataParsingTask.setWorkingDirectory(parserWorkingDir);
                 taskMap.put(dataParsingTask.getTaskId(), dataParsingTask);
 
-                cleanUpTask.addParsingDir(parserWorkingDir);
+                cleanUpTask.setParsingDir(parserWorkingDir);
+
 
                 OutPort outPort = new OutPort();
                 outPort.setNextTaskId(dataParsingTask.getTaskId());

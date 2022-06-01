@@ -23,7 +23,7 @@ public class DataParsingWorkflowResourceCleanUpTask extends NonBlockingTask {
     private final ThreadLocal<String> downloadPath = new ThreadLocal<>();
 
     @TaskParam(name = "parsingDir")
-    private final List<String> parsingDir = new ArrayList<>();
+    private final ThreadLocal<String> parsingDir = new ThreadLocal<>();
 
 
     @NonBlockingSection(sectionIndex = 1)
@@ -46,9 +46,10 @@ public class DataParsingWorkflowResourceCleanUpTask extends NonBlockingTask {
     public TaskResult section2() {
         try {
             logger.info("Running parsing directory cleanup");
-            for (String path : parsingDir) {
-                Files.deleteIfExists(Paths.get(path));
+            if (!parsingDir.get().isEmpty()) {
+                Files.deleteIfExists(Paths.get(parsingDir.get()));
             }
+
 
         } catch (Exception exception) {
             String msg = "parsing directory folder clean up failed Reason : " + exception.getMessage();
@@ -67,12 +68,12 @@ public class DataParsingWorkflowResourceCleanUpTask extends NonBlockingTask {
         this.downloadPath.set(downloadPath);
     }
 
-    public List<String> getParsingDir() {
-        return parsingDir;
+    public String getParsingDir() {
+        return parsingDir.get();
     }
 
-    public void addParsingDir(String parsingDir) {
-        this.parsingDir.add(parsingDir);
+    public void setParsingDir(String parsingDir) {
+        this.parsingDir.set(parsingDir);
     }
 
 }
