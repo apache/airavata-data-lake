@@ -7,8 +7,11 @@ import org.apache.helix.task.TaskResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 
 @BlockingTaskDef(name = "DataParsingWorkflowResourceCleanUpTask")
 public class DataParsingWorkflowResourceCleanUpTask extends BlockingTask {
@@ -46,9 +49,20 @@ public class DataParsingWorkflowResourceCleanUpTask extends BlockingTask {
 
             Files.deleteIfExists(Paths.get(downloadPath.get()));
 
-            logger.info("Running parsing directory cleanup");
+            logger.info("Running parser directory cleanup");
             if (!parsingDir.get().isEmpty()) {
-                Files.deleteIfExists(Paths.get(parsingDir.get()));
+                Path dir = Paths.get(parsingDir.get());
+                Files
+                        .walk(dir) // Traverse the file tree in depth-first order
+                        .sorted(Comparator.reverseOrder())
+                        .forEach(path -> {
+                            try {
+                                logger.info("Deleting: " + path);
+                                Files.delete(path);  //delete each file or directory
+                            } catch (IOException e) {
+                                logger.error("File deletion failed for path "+ dir, e);
+                            }
+                        });
             }
 
             return new TaskResult(TaskResult.Status.COMPLETED, "Completed");
