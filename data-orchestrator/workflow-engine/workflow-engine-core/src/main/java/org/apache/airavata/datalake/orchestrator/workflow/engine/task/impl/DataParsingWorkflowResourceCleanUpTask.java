@@ -1,7 +1,7 @@
 package org.apache.airavata.datalake.orchestrator.workflow.engine.task.impl;
 
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.BlockingTask;
-import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.NonBlockingTaskDef;
+import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.BlockingTaskDef;
 import org.apache.airavata.datalake.orchestrator.workflow.engine.task.annotation.TaskParam;
 import org.apache.helix.task.TaskResult;
 import org.slf4j.Logger;
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-@NonBlockingTaskDef(name = "DataParsingWorkflowResourceCleanUpTask")
+@BlockingTaskDef(name = "DataParsingWorkflowResourceCleanUpTask")
 public class DataParsingWorkflowResourceCleanUpTask extends BlockingTask {
 
     private final static Logger logger = LoggerFactory.getLogger(DataParsingWorkflowResourceCleanUpTask.class);
