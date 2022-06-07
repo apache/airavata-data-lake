@@ -152,13 +152,14 @@ public class GenericDataParsingTask extends BlockingTask {
         DefaultDockerClientConfig.Builder config = DefaultDockerClientConfig.createDefaultConfigBuilder();
         DockerClient dockerClient = DockerClientBuilder.getInstance(config.build()).build();
 
-
+        boolean existWithError = false;
         logger.info("Pulling image " + parser.getDockerImage());
         try {
             dockerClient.pullImageCmd(parser.getDockerImage().split(":")[0])
                     .withTag(parser.getDockerImage().split(":")[1])
                     .exec(new PullImageResultCallback()).awaitCompletion();
         } catch (InterruptedException e) {
+            existWithError = true;
             logger.error("Interrupted while pulling image", e);
             throw e;
         }
@@ -224,6 +225,7 @@ public class GenericDataParsingTask extends BlockingTask {
                         }
                     }).awaitCompletion();
                 } catch (InterruptedException e) {
+                    logger.info("Successfully removed container with id " + containerResponse.getId());
                     logger.error("Interrupted while reading container log" + e.getMessage());
                     throw e;
                 }
@@ -233,6 +235,7 @@ public class GenericDataParsingTask extends BlockingTask {
                 Integer statusCode = dockerClient.waitContainerCmd(containerResponse.getId()).exec(new WaitContainerResultCallback()).awaitStatusCode();
                 logger.info("Container " + containerResponse.getId() + " exited with status code " + statusCode);
                 if (statusCode != 0) {
+                    existWithError = true;
                     logger.error("Failing as non zero status code was returned");
                     throw new Exception("Failing as non zero status code was returned");
                 }
@@ -240,20 +243,21 @@ public class GenericDataParsingTask extends BlockingTask {
                 logger.info("Container logs " + dockerLogs.toString());
             }
         } finally {
+            if (existWithError) {
+                Path dir = Paths.get(workingDirectory.get());
+                Files
+                        .walk(dir) // Traverse the file tree in depth-first order
+                        .sorted(Comparator.reverseOrder())
+                        .forEach(path -> {
+                            try {
+                                logger.info("Deleting resources : " + path);
+                                Files.delete(path);  //delete each file or directory
+                            } catch (IOException ex) {
+                                logger.error("File cleanup failed for path " + dir, ex);
+                            }
+                        });
+            }
             dockerClient.removeContainerCmd(containerResponse.getId()).exec();
-            logger.info("Successfully removed container with id " + containerResponse.getId());
-            Path dir = Paths.get(workingDirectory.get());
-            Files
-                    .walk(dir) // Traverse the file tree in depth-first order
-                    .sorted(Comparator.reverseOrder())
-                    .forEach(path -> {
-                        try {
-                            logger.info("Deleting resources : " + path);
-                            Files.delete(path);  //delete each file or directory
-                        } catch (IOException e) {
-                            logger.error("File cleanup failed for path " + dir, e);
-                        }
-                    });
         }
     }
 
