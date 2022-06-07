@@ -12,6 +12,10 @@ WorkingDirectory={{ emc_portal_tusd_source_dir }}/tusd_linux_amd64
 #executable is a bash script which calls jar file
 ExecStart={{ emc_portal_tusd_source_dir }}/tusd_linux_amd64/tusd -upload-dir {{ emc_portal_source_dir }}/resource-images/
 
+# Works only in systemd v240 and newer!
+StandardOutput=append:{{ emc_portal_tusd_source_dir }}/tusd.std-out.log
+StandardError=append:{{ emc_portal_tusd_source_dir }}/tusd.std-err.log
+
 SuccessExitStatus=143
 TimeoutStopSec=10
 Restart=on-failure
