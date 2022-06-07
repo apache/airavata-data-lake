@@ -200,6 +200,7 @@ public class DataParsingWorkflowManager {
                 dataParsingTask.setParserServicePort(orchPort);
                 dataParsingTask.setInputMapping(parserInputMappings.get(parserId));
                 dataParsingTask.setWorkingDirectory(parserWorkingDir);
+                dataParsingTask.setTempDataFile(tempDownloadPath);
                 taskMap.put(dataParsingTask.getTaskId(), dataParsingTask);
 
                 cleanUpTask.setParsingDir(parserWorkingDir);

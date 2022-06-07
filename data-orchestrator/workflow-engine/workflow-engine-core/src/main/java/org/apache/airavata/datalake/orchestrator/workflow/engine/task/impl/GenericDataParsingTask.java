@@ -68,6 +68,9 @@ public class GenericDataParsingTask extends BlockingTask {
     @TaskParam(name = "WorkingDirectory")
     private ThreadLocal<String> workingDirectory = new ThreadLocal<>();
 
+    @TaskParam(name = "TempDataFile")
+    private ThreadLocal<String> tempDataFile = new ThreadLocal<>();
+
     @Override
     public TaskResult runBlockingCode() {
 
@@ -132,6 +135,29 @@ public class GenericDataParsingTask extends BlockingTask {
             runContainer(parser, tempInputDir, tempOutputDir, new HashMap<>());
             exportOutputs(parser, tempOutputDir);
         } catch (Exception e) {
+
+            Path dir = Paths.get(workingDirectory.get());
+            try {
+                if (!tempDataFile.get().isEmpty()) {
+                    logger.info("Deleting resources : " + Paths.get(tempDataFile.get()));
+
+                    Files.delete(Paths.get(tempDataFile.get()));
+                }
+                Files
+                        .walk(dir) // Traverse the file tree in depth-first order
+                        .sorted(Comparator.reverseOrder())
+                        .forEach(path -> {
+                            try {
+                                logger.info("Deleting resources : " + path);
+                                Files.delete(path);  //delete each file or directory
+                            } catch (IOException ex) {
+                                logger.error("File cleanup failed for path " + dir, ex);
+                            }
+                        });
+            } catch (Exception ex) {
+                logger.error("File cleanup task failed " + dir, ex);
+            }
+
             logger.error("Failed to execute the container for task {}", getTaskId());
             return new TaskResult(TaskResult.Status.FAILED, "Failed to execute the container");
         }
@@ -152,14 +178,12 @@ public class GenericDataParsingTask extends BlockingTask {
         DefaultDockerClientConfig.Builder config = DefaultDockerClientConfig.createDefaultConfigBuilder();
         DockerClient dockerClient = DockerClientBuilder.getInstance(config.build()).build();
 
-        boolean existWithError = false;
         logger.info("Pulling image " + parser.getDockerImage());
         try {
             dockerClient.pullImageCmd(parser.getDockerImage().split(":")[0])
                     .withTag(parser.getDockerImage().split(":")[1])
                     .exec(new PullImageResultCallback()).awaitCompletion();
         } catch (InterruptedException e) {
-            existWithError = true;
             logger.error("Interrupted while pulling image", e);
             throw e;
         }
@@ -235,7 +259,6 @@ public class GenericDataParsingTask extends BlockingTask {
                 Integer statusCode = dockerClient.waitContainerCmd(containerResponse.getId()).exec(new WaitContainerResultCallback()).awaitStatusCode();
                 logger.info("Container " + containerResponse.getId() + " exited with status code " + statusCode);
                 if (statusCode != 0) {
-                    existWithError = true;
                     logger.error("Failing as non zero status code was returned");
                     throw new Exception("Failing as non zero status code was returned");
                 }
@@ -243,20 +266,6 @@ public class GenericDataParsingTask extends BlockingTask {
                 logger.info("Container logs " + dockerLogs.toString());
             }
         } finally {
-            if (existWithError) {
-                Path dir = Paths.get(workingDirectory.get());
-                Files
-                        .walk(dir) // Traverse the file tree in depth-first order
-                        .sorted(Comparator.reverseOrder())
-                        .forEach(path -> {
-                            try {
-                                logger.info("Deleting resources : " + path);
-                                Files.delete(path);  //delete each file or directory
-                            } catch (IOException ex) {
-                                logger.error("File cleanup failed for path " + dir, ex);
-                            }
-                        });
-            }
             dockerClient.removeContainerCmd(containerResponse.getId()).exec();
         }
     }
@@ -299,5 +308,13 @@ public class GenericDataParsingTask extends BlockingTask {
 
     public void setParserServicePort(Integer parserServicePort) {
         this.parserServicePort.set(parserServicePort);
+    }
+
+    public String getTempDataFile() {
+        return tempDataFile.get();
+    }
+
+    public void setTempDataFile(String tempDataFile) {
+        this.tempDataFile.set(tempDataFile);
     }
 }
