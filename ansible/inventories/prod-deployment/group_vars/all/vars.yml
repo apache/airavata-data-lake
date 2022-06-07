@@ -35,8 +35,8 @@ kafka_url: "{{ groups['data-lake'][0] }}:9092"
 custos_kafka_url: custos07.sciencegateways.iu.edu:9092
 zookeeper_client_port: 2181
 zookeeper_connection_url: localhost:2181
-custos_host: services.usecustos.org
-custos_port: 31161
+custos_host: prod.custos.usecustos.org
+custos_port: 443
 
 mft_deployment_dir: "{{ user_home }}/mft-deployment"
 mft_source_dir: "{{ user_home }}/mft-source"
@@ -91,8 +91,8 @@ datalake_drms_neo4j_user: "{{ vault_datalake_drms_neo4j_user }}"
 datalake_drms_neo4j_password: "{{ vault_datalake_drms_neo4j_password }}"
 datalake_drms_custos_client_id: "{{ vault_mft_resource_service_custos_client_id }}"
 datalake_drms_custos_client_secret: "{{ vault_mft_resource_service_custos_client_secret }}"
-datalake_drms_custos_host: services.usecustos.org
-datalake_drms_custos_port: 31161
+datalake_drms_custos_host: "{{ custos_host }}"
+datalake_drms_custos_port: "{{ custos_port }}"
 datalake_drms_http_port: 8900
 
 datalake_synch_broker_url: "{{ custos_kafka_url }}"
@@ -132,8 +132,8 @@ workflow_manager_mft_callback_url: "{{ groups['data-lake'][0] }}:33335"
 workflow_manager_mft_client_id: "{{ vault_workflow_manager_mft_client_id }}"
 workflow_manager_mft_client_secret: "{{ vault_workflow_manager_mft_client_secret }}"
 
-workflow_manager_custos_host: services.usecustos.org
-workflow_manager_custos_port: 31161
+workflow_manager_custos_host: "{{ custos_host }}"
+workflow_manager_custos_port: "{{ custos_port }}"
 workflow_manager_custos_id: "{{ vault_workflow_manager_custos_id }}"
 workflow_manager_custos_secret: "{{ vault_workflow_manager_custos_secret }}"
 workflow_manager_work_dir: /home/airavata/tmp_data
