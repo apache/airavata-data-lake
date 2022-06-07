@@ -68,6 +68,9 @@ public class GenericDataParsingTask extends BlockingTask {
     @TaskParam(name = "WorkingDirectory")
     private ThreadLocal<String> workingDirectory = new ThreadLocal<>();
 
+    @TaskParam(name = "TempDataFile")
+    private ThreadLocal<String> tempDataFile = new ThreadLocal<>();
+
     @Override
     public TaskResult runBlockingCode() {
 
@@ -132,6 +135,29 @@ public class GenericDataParsingTask extends BlockingTask {
             runContainer(parser, tempInputDir, tempOutputDir, new HashMap<>());
             exportOutputs(parser, tempOutputDir);
         } catch (Exception e) {
+
+            Path dir = Paths.get(workingDirectory.get());
+            try {
+                if (!tempDataFile.get().isEmpty()) {
+                    logger.info("Deleting resources : " + Paths.get(tempDataFile.get()));
+
+                    Files.delete(Paths.get(tempDataFile.get()));
+                }
+                Files
+                        .walk(dir) // Traverse the file tree in depth-first order
+                        .sorted(Comparator.reverseOrder())
+                        .forEach(path -> {
+                            try {
+                                logger.info("Deleting resources : " + path);
+                                Files.delete(path);  //delete each file or directory
+                            } catch (IOException ex) {
+                                logger.error("File cleanup failed for path " + dir, ex);
+                            }
+                        });
+            } catch (Exception ex) {
+                logger.error("File cleanup task failed " + dir, ex);
+            }
+
             logger.error("Failed to execute the container for task {}", getTaskId());
             return new TaskResult(TaskResult.Status.FAILED, "Failed to execute the container");
         }
@@ -151,7 +177,6 @@ public class GenericDataParsingTask extends BlockingTask {
 
         DefaultDockerClientConfig.Builder config = DefaultDockerClientConfig.createDefaultConfigBuilder();
         DockerClient dockerClient = DockerClientBuilder.getInstance(config.build()).build();
-
 
         logger.info("Pulling image " + parser.getDockerImage());
         try {
@@ -224,6 +249,7 @@ public class GenericDataParsingTask extends BlockingTask {
                         }
                     }).awaitCompletion();
                 } catch (InterruptedException e) {
+                    logger.info("Successfully removed container with id " + containerResponse.getId());
                     logger.error("Interrupted while reading container log" + e.getMessage());
                     throw e;
                 }
@@ -241,19 +267,6 @@ public class GenericDataParsingTask extends BlockingTask {
             }
         } finally {
             dockerClient.removeContainerCmd(containerResponse.getId()).exec();
-            logger.info("Successfully removed container with id " + containerResponse.getId());
-            Path dir = Paths.get(workingDirectory.get());
-            Files
-                    .walk(dir) // Traverse the file tree in depth-first order
-                    .sorted(Comparator.reverseOrder())
-                    .forEach(path -> {
-                        try {
-                            logger.info("Deleting resources : " + path);
-                            Files.delete(path);  //delete each file or directory
-                        } catch (IOException e) {
-                            logger.error("File cleanup failed for path " + dir, e);
-                        }
-                    });
         }
     }
 
@@ -295,5 +308,13 @@ public class GenericDataParsingTask extends BlockingTask {
 
     public void setParserServicePort(Integer parserServicePort) {
         this.parserServicePort.set(parserServicePort);
+    }
+
+    public String getTempDataFile() {
+        return tempDataFile.get();
+    }
+
+    public void setTempDataFile(String tempDataFile) {
+        this.tempDataFile.set(tempDataFile);
     }
 }
