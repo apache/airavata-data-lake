@@ -472,11 +472,11 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     String val = searchParameterMap.get("sharedWith").get("username");
                     String query = "MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId " +
                             " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)  " +
-                            " OPTIONAL MATCH (u)<-[pRel:SHARED_WITH]-(p:COLLECTION)<-[:CHILD_OF*] -(x:" + value + ")-[relR:SHARED_WITH]->(u)" +
-                            " where NOT  x.owner  = '" + val + "'  " +
-                            " OPTIONAL MATCH (g)<-[pxRel:SHARED_WITH]-(pr:COLLECTION)<-[:CHILD_OF*] -(px:" + value + ")-[relR:SHARED_WITH]->(g)" +
-                            " where NOT  px.owner  = '" + val + "'" +
-                            " return distinct  p,pRel, px,pxRel";
+                            " OPTIONAL MATCH (u)<-[pRel:SHARED_WITH]-(p:COLLECTION)" +
+                            " where NOT  p.owner  = '" + val + "'  " +
+                            " OPTIONAL MATCH (g)<-[pxRel:SHARED_WITH]-(pr:COLLECTION)" +
+                            " where NOT  pr.owner  = '" + val + "'" +
+                            " return distinct  p,pRel, pr,pxRel";
                     Map<String, Object> objectMap = new HashMap<>();
                     objectMap.put("username", val);
                     objectMap.put("tenantId", callUser.getTenantId());

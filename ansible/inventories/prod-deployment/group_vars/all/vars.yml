@@ -32,7 +32,7 @@ datalake_repo: "https://github.com/apache/airavata-data-lake.git"
 datalake_git_branch: master
 kafka_listener_port: 9092
 kafka_url: "{{ groups['data-lake'][0] }}:9092"
-custos_kafka_url: custos07.sciencegateways.iu.edu:9092
+custos_kafka_url: custos15.sciencegateways.iu.edu:9092
 zookeeper_client_port: 2181
 zookeeper_connection_url: localhost:2181
 custos_host: prod.custos.usecustos.org
