@@ -864,8 +864,14 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     Map<String, GenericResource> genericResourceMap = new HashMap<>();
                     AtomicInteger count = new AtomicInteger();
                     genericResourceList.forEach(resource -> {
-                        genericResourceMap.put(String.valueOf(count.get()), resource);
-                        count.getAndIncrement();
+                        try {
+                            if (hasAccessForResource(callUser.getUsername(), callUser.getTenantId(), resource.getResourceId(), "COLLECTION")) {
+                                genericResourceMap.put(String.valueOf(count.get()), resource);
+                                count.getAndIncrement();
+                            }
+                        } catch (Exception exception) {
+                            logger.error(" Error occurred while fetching  parent resources: {}", resource.getResourceId());
+                        }
                     });
 
                     ParentResourcesFetchResponse.Builder builder = ParentResourcesFetchResponse.newBuilder();
@@ -878,7 +884,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     responseObserver.onCompleted();
                 }
             } else {
-                String msg = " Don't have access to change memberships";
+                String msg = " Don't have access to fetch resource "+ resourseId;
                 responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
                 return;
             }
