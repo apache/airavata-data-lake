@@ -262,7 +262,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 //
 //            if (depth == 1) {
             String query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId with u  " +
-                    " Match (r:" + type + ") where r.entityId = $entityId AND r.tenantId = $tenantId with u, r" +
+                    " Match (r" + type + ") where r.entityId = $entityId AND r.tenantId = $tenantId with u, r" +
                     " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)" +
                     " OPTIONAL MATCH (u)<-[crRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(cr)" +
                     " OPTIONAL MATCH (g)<-[chgrRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(chgr)" +
