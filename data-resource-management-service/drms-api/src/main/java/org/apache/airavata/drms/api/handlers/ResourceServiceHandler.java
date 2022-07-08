@@ -81,8 +81,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             userProps.put("entityId", resourceId);
 
 
-            String query = " MATCH (u:User),  (r" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
-                    " r.entityId = $entityId AND r.tenantId = $tenantId" +
+            String query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId with u  " +
+                    " Match (r:" + type + ") where r.entityId = $entityId AND r.tenantId = $tenantId with u, r" +
                     " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
                     " OPTIONAL MATCH (cg:Group)-[:CHILD_OF]->(g)" +
                     " OPTIONAL MATCH (r)-[:CHILD_OF*]->(x:COLLECTION)" +
@@ -194,8 +194,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             exProps.put("tenantId", callUser.getTenantId());
             exProps.put("entityId", exEntity.get().getId());
 
-            String query = " MATCH (u:User),  (r:" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
-                    " r.entityId = $entityId AND r.tenantId = $tenantId" +
+            String query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId with u  " +
+                    " Match (r:" + type + ") where r.entityId = $entityId AND r.tenantId = $tenantId with u, r" +
                     " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
                     " OPTIONAL MATCH (cg:Group)-[:CHILD_OF]->(g)" +
                     " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
@@ -251,48 +251,42 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             userProps.put("tenantId", callUser.getTenantId());
             userProps.put("entityId", resourceId);
 
-            String query = " MATCH (u:User),  (r" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
-                    " r.entityId = $entityId AND r.tenantId = $tenantId" +
+//            String query = " MATCH (u:User),  (r" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
+//                    " r.entityId = $entityId AND r.tenantId = $tenantId" +
+//                    " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)" +
+//                    " OPTIONAL MATCH (u)<-[crRel:SHARED_WITH]-(r)<-[:CHILD_OF*]-(cr)" +
+//                    " OPTIONAL MATCH (g)<-[chgrRel:SHARED_WITH]-(r)<-[:CHILD_OF*]-(chgr)" +
+//                    " OPTIONAL MATCH (u)<-[prRelU:SHARED_WITH]-(pr:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(x)" +
+//                    " OPTIONAL MATCH (g)<-[prRelG:SHARED_WITH]-(prg:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(y)" +
+//                    " return distinct  cr,crRel, chgr,chgrRel, x, prRelU,y,prRelG";
+//
+//            if (depth == 1) {
+            String query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId with u  " +
+                    " Match (r:" + type + ") where r.entityId = $entityId AND r.tenantId = $tenantId with u, r" +
                     " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)" +
-                    " OPTIONAL MATCH (u)<-[crRel:SHARED_WITH]-(r)<-[:CHILD_OF*]-(cr)" +
-                    " OPTIONAL MATCH (g)<-[chgrRel:SHARED_WITH]-(r)<-[:CHILD_OF*]-(chgr)" +
+                    " OPTIONAL MATCH (u)<-[crRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(cr)" +
+                    " OPTIONAL MATCH (g)<-[chgrRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(chgr)" +
                     " OPTIONAL MATCH (u)<-[prRelU:SHARED_WITH]-(pr:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(x)" +
                     " OPTIONAL MATCH (g)<-[prRelG:SHARED_WITH]-(prg:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(y)" +
                     " return distinct  cr,crRel, chgr,chgrRel, x, prRelU,y,prRelG";
-
-            if (depth == 1) {
-                query = " MATCH (u:User),  (r" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
-                        " r.entityId = $entityId AND r.tenantId = $tenantId" +
-                        " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)" +
-                        " OPTIONAL MATCH (u)<-[crRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(cr)" +
-                        " OPTIONAL MATCH (g)<-[chgrRel:SHARED_WITH]-(r)<-[:CHILD_OF]-(chgr)" +
-                        " OPTIONAL MATCH (u)<-[prRelU:SHARED_WITH]-(pr:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(x)" +
-                        " OPTIONAL MATCH (g)<-[prRelG:SHARED_WITH]-(prg:COLLECTION)<-[:CHILD_OF*]-(r)<-[:CHILD_OF]-(y)" +
-                        " return distinct  cr,crRel, chgr,chgrRel, x, prRelU,y,prRelG";
-            }
+//            }
 
             logger.debug("Fetch child query {}", query);
 
+
             List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
+            List keyList = new ArrayList();
+            keyList.add("cr:crRel");
+            keyList.add("chgr:chgrRel");
+            keyList.add("chcgr:chcgrRel");
+            keyList.add("x:prRelU");
+            keyList.add("y:prRelG");
+            List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
+            ChildResourceFetchResponse.Builder builder = ChildResourceFetchResponse.newBuilder();
+            builder.addAllResources(genericResourceList);
+            responseObserver.onNext(builder.build());
+            responseObserver.onCompleted();
 
-            try {
-                List keyList = new ArrayList();
-                keyList.add("cr:crRel");
-                keyList.add("chgr:chgrRel");
-                keyList.add("chcgr:chcgrRel");
-                keyList.add("x:prRelU");
-                keyList.add("y:prRelG");
-                List<GenericResource> genericResourceList = GenericResourceDeserializer.deserializeList(records, keyList);
-                ChildResourceFetchResponse.Builder builder = ChildResourceFetchResponse.newBuilder();
-                builder.addAllResources(genericResourceList);
-                responseObserver.onNext(builder.build());
-                responseObserver.onCompleted();
-
-            } catch (Exception e) {
-                logger.error("Errored while searching generic child resources; Message: {}", e.getMessage(), e);
-                String msg = "Errored while searching generic child resources" + e.getMessage();
-                responseObserver.onError(Status.INTERNAL.withDescription(msg).asRuntimeException());
-            }
 
         } catch (Exception ex) {
             logger.error("Error occurred while fetching child resource {}", request.getResourceId(), ex);
@@ -361,8 +355,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             exProps.put("tenantId", callUser.getTenantId());
             exProps.put("entityId", exEntity.get().getId());
 
-            String query = " MATCH (u:User),  (r:" + type + ") where u.username = $username AND u.tenantId = $tenantId AND " +
-                    " r.entityId = $entityId AND r.tenantId = $tenantId" +
+            String query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId with u  " +
+                    " Match (r:" + type + ") where r.entityId = $entityId AND r.tenantId = $tenantId with u, r" +
                     " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
                     " OPTIONAL MATCH (cg:Group)-[:CHILD_OF]->(g)" +
                     " return case when  exists((u)<-[:SHARED_WITH]-(r)) OR  exists((g)<-[:SHARED_WITH]-(r)) OR   " +
@@ -649,7 +643,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 if ((value.equals("FILE") || value.equals("COLLECTION"))) {
                     for (String storageId : storageList) {
 
-                        query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
+                        query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId with u" +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
                                 " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")-[:CHILD_OF*]->(s:Storage{entityId:'" + storageId + "'})" +
                                 " , (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF*]-(r:" + value + ")-[relR:SHARED_WITH]->(u)" +
@@ -662,7 +656,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         keyList.add("rmg:relRMG");
                         keyList.add("rg:relRG");
                         if (depth == 1) {
-                            query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
+                            query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId with u" +
                                     " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
                                     " OPTIONAL MATCH (s:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(r:" + value + ")-[relR:SHARED_WITH]->(u)" +
                                     " OPTIONAL MATCH (sp:Storage{entityId:'" + storageId + "'})<-[:CHILD_OF]-(rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
@@ -683,7 +677,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         allowedResourceList.addAll(genericResourceList);
                     }
                 } else {
-                    query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
+                    query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId with u" +
                             " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
                             " OPTIONAL MATCH (u)<-[relRM:SHARED_WITH]-(m)<-[:CHILD_OF*]-(rm:" + value + ")" +
                             " , (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
@@ -696,7 +690,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     keyList.add("rmg:relRMG");
                     keyList.add("rg:relRG");
                     if (depth == 1) {
-                        query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId" +
+                        query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId with u" +
                                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u) " +
                                 " OPTIONAL MATCH (r:" + value + ")-[relR:SHARED_WITH]->(u)" +
                                 " OPTIONAL MATCH (rg:" + value + ")-[relRG:SHARED_WITH]->(g)" +
@@ -856,7 +850,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 Map<String, Object> userProps = new HashMap<>();
                 userProps.put("tenantId", callUser.getTenantId());
                 userProps.put("entityId", resourseId);
-                String query = "MATCH  (r" + type + ")  where  r.entityId = $entityId AND r.tenantId = $tenantId" +
+                String query = "MATCH  (r" + type + ")  where  r.entityId = $entityId AND r.tenantId = $tenantId  with r" +
                         " MATCH (r)-[ch:CHILD_OF*1.." + depth + "]->(m) return distinct m";
                 List<Record> records = this.neo4JConnector.searchNodes(userProps, query);
                 if (!records.isEmpty()) {
@@ -884,7 +878,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     responseObserver.onCompleted();
                 }
             } else {
-                String msg = " Don't have access to fetch resource "+ resourseId;
+                String msg = " Don't have access to fetch resource " + resourseId;
                 responseObserver.onError(Status.PERMISSION_DENIED.withDescription(msg).asRuntimeException());
                 return;
             }
@@ -933,7 +927,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 message = mergeJSON(oldJSON, message);
             }
             parameters.put("metadata", message);
-            String query = " MATCH (r" + type + ") where r.entityId= $parentResourceId AND r.tenantId= $tenantId " +
+            String query = " MATCH (r" + type + ") where r.entityId= $parentResourceId AND r.tenantId= $tenantId with r" +
                     " MERGE (r)-[:HAS_FULL_METADATA]->(cr:FULL_METADATA_NODE{tenantId: $tenantId}) ON CREATE SET cr.metadata= $metadata " +
                     " ON MATCH SET cr.metadata = $metadata";
             this.neo4JConnector.runTransactionalQuery(parameters, query);
@@ -1003,8 +997,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
         userProps.put("tenantId", tenantId);
         userProps.put("entityId", resourceId);
 
-        String query = " MATCH (u:User),  (r) where u.username = $username AND u.tenantId = $tenantId AND " +
-                " r.entityId = $entityId AND r.tenantId = $tenantId" +
+        String query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId with u  " +
+                " Match (r) where r.entityId = $entityId AND r.tenantId = $tenantId with u, r" +
                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)" +
                 " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g)" +
                 " OPTIONAL MATCH (l)<-[:CHILD_OF*]-(r)" +
@@ -1028,8 +1022,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
         userProps.put("tenantId", tenantId);
         userProps.put("entityId", resourceId);
 
-        String query = " MATCH (u:User),  (r) where u.username = $username AND u.tenantId = $tenantId AND " +
-                " r.entityId = $entityId AND r.tenantId = $tenantId" +
+        String query = " MATCH (u:User) where u.username = $username AND u.tenantId = $tenantId with u  " +
+                " Match (r) where r.entityId = $entityId AND r.tenantId = $tenantId with u, r" +
                 " OPTIONAL MATCH (g:Group)<-[:MEMBER_OF]-(u)" +
                 " OPTIONAL MATCH (cg:Group)-[:CHILD_OF*]->(g)" +
                 " OPTIONAL MATCH (l:" + parentType + ")<-[:CHILD_OF*]-(r)" +
