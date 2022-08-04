@@ -39,6 +39,8 @@ message ChildResourceFetchRequest {
     string resource_id = 2;
     string type = 3;
     int32 depth = 4;
+    int32 offset=5;
+    int32 limit=6;
 }
 
 message ChildResourceFetchResponse {

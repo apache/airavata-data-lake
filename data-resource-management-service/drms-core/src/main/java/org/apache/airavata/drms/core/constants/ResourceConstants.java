@@ -18,4 +18,5 @@ package org.apache.airavata.drms.core.constants;
 
 public class ResourceConstants {
     public static final String RESOURCE_LABEL = "Resource";
+
 }
