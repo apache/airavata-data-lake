@@ -159,7 +159,7 @@
   unarchive: "src={{ datalake_source_dir }}/{{ item }}
               dest={{ datalake_deployment_dir }}/ copy=no"
   with_items:
-    - "data-resource-management-service/drms-api/target/DRMS-{{datalake_distribution_version}}-bin.zip"
+    - "data-resource-management-service/drms-rdbms-impl/drms-server/target/DRMS-{{datalake_distribution_version}}-bin.zip"
     - "data-resource-management-service/drms-custos-synchronizer/target/DRMS-Custos-Synchronizer-{{datalake_distribution_version}}-bin.zip"
     - "data-orchestrator/data-orchestrator-service/data-orchestrator-api-server/target/Orchestrator-API-Service-{{datalake_distribution_version}}-bin.zip"
   become: yes
