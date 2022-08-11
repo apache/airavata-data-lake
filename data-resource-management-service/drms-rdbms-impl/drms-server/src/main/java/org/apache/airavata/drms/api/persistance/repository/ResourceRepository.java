@@ -16,5 +16,5 @@ public interface ResourceRepository extends JpaRepository<Resource, String> {
                                                                              int limit, int offset);
 
 
-    List<Resource> findAllByParentResourceIdAndTenantIdAAndType(String parentResourdeId, String tenantId, String type);
+    List<Resource> findAllByParentResourceIdAndTenantIdAndType(String parentResourdeId, String tenantId, String type);
 }
