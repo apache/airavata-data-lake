@@ -15,11 +15,11 @@ public class TransferMapping {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "resource_id")
+    @JoinColumn(name = "source_resource_id")
     private Resource source;
 
     @ManyToOne
-    @JoinColumn(name = "resource_id")
+    @JoinColumn(name = "destination_resource_id")
     private Resource destination;
 
     @Column
