@@ -93,8 +93,6 @@
             <artifactId>json</artifactId>
             <version>${org.json.version}</version>
         </dependency>
-
-
     </dependencies>
 
     <build>

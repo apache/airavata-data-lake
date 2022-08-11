@@ -32,6 +32,9 @@
         <module>data-orchestrator</module>
         <module>data-resource-management-service</module>
         <module>loadtesting-utilities</module>
+        <module>data-resource-management-service/drms-graph-impl</module>
+        <module>data-resource-management-service/drms-rdbms-impl</module>
+        <module>data-resource-management-service/drms-rdbms-impl/drms-server</module>
     </modules>
 
     <parent>
@@ -182,6 +185,10 @@
         <docker.java.version>3.2.11</docker.java.version>
         <jackson.version>2.11.4</jackson.version>
         <commons.io.version>2.6</commons.io.version>
+
+        <mysql.connector.java>8.0.18</mysql.connector.java>
+        <javax.persistance>1.0.2</javax.persistance>
+
     </properties>
 
 </project>
