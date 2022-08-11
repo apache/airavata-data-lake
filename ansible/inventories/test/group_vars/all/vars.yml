@@ -47,7 +47,7 @@ mft_distribution_version: 0.01
 
 custos_source_dir: "{{ user_home }}/custos-source"
 custos_repo: "https://github.com/apache/airavata-custos.git"
-custos_git_branch: develop
+custos_git_branch: baremetal
 
 mft_default_agent_id: agent0
 mft_default_agent_host: "{{ ansible_default_ipv4.address }}"

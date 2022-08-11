@@ -22,10 +22,10 @@ public class Resource {
     @Column
     private String type;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "property", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "resource", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ResourceProperty> resourceProperty;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "transferMapping", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "resource", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<TransferMapping> transferMapping;
 
 
