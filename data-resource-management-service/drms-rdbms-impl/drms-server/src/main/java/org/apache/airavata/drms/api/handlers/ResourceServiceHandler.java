@@ -172,7 +172,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         resources = resourceRepository.findAllByParentResourceIdAndTenantIdAndTypeWithPagination(resourceId
                                 , callUser.getTenantId(), type, limit, offset);
                     } else {
-                        resources = resourceRepository.findAllByParentResourceIdAndTenantIdAAndType(resourceId,
+                        resources = resourceRepository.findAllByParentResourceIdAndTenantIdAndType(resourceId,
                                 callUser.getTenantId(), type);
                     }
 
