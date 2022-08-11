@@ -25,8 +25,11 @@ public class Resource {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "resource", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ResourceProperty> resourceProperty;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "resource", orphanRemoval = true, cascade = CascadeType.ALL)
-    private Set<TransferMapping> transferMapping;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "source", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<TransferMapping> sourceTransferMapping;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "destination", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<TransferMapping> destinationTransferMapping;
 
 
     public String getParentResourceId() {
@@ -69,11 +72,19 @@ public class Resource {
         this.resourceProperty = resourceProperty;
     }
 
-    public Set<TransferMapping> getTransferMapping() {
-        return transferMapping;
+    public Set<TransferMapping> getSourceTransferMapping() {
+        return sourceTransferMapping;
     }
 
-    public void setTransferMapping(Set<TransferMapping> transferMapping) {
-        this.transferMapping = transferMapping;
+    public void setSourceTransferMapping(Set<TransferMapping> transferMapping) {
+        this.sourceTransferMapping = transferMapping;
+    }
+
+    public Set<TransferMapping> getDestinationTransferMapping() {
+        return destinationTransferMapping;
+    }
+
+    public void setDestinationTransferMapping(Set<TransferMapping> destinationTransferMapping) {
+        this.destinationTransferMapping = destinationTransferMapping;
     }
 }
