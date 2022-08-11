@@ -5,9 +5,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "resource_property",uniqueConstraints={
-        @UniqueConstraint( name = "idx_key_vaule",  columnNames ={"key","vaule","resource_id"})
-})
+@Table
+//
+//        (name = "resource_property",uniqueConstraints={
+//        @UniqueConstraint( name = "idx_key_vaule",  columnNames ={"key","vaule","resource_id"})
+//})
 @EntityListeners(AuditingEntityListener.class)
 public class ResourceProperty {
 
