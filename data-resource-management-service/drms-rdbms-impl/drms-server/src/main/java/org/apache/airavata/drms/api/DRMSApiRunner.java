@@ -23,11 +23,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@ComponentScan(basePackages = {"org.apache.airavata.drms","org.apache.custos"})
+@ComponentScan(basePackages = {"org.apache.airavata.drms"})
 @SpringBootApplication
 @EnableJpaAuditing
-@EnableJpaRepositories(basePackages = {"org.apache.airavata.drms","org.apache.custos"})
-@EntityScan(basePackages = {"org.apache.airavata.drms","org.apache.custos"})
+@EnableJpaRepositories(basePackages = {"org.apache.airavata.drms"})
+@EntityScan(basePackages = {"org.apache.airavata.drms"})
 public class DRMSApiRunner {
     public static void main(String[] args) {
         SpringApplication.run(DRMSApiRunner.class, args);
