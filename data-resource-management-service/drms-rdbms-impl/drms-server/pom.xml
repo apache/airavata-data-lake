@@ -67,14 +67,6 @@
                     <groupId>org.apache.custos</groupId>
                     <artifactId>tenant-profile-core-service-client-stub</artifactId>
                 </exclusion>
-<!--                <exclusion>-->
-<!--                    <groupId>org.apache.custos</groupId>-->
-<!--                    <artifactId>iam-admin-core-service-client-stub</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.apache.custos</groupId>-->
-<!--                    <artifactId>identity-core-service-client-stub</artifactId>-->
-<!--                </exclusion>-->
                 <exclusion>
                     <groupId>org.apache.custos</groupId>
                     <artifactId>user-profile-core-service-client-stub</artifactId>

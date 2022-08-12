@@ -87,8 +87,8 @@ datalake_drms_host: localhost
 datalake_drms_grpc_port: 7070
 
 datalake_drms_neo4j_uri: bolt://scigap10.sciencegateways.iu.edu:7687
-datalake_drms_neo4j_user: "{{ vault_datalake_drms_neo4j_user }}"
-datalake_drms_neo4j_password: "{{ vault_datalake_drms_neo4j_password }}"
+datalake_drms_neo4j_user: "{{ vault_datalake_drms_datasource_username }}"
+datalake_drms_neo4j_password: "{{ vault_datalake_drms_datasource_password }}"
 datalake_drms_custos_client_id: "{{ vault_mft_resource_service_custos_client_id }}"
 datalake_drms_custos_client_secret: "{{ vault_mft_resource_service_custos_client_secret }}"
 datalake_drms_custos_host: prod.custos.usecustos.org
