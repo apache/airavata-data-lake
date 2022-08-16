@@ -169,10 +169,10 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     List<GenericResource> genericResources = new ArrayList<>();
                     List<Resource> resources;
                     if (limit > 0) {
-                        resources = resourceRepository.findAllByParentResourceIdAndTenantIdAndTypeWithPagination(resourceId
+                        resources = resourceRepository.findAllByParentResourceIdAndTenantIdAndResourceTypeWithPagination(resourceId
                                 , callUser.getTenantId(), type, limit, offset);
                     } else {
-                        resources = resourceRepository.findAllByParentResourceIdAndTenantIdAndType(resourceId,
+                        resources = resourceRepository.findAllByParentResourceIdAndTenantIdAndResourceType(resourceId,
                                 callUser.getTenantId(), type);
                     }
 

@@ -12,9 +12,9 @@ public interface ResourceRepository extends JpaRepository<Resource, String> {
 
     @Query(value = "select * from RESOURCE t where t.parent_resource_id =?1 and  t.tenant_id = ?2 and  t.type = ?3 " +
             "order by t.id limit ?3 offset ?4", nativeQuery = true)
-    List<Resource> findAllByParentResourceIdAndTenantIdAndTypeWithPagination(String parentResourdeId, String tenantId, String type,
+    List<Resource> findAllByParentResourceIdAndTenantIdAndResourceTypeWithPagination(String parentResourdeId, String tenantId, String type,
                                                                              int limit, int offset);
 
 
-    List<Resource> findAllByParentResourceIdAndTenantIdAndType(String parentResourdeId, String tenantId, String type);
+    List<Resource> findAllByParentResourceIdAndTenantIdAndResourceType(String parentResourdeId, String tenantId, String type);
 }
