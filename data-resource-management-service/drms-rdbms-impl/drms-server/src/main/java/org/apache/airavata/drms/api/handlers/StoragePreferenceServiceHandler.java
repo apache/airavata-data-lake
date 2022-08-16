@@ -113,7 +113,15 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
             serializedMap.remove("storage");
             String storageId = null;
 
+            if (resourceRepository.findById(storagePreferenceId).isPresent()) {
+                responseObserver.onError(Status.ALREADY_EXISTS.asRuntimeException());
+                return;
+            }
+
+
             Resource resource = new Resource();
+            resource.setTenantId(callUser.getTenantId());
+            resource.setId(storagePreferenceId);
             if (storage.getStorageCase().equals(AnyStoragePreference.StorageCase.S3_STORAGE_PREFERENCE)) {
                 storageId = storage.getS3StoragePreference().getStorage().getStorageId();
                 serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
@@ -143,26 +151,24 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                 resource.setResourceType(StoragePreferenceConstants.SDA_STORAGE_PREFERENCE_TYPE_LABEL);
             }
 
+            if (storageId == null || resourceRepository.findById(storageId).isEmpty()) {
 
-            if (storageId != null) {
-                CustosUtils.
-                        mergeStoragePreferenceEntity(custosClientProvider, callUser.getTenantId(),
-                                storagePreferenceId, storageId, callUser.getUsername());
-                Optional<Resource> resourceOptional = resourceRepository.findById(storageId);
-                Optional<Resource> storagePrefOptional = resourceRepository.findById(storagePreferenceId);
-                if (resourceOptional.isPresent() && storagePrefOptional.isEmpty()) {
-
-                    Set<ResourceProperty> resourcePropertySet = new HashSet<>();
-
-                    serializedMap.forEach((key, value) -> {
-                        resourcePropertySet.add(new ResourceProperty(key, value.toString(), resource));
-                    });
-                }
-                //TODO:Error
-
-
-                resourceRepository.save(resource);
+                responseObserver.onError(Status.NOT_FOUND.withDescription("Storage not found").asRuntimeException());
+                return;
             }
+
+            CustosUtils.
+                    mergeStoragePreferenceEntity(custosClientProvider, callUser.getTenantId(),
+                            storagePreferenceId, storageId, callUser.getUsername());
+            Set<ResourceProperty> resourcePropertySet = new HashSet<>();
+
+            serializedMap.forEach((key, value) -> {
+                resourcePropertySet.add(new ResourceProperty(key, value.toString(), resource));
+            });
+            resource.setResourceProperty(resourcePropertySet);
+
+            resourceRepository.save(resource);
+
             StoragePreferenceCreateResponse response = StoragePreferenceCreateResponse
                     .newBuilder().setStoragePreference(storage).build();
             responseObserver.onNext(response);
