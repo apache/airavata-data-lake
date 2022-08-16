@@ -26,7 +26,7 @@ public class StorageMapper {
 
         AnyStorage.Builder anyStorageBuilder = AnyStorage.newBuilder();
 
-        String type = resource.getType();
+        String type = resource.getResourceType();
         switch (type) {
             case StorageConstants.SSH_STORAGE_TYPE_LABEL:
                 SSHStorage.Builder builder = SSHStorage.newBuilder();
@@ -61,7 +61,7 @@ public class StorageMapper {
                 allFields = sshStorage.getAllFields();
                 resourcePropertySet.add(new ResourceProperty(StorageConstants.STORAGE_TYPE_LABEL,
                         StorageConstants.SSH_STORAGE_TYPE_LABEL, prResource));
-                prResource.setType(StorageConstants.SSH_STORAGE_TYPE_LABEL);
+                prResource.setResourceType(StorageConstants.SSH_STORAGE_TYPE_LABEL);
                 prResource.setId(sshStorage.getStorageId());
                 break;
             case S3_STORAGE:
@@ -69,7 +69,7 @@ public class StorageMapper {
                 allFields = s3Storage.getAllFields();
                 resourcePropertySet.add(new ResourceProperty(StorageConstants.STORAGE_TYPE_LABEL,
                         StorageConstants.S3_STORAGE_TYPE_LABEL, prResource));
-                prResource.setType(StorageConstants.S3_STORAGE_TYPE_LABEL);
+                prResource.setResourceType(StorageConstants.S3_STORAGE_TYPE_LABEL);
                 prResource.setId(s3Storage.getStorageId());
                 break;
             case STORAGE_NOT_SET:
