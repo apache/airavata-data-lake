@@ -61,12 +61,16 @@ public class StorageMapper {
                 allFields = sshStorage.getAllFields();
                 resourcePropertySet.add(new ResourceProperty(StorageConstants.STORAGE_TYPE_LABEL,
                         StorageConstants.SSH_STORAGE_TYPE_LABEL, prResource));
+                prResource.setType(StorageConstants.SSH_STORAGE_TYPE_LABEL);
+                prResource.setId(sshStorage.getStorageId());
                 break;
             case S3_STORAGE:
                 S3Storage s3Storage = anyStorage.getS3Storage();
                 allFields = s3Storage.getAllFields();
                 resourcePropertySet.add(new ResourceProperty(StorageConstants.STORAGE_TYPE_LABEL,
                         StorageConstants.S3_STORAGE_TYPE_LABEL, prResource));
+                prResource.setType(StorageConstants.S3_STORAGE_TYPE_LABEL);
+                prResource.setId(s3Storage.getStorageId());
                 break;
             case STORAGE_NOT_SET:
                 break;
@@ -80,6 +84,8 @@ public class StorageMapper {
         }
 
         resourcePropertySet.add(new ResourceProperty("tenantId", authenticatedUser.getTenantId(), prResource));
+        prResource.setResourceProperty(resourcePropertySet);
+
         return prResource;
     }
 

@@ -123,11 +123,8 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
             Resource resource = StorageMapper.map(storage, callUser);
 
-            Map<String, Object> serializedMap = AnyStorageSerializer.serializeToMap(storage);
-            String storageId = (String) serializedMap.get("storageId");
-
             CustosUtils.
-                    mergeStorageEntity(custosClientProvider, callUser.getTenantId(), storageId, callUser.getUsername());
+                    mergeStorageEntity(custosClientProvider, callUser.getTenantId(), resource.getId(), callUser.getUsername());
 
             resourceRepository.save(resource);
 
@@ -156,15 +153,13 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
             Resource resource = StorageMapper.map(storage, callUser);
 
-            Map<String, Object> serializedMap = AnyStorageSerializer.serializeToMap(storage);
-            String storageId = (String) serializedMap.get("storageId");
 
             boolean access = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
-                    callUser.getUsername(), storageId,
+                    callUser.getUsername(), resource.getId(),
                     SharingConstants.PERMISSION_TYPE_VIEWER);
 
             if (access) {
-                Optional<Resource> optionalResource = resourceRepository.findById(storageId);
+                Optional<Resource> optionalResource = resourceRepository.findById(resource.getId());
 
 
                 if (optionalResource.isPresent()) {
