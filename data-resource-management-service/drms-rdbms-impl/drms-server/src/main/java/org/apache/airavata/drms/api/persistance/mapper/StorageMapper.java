@@ -85,7 +85,7 @@ public class StorageMapper {
 
         resourcePropertySet.add(new ResourceProperty("tenantId", authenticatedUser.getTenantId(), prResource));
         prResource.setResourceProperty(resourcePropertySet);
-
+        prResource.setTenantId(authenticatedUser.getTenantId());
         return prResource;
     }
 
