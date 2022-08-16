@@ -87,20 +87,21 @@ datalake_drms_host: localhost
 datalake_drms_grpc_port: 7070
 
 datalake_drms_neo4j_uri: bolt://scigap10.sciencegateways.iu.edu:7687
-datalake_drms_neo4j_user: "{{ vault_datalake_drms_datasource_username }}"
-datalake_drms_neo4j_password: "{{ vault_datalake_drms_datasource_password }}"
+datalake_drms_neo4j_user: ""
+datalake_drms_neo4j_password: ""
 datalake_drms_custos_client_id: "{{ vault_mft_resource_service_custos_client_id }}"
 datalake_drms_custos_client_secret: "{{ vault_mft_resource_service_custos_client_secret }}"
 datalake_drms_custos_host: prod.custos.usecustos.org
 datalake_drms_custos_port: 443
 datalake_drms_http_port: 8900
+datalake_drms_datasource_host: scigap10.sciencegateways.iu.edu
 
 datalake_synch_broker_url: "{{ custos_kafka_url }}"
 datalake_synch_broker_consumer_group: custosEventsGroup
 datalake_synch_broker_topic: 10000201-24565f21-a87a-46ac-a50c-6cdf0e41028c
 datalake_synch_tenant_id: "{{ vault_workflow_manager_custos_id }}"
 
-datalake_data_orch_datasource_url: jdbc:mysql://localhost:3306/data_orchestrator?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+datalake_data_orch_datasource_url: jdbc:mysql://scigap10.sciencegateways.iu.edu:3306/data_orchestrator?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
 datalake_data_orch_datasource_username: "{{ vault_datalake_data_orch_datasource_username }}"
 datalake_data_orch_datasource_password: "{{ vault_datalake_data_orch_datasource_password }}"
 datalake_data_orch_host: localhost
