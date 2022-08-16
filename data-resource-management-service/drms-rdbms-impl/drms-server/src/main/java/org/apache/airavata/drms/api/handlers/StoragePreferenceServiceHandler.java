@@ -28,7 +28,6 @@ import org.apache.airavata.drms.api.persistance.model.ResourceProperty;
 import org.apache.airavata.drms.api.persistance.repository.ResourcePropertyRepository;
 import org.apache.airavata.drms.api.persistance.repository.ResourceRepository;
 import org.apache.airavata.drms.api.utils.CustosUtils;
-import org.apache.airavata.drms.core.Neo4JConnector;
 import org.apache.airavata.drms.core.constants.SharingConstants;
 import org.apache.airavata.drms.core.constants.StoragePreferenceConstants;
 import org.apache.airavata.drms.core.serializer.AnyStoragePreferenceSerializer;
@@ -120,7 +119,7 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                 serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
                         StoragePreferenceConstants.S3_STORAGE_PREFERENCE_TYPE_LABEL);
                 resource.setParentResourceId(storageId);
-                resource.setType(StoragePreferenceConstants.S3_STORAGE_PREFERENCE_TYPE_LABEL);
+                resource.setResourceType(StoragePreferenceConstants.S3_STORAGE_PREFERENCE_TYPE_LABEL);
 
             } else if (storage.getStorageCase()
                     .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
@@ -133,7 +132,7 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                 serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
                         StoragePreferenceConstants.SSH_STORAGE_PREFERENCE_TYPE_LABEL);
                 resource.setParentResourceId(storageId);
-                resource.setType(StoragePreferenceConstants.SSH_STORAGE_PREFERENCE_TYPE_LABEL);
+                resource.setResourceType(StoragePreferenceConstants.SSH_STORAGE_PREFERENCE_TYPE_LABEL);
             } else if (storage.getStorageCase()
                     .equals(AnyStoragePreference.StorageCase.SDA_STORAGE_PREFERENCE)) {
 
@@ -141,7 +140,7 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                 serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
                         StoragePreferenceConstants.SDA_STORAGE_PREFERENCE_TYPE_LABEL);
                 resource.setParentResourceId(storageId);
-                resource.setType(StoragePreferenceConstants.SDA_STORAGE_PREFERENCE_TYPE_LABEL);
+                resource.setResourceType(StoragePreferenceConstants.SDA_STORAGE_PREFERENCE_TYPE_LABEL);
             }
 
 

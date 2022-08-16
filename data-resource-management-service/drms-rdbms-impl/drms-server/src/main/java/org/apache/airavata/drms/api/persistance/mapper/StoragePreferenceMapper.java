@@ -19,7 +19,7 @@ public class StoragePreferenceMapper {
 
     public static AnyStoragePreference map(Resource resource, AnyStorage anyStorage) throws Exception {
 
-        String type = resource.getType();
+        String type = resource.getResourceType();
         AnyStoragePreference.Builder anyStoragePrefBuilder = AnyStoragePreference.newBuilder();
 
         switch (type) {

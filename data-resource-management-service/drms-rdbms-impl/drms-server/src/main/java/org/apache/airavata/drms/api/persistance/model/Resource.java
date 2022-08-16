@@ -20,7 +20,7 @@ public class Resource {
     private String parentResourceId;
 
     @Column
-    private String type;
+    private String resourceType;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "resource", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ResourceProperty> resourceProperty;
@@ -56,12 +56,12 @@ public class Resource {
         this.tenantId = tenantId;
     }
 
-    public String getType() {
-        return type;
+    public String getResourceType() {
+        return resourceType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setResourceType(String type) {
+        this.resourceType = type;
     }
 
     public Set<ResourceProperty> getResourceProperty() {
