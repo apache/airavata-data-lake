@@ -39,13 +39,13 @@
   service: name=drms-service state=started enabled=yes
   become: yes
 
-- name: stop drms-custos-sync
-  service: name=drms-custos-sync state=stopped enabled=yes
-  become: yes
-
-- name: start drms-custos-sync
-  service: name=drms-custos-sync state=started enabled=yes
-  become: yes
+#- name: stop drms-custos-sync
+#  service: name=drms-custos-sync state=stopped enabled=yes
+#  become: yes
+#
+#- name: start drms-custos-sync
+#  service: name=drms-custos-sync state=started enabled=yes
+#  become: yes
 
 
 - name: stop orch-service

@@ -62,32 +62,32 @@
             <groupId>org.apache.custos</groupId>
             <artifactId>custos-java-sdk</artifactId>
             <version>${custos.clients.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.custos</groupId>
-                    <artifactId>tenant-profile-core-service-client-stub</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.custos</groupId>
-                    <artifactId>user-profile-core-service-client-stub</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.custos</groupId>
-                    <artifactId>federated-authentication-core-service-client-stub</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.custos</groupId>
-                    <artifactId>credential-store-core-service-client-stubs</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.custos</groupId>
-                    <artifactId>messaging-core-service-client-stub</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.custos</groupId>
-                    <artifactId>sharing-core-service-client-stub</artifactId>
-                </exclusion>
-            </exclusions>
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.custos</groupId>-->
+<!--                    <artifactId>tenant-profile-core-service-client-stub</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.custos</groupId>-->
+<!--                    <artifactId>user-profile-core-service-client-stub</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.custos</groupId>-->
+<!--                    <artifactId>federated-authentication-core-service-client-stub</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.custos</groupId>-->
+<!--                    <artifactId>credential-store-core-service-client-stubs</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.custos</groupId>-->
+<!--                    <artifactId>messaging-core-service-client-stub</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.custos</groupId>-->
+<!--                    <artifactId>sharing-core-service-client-stub</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
         </dependency>
 
 
