@@ -94,7 +94,7 @@ public class StorageMapper {
         for (ResourceProperty field : values) {
             BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(target);
             try {
-                beanWrapper.setPropertyValue(field.getKey(), field.getValue());
+                beanWrapper.setPropertyValue(field.getPropertyKey(), field.getPropertyValue());
             } catch (Exception ex) {
                 LOGGER.error(" Error occurred during field setting ", ex);
                 continue;
