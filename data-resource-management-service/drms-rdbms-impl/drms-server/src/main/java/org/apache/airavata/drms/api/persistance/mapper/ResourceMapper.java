@@ -34,10 +34,10 @@ public class ResourceMapper {
 
         while (iterator.hasNext()) {
             ResourceProperty resourceProperty = iterator.next();
-            if (resourceProperty.getKey().equals("resourcePath")) {
-                genericResourceBuilder.setResourcePath(resourceProperty.getValue());
+            if (resourceProperty.getPropertyKey().equals("resourcePath")) {
+                genericResourceBuilder.setResourcePath(resourceProperty.getPropertyValue());
             }
-            genericResourceBuilder.putProperties(resourceProperty.getKey(), resourceProperty.getValue());
+            genericResourceBuilder.putProperties(resourceProperty.getPropertyKey(), resourceProperty.getPropertyValue());
 
         }
         return genericResourceBuilder.build();

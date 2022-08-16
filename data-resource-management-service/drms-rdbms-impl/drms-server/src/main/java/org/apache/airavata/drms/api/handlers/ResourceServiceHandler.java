@@ -413,15 +413,15 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     Set<ResourceProperty> resourcePropertySet = mergeProperties(resource, map);
 
                     Optional<ResourceProperty> property = resourcePropertyRepository.
-                            findByKeyAndResourceId("metadata", resource.getId());
+                            findByPropertyKeyAndResourceId("metadata", resource.getId());
 
                     if (property.isPresent()) {
                         resourcePropertyRepository.delete(property.get());
                     }
 
                     ResourceProperty resourceProperty = new ResourceProperty();
-                    resourceProperty.setKey("metadata");
-                    resourceProperty.setValue(message);
+                    resourceProperty.setPropertyKey("metadata");
+                    resourceProperty.setPropertyValue(message);
                     resourcePropertySet.add(resourceProperty);
 
                     resource.setResourceProperty(resourcePropertySet);
@@ -457,9 +457,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 if (resourceOptional.isPresent()) {
 
                     Optional<ResourceProperty> resourceProperty = resourcePropertyRepository
-                            .findByKeyAndResourceId("metadata", resourceOptional.get().getId());
+                            .findByPropertyKeyAndResourceId("metadata", resourceOptional.get().getId());
                     if (resourceProperty.isPresent()) {
-                        String message = resourceProperty.get().getValue();
+                        String message = resourceProperty.get().getPropertyValue();
                         Struct.Builder structBuilder = Struct.newBuilder();
                         JsonFormat.parser().merge(message, structBuilder);
                         builder.addMetadata(structBuilder.build());
@@ -483,7 +483,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
         for (String key : values.keySet()) {
             List<ResourceProperty> matched = exisitingProperties.stream().filter(prop -> {
-                if (prop.getKey().equals(key)) {
+                if (prop.getPropertyKey().equals(key)) {
                     return true;
                 } else {
                     return false;
@@ -501,8 +501,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 }
                 arrayList.forEach(val -> {
                     ResourceProperty resourceProperty = new ResourceProperty();
-                    resourceProperty.setKey(key);
-                    resourceProperty.setValue(val.toString());
+                    resourceProperty.setPropertyKey(key);
+                    resourceProperty.setPropertyValue(val.toString());
                     resourceProperty.setResource(resource);
                     resourcePropertySet.add(resourceProperty);
                 });
@@ -514,8 +514,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     });
                 }
                 ResourceProperty resourceProperty = new ResourceProperty();
-                resourceProperty.setKey(key);
-                resourceProperty.setValue(value);
+                resourceProperty.setPropertyKey(key);
+                resourceProperty.setPropertyValue(value);
                 resourceProperty.setResource(resource);
                 resourcePropertySet.add(resourceProperty);
             }

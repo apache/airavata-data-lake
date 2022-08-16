@@ -6,20 +6,21 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "resource")
+@Table(name = "RESOURCE")
 @EntityListeners(AuditingEntityListener.class)
 public class Resource {
 
     @Id
+    @Column(name="ID")
     private String id;
 
-    @Column(nullable = false)
+    @Column(name="TENANT_ID",nullable = false)
     private String tenantId;
 
-    @Column
+    @Column(name="PARENT_RESOURCE_ID")
     private String parentResourceId;
 
-    @Column
+    @Column(name="RESOURCE_TYPE")
     private String resourceType;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "resource", orphanRemoval = true, cascade = CascadeType.ALL)

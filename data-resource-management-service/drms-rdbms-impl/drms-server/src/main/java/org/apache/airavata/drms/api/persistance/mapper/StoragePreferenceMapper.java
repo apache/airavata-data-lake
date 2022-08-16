@@ -53,7 +53,7 @@ public class StoragePreferenceMapper {
         for (ResourceProperty field : resource.getResourceProperty()) {
             BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(target);
             try {
-                beanWrapper.setPropertyValue(field.getKey(), field.getValue());
+                beanWrapper.setPropertyValue(field.getPropertyKey(), field.getPropertyValue());
             } catch (Exception ex) {
                 continue;
             }

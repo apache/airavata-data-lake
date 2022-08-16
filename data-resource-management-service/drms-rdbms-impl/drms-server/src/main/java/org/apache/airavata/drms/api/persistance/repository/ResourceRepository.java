@@ -10,7 +10,7 @@ import java.util.List;
 public interface ResourceRepository extends JpaRepository<Resource, String> {
 
 
-    @Query(value = "select * from RESOURCE t where t.parent_resource_id =?1 and  t.tenant_id = ?2 and  t.type = ?3 " +
+    @Query(value = "select * from RESOURCE t where t.PARENT_RESOURCE_ID =?1 and  t.TENANT_ID = ?2 and  t.RESOURCE_TYPE = ?3 " +
             "order by t.id limit ?3 offset ?4", nativeQuery = true)
     List<Resource> findAllByParentResourceIdAndTenantIdAndResourceTypeWithPagination(String parentResourdeId, String tenantId, String type,
                                                                              int limit, int offset);

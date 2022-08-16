@@ -6,12 +6,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "transfer_mapping")
+@Table(name = "TRANSFER_MAPPING")
 @EntityListeners(AuditingEntityListener.class)
 public class TransferMapping {
 
 
     @Id
+    @Column(name="ID")
     private String id;
 
     @ManyToOne
@@ -22,10 +23,10 @@ public class TransferMapping {
     @JoinColumn(name = "destination_resource_id")
     private Resource destination;
 
-    @Column
+    @Column(name="SCOPE")
     private String scope;
 
-    @Column
+    @Column(name="OWNER_ID")
     private String ownerId;
 
 

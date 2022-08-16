@@ -5,34 +5,31 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 @Entity
-@Table
-//
-//        (name = "resource_property",uniqueConstraints={
-//        @UniqueConstraint( name = "idx_key_vaule",  columnNames ={"key","vaule","resource_id"})
-//})
+@Table(name = "RESOURCE_PROPERTY")
 @EntityListeners(AuditingEntityListener.class)
 public class ResourceProperty {
 
-    public ResourceProperty(String key, String value, Resource resource) {
-        this.key = key;
-        this.value = value;
+    public ResourceProperty(String propertyKey, String propertyValue, Resource resource) {
+        this.propertyKey = propertyKey;
+        this.propertyValue = propertyValue;
         this.resource = resource;
     }
 
     @Id
+    @Column(name="ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
-    private String key;
+    @Column(name="PROPERTY_KEY", nullable = false)
+    private String propertyKey;
 
-    @Column(nullable = false)
+    @Column(name="PROPERTY_VALUE",nullable = false)
     @Lob
-    private String value;
+    private String propertyValue;
 
 
     @ManyToOne
-    @JoinColumn(name = "resource_id")
+    @JoinColumn(name = "RESOURCE_ID")
     private Resource resource;
 
     public ResourceProperty() {
@@ -47,20 +44,20 @@ public class ResourceProperty {
         this.id = id;
     }
 
-    public String getKey() {
-        return key;
+    public String getPropertyKey() {
+        return propertyKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setPropertyKey(String key) {
+        this.propertyKey = key;
     }
 
-    public String getValue() {
-        return value;
+    public String getPropertyValue() {
+        return propertyValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setPropertyValue(String value) {
+        this.propertyValue = value;
     }
 
     public Resource getResource() {
