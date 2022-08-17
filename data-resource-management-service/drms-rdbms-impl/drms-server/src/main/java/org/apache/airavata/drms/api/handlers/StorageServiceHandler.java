@@ -334,7 +334,7 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
                     transferMappings = new HashSet<>();
                     transferMappings.add(transferMapping);
                 }
-                transferMapping.setDestination(optionalSource.get());
+                transferMapping.setDestination(optionalDst.get());
                 optionalDst.get().setDestinationTransferMapping(transferMappings);
             }
 
