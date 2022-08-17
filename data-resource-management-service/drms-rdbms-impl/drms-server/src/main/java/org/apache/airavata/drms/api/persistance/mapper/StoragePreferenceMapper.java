@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
+import java.util.Set;
+
 public class StoragePreferenceMapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StoragePreferenceMapper.class);
@@ -19,21 +21,30 @@ public class StoragePreferenceMapper {
 
     public static AnyStoragePreference map(Resource resource, AnyStorage anyStorage) throws Exception {
 
-        String type = resource.getResourceType();
+
         AnyStoragePreference.Builder anyStoragePrefBuilder = AnyStoragePreference.newBuilder();
+
+        Set<ResourceProperty> resourcePropertySet = resource.getResourceProperty();
+        String type = null;
+        for (ResourceProperty resourceProperty : resourcePropertySet) {
+            if (resourceProperty.getPropertyKey().equals("type")) {
+                type = resourceProperty.getPropertyValue();
+                break;
+            }
+        }
 
         switch (type) {
             case StoragePreferenceConstants.SSH_STORAGE_PREFERENCE_TYPE_LABEL:
                 SSHStoragePreference.Builder builder = SSHStoragePreference.newBuilder();
                 SSHStoragePreference sshStoragePreference = builder.build();
                 anyStoragePrefBuilder.setSshStoragePreference(sshStoragePreference);
-                setObjectFieldsUsingMap(anyStoragePrefBuilder,resource);
+                setObjectFieldsUsingMap(anyStoragePrefBuilder, resource);
                 break;
             case StoragePreferenceConstants.S3_STORAGE_PREFERENCE_TYPE_LABEL:
                 S3StoragePreference.Builder s3Builder = S3StoragePreference.newBuilder();
                 s3Builder.setStorage(anyStorage.getS3Storage());
                 anyStoragePrefBuilder.setS3StoragePreference(s3Builder.build());
-                setObjectFieldsUsingMap(anyStoragePrefBuilder,resource);
+                setObjectFieldsUsingMap(anyStoragePrefBuilder, resource);
                 break;
             default:
                 throw new Exception("Unsupported storage type for deserializing : " + type);
@@ -42,11 +53,6 @@ public class StoragePreferenceMapper {
 
         return anyStoragePrefBuilder.build();
     }
-
-
-
-
-
 
 
     private static void setObjectFieldsUsingMap(Object target, Resource resource) {

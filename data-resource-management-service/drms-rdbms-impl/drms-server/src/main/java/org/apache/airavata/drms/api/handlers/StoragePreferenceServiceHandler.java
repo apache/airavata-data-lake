@@ -122,12 +122,13 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
             Resource resource = new Resource();
             resource.setTenantId(callUser.getTenantId());
             resource.setId(storagePreferenceId);
+            resource.setResourceType(StoragePreferenceConstants.STORAGE_PREFERENCE_LABEL);
             if (storage.getStorageCase().equals(AnyStoragePreference.StorageCase.S3_STORAGE_PREFERENCE)) {
                 storageId = storage.getS3StoragePreference().getStorage().getStorageId();
                 serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
                         StoragePreferenceConstants.S3_STORAGE_PREFERENCE_TYPE_LABEL);
                 resource.setParentResourceId(storageId);
-                resource.setResourceType(StoragePreferenceConstants.S3_STORAGE_PREFERENCE_TYPE_LABEL);
+
 
             } else if (storage.getStorageCase()
                     .equals(AnyStoragePreference.StorageCase.SSH_STORAGE_PREFERENCE)) {
@@ -140,7 +141,6 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                 serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
                         StoragePreferenceConstants.SSH_STORAGE_PREFERENCE_TYPE_LABEL);
                 resource.setParentResourceId(storageId);
-                resource.setResourceType(StoragePreferenceConstants.SSH_STORAGE_PREFERENCE_TYPE_LABEL);
             } else if (storage.getStorageCase()
                     .equals(AnyStoragePreference.StorageCase.SDA_STORAGE_PREFERENCE)) {
 
@@ -148,7 +148,6 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                 serializedMap.put(StoragePreferenceConstants.STORAGE_PREFERENCE_TYPE_LABEL,
                         StoragePreferenceConstants.SDA_STORAGE_PREFERENCE_TYPE_LABEL);
                 resource.setParentResourceId(storageId);
-                resource.setResourceType(StoragePreferenceConstants.SDA_STORAGE_PREFERENCE_TYPE_LABEL);
             }
 
             if (storageId == null || resourceRepository.findById(storageId).isEmpty()) {
