@@ -308,14 +308,14 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
             if (optionalSource.isPresent()) {
 
-               Set<org.apache.airavata.drms.api.persistance.model.TransferMapping> transferMappings =
-                       optionalSource.get().getSourceTransferMapping();
-               if (transferMappings != null){
-                   transferMappings.add(transferMapping);
-               }else{
-                  transferMappings = new HashSet<>();
-                   transferMappings.add(transferMapping);
-               }
+                Set<org.apache.airavata.drms.api.persistance.model.TransferMapping> transferMappings =
+                        optionalSource.get().getSourceTransferMapping();
+                if (transferMappings != null) {
+                    transferMappings.add(transferMapping);
+                } else {
+                    transferMappings = new HashSet<>();
+                    transferMappings.add(transferMapping);
+                }
                 transferMapping.setSource(optionalSource.get());
                 optionalSource.get().setSourceTransferMapping(transferMappings);
             }
@@ -323,9 +323,9 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
             if (optionalDst.isPresent()) {
                 Set<org.apache.airavata.drms.api.persistance.model.TransferMapping> transferMappings =
                         optionalDst.get().getDestinationTransferMapping();
-                if (transferMappings != null){
+                if (transferMappings != null) {
                     transferMappings.add(transferMapping);
-                }else{
+                } else {
                     transferMappings = new HashSet<>();
                     transferMappings.add(transferMapping);
                 }
