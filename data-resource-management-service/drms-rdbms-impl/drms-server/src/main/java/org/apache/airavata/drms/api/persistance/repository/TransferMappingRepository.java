@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface TransferMappingRepository extends JpaRepository<TransferMapping, String> {
 
 
-    Optional<TransferMapping> findTransferMappingBySourceResourceIdAndDestinationResourceId(String sourceId,
+    Optional<TransferMapping> findTransferMappingBySourceIdAndDestinationId(String sourceId,
                                                                                             String destinationId);
 }
