@@ -292,30 +292,35 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
                 optionalDst = resourceRepository.findById(getStorageId(destinationStorage));
             }
 
-
-            Optional<org.apache.airavata.drms.api.persistance.model.TransferMapping> optionalTransferMapping =
-                    transferMappingRepository
-                            .findById(request.getTransferMapping().getId());
-
-            if (optionalTransferMapping.isPresent()) {
-                responseObserver.onError(Status.ALREADY_EXISTS.asRuntimeException());
-                return;
+            if (optionalSource.isEmpty() || optionalDst.isEmpty()) {
+               responseObserver.onError(Status.NOT_FOUND.
+                       withDescription("source or destination storages are not found").asRuntimeException());
+               return;
             }
 
+           Optional<org.apache.airavata.drms.api.persistance.model.TransferMapping> transferMappingOp =
+                   transferMappingRepository.findTransferMappingBySourceResourceIdAndDestinationResourceId(
+                    optionalSource.get().getId(),optionalDst.get().getId());
+
+            if (transferMappingOp.isPresent()){
+                responseObserver.onError(Status.ALREADY_EXISTS.
+                        withDescription("source or destination storages are not found").asRuntimeException());
+                return;
+            }
 
             org.apache.airavata.drms.api.persistance.model.TransferMapping transferMapping = new
                     org.apache.airavata.drms.api.persistance.model.TransferMapping();
 
             if (optionalSource.isPresent()) {
 
-               Set<org.apache.airavata.drms.api.persistance.model.TransferMapping> transferMappings =
-                       optionalSource.get().getSourceTransferMapping();
-               if (transferMappings != null){
-                   transferMappings.add(transferMapping);
-               }else{
-                  transferMappings = new HashSet<>();
-                   transferMappings.add(transferMapping);
-               }
+                Set<org.apache.airavata.drms.api.persistance.model.TransferMapping> transferMappings =
+                        optionalSource.get().getSourceTransferMapping();
+                if (transferMappings != null) {
+                    transferMappings.add(transferMapping);
+                } else {
+                    transferMappings = new HashSet<>();
+                    transferMappings.add(transferMapping);
+                }
                 transferMapping.setSource(optionalSource.get());
                 optionalSource.get().setSourceTransferMapping(transferMappings);
             }
@@ -323,9 +328,9 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
             if (optionalDst.isPresent()) {
                 Set<org.apache.airavata.drms.api.persistance.model.TransferMapping> transferMappings =
                         optionalDst.get().getDestinationTransferMapping();
-                if (transferMappings != null){
+                if (transferMappings != null) {
                     transferMappings.add(transferMapping);
-                }else{
+                } else {
                     transferMappings = new HashSet<>();
                     transferMappings.add(transferMapping);
                 }
@@ -344,8 +349,7 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
                     .build();
             responseObserver.onNext(createTransferMappingResponse);
             responseObserver.onCompleted();
-
-
+            
         } catch (Exception e) {
             String msg = "Errored while creating transfer mapping; Message:" + e.getMessage();
             logger.error("Errored while creating transfer mapping; Message: {}", e.getMessage(), e);
