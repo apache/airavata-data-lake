@@ -13,7 +13,8 @@ public class TransferMapping {
 
     @Id
     @Column(name="ID")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "source_resource_id")
