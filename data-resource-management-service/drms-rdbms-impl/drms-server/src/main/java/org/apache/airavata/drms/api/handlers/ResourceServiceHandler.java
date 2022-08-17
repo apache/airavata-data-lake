@@ -126,6 +126,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
             if (exEntity.isPresent()) {
                 Resource resource = ResourceMapper.map(request.getResource(), exEntity.get(), callUser);
+                resource.setResourceType(type);
+                resource.setParentResourceId(parentId);
                 resourceRepository.save(resource);
 
                 GenericResource genericResource = ResourceMapper.map(resource, exEntity.get());
