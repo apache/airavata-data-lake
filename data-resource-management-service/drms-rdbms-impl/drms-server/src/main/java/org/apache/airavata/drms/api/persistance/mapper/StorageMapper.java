@@ -26,7 +26,14 @@ public class StorageMapper {
 
         AnyStorage.Builder anyStorageBuilder = AnyStorage.newBuilder();
 
-        String type = resource.getResourceType();
+        String type = null;
+        for (ResourceProperty resourceProperty : resource.getResourceProperty()) {
+            if (resourceProperty.getPropertyKey().equals("type")) {
+                type = resourceProperty.getPropertyValue();
+                break;
+            }
+        }
+
         switch (type) {
             case StorageConstants.SSH_STORAGE_TYPE_LABEL:
                 SSHStorage.Builder builder = SSHStorage.newBuilder();
@@ -54,14 +61,14 @@ public class StorageMapper {
         Set<ResourceProperty> resourcePropertySet = new HashSet<>();
 
         Resource prResource = new Resource();
-
+        prResource.setResourceType(StorageConstants.STORAGE_LABEL);
         switch (anyStorage.getStorageCase()) {
             case SSH_STORAGE:
                 SSHStorage sshStorage = anyStorage.getSshStorage();
                 allFields = sshStorage.getAllFields();
                 resourcePropertySet.add(new ResourceProperty(StorageConstants.STORAGE_TYPE_LABEL,
                         StorageConstants.SSH_STORAGE_TYPE_LABEL, prResource));
-                prResource.setResourceType(StorageConstants.SSH_STORAGE_TYPE_LABEL);
+
                 prResource.setId(sshStorage.getStorageId());
                 break;
             case S3_STORAGE:
@@ -69,7 +76,6 @@ public class StorageMapper {
                 allFields = s3Storage.getAllFields();
                 resourcePropertySet.add(new ResourceProperty(StorageConstants.STORAGE_TYPE_LABEL,
                         StorageConstants.S3_STORAGE_TYPE_LABEL, prResource));
-                prResource.setResourceType(StorageConstants.S3_STORAGE_TYPE_LABEL);
                 prResource.setId(s3Storage.getStorageId());
                 break;
             case STORAGE_NOT_SET:
