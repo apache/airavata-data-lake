@@ -29,7 +29,6 @@ import org.apache.airavata.drms.api.persistance.repository.ResourceRepository;
 import org.apache.airavata.drms.api.persistance.repository.TransferMappingRepository;
 import org.apache.airavata.drms.api.utils.CustosUtils;
 import org.apache.airavata.drms.core.constants.SharingConstants;
-import org.apache.airavata.drms.core.serializer.AnyStorageSerializer;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.sharing.management.client.SharingManagementClient;
 import org.apache.custos.sharing.service.Entity;
@@ -298,36 +297,54 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
                     transferMappingRepository
                             .findById(request.getTransferMapping().getId());
 
-
-            if (optionalTransferMapping.isEmpty()) {
-
-
-                org.apache.airavata.drms.api.persistance.model.TransferMapping transferMapping = new
-                        org.apache.airavata.drms.api.persistance.model.TransferMapping();
-
-                if (optionalSource.isPresent()) {
-                    transferMapping.setSource(optionalSource.get());
-                }
-
-                if (optionalDst.isPresent()) {
-                    transferMapping.setDestination(optionalDst.get());
-                }
-
-                transferMapping.setScope(scope.name());
-                transferMapping.setOwnerId(authenticatedUser.getUsername());
-
-                transferMappingRepository.save(transferMapping);
-
-                CreateTransferMappingResponse createTransferMappingResponse = CreateTransferMappingResponse
-                        .newBuilder()
-                        .setTransferMapping(request.getTransferMapping())
-                        .build();
-                responseObserver.onNext(createTransferMappingResponse);
-                responseObserver.onCompleted();
+            if (optionalTransferMapping.isPresent()) {
+                responseObserver.onError(Status.ALREADY_EXISTS.asRuntimeException());
                 return;
-
             }
-            //TODO:Error
+
+
+            org.apache.airavata.drms.api.persistance.model.TransferMapping transferMapping = new
+                    org.apache.airavata.drms.api.persistance.model.TransferMapping();
+
+            if (optionalSource.isPresent()) {
+
+               Set<org.apache.airavata.drms.api.persistance.model.TransferMapping> transferMappings =
+                       optionalSource.get().getSourceTransferMapping();
+               if (transferMappings != null){
+                   transferMappings.add(transferMapping);
+               }else{
+                  transferMappings = new HashSet<>();
+                   transferMappings.add(transferMapping);
+               }
+                transferMapping.setSource(optionalSource.get());
+                optionalSource.get().setSourceTransferMapping(transferMappings);
+            }
+
+            if (optionalDst.isPresent()) {
+                Set<org.apache.airavata.drms.api.persistance.model.TransferMapping> transferMappings =
+                        optionalDst.get().getDestinationTransferMapping();
+                if (transferMappings != null){
+                    transferMappings.add(transferMapping);
+                }else{
+                    transferMappings = new HashSet<>();
+                    transferMappings.add(transferMapping);
+                }
+                transferMapping.setDestination(optionalSource.get());
+                optionalDst.get().setDestinationTransferMapping(transferMappings);
+            }
+
+            transferMapping.setScope(scope.name());
+            transferMapping.setOwnerId(authenticatedUser.getUsername());
+
+            transferMappingRepository.save(transferMapping);
+
+            CreateTransferMappingResponse createTransferMappingResponse = CreateTransferMappingResponse
+                    .newBuilder()
+                    .setTransferMapping(request.getTransferMapping())
+                    .build();
+            responseObserver.onNext(createTransferMappingResponse);
+            responseObserver.onCompleted();
+
 
         } catch (Exception e) {
             String msg = "Errored while creating transfer mapping; Message:" + e.getMessage();
