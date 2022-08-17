@@ -76,6 +76,8 @@ public class ResourceMapper {
         prResource.setResourceProperty(resourcePropertySet);
         prResource.setTenantId(authenticatedUser.getTenantId());
         prResource.setResourceProperty(resourcePropertySet);
+        prResource.setSourceTransferMapping(new HashSet<>());
+        prResource.setDestinationTransferMapping(new HashSet<>());
 
         return prResource;
     }

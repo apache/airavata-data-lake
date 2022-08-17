@@ -26,10 +26,10 @@ public class Resource {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "resource", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ResourceProperty> resourceProperty;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "source", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "source", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<TransferMapping> sourceTransferMapping;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "destination", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "destination", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<TransferMapping> destinationTransferMapping;
 
 
