@@ -299,7 +299,7 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
             }
 
            Optional<org.apache.airavata.drms.api.persistance.model.TransferMapping> transferMappingOp =
-                   transferMappingRepository.findTransferMappingBySourceResourceIdAndDestinationResourceId(
+                   transferMappingRepository.findTransferMappingBySourceIdAndDestinationId(
                     optionalSource.get().getId(),optionalDst.get().getId());
 
             if (transferMappingOp.isPresent()){
@@ -349,7 +349,7 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
                     .build();
             responseObserver.onNext(createTransferMappingResponse);
             responseObserver.onCompleted();
-            
+
         } catch (Exception e) {
             String msg = "Errored while creating transfer mapping; Message:" + e.getMessage();
             logger.error("Errored while creating transfer mapping; Message: {}", e.getMessage(), e);
