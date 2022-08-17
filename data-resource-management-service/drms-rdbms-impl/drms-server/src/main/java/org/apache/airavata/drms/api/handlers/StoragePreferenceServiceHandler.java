@@ -291,7 +291,8 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                         .setCondition(SearchCondition.EQUAL)
                         .setValue(StoragePreferenceConstants.STORAGE_PREFERENCE_LABEL).build();
 
-                SearchRequest searchRequest = SearchRequest.newBuilder().addSearchCriteria(searchCriteria).build();
+                SearchRequest searchRequest = SearchRequest.newBuilder().setOwnerId(callUser.getUsername())
+                        .addSearchCriteria(searchCriteria).build();
                 Entities entities = sharingManagementClient.searchEntities(callUser.getTenantId(),
                         searchRequest);
 
