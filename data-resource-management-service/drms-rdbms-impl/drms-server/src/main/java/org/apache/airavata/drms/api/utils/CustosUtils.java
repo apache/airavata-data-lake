@@ -118,7 +118,7 @@ public class CustosUtils {
                 .setId(resourceId)
                 .build();
 
-        PermissionType permissionType = PermissionType.newBuilder()
+        PermissionType permissionType = PermissionType.newBuilder().setId(permission)
                 .build();
 
         SharingRequest sharingRequest = SharingRequest

@@ -96,7 +96,7 @@ public class StorageMapper {
             try {
                 beanWrapper.setPropertyValue(field.getPropertyKey(), field.getPropertyValue());
             } catch (Exception ex) {
-                LOGGER.error(" Error occurred during field setting ", ex);
+//                LOGGER.error(" Error occurred during field setting ", ex);
                 continue;
             }
         }
