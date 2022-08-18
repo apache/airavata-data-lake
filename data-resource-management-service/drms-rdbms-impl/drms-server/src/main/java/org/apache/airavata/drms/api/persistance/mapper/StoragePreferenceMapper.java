@@ -38,21 +38,22 @@ public class StoragePreferenceMapper {
             case StoragePreferenceConstants.SSH_STORAGE_PREFERENCE_TYPE_LABEL:
                 SSHStoragePreference.Builder builder = SSHStoragePreference.newBuilder();
                 builder.setStorage(anyStorage.getSshStorage());
+                setObjectFieldsUsingMap(builder, resource);
                 SSHStoragePreference sshStoragePreference = builder.build();
                 anyStoragePrefBuilder.setSshStoragePreference(sshStoragePreference);
-                setObjectFieldsUsingMap(anyStoragePrefBuilder, resource);
                 break;
             case StoragePreferenceConstants.S3_STORAGE_PREFERENCE_TYPE_LABEL:
                 S3StoragePreference.Builder s3Builder = S3StoragePreference.newBuilder();
                 s3Builder.setStorage(anyStorage.getS3Storage());
+                setObjectFieldsUsingMap(s3Builder, resource);
                 anyStoragePrefBuilder.setS3StoragePreference(s3Builder.build());
-                setObjectFieldsUsingMap(anyStoragePrefBuilder, resource);
+
                 break;
             case StoragePreferenceConstants.SDA_STORAGE_PREFERENCE_TYPE_LABEL:
                 SDAStoragePreference.Builder sdaBuilder = SDAStoragePreference.newBuilder();
                 sdaBuilder.setStorage(anyStorage.getSshStorage());
+                setObjectFieldsUsingMap(sdaBuilder, resource);
                 anyStoragePrefBuilder.setSdaStoragePreference(sdaBuilder.build());
-                setObjectFieldsUsingMap(anyStoragePrefBuilder, resource);
                 break;
             default:
                 throw new Exception("Unsupported storage type for deserializing : " + type);
