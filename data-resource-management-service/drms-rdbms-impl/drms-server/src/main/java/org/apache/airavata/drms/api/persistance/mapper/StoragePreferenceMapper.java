@@ -37,6 +37,7 @@ public class StoragePreferenceMapper {
         switch (type) {
             case StoragePreferenceConstants.SSH_STORAGE_PREFERENCE_TYPE_LABEL:
                 SSHStoragePreference.Builder builder = SSHStoragePreference.newBuilder();
+                builder.setStorage(anyStorage.getSshStorage());
                 SSHStoragePreference sshStoragePreference = builder.build();
                 anyStoragePrefBuilder.setSshStoragePreference(sshStoragePreference);
                 setObjectFieldsUsingMap(anyStoragePrefBuilder, resource);
