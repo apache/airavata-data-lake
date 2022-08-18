@@ -342,11 +342,11 @@ public class OrchestratorEventProcessor implements Runnable {
         switch (sourceSP.getStorageCase()) {
             case SSH_STORAGE_PREFERENCE:
                 resourceMetadataReq.setResourceType("SCP");
-                resourceMetadataReq.setResourceToken(sourceSP.getSshStoragePreference().getCredentialToken());
+                resourceMetadataReq.setResourceToken(sourceSP.getSshStoragePreference().getStoragePreferenceId());
                 break;
             case S3_STORAGE_PREFERENCE:
                 resourceMetadataReq.setResourceType("S3");
-                resourceMetadataReq.setResourceToken(sourceSP.getS3StoragePreference().getCredentialToken());
+                resourceMetadataReq.setResourceToken(sourceSP.getS3StoragePreference().getStoragePreferenceId());
                 break;
         }
 
