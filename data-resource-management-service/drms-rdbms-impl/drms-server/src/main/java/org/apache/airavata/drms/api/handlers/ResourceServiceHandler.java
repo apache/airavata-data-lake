@@ -25,12 +25,14 @@ import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.*;
 import org.apache.airavata.drms.api.persistance.mapper.ResourceMapper;
+import org.apache.airavata.drms.api.persistance.mapper.StorageMapper;
 import org.apache.airavata.drms.api.persistance.model.Resource;
 import org.apache.airavata.drms.api.persistance.model.ResourceProperty;
 import org.apache.airavata.drms.api.persistance.repository.ResourcePropertyRepository;
 import org.apache.airavata.drms.api.persistance.repository.ResourceRepository;
 import org.apache.airavata.drms.api.utils.CustosUtils;
 import org.apache.airavata.drms.core.constants.SharingConstants;
+import org.apache.airavata.drms.core.constants.StorageConstants;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.sharing.management.client.SharingManagementClient;
 import org.apache.custos.sharing.service.Entity;
@@ -87,7 +89,23 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     Optional<Resource> resourceOptional = resourceRepository.findById(resourceId);
                     if (resourceOptional.isPresent()) {
 
+                        Resource persistedRes = resourceOptional.get();
                         GenericResource resource = ResourceMapper.map(resourceOptional.get(), entity);
+
+                        while (!persistedRes.getParentResourceId().isEmpty()) {
+                            Optional<Resource> perResourceOptional = resourceRepository.findById(resourceId);
+                            if (perResourceOptional.isPresent()) {
+                                persistedRes = perResourceOptional.get();
+                            }
+                        }
+                        if (persistedRes.getResourceType().equals(StorageConstants.STORAGE_LABEL)) {
+                            AnyStorage storage = StorageMapper.map(persistedRes);
+                            if (storage.getSshStorage().isInitialized()) {
+                                resource.toBuilder().setSshStorage(storage.getSshStorage());
+                            } else {
+                                resource.toBuilder().setS3Storage(storage.getS3Storage());
+                            }
+                        }
                         ResourceFetchResponse response = ResourceFetchResponse
                                 .newBuilder()
                                 .setResource(resource)
