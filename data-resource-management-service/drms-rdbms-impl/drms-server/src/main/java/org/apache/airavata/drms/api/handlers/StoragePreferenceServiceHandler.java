@@ -285,7 +285,6 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
 
             try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
 
-
                 SearchCriteria searchCriteria = SearchCriteria.newBuilder()
                         .setSearchField(EntitySearchField.ENTITY_TYPE_ID)
                         .setCondition(SearchCondition.EQUAL)
@@ -305,15 +304,34 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
                     if (resource.isPresent()) {
 
                         String storageId = resource.get().getParentResourceId();
-                        Optional<Resource> storageOptional = resourceRepository.findById(storageId);
 
-                        if (storageOptional.isPresent()) {
-                            try {
-                                AnyStorage anyStorage = StorageMapper.map(storageOptional.get());
-                                AnyStoragePreference anyStoragePreference = StoragePreferenceMapper.map(resource.get(), anyStorage);
-                                anyStoragePreferenceList.add(anyStoragePreference);
-                            } catch (Exception exception) {
-                                logger.error(" Mapping error ", exception);
+                        if (request.getQueriesList().size() > 0) {
+                            request.getQueriesList().forEach(query -> {
+                                if (query.getField().equals("storageId") && query.getValue().equals(storageId)) {
+                                    Optional<Resource> storageOptional = resourceRepository.findById(storageId);
+
+                                    if (storageOptional.isPresent()) {
+                                        try {
+                                            AnyStorage anyStorage = StorageMapper.map(storageOptional.get());
+                                            AnyStoragePreference anyStoragePreference = StoragePreferenceMapper.map(resource.get(), anyStorage);
+                                            anyStoragePreferenceList.add(anyStoragePreference);
+                                        } catch (Exception exception) {
+                                            logger.error(" Mapping error ", exception);
+                                        }
+                                    }
+                                }
+                            });
+                        } else {
+                            Optional<Resource> storageOptional = resourceRepository.findById(storageId);
+
+                            if (storageOptional.isPresent()) {
+                                try {
+                                    AnyStorage anyStorage = StorageMapper.map(storageOptional.get());
+                                    AnyStoragePreference anyStoragePreference = StoragePreferenceMapper.map(resource.get(), anyStorage);
+                                    anyStoragePreferenceList.add(anyStoragePreference);
+                                } catch (Exception exception) {
+                                    logger.error(" Mapping error ", exception);
+                                }
                             }
                         }
                     }
