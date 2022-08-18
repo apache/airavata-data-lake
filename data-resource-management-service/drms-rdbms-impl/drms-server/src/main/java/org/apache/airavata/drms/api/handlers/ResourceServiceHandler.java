@@ -101,9 +101,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         if (persistedRes.getResourceType().equals(StorageConstants.STORAGE_LABEL)) {
                             AnyStorage storage = StorageMapper.map(persistedRes);
                             if (storage.getSshStorage().isInitialized()) {
-                                resource.toBuilder().setSshStorage(storage.getSshStorage()).build();
+                              resource =  resource.toBuilder().setSshStorage(storage.getSshStorage()).build();
                             } else {
-                                resource.toBuilder().setS3Storage(storage.getS3Storage()).build();
+                              resource =   resource.toBuilder().setS3Storage(storage.getS3Storage()).build();
                             }
                         }
                         ResourceFetchResponse response = ResourceFetchResponse
