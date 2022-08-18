@@ -93,7 +93,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         GenericResource resource = ResourceMapper.map(resourceOptional.get(), entity);
 
                         while (!persistedRes.getParentResourceId().isEmpty()) {
-                            Optional<Resource> perResourceOptional = resourceRepository.findById(persistedRes.getId());
+                            Optional<Resource> perResourceOptional = resourceRepository.findById(persistedRes.getParentResourceId());
                             if (perResourceOptional.isPresent()) {
                                 persistedRes = perResourceOptional.get();
                             }
