@@ -35,9 +35,7 @@ import org.apache.airavata.drms.core.constants.SharingConstants;
 import org.apache.airavata.drms.core.constants.StorageConstants;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.sharing.management.client.SharingManagementClient;
-import org.apache.custos.sharing.service.Entity;
-import org.apache.custos.sharing.service.GetAllDirectSharingsResponse;
-import org.apache.custos.sharing.service.SharingRequest;
+import org.apache.custos.sharing.service.*;
 import org.json.JSONObject;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
@@ -101,9 +99,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         if (persistedRes.getResourceType().equals(StorageConstants.STORAGE_LABEL)) {
                             AnyStorage storage = StorageMapper.map(persistedRes);
                             if (storage.getSshStorage().isInitialized()) {
-                              resource =  resource.toBuilder().setSshStorage(storage.getSshStorage()).build();
+                                resource = resource.toBuilder().setSshStorage(storage.getSshStorage()).build();
                             } else {
-                              resource =   resource.toBuilder().setS3Storage(storage.getS3Storage()).build();
+                                resource = resource.toBuilder().setS3Storage(storage.getS3Storage()).build();
                             }
                         }
                         ResourceFetchResponse response = ResourceFetchResponse
@@ -271,26 +269,37 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
     public void searchResource(ResourceSearchRequest
                                        request, StreamObserver<ResourceSearchResponse> responseObserver) {
         AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
-        String value = request.getType();
+
+        List<ResourceSearchQuery> resourceSearchQueries = request.getQueriesList();
+
+        SearchRequest.Builder searchRequestBuilder = SearchRequest.newBuilder();
+
+
+        for (ResourceSearchQuery searchQuery : resourceSearchQueries) {
+
+            SearchCriteria searchCriteria = SearchCriteria.newBuilder()
+                    .setSearchField(EntitySearchField.valueOf(searchQuery.getField()))
+                    .setCondition(SearchCondition.valueOf(searchQuery.getOptions()))
+                    .setValue(searchQuery.getValue()).build();
+
+            searchRequestBuilder = searchRequestBuilder.addSearchCriteria(searchCriteria);
+
+        }
+        SearchRequest searchRequest = searchRequestBuilder.setOwnerId(callUser
+                .getUsername())
+                .setClientId(callUser.getTenantId())
+                .build();
+
 
         try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
 
-            Entity entity = Entity.newBuilder().setType(value).build();
 
-            SharingRequest sharingRequest = SharingRequest.newBuilder()
-                    .setEntity(entity)
-                    .addOwnerId(callUser.getUsername())
-                    .build();
-
-            GetAllDirectSharingsResponse response = sharingManagementClient.getAllDirectSharings(callUser.getTenantId(),
-                    sharingRequest);
-
+            Entities entities = sharingManagementClient.searchEntities(callUser.getTenantId(), searchRequest);
             List<GenericResource> metadataList = new ArrayList<>();
-            response.getSharedDataList().forEach(shrMetadata -> {
-                Entity exEntity = shrMetadata.getEntity();
-                Optional<Resource> resourceOptional = resourceRepository.findById(exEntity.getId());
+            entities.getEntityArrayList().forEach(shrMetadata -> {
+                Optional<Resource> resourceOptional = resourceRepository.findById(shrMetadata.getId());
                 if (resourceOptional.isPresent()) {
-                    metadataList.add(ResourceMapper.map(resourceOptional.get(), exEntity));
+                    metadataList.add(ResourceMapper.map(resourceOptional.get(), shrMetadata));
                 }
 
             });
