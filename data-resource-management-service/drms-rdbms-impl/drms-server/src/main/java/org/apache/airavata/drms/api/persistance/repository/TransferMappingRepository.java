@@ -10,4 +10,5 @@ public interface TransferMappingRepository extends JpaRepository<TransferMapping
 
     Optional<TransferMapping> findTransferMappingBySourceIdAndDestinationId(String sourceId,
                                                                                             String destinationId);
+    Optional<TransferMapping> findTransferMappingByScope(String scope);
 }
