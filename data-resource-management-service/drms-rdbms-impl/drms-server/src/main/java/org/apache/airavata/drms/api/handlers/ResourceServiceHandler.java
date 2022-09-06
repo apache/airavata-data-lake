@@ -28,8 +28,10 @@ import org.apache.airavata.drms.api.persistance.mapper.ResourceMapper;
 import org.apache.airavata.drms.api.persistance.mapper.StorageMapper;
 import org.apache.airavata.drms.api.persistance.model.Resource;
 import org.apache.airavata.drms.api.persistance.model.ResourceProperty;
+import org.apache.airavata.drms.api.persistance.model.TransferMapping;
 import org.apache.airavata.drms.api.persistance.repository.ResourcePropertyRepository;
 import org.apache.airavata.drms.api.persistance.repository.ResourceRepository;
+import org.apache.airavata.drms.api.persistance.repository.TransferMappingRepository;
 import org.apache.airavata.drms.api.utils.CustosUtils;
 import org.apache.airavata.drms.core.constants.SharingConstants;
 import org.apache.airavata.drms.core.constants.StorageConstants;
@@ -59,6 +61,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
     @Autowired
     private ResourcePropertyRepository resourcePropertyRepository;
+
+    @Autowired
+    private TransferMappingRepository transferMappingRepository;
 
 
     @Override
@@ -285,6 +290,30 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             searchRequestBuilder = searchRequestBuilder.addSearchCriteria(searchCriteria);
 
         }
+
+        if (resourceSearchQueries.isEmpty()) {
+
+            String type = request.getType();
+
+            Optional<TransferMapping> transferMappingOptional = transferMappingRepository.
+                    findTransferMappingByScope(TransferScope.GLOBAL.name());
+
+            if (transferMappingOptional.isPresent()) {
+                TransferMapping transferMapping = transferMappingOptional.get();
+                String sourceId = transferMapping.getSource().getId();
+
+                searchRequestBuilder = searchRequestBuilder.addSearchCriteria(SearchCriteria.newBuilder()
+                        .setSearchField(EntitySearchField.PARENT_ID)
+                        .setCondition(SearchCondition.EQUAL)
+                        .setValue(sourceId).build());
+
+                searchRequestBuilder = searchRequestBuilder.addSearchCriteria(SearchCriteria.newBuilder()
+                        .setSearchField(EntitySearchField.ENTITY_TYPE_ID)
+                        .setCondition(SearchCondition.EQUAL)
+                        .setValue(type).build());
+            }
+        }
+
         SearchRequest searchRequest = searchRequestBuilder.setOwnerId(callUser
                 .getUsername())
                 .setClientId(callUser.getTenantId())
