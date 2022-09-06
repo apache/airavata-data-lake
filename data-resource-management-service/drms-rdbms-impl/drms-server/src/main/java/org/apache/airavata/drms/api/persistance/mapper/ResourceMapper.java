@@ -26,8 +26,8 @@ public class ResourceMapper {
         }
         genericResourceBuilder.putProperties("owner", entity.getOwnerId());
         genericResourceBuilder.putProperties("description", entity.getDescription());
-        genericResourceBuilder.putProperties("created_at", String.valueOf(entity.getCreatedAt()));
-        genericResourceBuilder.putProperties("updated_at", String.valueOf(entity.getUpdatedAt()));
+        genericResourceBuilder.putProperties("createdTime", String.valueOf(entity.getCreatedAt()));
+        genericResourceBuilder.putProperties("lastModifiedTime", String.valueOf(entity.getUpdatedAt()));
         Set<ResourceProperty> resourcePropertySet = resource.getResourceProperty();
 
         Iterator<ResourceProperty> iterator = resourcePropertySet.iterator();
