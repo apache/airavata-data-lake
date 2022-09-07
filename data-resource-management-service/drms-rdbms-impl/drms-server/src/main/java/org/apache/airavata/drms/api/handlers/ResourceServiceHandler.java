@@ -18,6 +18,7 @@ package org.apache.airavata.drms.api.handlers;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.Struct;
+import com.google.protobuf.Value;
 import com.google.protobuf.util.JsonFormat;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
@@ -45,6 +46,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @GRpcService
@@ -522,7 +524,20 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         Struct.Builder structBuilder = Struct.newBuilder();
                         JsonFormat.parser().merge(message, structBuilder);
                         builder.addMetadata(structBuilder.build());
+                    } else {
+                        List<ResourceProperty> resourceProperties = resourcePropertyRepository.findAllByResourceId(resourceId);
+                        Struct.Builder structBuilder = Struct.newBuilder();
+
+                        Map<String, Value> valueMap = resourceProperties.stream()
+                                .collect(Collectors.toMap(ResourceProperty::getPropertyKey,
+                                        e->Value.newBuilder().setStringValue(e.getPropertyValue()).build()));
+
+                        structBuilder.putAllFields(valueMap);
+
+                        builder.addMetadata(structBuilder.build());
+
                     }
+
                 }
                 responseObserver.onNext(builder.build());
                 responseObserver.onCompleted();
