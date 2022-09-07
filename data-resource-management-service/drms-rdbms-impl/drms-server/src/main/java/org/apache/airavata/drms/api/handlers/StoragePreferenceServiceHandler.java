@@ -70,7 +70,7 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
             String storagePreferenceId = request.getStoragePreferenceId();
 
             CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(), callUser.getUsername(),
-                    storagePreferenceId, SharingConstants.PERMISSION_TYPE_VIEWER);
+                    storagePreferenceId, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER, SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
 
             Optional<Resource> optionalResource = resourceRepository.findById(storagePreferenceId);
 
@@ -193,7 +193,8 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
 
             boolean access = CustosUtils.
                     userHasAccess(custosClientProvider, callUser.getTenantId(), callUser.getUsername(),
-                            storagePreferenceId, SharingConstants.PERMISSION_TYPE_OWNER);
+                            storagePreferenceId, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER,
+                                    SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
 
             if (access) {
                 if (storage.getStorageCase().name()
@@ -258,7 +259,8 @@ public class StoragePreferenceServiceHandler extends StoragePreferenceServiceGrp
             String id = request.getStoragePreferenceId();
 
             boolean accessEditor = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
-                    callUser.getUsername(), id, SharingConstants.PERMISSION_TYPE_OWNER);
+                    callUser.getUsername(), id, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER,
+                            SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
             if (accessEditor) {
                 resourceRepository.deleteById(id);
 

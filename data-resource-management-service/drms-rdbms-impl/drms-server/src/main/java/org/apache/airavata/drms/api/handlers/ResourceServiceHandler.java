@@ -76,7 +76,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
             boolean access = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
                     callUser.getUsername(), resourceId,
-                    SharingConstants.PERMISSION_TYPE_VIEWER);
+                    new String[]{SharingConstants.PERMISSION_TYPE_VIEWER, SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
 
             if (access) {
                 try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
@@ -186,7 +186,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             }
 
             boolean status = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
-                    callUser.getUsername(), resourceId, SharingConstants.PERMISSION_TYPE_VIEWER);
+                    callUser.getUsername(), resourceId, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER, SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
             if (status) {
                 try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
                     List<GenericResource> genericResources = new ArrayList<>();
@@ -414,7 +414,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 String parentId = optionalResource.get().getParentResourceId();
 
                 boolean status = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
-                        callUser.getUsername(), parentId, SharingConstants.PERMISSION_TYPE_VIEWER);
+                        callUser.getUsername(), parentId, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER, SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
 
                 if (status) {
                     try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
@@ -461,7 +461,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             Map<String, Object> map = json.toMap();
 
             boolean status = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
-                    callUser.getUsername(), resourceId, SharingConstants.PERMISSION_TYPE_VIEWER);
+                    callUser.getUsername(), resourceId, new String[]{SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
 
             if (status) {
                 Optional<Resource> optionalResource = resourceRepository.findById(resourceId);
@@ -504,14 +504,11 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
             String resourceId = request.getResourceId();
 
-            boolean statusViewer = CustosUtils.userHasAccess(custosClientProvider,
-                    callUser.getTenantId(), callUser.getUsername(), resourceId, SharingConstants.PERMISSION_TYPE_VIEWER);
-            boolean statusEditor = CustosUtils.userHasAccess(custosClientProvider,
-                    callUser.getTenantId(), callUser.getUsername(), resourceId, SharingConstants.PERMISSION_TYPE_EDITOR);
-            boolean statusOwner = CustosUtils.userHasAccess(custosClientProvider,
-                    callUser.getTenantId(), callUser.getUsername(), resourceId, SharingConstants.PERMISSION_TYPE_OWNER);
+            boolean status = CustosUtils.userHasAccess(custosClientProvider,
+                    callUser.getTenantId(), callUser.getUsername(), resourceId,
+                    new String[]{SharingConstants.PERMISSION_TYPE_VIEWER, SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
 
-            if (statusViewer || statusEditor|| statusOwner) {
+            if (status) {
 
                 Optional<Resource> resourceOptional = resourceRepository.findById(resourceId);
                 FetchResourceMetadataResponse.Builder builder = FetchResourceMetadataResponse.newBuilder();

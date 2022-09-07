@@ -76,7 +76,8 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
             boolean access = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
                     callUser.getUsername(), request.getStorageId(),
-                    SharingConstants.PERMISSION_TYPE_VIEWER);
+                    new String[]{SharingConstants.PERMISSION_TYPE_VIEWER,
+                            SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
 
             if (access) {
                 try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
@@ -155,7 +156,8 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
             boolean access = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
                     callUser.getUsername(), resource.getId(),
-                    SharingConstants.PERMISSION_TYPE_VIEWER);
+                    new String[]{SharingConstants.PERMISSION_TYPE_VIEWER,
+                            SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
 
             if (access) {
                 Optional<Resource> optionalResource = resourceRepository.findById(resource.getId());
@@ -200,7 +202,8 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
             boolean access = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
                     callUser.getUsername(), id,
-                    SharingConstants.PERMISSION_TYPE_VIEWER);
+                    new String[]{SharingConstants.PERMISSION_TYPE_VIEWER,
+                            SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
             if (access) {
 
                 CustosUtils.deleteStorageEntity(custosClientProvider, callUser.getTenantId(), request.getStorageId());
@@ -228,7 +231,8 @@ public class StorageServiceHandler extends StorageServiceGrpc.StorageServiceImpl
 
             boolean access = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
                     callUser.getUsername(), storageId,
-                    SharingConstants.PERMISSION_TYPE_VIEWER);
+                    new String[]{SharingConstants.PERMISSION_TYPE_VIEWER,
+                            SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
 
             if (access) {
 
