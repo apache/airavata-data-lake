@@ -91,8 +91,8 @@ datalake_drms_neo4j_user: ""
 datalake_drms_neo4j_password: ""
 datalake_drms_custos_client_id: "{{ vault_mft_resource_service_custos_client_id }}"
 datalake_drms_custos_client_secret: "{{ vault_mft_resource_service_custos_client_secret }}"
-datalake_drms_custos_host: prod.custos.usecustos.org
-datalake_drms_custos_port: 443
+datalake_drms_custos_host: "{{ custos_host }}"
+datalake_drms_custos_port: "{{ custos_port }}"
 datalake_drms_http_port: 8900
 datalake_drms_datasource_host: scigap10.sciencegateways.iu.edu
 
@@ -133,8 +133,8 @@ workflow_manager_mft_callback_url: "{{ groups['data-lake'][0] }}:33335"
 workflow_manager_mft_client_id: "{{ vault_workflow_manager_mft_client_id }}"
 workflow_manager_mft_client_secret: "{{ vault_workflow_manager_mft_client_secret }}"
 
-workflow_manager_custos_host: prod.custos.usecustos.org
-workflow_manager_custos_port: 443
+workflow_manager_custos_host: "{{ custos_host }}"
+workflow_manager_custos_port: "{{ custos_port }}"
 workflow_manager_custos_id: "{{ vault_workflow_manager_custos_id }}"
 workflow_manager_custos_secret: "{{ vault_workflow_manager_custos_secret }}"
 workflow_manager_work_dir: /data/tmp_data
