@@ -193,10 +193,10 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     List<Resource> resources;
                     if (limit > 0) {
                         resources = resourceRepository.findAllByParentResourceIdAndTenantIdAndResourceTypeWithPagination(resourceId
-                                , callUser.getTenantId(), type, limit, offset);
+                                , callUser.getTenantId(), limit, offset);
                     } else {
-                        resources = resourceRepository.findAllByParentResourceIdAndTenantIdAndResourceType(resourceId,
-                                callUser.getTenantId(), type);
+                        resources = resourceRepository.findAllByParentResourceIdAndTenantId(resourceId,
+                                callUser.getTenantId());
                     }
 
                     resources.forEach(resource -> {
@@ -526,7 +526,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 }
                 responseObserver.onNext(builder.build());
                 responseObserver.onCompleted();
-            }else{
+            } else {
                 responseObserver.onError(Status.PERMISSION_DENIED
                         .withDescription("You don't have  privileges to view metadata").asRuntimeException());
             }
