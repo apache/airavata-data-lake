@@ -7,6 +7,8 @@ import org.apache.custos.sharing.management.client.SharingManagementClient;
 import org.apache.custos.sharing.service.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class CustosUtils {
@@ -112,29 +114,35 @@ public class CustosUtils {
     }
 
     public static boolean userHasAccess(CustosClientProvider custosClientProvider,
-                                        String tenantId, String username, String resourceId, String permission) throws IOException {
-        Entity sharedEntity = Entity
-                .newBuilder()
-                .setId(resourceId)
-                .build();
+                                        String tenantId, String username, String resourceId, String[] permission) throws IOException {
 
-        PermissionType permissionType = PermissionType.newBuilder().setId(permission)
-                .build();
+        List<Boolean> statusArray = new ArrayList<>();
 
-        SharingRequest sharingRequest = SharingRequest
-                .newBuilder()
-                .setEntity(sharedEntity)
-                .setPermissionType(permissionType)
-                .addOwnerId(username)
-                .build();
+        for (String perm : permission) {
+            Entity sharedEntity = Entity
+                    .newBuilder()
+                    .setId(resourceId)
+                    .build();
 
-        try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
+            PermissionType permissionType = PermissionType.newBuilder().setId(perm)
+                    .build();
+
+            SharingRequest sharingRequest = SharingRequest
+                    .newBuilder()
+                    .setEntity(sharedEntity)
+                    .setPermissionType(permissionType)
+                    .addOwnerId(username)
+                    .build();
+
+            try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
 
 
-            org.apache.custos.sharing.service.Status status = sharingManagementClient
-                    .userHasAccess(tenantId, sharingRequest);
-            return status.getStatus();
+                org.apache.custos.sharing.service.Status status = sharingManagementClient
+                        .userHasAccess(tenantId, sharingRequest);
+                statusArray.add(status.getStatus());
+            }
+
         }
-
+        return statusArray.contains(Boolean.TRUE);
     }
 }
