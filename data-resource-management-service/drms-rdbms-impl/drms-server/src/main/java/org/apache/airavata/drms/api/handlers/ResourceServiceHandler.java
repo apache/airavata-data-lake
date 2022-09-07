@@ -504,10 +504,14 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
             String resourceId = request.getResourceId();
 
-            boolean status = CustosUtils.userHasAccess(custosClientProvider,
+            boolean statusViewer = CustosUtils.userHasAccess(custosClientProvider,
                     callUser.getTenantId(), callUser.getUsername(), resourceId, SharingConstants.PERMISSION_TYPE_VIEWER);
+            boolean statusEditor = CustosUtils.userHasAccess(custosClientProvider,
+                    callUser.getTenantId(), callUser.getUsername(), resourceId, SharingConstants.PERMISSION_TYPE_EDITOR);
+            boolean statusOwner = CustosUtils.userHasAccess(custosClientProvider,
+                    callUser.getTenantId(), callUser.getUsername(), resourceId, SharingConstants.PERMISSION_TYPE_OWNER);
 
-            if (status) {
+            if (statusViewer || statusEditor|| statusOwner) {
 
                 Optional<Resource> resourceOptional = resourceRepository.findById(resourceId);
                 FetchResourceMetadataResponse.Builder builder = FetchResourceMetadataResponse.newBuilder();
@@ -525,6 +529,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 }
                 responseObserver.onNext(builder.build());
                 responseObserver.onCompleted();
+            }else{
+                responseObserver.onError(Status.PERMISSION_DENIED
+                        .withDescription("You don't have  privileges to view metadata").asRuntimeException());
             }
         } catch (Exception ex) {
             String msg = " Error occurred while fetching resource metadata " + ex.getMessage();

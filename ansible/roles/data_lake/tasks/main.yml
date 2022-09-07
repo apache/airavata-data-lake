@@ -132,10 +132,10 @@
   notify: stop drms-service
   become: yes
 
-- name: Stop custos synchronizer  service
-  command: systemctl daemon-reload
-  notify: stop drms-custos-sync
-  become: yes
+#- name: Stop custos synchronizer  service
+#  command: systemctl daemon-reload
+#  notify: stop drms-custos-sync
+#  become: yes
 
 - name: Stop orchestrator  service
   command: systemctl daemon-reload
@@ -192,10 +192,10 @@
   notify: start drms-service
   become: yes
 
-- name: Start custos synchronizer  service
-  command: systemctl daemon-reload
-  notify: start drms-custos-sync
-  become: yes
+#- name: Start custos synchronizer  service
+#  command: systemctl daemon-reload
+#  notify: start drms-custos-sync
+#  become: yes
 
 - name: Start orchestrator  service
   command: systemctl daemon-reload
