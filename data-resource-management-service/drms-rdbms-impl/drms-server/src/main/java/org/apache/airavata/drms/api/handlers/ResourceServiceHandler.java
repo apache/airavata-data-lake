@@ -201,7 +201,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
                     resources.forEach(resource -> {
                         String id = resource.getId();
-                        Entity entity = Entity.newBuilder().setDescription(id).build();
+                        Entity entity = Entity.newBuilder().setId(id).build();
                         Entity exEntity = sharingManagementClient.getEntity(callUser.getTenantId(), entity);
                         genericResources.add(ResourceMapper.map(resource, exEntity));
 
