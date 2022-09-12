@@ -284,16 +284,18 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
         for (ResourceSearchQuery searchQuery : resourceSearchQueries) {
 
-            SearchCriteria searchCriteria = SearchCriteria.newBuilder()
-                    .setSearchField(EntitySearchField.valueOf(searchQuery.getField()))
-                    .setCondition(SearchCondition.valueOf(searchQuery.getOptions()))
-                    .setValue(searchQuery.getValue()).build();
+            if(!searchQuery.getField().equals("shared_with")) {
+                SearchCriteria searchCriteria = SearchCriteria.newBuilder()
+                        .setSearchField(EntitySearchField.valueOf(searchQuery.getField()))
+                        .setCondition(SearchCondition.valueOf(searchQuery.getOptions()))
+                        .setValue(searchQuery.getValue()).build();
 
-            searchRequestBuilder = searchRequestBuilder.addSearchCriteria(searchCriteria);
+                searchRequestBuilder = searchRequestBuilder.addSearchCriteria(searchCriteria);
+            }
 
         }
 
-        if (resourceSearchQueries.isEmpty()) {
+//        if (resourceSearchQueries.isEmpty()) {
 
             String type = request.getType();
 
@@ -314,7 +316,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         .setCondition(SearchCondition.EQUAL)
                         .setValue(type).build());
             }
-        }
+//        }
 
         SearchRequest searchRequest = searchRequestBuilder.setOwnerId(callUser
                 .getUsername())
