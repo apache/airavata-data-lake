@@ -558,26 +558,16 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
     private Set<ResourceProperty> mergeProperties(Resource resource, Map<String, Object> values) {
 
         Set<ResourceProperty> resourcePropertySet = new HashSet<>();
-        Set<ResourceProperty> exisitingProperties = resource.getResourceProperty();
 
         for (String key : values.keySet()) {
-            List<ResourceProperty> matched = exisitingProperties.stream().filter(prop -> {
-                if (prop.getPropertyKey().equals(key)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }).collect(Collectors.toList());
+
+            resourcePropertyRepository.deleteAllByPropertyKeyAndResourceId(key,resource.getId());
 
             if (values.get(key) instanceof Map) {
                 //TODO: Implement MAP
             } else if (values.get(key) instanceof List) {
                 ArrayList arrayList = (ArrayList) values.get(key);
-                if (!matched.isEmpty()) {
-                    matched.forEach(val -> {
-                        resourcePropertyRepository.delete(val);
-                    });
-                }
+
                 arrayList.forEach(val -> {
                     ResourceProperty resourceProperty = new ResourceProperty();
                     resourceProperty.setPropertyKey(key);
@@ -587,29 +577,23 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 });
             } else {
                 String value = String.valueOf(values.get(key));
-                if (!matched.isEmpty()) {
-                    matched.forEach(val -> {
-                        resourcePropertyRepository.deleteById(val.getId());
-                    });
-                }
-
                 ResourceProperty resourceProperty = new ResourceProperty();
                 resourceProperty.setPropertyKey(key);
                 resourceProperty.setPropertyValue(value);
                 resourceProperty.setResource(resource);
                 resourcePropertySet.add(resourceProperty);
             }
-
         }
 
-        Optional<ResourceProperty> hostOp = resourcePropertyRepository.findByPropertyKeyAndResourceId("hostName",resource.getId());
-        Optional<ResourceProperty> resourceOp = resourcePropertyRepository.findByPropertyKeyAndResourceId("resourcePath",resource.getId());
-        if(hostOp.isPresent()){
-            resourcePropertySet.add(hostOp.get());
-        }
-        if(resourceOp.isPresent()){
-            resourcePropertySet.add(resourceOp.get());
-        }
+//        Optional<ResourceProperty> hostOp = resourcePropertyRepository.findByPropertyKeyAndResourceId("hostName",resource.getId());
+//        Optional<ResourceProperty> resourceOp = resourcePropertyRepository.findByPropertyKeyAndResourceId("resourcePath",resource.getId());
+//
+//        if(hostOp.isPresent()){
+//            resourcePropertySet.add(hostOp.get());
+//        }
+//        if(resourceOp.isPresent()){
+//            resourcePropertySet.add(resourceOp.get());
+//        }
 
 
         return resourcePropertySet;
