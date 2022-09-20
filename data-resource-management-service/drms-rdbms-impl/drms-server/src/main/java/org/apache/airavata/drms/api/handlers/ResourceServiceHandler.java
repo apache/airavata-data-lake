@@ -477,7 +477,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                             findByPropertyKeyAndResourceId("metadata", resource.getId());
 
                     if (property.isPresent()) {
-                        resourcePropertyRepository.delete(property.get());
+                        resourcePropertyRepository.deleteById(property.get().getId());
                     }
 
                     ResourceProperty resourceProperty = new ResourceProperty();
@@ -589,7 +589,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 String value = String.valueOf(values.get(key));
                 if (!matched.isEmpty()) {
                     matched.forEach(val -> {
-                        resourcePropertyRepository.delete(val);
+                        resourcePropertyRepository.deleteById(val.getId());
                     });
                 }
 
