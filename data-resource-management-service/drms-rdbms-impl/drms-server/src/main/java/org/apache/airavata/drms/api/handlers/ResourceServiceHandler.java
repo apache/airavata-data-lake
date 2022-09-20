@@ -477,9 +477,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                             findByPropertyKeyAndResourceId("metadata", resource.getId());
 
                     properties.forEach(property -> {
-
                                 resourcePropertyRepository.deleteById(property.getId());
-
                             }
                     );
 
