@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ResourcePropertyRepository extends JpaRepository<ResourceProperty, Long> {
 
-    Optional<ResourceProperty> findByPropertyKeyAndResourceId(String key, String resourceId);
+    List<ResourceProperty> findByPropertyKeyAndResourceId(String key, String resourceId);
 
     List<ResourceProperty> findAllByResourceId(String resourceId);
 

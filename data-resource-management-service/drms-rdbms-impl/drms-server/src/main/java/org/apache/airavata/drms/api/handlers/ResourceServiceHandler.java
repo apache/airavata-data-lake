@@ -473,12 +473,16 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     Resource resource = optionalResource.get();
                     Set<ResourceProperty> resourcePropertySet = mergeProperties(resource, map);
 
-                    Optional<ResourceProperty> property = resourcePropertyRepository.
+                    List<ResourceProperty> properties = resourcePropertyRepository.
                             findByPropertyKeyAndResourceId("metadata", resource.getId());
 
-                    if (property.isPresent()) {
-                        resourcePropertyRepository.deleteById(property.get().getId());
-                    }
+                    properties.forEach(property -> {
+
+                                resourcePropertyRepository.deleteById(property.getId());
+
+                            }
+                    );
+
 
                     ResourceProperty resourceProperty = new ResourceProperty();
                     resourceProperty.setPropertyKey("metadata");
@@ -519,10 +523,10 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
                 if (resourceOptional.isPresent()) {
 
-                    Optional<ResourceProperty> resourceProperty = resourcePropertyRepository
+                    List<ResourceProperty> resourceProperty = resourcePropertyRepository
                             .findByPropertyKeyAndResourceId("metadata", resourceOptional.get().getId());
-                    if (resourceProperty.isPresent()) {
-                        String message = resourceProperty.get().getPropertyValue();
+                    if (!resourceProperty.isEmpty()) {
+                        String message = resourceProperty.get(0).getPropertyValue();
                         Struct.Builder structBuilder = Struct.newBuilder();
                         JsonFormat.parser().merge(message, structBuilder);
                         builder.addMetadata(structBuilder.build());
@@ -560,14 +564,16 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
         Set<ResourceProperty> resourcePropertySet = new HashSet<>();
 
         for (String key : values.keySet()) {
-
-            resourcePropertyRepository.deleteAllByPropertyKeyAndResourceId(key,resource.getId());
-
+            List<ResourceProperty> propertyList = resourcePropertyRepository.findByPropertyKeyAndResourceId(key, resource.getId());
             if (values.get(key) instanceof Map) {
                 //TODO: Implement MAP
             } else if (values.get(key) instanceof List) {
                 ArrayList arrayList = (ArrayList) values.get(key);
-
+                if (!propertyList.isEmpty()) {
+                    propertyList.forEach(prop -> {
+                        resourcePropertyRepository.delete(prop);
+                    });
+                }
                 arrayList.forEach(val -> {
                     ResourceProperty resourceProperty = new ResourceProperty();
                     resourceProperty.setPropertyKey(key);
@@ -575,13 +581,21 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     resourceProperty.setResource(resource);
                     resourcePropertySet.add(resourceProperty);
                 });
+
             } else {
-                String value = String.valueOf(values.get(key));
-                ResourceProperty resourceProperty = new ResourceProperty();
-                resourceProperty.setPropertyKey(key);
-                resourceProperty.setPropertyValue(value);
-                resourceProperty.setResource(resource);
-                resourcePropertySet.add(resourceProperty);
+                if (!propertyList.isEmpty()) {
+                    propertyList.forEach(prop -> {
+                        prop.setPropertyValue((String) values.get(key));
+                        resourcePropertyRepository.save(prop);
+                    });
+                } else {
+                    String value = String.valueOf(values.get(key));
+                    ResourceProperty resourceProperty = new ResourceProperty();
+                    resourceProperty.setPropertyKey(key);
+                    resourceProperty.setPropertyValue(value);
+                    resourceProperty.setResource(resource);
+                    resourcePropertySet.add(resourceProperty);
+                }
             }
         }
 
