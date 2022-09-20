@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @GRpcService
@@ -284,7 +283,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
         for (ResourceSearchQuery searchQuery : resourceSearchQueries) {
 
-            if(searchQuery.getField().equalsIgnoreCase("sharedBy")) {
+            if (searchQuery.getField().equalsIgnoreCase("sharedBy")) {
                 SearchCriteria searchCriteria = SearchCriteria.newBuilder()
                         .setSearchField(EntitySearchField.SHARED_BY)
                         .setCondition(SearchCondition.EQUAL)
@@ -297,25 +296,25 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
 //        if (resourceSearchQueries.isEmpty()) {
 
-            String type = request.getType();
+        String type = request.getType();
 
-            Optional<TransferMapping> transferMappingOptional = transferMappingRepository.
-                    findTransferMappingByScope(TransferScope.GLOBAL.name());
+        Optional<TransferMapping> transferMappingOptional = transferMappingRepository.
+                findTransferMappingByScope(TransferScope.GLOBAL.name());
 
-            if (transferMappingOptional.isPresent()) {
-                TransferMapping transferMapping = transferMappingOptional.get();
-                String sourceId = transferMapping.getSource().getId();
+        if (transferMappingOptional.isPresent()) {
+            TransferMapping transferMapping = transferMappingOptional.get();
+            String sourceId = transferMapping.getSource().getId();
 
-                searchRequestBuilder = searchRequestBuilder.addSearchCriteria(SearchCriteria.newBuilder()
-                        .setSearchField(EntitySearchField.PARENT_ID)
-                        .setCondition(SearchCondition.EQUAL)
-                        .setValue(sourceId).build());
+            searchRequestBuilder = searchRequestBuilder.addSearchCriteria(SearchCriteria.newBuilder()
+                    .setSearchField(EntitySearchField.PARENT_ID)
+                    .setCondition(SearchCondition.EQUAL)
+                    .setValue(sourceId).build());
 
-                searchRequestBuilder = searchRequestBuilder.addSearchCriteria(SearchCriteria.newBuilder()
-                        .setSearchField(EntitySearchField.ENTITY_TYPE_ID)
-                        .setCondition(SearchCondition.EQUAL)
-                        .setValue(type).build());
-            }
+            searchRequestBuilder = searchRequestBuilder.addSearchCriteria(SearchCriteria.newBuilder()
+                    .setSearchField(EntitySearchField.ENTITY_TYPE_ID)
+                    .setCondition(SearchCondition.EQUAL)
+                    .setValue(type).build());
+        }
 //        }
 
         SearchRequest searchRequest = searchRequestBuilder.setOwnerId(callUser
@@ -485,6 +484,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     resourceProperty.setPropertyKey("metadata");
                     resourceProperty.setPropertyValue(message);
                     resourcePropertySet.add(resourceProperty);
+                    resourceProperty.setResource(resource);
 
                     resource.setResourceProperty(resourcePropertySet);
                     resourceRepository.save(resource);
@@ -532,7 +532,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
                         Map<String, Value> valueMap = resourceProperties.stream()
                                 .collect(Collectors.toMap(ResourceProperty::getPropertyKey,
-                                        e->Value.newBuilder().setStringValue(e.getPropertyValue()).build()));
+                                        e -> Value.newBuilder().setStringValue(e.getPropertyValue()).build()));
 
                         structBuilder.putAllFields(valueMap);
 
@@ -592,6 +592,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         resourcePropertyRepository.delete(val);
                     });
                 }
+
                 ResourceProperty resourceProperty = new ResourceProperty();
                 resourceProperty.setPropertyKey(key);
                 resourceProperty.setPropertyValue(value);
@@ -600,6 +601,10 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             }
 
         }
+
+        List<ResourceProperty> restProperties = resourcePropertyRepository.findAllByResourceId(resource.getId());
+        resourcePropertySet.addAll(restProperties);
+        
         return resourcePropertySet;
     }
 
