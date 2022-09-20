@@ -602,9 +602,16 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
         }
 
-        List<ResourceProperty> restProperties = resourcePropertyRepository.findAllByResourceId(resource.getId());
-        resourcePropertySet.addAll(restProperties);
-        
+        Optional<ResourceProperty> hostOp = resourcePropertyRepository.findByPropertyKeyAndResourceId("hostName",resource.getId());
+        Optional<ResourceProperty> resourceOp = resourcePropertyRepository.findByPropertyKeyAndResourceId("resourcePath",resource.getId());
+        if(hostOp.isPresent()){
+            resourcePropertySet.add(hostOp.get());
+        }
+        if(resourceOp.isPresent()){
+            resourcePropertySet.add(resourceOp.get());
+        }
+
+
         return resourcePropertySet;
     }
 
