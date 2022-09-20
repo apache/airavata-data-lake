@@ -559,56 +559,72 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
     private Set<ResourceProperty> mergeProperties(Resource resource, Map<String, Object> values) {
 
-        Set<ResourceProperty> resourcePropertySet = new HashSet<>();
+        Set<ResourceProperty> exProperties = resource.getResourceProperty();
+        Set<ResourceProperty> newProperties = new HashSet<>();
+
 
         for (String key : values.keySet()) {
-            List<ResourceProperty> propertyList = resourcePropertyRepository.findByPropertyKeyAndResourceId(key, resource.getId());
+
+            List<ResourceProperty> resourcePropertyList = exProperties.stream().filter(prop -> {
+                if (prop.getPropertyKey().equals(key)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }).collect(Collectors.toList());
+
+
             if (values.get(key) instanceof Map) {
                 //TODO: Implement MAP
             } else if (values.get(key) instanceof List) {
                 ArrayList arrayList = (ArrayList) values.get(key);
-                if (!propertyList.isEmpty()) {
-                    propertyList.forEach(prop -> {
-                        resourcePropertyRepository.delete(prop);
+                if (!resourcePropertyList.isEmpty()) {
+                    //TODO:handle this
+
+                } else {
+                    arrayList.forEach(val -> {
+                        ResourceProperty resourceProperty = new ResourceProperty();
+                        resourceProperty.setPropertyKey(key);
+                        resourceProperty.setPropertyValue(val.toString());
+                        resourceProperty.setResource(resource);
+                        newProperties.add(resourceProperty);
                     });
                 }
-                arrayList.forEach(val -> {
-                    ResourceProperty resourceProperty = new ResourceProperty();
-                    resourceProperty.setPropertyKey(key);
-                    resourceProperty.setPropertyValue(val.toString());
-                    resourceProperty.setResource(resource);
-                    resourcePropertySet.add(resourceProperty);
-                });
 
             } else {
-                if (!propertyList.isEmpty()) {
-                    propertyList.forEach(prop -> {
-                        prop.setPropertyValue((String) values.get(key));
-                        resourcePropertyRepository.save(prop);
-                    });
+                if (!resourcePropertyList.isEmpty()) {
+                    Set<ResourceProperty> newRes = resourcePropertyList.stream().map(prop -> {
+                        prop.setPropertyValue(String.valueOf(values.get(key)));
+                        return prop;
+                    }).collect(Collectors.toSet());
+                    newProperties.addAll(newRes);
                 } else {
                     String value = String.valueOf(values.get(key));
                     ResourceProperty resourceProperty = new ResourceProperty();
                     resourceProperty.setPropertyKey(key);
                     resourceProperty.setPropertyValue(value);
                     resourceProperty.setResource(resource);
-                    resourcePropertySet.add(resourceProperty);
+                    newProperties.add(resourceProperty);
                 }
             }
         }
 
-//        Optional<ResourceProperty> hostOp = resourcePropertyRepository.findByPropertyKeyAndResourceId("hostName",resource.getId());
-//        Optional<ResourceProperty> resourceOp = resourcePropertyRepository.findByPropertyKeyAndResourceId("resourcePath",resource.getId());
-//
-//        if(hostOp.isPresent()){
-//            resourcePropertySet.add(hostOp.get());
-//        }
-//        if(resourceOp.isPresent()){
-//            resourcePropertySet.add(resourceOp.get());
-//        }
+        while (exProperties.iterator().hasNext()) {
+            ResourceProperty resourceProperty = exProperties.iterator().next();
+            if (values.keySet().stream().filter(prop -> {
+                if (prop.equals(resourceProperty.getPropertyKey())) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }).collect(Collectors.toList()).isEmpty()) {
+                newProperties.add(resourceProperty);
+            }
 
 
-        return resourcePropertySet;
+        }
+
+        return newProperties;
     }
 
 }
