@@ -609,8 +609,9 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             }
         }
 
-        while (exProperties.iterator().hasNext()) {
-            ResourceProperty resourceProperty = exProperties.iterator().next();
+       Iterator<ResourceProperty> it =  exProperties.iterator();
+        while (it.hasNext()) {
+            ResourceProperty resourceProperty = it.next();
             if (values.keySet().stream().filter(prop -> {
                 if (prop.equals(resourceProperty.getPropertyKey())) {
                     return true;
