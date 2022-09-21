@@ -3,6 +3,7 @@ package org.apache.airavata.drms.api.persistance.model;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "RESOURCE_PROPERTY")
@@ -16,14 +17,14 @@ public class ResourceProperty {
     }
 
     @Id
-    @Column(name="ID")
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name="PROPERTY_KEY", nullable = false)
+    @Column(name = "PROPERTY_KEY", nullable = false)
     private String propertyKey;
 
-    @Column(name="PROPERTY_VALUE",nullable = false)
+    @Column(name = "PROPERTY_VALUE", nullable = false)
     @Lob
     private String propertyValue;
 
@@ -68,4 +69,17 @@ public class ResourceProperty {
         this.resource = resource;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ResourceProperty that = (ResourceProperty) o;
+        return Objects.equals(propertyKey, that.propertyKey) && Objects.equals(resource.getId(), that.resource.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(propertyKey, resource.getId());
+    }
 }

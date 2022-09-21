@@ -88,4 +88,6 @@ public class Resource {
     public void setDestinationTransferMapping(Set<TransferMapping> destinationTransferMapping) {
         this.destinationTransferMapping = destinationTransferMapping;
     }
+
+
 }
