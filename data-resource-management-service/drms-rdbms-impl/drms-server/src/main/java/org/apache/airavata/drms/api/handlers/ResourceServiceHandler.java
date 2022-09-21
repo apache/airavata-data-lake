@@ -291,7 +291,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         .setValue(searchQuery.getValue()).build();
 
                 searchRequestBuilder = searchRequestBuilder.addSearchCriteria(searchCriteria);
-            } else {
+            } else if(!searchQuery.getField().equalsIgnoreCase("sharedWith")){
                 searchMap.put(searchQuery.getField(), searchQuery.getValue());
             }
 
@@ -304,7 +304,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
         Optional<TransferMapping> transferMappingOptional = transferMappingRepository.
                 findTransferMappingByScope(TransferScope.GLOBAL.name());
 
-        if (transferMappingOptional.isPresent()) {
+        if (transferMappingOptional.isPresent() && searchMap.isEmpty()) {
             TransferMapping transferMapping = transferMappingOptional.get();
             String sourceId = transferMapping.getSource().getId();
 
