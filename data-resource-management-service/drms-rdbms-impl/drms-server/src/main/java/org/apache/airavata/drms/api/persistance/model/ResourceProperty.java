@@ -80,6 +80,10 @@ public class ResourceProperty {
 
     @Override
     public int hashCode() {
-        return Objects.hash(propertyKey, resource.getId());
+        if (propertyKey != null && resource != null) {
+            return Objects.hash(propertyKey, resource.getId());
+        } else {
+            return Objects.hash(id);
+        }
     }
 }
