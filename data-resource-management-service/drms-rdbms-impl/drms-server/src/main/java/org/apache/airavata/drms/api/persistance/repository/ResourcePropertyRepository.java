@@ -10,6 +10,8 @@ public interface ResourcePropertyRepository extends JpaRepository<ResourceProper
 
     List<ResourceProperty> findByPropertyKeyAndResourceId(String key, String resourceId);
 
+    List<ResourceProperty> findByPropertyKeyAndPropertyValueAndResourceId(String key,String value, String resourceId);
+
     List<ResourceProperty> findAllByResourceId(String resourceId);
 
     void deleteAllByPropertyKeyAndResourceId(String propertyKey, String resourceId);
