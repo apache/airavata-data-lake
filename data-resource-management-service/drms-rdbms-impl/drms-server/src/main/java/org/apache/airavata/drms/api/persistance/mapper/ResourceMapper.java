@@ -64,12 +64,10 @@ public class ResourceMapper {
         resourcePropertySet.add(new ResourceProperty("resourceName", entity.getName(), prResource));
         resourcePropertySet.add(new ResourceProperty("createdTime", String.valueOf(entity.getCreatedAt()), prResource));
         resourcePropertySet.add(new ResourceProperty("tenantId", authenticatedUser.getTenantId(), prResource));
-        resourcePropertySet.add(new ResourceProperty("entityId", entity.getId(), prResource));
-        resourcePropertySet.add(new ResourceProperty("entityType", entity.getType(), prResource));
         resourcePropertySet.add(new ResourceProperty("lastModifiedTime", String.valueOf(entity.getCreatedAt()), prResource));
         resourcePropertySet.add(new ResourceProperty("owner", entity.getOwnerId(), prResource));
         resourcePropertySet.add(new ResourceProperty("firstName", authenticatedUser.getFirstName(), prResource));
-        resourcePropertySet.add(new ResourceProperty("lastName", authenticatedUser.getFirstName(), prResource));
+        resourcePropertySet.add(new ResourceProperty("lastName", authenticatedUser.getLastName(), prResource));
 
 
         prResource.setId(entity.getId());
