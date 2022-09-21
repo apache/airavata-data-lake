@@ -280,6 +280,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
         SearchRequest.Builder searchRequestBuilder = SearchRequest.newBuilder();
 
+        Map<String, String> searchMap = new HashMap<>();
 
         for (ResourceSearchQuery searchQuery : resourceSearchQueries) {
 
@@ -290,6 +291,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         .setValue(searchQuery.getValue()).build();
 
                 searchRequestBuilder = searchRequestBuilder.addSearchCriteria(searchCriteria);
+            } else {
+                searchMap.put(searchQuery.getField(), searchQuery.getValue());
             }
 
         }
@@ -329,9 +332,22 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             Entities entities = sharingManagementClient.searchEntities(callUser.getTenantId(), searchRequest);
             List<GenericResource> metadataList = new ArrayList<>();
             entities.getEntityArrayList().forEach(shrMetadata -> {
-                Optional<Resource> resourceOptional = resourceRepository.findById(shrMetadata.getId());
-                if (resourceOptional.isPresent()) {
-                    metadataList.add(ResourceMapper.map(resourceOptional.get(), shrMetadata));
+
+                if (!searchMap.isEmpty()) {
+                    searchMap.forEach((key, val) -> {
+                        List<ResourceProperty> resourceProperties = resourcePropertyRepository
+                                .findByPropertyKeyAndPropertyValueAndResourceId(key, val, shrMetadata.getId());
+                        resourceProperties.forEach(rp -> {
+                            metadataList.add(ResourceMapper.map(rp.getResource(), shrMetadata));
+                        });
+                    });
+                } else {
+
+
+                    Optional<Resource> resourceOptional = resourceRepository.findById(shrMetadata.getId());
+                    if (resourceOptional.isPresent()) {
+                        metadataList.add(ResourceMapper.map(resourceOptional.get(), shrMetadata));
+                    }
                 }
 
             });
