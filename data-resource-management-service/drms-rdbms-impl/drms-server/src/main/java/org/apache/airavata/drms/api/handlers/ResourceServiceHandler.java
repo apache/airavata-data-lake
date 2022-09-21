@@ -473,20 +473,13 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     Resource resource = optionalResource.get();
                     Set<ResourceProperty> resourcePropertySet = mergeProperties(resource, map);
 
-                    List<ResourceProperty> properties = resourcePropertyRepository.
-                            findByPropertyKeyAndResourceId("metadata", resource.getId());
-
-                    properties.forEach(property -> {
-                                resourcePropertyRepository.deleteById(property.getId());
-                            }
-                    );
-
-
                     ResourceProperty resourceProperty = new ResourceProperty();
                     resourceProperty.setPropertyKey("metadata");
                     resourceProperty.setPropertyValue(message);
-                    resourcePropertySet.add(resourceProperty);
                     resourceProperty.setResource(resource);
+                    resourcePropertySet.add(resourceProperty);
+
+                    resourcePropertySet.addAll(resource.getResourceProperty());
 
                     resource.setResourceProperty(resourcePropertySet);
                     resourceRepository.save(resource);
@@ -565,64 +558,28 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
         for (String key : values.keySet()) {
 
-            List<ResourceProperty> resourcePropertyList = exProperties.stream().filter(prop -> {
-                if (prop.getPropertyKey().equals(key)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }).collect(Collectors.toList());
-
-
             if (values.get(key) instanceof Map) {
                 //TODO: Implement MAP
             } else if (values.get(key) instanceof List) {
                 ArrayList arrayList = (ArrayList) values.get(key);
-                if (!resourcePropertyList.isEmpty()) {
-                    //TODO:handle this
 
-                } else {
-                    arrayList.forEach(val -> {
-                        ResourceProperty resourceProperty = new ResourceProperty();
-                        resourceProperty.setPropertyKey(key);
-                        resourceProperty.setPropertyValue(val.toString());
-                        resourceProperty.setResource(resource);
-                        newProperties.add(resourceProperty);
-                    });
-                }
-
-            } else {
-                if (!resourcePropertyList.isEmpty()) {
-                    Set<ResourceProperty> newRes = resourcePropertyList.stream().map(prop -> {
-                        prop.setPropertyValue(String.valueOf(values.get(key)));
-                        return prop;
-                    }).collect(Collectors.toSet());
-                    newProperties.addAll(newRes);
-                } else {
-                    String value = String.valueOf(values.get(key));
+                arrayList.forEach(val -> {
                     ResourceProperty resourceProperty = new ResourceProperty();
                     resourceProperty.setPropertyKey(key);
-                    resourceProperty.setPropertyValue(value);
+                    resourceProperty.setPropertyValue(val.toString());
                     resourceProperty.setResource(resource);
                     newProperties.add(resourceProperty);
-                }
-            }
-        }
+                });
 
-       Iterator<ResourceProperty> it =  exProperties.iterator();
-        while (it.hasNext()) {
-            ResourceProperty resourceProperty = it.next();
-            if (values.keySet().stream().filter(prop -> {
-                if (prop.equals(resourceProperty.getPropertyKey())) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }).collect(Collectors.toList()).isEmpty()) {
+
+            } else {
+                String value = String.valueOf(values.get(key));
+                ResourceProperty resourceProperty = new ResourceProperty();
+                resourceProperty.setPropertyKey(key);
+                resourceProperty.setPropertyValue(value);
+                resourceProperty.setResource(resource);
                 newProperties.add(resourceProperty);
             }
-
-
         }
 
         return newProperties;
