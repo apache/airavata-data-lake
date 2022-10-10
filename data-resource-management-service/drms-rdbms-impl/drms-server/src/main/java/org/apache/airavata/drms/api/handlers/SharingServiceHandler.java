@@ -51,7 +51,6 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
                         .setClientId(tenantId)
                         .setEntity(entity)
                         .setPermissionType(permissionTypeAdmin)
-                        .setCascade(true)
                         .addOwnerId(username).build();
                 org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
                         .userHasAccess(tenantId, sharingRequestAdmin);
@@ -60,6 +59,7 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
                             .newBuilder()
                             .setClientId(tenantId)
                             .setEntity(entity)
+                            .setCascade(true)
                             .setPermissionType(PermissionType.newBuilder().setId(request.getPermissionId()).build())
                             .addOwnerId(request.getSharedUserId()).build();
                     sharingManagementClient.shareEntityWithUsers(tenantId, shrRequest);
@@ -107,7 +107,6 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
                         .setClientId(tenantId)
                         .setEntity(entity)
                         .setPermissionType(permissionTypeAdmin)
-                        .setCascade(true)
                         .addOwnerId(username).build();
                 org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
                         .userHasAccess(tenantId, sharingRequestAdmin);
@@ -116,6 +115,7 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
                             .newBuilder()
                             .setClientId(tenantId)
                             .setEntity(entity)
+                            .setCascade(true)
                             .setPermissionType(PermissionType.newBuilder().setId(request.getPermissionId()).build())
                             .addOwnerId(request.getSharedGroupId()).build();
                     sharingManagementClient.shareEntityWithGroups(tenantId, shrRequest);
