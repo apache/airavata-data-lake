@@ -51,6 +51,7 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
                         .setClientId(tenantId)
                         .setEntity(entity)
                         .setPermissionType(permissionTypeAdmin)
+                        .setCascade(true)
                         .addOwnerId(username).build();
                 org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
                         .userHasAccess(tenantId, sharingRequestAdmin);
@@ -106,6 +107,7 @@ public class SharingServiceHandler extends DRMSSharingServiceGrpc.DRMSSharingSer
                         .setClientId(tenantId)
                         .setEntity(entity)
                         .setPermissionType(permissionTypeAdmin)
+                        .setCascade(true)
                         .addOwnerId(username).build();
                 org.apache.custos.sharing.service.Status statusAdmin = sharingManagementClient
                         .userHasAccess(tenantId, sharingRequestAdmin);
