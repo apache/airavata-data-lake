@@ -317,6 +317,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     .setSearchField(EntitySearchField.ENTITY_TYPE_ID)
                     .setCondition(SearchCondition.EQUAL)
                     .setValue(type).build());
+            searchRequestBuilder.setSearchPermBottomUp(true);
         }
 //        }
 
