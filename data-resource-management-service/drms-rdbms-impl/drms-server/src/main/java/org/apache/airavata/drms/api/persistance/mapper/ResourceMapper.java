@@ -37,7 +37,19 @@ public class ResourceMapper {
             if (resourceProperty.getPropertyKey().equals("resourcePath")) {
                 genericResourceBuilder.setResourcePath(resourceProperty.getPropertyValue());
             }
-            genericResourceBuilder.putProperties(resourceProperty.getPropertyKey(), resourceProperty.getPropertyValue());
+            if (resourceProperty.getPropertyKey().equals("note") || resourceProperty.getPropertyKey().equals("permission")){
+                genericResourceBuilder.putProperties(resourceProperty.getPropertyKey(),resourceProperty.getPropertyValue());
+            }
+
+            if (resourceProperty.getPropertyKey().equals("image") || resourceProperty.getPropertyKey().equals("thumbnail")){
+                String[] urlArrays = resourceProperty.getPropertyValue().split("/");
+                String imagePath = "https://gateway.iubemcenter.indiana.edu/resource-images/";
+                String fullPath = imagePath+ urlArrays[urlArrays.length-1];
+                genericResourceBuilder.putProperties(resourceProperty.getPropertyKey(),fullPath);
+            }
+
+
+//            genericResourceBuilder.putProperties(resourceProperty.getPropertyKey(), resourceProperty.getPropertyValue());
 
         }
         return genericResourceBuilder.build();
