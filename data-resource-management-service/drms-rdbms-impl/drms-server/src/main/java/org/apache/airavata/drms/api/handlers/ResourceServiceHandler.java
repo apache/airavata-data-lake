@@ -335,7 +335,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
             Entities entities = sharingManagementClient.searchEntities(callUser.getTenantId(), searchRequest);
             List<GenericResource> metadataList = new ArrayList<>();
-            entities.getEntityArrayList().forEach(shrMetadata -> {
+            entities.getEntityArrayList().stream().filter(en->en.getType().equals(type)).forEach(shrMetadata -> {
 
                 if (!searchMap.isEmpty()) {
                     searchMap.forEach((key, val) -> {
@@ -355,7 +355,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 }
 
             });
-
+            
             ResourceSearchResponse resourceSearchResponse = ResourceSearchResponse
                     .newBuilder()
                     .addAllResources(metadataList)
