@@ -45,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -186,9 +187,10 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 limit = -1;
             }
 
-            boolean status = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
-                    callUser.getUsername(), resourceId, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER, SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
-            if (status) {
+            boolean access = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
+                    callUser.getUsername(), resourceId, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER,
+                            SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
+            if (access) {
                 try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
                     List<GenericResource> genericResources = new ArrayList<>();
                     List<Resource> resources;
@@ -203,9 +205,19 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     resources.forEach(resource -> {
                         String id = resource.getId();
                         Entity entity = Entity.newBuilder().setId(id).build();
-                        if(sharingManagementClient.isEntityExists(callUser.getTenantId(),entity).getStatus()) {
+                        if (sharingManagementClient.isEntityExists(callUser.getTenantId(), entity).getStatus()) {
                             Entity exEntity = sharingManagementClient.getEntity(callUser.getTenantId(), entity);
-                            genericResources.add(ResourceMapper.map(resource, exEntity));
+                            try {
+                                List<String> allAccess = CustosUtils.getAllAccess(custosClientProvider, callUser.getTenantId(),
+                                        callUser.getUsername(), resourceId, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER,
+                                                SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
+                                genericResources.add(ResourceMapper.map(resource, exEntity, allAccess));
+                            } catch (IOException e) {
+                                logger.error("Permission fetching error for entity {}", exEntity.getId());
+                                responseObserver.onError(Status.PERMISSION_DENIED.asRuntimeException());
+                            }
+
+
                         }
 
 
@@ -294,7 +306,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         .setValue(searchQuery.getValue()).build();
 
                 searchRequestBuilder = searchRequestBuilder.addSearchCriteria(searchCriteria);
-            } else if(!searchQuery.getField().equalsIgnoreCase("sharedWith")){
+            } else if (!searchQuery.getField().equalsIgnoreCase("sharedWith")) {
                 searchMap.put(searchQuery.getField(), searchQuery.getValue());
             }
 
@@ -335,7 +347,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
             Entities entities = sharingManagementClient.searchEntities(callUser.getTenantId(), searchRequest);
             List<GenericResource> metadataList = new ArrayList<>();
-            entities.getEntityArrayList().stream().filter(en->en.getType().equals(type)).forEach(shrMetadata -> {
+            entities.getEntityArrayList().stream().filter(en -> en.getType().equals(type)).forEach(shrMetadata -> {
 
                 if (!searchMap.isEmpty()) {
                     searchMap.forEach((key, val) -> {
@@ -436,15 +448,16 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
                 String parentId = optionalResource.get().getParentResourceId();
 
-                boolean status = CustosUtils.userHasAccess(custosClientProvider, callUser.getTenantId(),
+                List<String> allAccess = CustosUtils.getAllAccess(custosClientProvider, callUser.getTenantId(),
                         callUser.getUsername(), parentId, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER, SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
 
-                if (status) {
+                if (!allAccess.isEmpty()) {
                     try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
                         Entity enitity = Entity.newBuilder().setId(parentId).build();
                         Entity exEntity = sharingManagementClient.getEntity(callUser.getTenantId(), enitity);
                         Optional<Resource> parentResourceOp = resourceRepository.findById(parentId);
-                        GenericResource resource = ResourceMapper.map(parentResourceOp.get(), exEntity);
+                        GenericResource resource = ResourceMapper.map(parentResourceOp.get(), exEntity, allAccess);
+
                         Map<String, GenericResource> genericResourceMap = new HashMap<>();
                         genericResourceMap.put(String.valueOf(0), resource);
                         ParentResourcesFetchResponse resourcesFetchResponse = ParentResourcesFetchResponse

@@ -9,11 +9,7 @@ import org.apache.custos.sharing.service.Entity;
 import org.apache.custos.sharing.service.PermissionType;
 import org.apache.custos.sharing.service.SharingMetadata;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.*;
 
 public class ResourceMapper {
 
@@ -34,13 +30,18 @@ public class ResourceMapper {
         Set<ResourceProperty> resourcePropertySet = resource.getResourceProperty();
 
 
-        SharingMetadata sharingMetadata =  entity.getSharingMetadata();
-        if(sharingMetadata != null && !sharingMetadata.getPermissionsList().isEmpty()) {
-           String permission="";
-           for(PermissionType permissionType: sharingMetadata.getPermissionsList()){
-               permission = permission +" "+permissionType.getId();
-           }
-            genericResourceBuilder.putProperties("permission",permission);
+        SharingMetadata sharingMetadata = entity.getSharingMetadata();
+        if (sharingMetadata != null && !sharingMetadata.getPermissionsList().isEmpty()) {
+            String permission = "";
+            for (PermissionType permissionType : sharingMetadata.getPermissionsList()) {
+                if (permission.length() == 0) {
+                    permission = permissionType.getId();
+                } else {
+                    permission = permissionType.getId() + " " + permission;
+                }
+
+            }
+            genericResourceBuilder.putProperties("permission", permission);
         }
 
 
@@ -51,15 +52,15 @@ public class ResourceMapper {
             if (resourceProperty.getPropertyKey().equals("resourcePath")) {
                 genericResourceBuilder.setResourcePath(resourceProperty.getPropertyValue());
             }
-            if (resourceProperty.getPropertyKey().equals("note")){
-                genericResourceBuilder.putProperties(resourceProperty.getPropertyKey(),resourceProperty.getPropertyValue());
+            if (resourceProperty.getPropertyKey().equals("note")) {
+                genericResourceBuilder.putProperties(resourceProperty.getPropertyKey(), resourceProperty.getPropertyValue());
             }
 
-            if (resourceProperty.getPropertyKey().equals("image") || resourceProperty.getPropertyKey().equals("thumbnail")){
+            if (resourceProperty.getPropertyKey().equals("image") || resourceProperty.getPropertyKey().equals("thumbnail")) {
                 String[] urlArrays = resourceProperty.getPropertyValue().split("/");
                 String imagePath = "https://gateway.iubemcenter.indiana.edu/resource-images/";
-                String fullPath = imagePath+ urlArrays[urlArrays.length-1];
-                genericResourceBuilder.putProperties(resourceProperty.getPropertyKey(),fullPath);
+                String fullPath = imagePath + urlArrays[urlArrays.length - 1];
+                genericResourceBuilder.putProperties(resourceProperty.getPropertyKey(), fullPath);
             }
 
 
@@ -67,6 +68,27 @@ public class ResourceMapper {
 
         }
         return genericResourceBuilder.build();
+    }
+
+    public static GenericResource map(Resource resource, Entity entity, List<String> permissions) {
+
+        GenericResource genericResource = map(resource, entity);
+        GenericResource.Builder builder =null;
+        if (!permissions.isEmpty()) {
+            String perm = "";
+            for (String permission : permissions) {
+                if (perm.isEmpty()) {
+                    perm = permission;
+                } else {
+
+                    perm = perm + " " + permission;
+                }
+
+            }
+             builder =  genericResource.toBuilder().putProperties("permission", perm);
+        }
+        return builder.build();
+
     }
 
     public static Resource map(GenericResource resource, Entity entity, AuthenticatedUser authenticatedUser) {
