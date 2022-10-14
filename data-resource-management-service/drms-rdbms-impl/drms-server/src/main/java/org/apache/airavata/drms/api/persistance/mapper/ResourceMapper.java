@@ -6,11 +6,14 @@ import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.drms.api.persistance.model.Resource;
 import org.apache.airavata.drms.api.persistance.model.ResourceProperty;
 import org.apache.custos.sharing.service.Entity;
+import org.apache.custos.sharing.service.PermissionType;
+import org.apache.custos.sharing.service.SharingMetadata;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ResourceMapper {
 
@@ -30,6 +33,17 @@ public class ResourceMapper {
         genericResourceBuilder.putProperties("lastModifiedTime", String.valueOf(entity.getUpdatedAt()));
         Set<ResourceProperty> resourcePropertySet = resource.getResourceProperty();
 
+
+        SharingMetadata sharingMetadata =  entity.getSharingMetadata();
+        if(sharingMetadata != null && !sharingMetadata.getPermissionsList().isEmpty()) {
+           String permission="";
+           for(PermissionType permissionType: sharingMetadata.getPermissionsList()){
+               permission = permission +" "+permissionType.getId();
+           }
+            genericResourceBuilder.putProperties("permission",permission);
+        }
+
+
         Iterator<ResourceProperty> iterator = resourcePropertySet.iterator();
 
         while (iterator.hasNext()) {
@@ -37,7 +51,7 @@ public class ResourceMapper {
             if (resourceProperty.getPropertyKey().equals("resourcePath")) {
                 genericResourceBuilder.setResourcePath(resourceProperty.getPropertyValue());
             }
-            if (resourceProperty.getPropertyKey().equals("note") || resourceProperty.getPropertyKey().equals("permission")){
+            if (resourceProperty.getPropertyKey().equals("note")){
                 genericResourceBuilder.putProperties(resourceProperty.getPropertyKey(),resourceProperty.getPropertyValue());
             }
 

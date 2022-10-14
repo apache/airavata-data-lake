@@ -355,7 +355,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 }
 
             });
-            
+
             ResourceSearchResponse resourceSearchResponse = ResourceSearchResponse
                     .newBuilder()
                     .addAllResources(metadataList)
