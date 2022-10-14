@@ -30,7 +30,7 @@
     <modules>
         <module>drms-stubs</module>
        <module>drms-core</module>
-        <module>drms-graph-impl/drms-api</module>
-        <module>drms-graph-impl/drms-custos-synchronizer</module>
+<!--        <module>drms-graph-impl/drms-api</module>-->
+<!--        <module>drms-graph-impl/drms-custos-synchronizer</module>-->
     </modules>
 </project>
