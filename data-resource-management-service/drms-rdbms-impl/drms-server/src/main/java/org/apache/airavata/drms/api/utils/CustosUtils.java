@@ -139,10 +139,47 @@ public class CustosUtils {
 
                 org.apache.custos.sharing.service.Status status = sharingManagementClient
                         .userHasAccess(tenantId, sharingRequest);
-                statusArray.add(status.getStatus());
+                if(status.getStatus()){
+                    return true;
+                }
             }
 
         }
-        return statusArray.contains(Boolean.TRUE);
+        return false;
+    }
+
+    public static List<String>  getAllAccess(CustosClientProvider custosClientProvider,
+                                        String tenantId, String username, String resourceId, String[] permission) throws IOException {
+
+        List<String> statusArray = new ArrayList<>();
+
+        for (String perm : permission) {
+            Entity sharedEntity = Entity
+                    .newBuilder()
+                    .setId(resourceId)
+                    .build();
+
+            PermissionType permissionType = PermissionType.newBuilder().setId(perm)
+                    .build();
+
+            SharingRequest sharingRequest = SharingRequest
+                    .newBuilder()
+                    .setEntity(sharedEntity)
+                    .setPermissionType(permissionType)
+                    .addOwnerId(username)
+                    .build();
+
+            try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
+
+
+                org.apache.custos.sharing.service.Status status = sharingManagementClient
+                        .userHasAccess(tenantId, sharingRequest);
+                if(status.getStatus()){
+                   statusArray.add(perm);
+                }
+            }
+
+        }
+        return statusArray;
     }
 }
