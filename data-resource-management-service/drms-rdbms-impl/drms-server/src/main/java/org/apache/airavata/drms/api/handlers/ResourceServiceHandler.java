@@ -204,19 +204,19 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
                     resources.forEach(resource -> {
                         String id = resource.getId();
-                        Entity entity = Entity.newBuilder().setId(id).build();
-                        if (sharingManagementClient.isEntityExists(callUser.getTenantId(), entity).getStatus()) {
-                            Entity exEntity = sharingManagementClient.getEntity(callUser.getTenantId(), entity);
-                            try {
-                                List<String> allAccess = CustosUtils.getAllAccess(custosClientProvider, callUser.getTenantId(),
-                                        callUser.getUsername(), resourceId, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER,
-                                                SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
-                                genericResources.add(ResourceMapper.map(resource, exEntity, allAccess));
-                            } catch (IOException e) {
-                                logger.error("Permission fetching error for entity {}", exEntity.getId());
-                                responseObserver.onError(Status.PERMISSION_DENIED.asRuntimeException());
-                            }
+                        SearchRequest searchRequest = SearchRequest.newBuilder().setOwnerId(callUser
+                                .getUsername())
+                                .setClientId(callUser.getTenantId())
+                                .addSearchCriteria(SearchCriteria.newBuilder()
+                                        .setSearchField(EntitySearchField.ID)
+                                        .setCondition(SearchCondition.EQUAL)
+                                        .setValue(id))
+                                .build();
+                        Entities entities =   sharingManagementClient.searchEntities(callUser.getTenantId(), searchRequest);
 
+
+                        if (entities != null && !entities.getEntityArrayList().isEmpty()) {
+                                genericResources.add(ResourceMapper.map(resource, entities.getEntityArray(0)));
 
                         }
 
