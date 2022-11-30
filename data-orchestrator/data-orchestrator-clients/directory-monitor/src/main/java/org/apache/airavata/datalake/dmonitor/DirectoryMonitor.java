@@ -65,6 +65,9 @@ public class DirectoryMonitor implements CommandLineRunner {
     @org.springframework.beans.factory.annotation.Value("${kafka.event.topic}")
     private String kafkaEventTopic;
 
+    @org.springframework.beans.factory.annotation.Value("${saturation.count}")
+    private int saturationCount;
+
     private Map<WatchKey, Path> watchKeyPathMap = new HashMap<>();
 
     public static void main(String args[]) {
@@ -104,7 +107,7 @@ public class DirectoryMonitor implements CommandLineRunner {
 
         SaturationGauge saturationGauge = new SaturationGauge();
         saturationGauge.start(eventNotifier);
-
+        saturationGauge.setSaturationCount(saturationCount);
         WatchService watchService = FileSystems.getDefault().newWatchService();
         Path base = Paths.get(basePath);
         watchKeyPathMap.put(base.register(watchService, StandardWatchEventKinds.ENTRY_CREATE), base);

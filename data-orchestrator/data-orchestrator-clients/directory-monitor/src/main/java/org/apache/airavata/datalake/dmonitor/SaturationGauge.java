@@ -35,6 +35,8 @@ public class SaturationGauge {
     final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     final ExecutorService monitoringService = Executors.newFixedThreadPool(10);
 
+    private int saturationCount = 3;
+
     public void start(EventNotifier eventNotifier) {
         scheduledExecutorService.scheduleWithFixedDelay(() -> {
             List<Future<Boolean>> submitFutures = new ArrayList<>();
@@ -49,7 +51,7 @@ public class SaturationGauge {
                         directorySizes.put(key, newSize);
                         logger.info("Directory : " + key + " Size : " + newSize + " Scan count : " + monitorCount.get(key));
 
-                        if (oldSize == newSize && monitorCount.get(key) > 3) {
+                        if (oldSize == newSize && monitorCount.get(key) > saturationCount) {
                             logger.info("Directory " + key + " is saturated. Final size " + oldSize);
                             monitorCount.remove(key);
                             directorySizes.remove(key);
@@ -107,5 +109,13 @@ public class SaturationGauge {
             }
         }
         return length;
+    }
+
+    public int getSaturationCount() {
+        return saturationCount;
+    }
+
+    public void setSaturationCount(int saturationCount) {
+        this.saturationCount = saturationCount;
     }
 }
