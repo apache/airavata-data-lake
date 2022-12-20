@@ -398,12 +398,17 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             List<GenericResource> childResources = request.getChildResourcesList();
             List<GenericResource> allResources = new ArrayList<>();
                 childResources.forEach(childResource-> {
-                    try {
-                        CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
+
+                      List<ResourceProperty> resourceProperties =  resourcePropertyRepository.
+                              findByPropertyKeyAndResourceId("resourceName",childResource.getResourceId());
+                   try{
+                      if(!resourceProperties.isEmpty()) {
+                          CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
                                   resource.getResourceId(), childResource.getType(), childResource.getResourceId(),
-                                  childResource.getResourceName(), childResource.getResourceName(),
+                                  resourceProperties.get(0).getPropertyValue(), resourceProperties.get(0).getPropertyValue(),
                                   callUser.getUsername());
-                        allResources.add(childResource);
+                          allResources.add(childResource);
+                      }
                     } catch (IOException e) {
                         String msg = " Error occurred while adding  child memberships " + e.getMessage();
                         logger.error(" Error occurred while adding  child memberships: Messages {} ", e.getMessage(), e);
@@ -434,12 +439,15 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             List<GenericResource> childResources = request.getChildResourcesList();
             List<GenericResource> allResources = new ArrayList<>();
             childResources.forEach(childResource-> {
+                List<ResourceProperty> resourceProperties =  resourcePropertyRepository.findByPropertyKeyAndResourceId("resourceName",childResource.getResourceId());
                 try {
-                    CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
-                            "", childResource.getType(), childResource.getResourceId(),
-                            childResource.getResourceName(), childResource.getResourceName(),
-                            callUser.getUsername());
-                    allResources.add(childResource);
+                    if(!resourceProperties.isEmpty()) {
+                        CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
+                                "", childResource.getType(), childResource.getResourceId(),
+                                resourceProperties.get(0).getPropertyValue(), resourceProperties.get(0).getPropertyValue(),
+                                callUser.getUsername());
+                        allResources.add(childResource);
+                    }
                 } catch (IOException e) {
                     String msg = " Error occurred while adding  child memberships " + e.getMessage();
                     logger.error(" Error occurred while adding  child memberships: Messages {} ", e.getMessage(), e);
