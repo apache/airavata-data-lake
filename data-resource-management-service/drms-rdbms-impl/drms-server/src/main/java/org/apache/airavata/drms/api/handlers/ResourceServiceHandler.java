@@ -45,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -392,16 +393,28 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
     public void addChildMembership(AddChildResourcesMembershipRequest request,
                                    StreamObserver<OperationStatusResponse> responseObserver) {
         try {
-//            AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
-//            GenericResource resource = request.getParentResource();
-//            List<GenericResource> childResources = request.getChildResourcesList();
-//
-//            List<GenericResource> allResources = new ArrayList<>();
-//            allResources.add(resource);
-//            allResources.addAll(childResources);
-
-            responseObserver.onError(Status.UNIMPLEMENTED.asRuntimeException());
-
+            AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
+            GenericResource resource = request.getParentResource();
+            List<GenericResource> childResources = request.getChildResourcesList();
+            List<GenericResource> allResources = new ArrayList<>();
+                childResources.forEach(childResource-> {
+                    try {
+                        CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
+                                  resource.getResourceId(), childResource.getType(), childResource.getResourceId(),
+                                  childResource.getResourceName(), childResource.getResourceName(),
+                                  callUser.getUsername());
+                        allResources.add(childResource);
+                    } catch (IOException e) {
+                        String msg = " Error occurred while adding  child memberships " + e.getMessage();
+                        logger.error(" Error occurred while adding  child memberships: Messages {} ", e.getMessage(), e);
+                    }
+                });
+                OperationStatusResponse operationStatusResponse = OperationStatusResponse
+                        .newBuilder().
+                                setStatus(true)
+                        .build();
+           responseObserver.onNext(operationStatusResponse);
+           responseObserver.onCompleted();
 
         } catch (Exception e) {
             String msg = " Error occurred while adding  child memberships " + e.getMessage();
@@ -416,15 +429,28 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                                       StreamObserver<OperationStatusResponse> responseObserver) {
         try {
 
-//            AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
-//            GenericResource resource = request.getParentResource();
-//            List<GenericResource> childResources = request.getChildResourcesList();
-//
-//            List<GenericResource> allResources = new ArrayList<>();
-//            allResources.add(resource);
-//            allResources.addAll(childResources);
-
-            responseObserver.onError(Status.UNIMPLEMENTED.asRuntimeException());
+            AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
+            GenericResource resource = request.getParentResource();
+            List<GenericResource> childResources = request.getChildResourcesList();
+            List<GenericResource> allResources = new ArrayList<>();
+            childResources.forEach(childResource-> {
+                try {
+                    CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
+                            "", childResource.getType(), childResource.getResourceId(),
+                            childResource.getResourceName(), childResource.getResourceName(),
+                            callUser.getUsername());
+                    allResources.add(childResource);
+                } catch (IOException e) {
+                    String msg = " Error occurred while adding  child memberships " + e.getMessage();
+                    logger.error(" Error occurred while adding  child memberships: Messages {} ", e.getMessage(), e);
+                }
+            });
+            OperationStatusResponse operationStatusResponse = OperationStatusResponse
+                    .newBuilder().
+                            setStatus(true)
+                    .build();
+            responseObserver.onNext(operationStatusResponse);
+            responseObserver.onCompleted();
 
 
         } catch (Exception e) {
