@@ -307,6 +307,12 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
                 searchRequestBuilder = searchRequestBuilder.addSearchCriteria(searchCriteria);
             } else if (!searchQuery.getField().equalsIgnoreCase("sharedWith")) {
+                SearchCriteria searchCriteria = SearchCriteria.newBuilder()
+                        .setSearchField(EntitySearchField.SHARED_WITH)
+                        .setCondition(SearchCondition.EQUAL)
+                        .setValue(searchQuery.getValue()).build();
+                searchRequestBuilder = searchRequestBuilder.addSearchCriteria(searchCriteria);
+            } else {
                 searchMap.put(searchQuery.getField(), searchQuery.getValue());
             }
 
@@ -449,7 +455,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                 String parentId = optionalResource.get().getParentResourceId();
 
                 List<String> allAccess = CustosUtils.getAllAccess(custosClientProvider, callUser.getTenantId(),
-                        callUser.getUsername(), parentId, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER, SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
+                        callUser.getUsername(), parentId, new String[]{SharingConstants.PERMISSION_TYPE_VIEWER,
+                                SharingConstants.PERMISSION_TYPE_EDITOR, SharingConstants.PERMISSION_TYPE_OWNER});
 
                 if (!allAccess.isEmpty()) {
                     try (SharingManagementClient sharingManagementClient = custosClientProvider.getSharingManagementClient()) {
