@@ -396,18 +396,22 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
             GenericResource resource = request.getParentResource();
             List<GenericResource> childResources = request.getChildResourcesList();
-            List<GenericResource> allResources = new ArrayList<>();
                 childResources.forEach(childResource-> {
 
                       List<ResourceProperty> resourceProperties =  resourcePropertyRepository.
                               findByPropertyKeyAndResourceId("resourceName",childResource.getResourceId());
+                    Optional<Resource>  exRes = resourceRepository.findById(childResource.getResourceId());
                    try{
-                      if(!resourceProperties.isEmpty()) {
+                      if(!resourceProperties.isEmpty() && exRes.isPresent()) {
                           CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
                                   resource.getResourceId(), childResource.getType(), childResource.getResourceId(),
                                   resourceProperties.get(0).getPropertyValue(), resourceProperties.get(0).getPropertyValue(),
                                   callUser.getUsername());
-                          allResources.add(childResource);
+                       Resource chResource =  exRes.get();
+                       chResource.setParentResourceId(resource.getResourceId());
+                       resourceRepository.save(chResource);
+
+
                       }
                     } catch (IOException e) {
                         String msg = " Error occurred while adding  child memberships " + e.getMessage();
@@ -437,16 +441,18 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
             GenericResource resource = request.getParentResource();
             List<GenericResource> childResources = request.getChildResourcesList();
-            List<GenericResource> allResources = new ArrayList<>();
             childResources.forEach(childResource-> {
                 List<ResourceProperty> resourceProperties =  resourcePropertyRepository.findByPropertyKeyAndResourceId("resourceName",childResource.getResourceId());
+                Optional<Resource>  exRes = resourceRepository.findById(childResource.getResourceId());
                 try {
-                    if(!resourceProperties.isEmpty()) {
+                    if(!resourceProperties.isEmpty() && exRes.isPresent()) {
                         CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
                                 "", childResource.getType(), childResource.getResourceId(),
                                 resourceProperties.get(0).getPropertyValue(), resourceProperties.get(0).getPropertyValue(),
                                 callUser.getUsername());
-                        allResources.add(childResource);
+                        Resource chResource =  exRes.get();
+                        chResource.setParentResourceId(null);
+                        resourceRepository.save(chResource);
                     }
                 } catch (IOException e) {
                     String msg = " Error occurred while adding  child memberships " + e.getMessage();
