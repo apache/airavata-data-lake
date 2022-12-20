@@ -306,7 +306,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                         .setValue(searchQuery.getValue()).build();
 
                 searchRequestBuilder = searchRequestBuilder.addSearchCriteria(searchCriteria);
-            } else if (!searchQuery.getField().equalsIgnoreCase("sharedWith")) {
+            } else if (searchQuery.getField().equalsIgnoreCase("sharedWith")) {
                 SearchCriteria searchCriteria = SearchCriteria.newBuilder()
                         .setSearchField(EntitySearchField.SHARED_WITH)
                         .setCondition(SearchCondition.EQUAL)
