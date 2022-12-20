@@ -107,6 +107,8 @@ public class CustosUtils {
             Status status = sharingManagementClient.isEntityExists(tenantId, entity);
             if (!status.getStatus()) {
                 sharingManagementClient.createEntity(tenantId, entity);
+            }else{
+                sharingManagementClient.updateEntity(tenantId,entity);
             }
 
             return Optional.ofNullable(sharingManagementClient.getEntity(tenantId, entity));
