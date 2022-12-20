@@ -45,7 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -212,11 +211,11 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                                         .setCondition(SearchCondition.EQUAL)
                                         .setValue(id))
                                 .build();
-                        Entities entities =   sharingManagementClient.searchEntities(callUser.getTenantId(), searchRequest);
+                        Entities entities = sharingManagementClient.searchEntities(callUser.getTenantId(), searchRequest);
 
 
                         if (entities != null && !entities.getEntityArrayList().isEmpty()) {
-                                genericResources.add(ResourceMapper.map(resource, entities.getEntityArray(0)));
+                            genericResources.add(ResourceMapper.map(resource, entities.getEntityArray(0)));
 
                         }
 
@@ -325,7 +324,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
         Optional<TransferMapping> transferMappingOptional = transferMappingRepository.
                 findTransferMappingByScope(TransferScope.GLOBAL.name());
 
-        if (transferMappingOptional.isPresent() && searchMap.isEmpty()) {
+      if (transferMappingOptional.isPresent() && searchMap.isEmpty() && !type.equalsIgnoreCase("COLLECTION_GROUP")) {
             TransferMapping transferMapping = transferMappingOptional.get();
             String sourceId = transferMapping.getSource().getId();
 
@@ -334,16 +333,14 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     .setCondition(SearchCondition.EQUAL)
                     .setValue(sourceId).build());
 
-            searchRequestBuilder = searchRequestBuilder.addSearchCriteria(SearchCriteria.newBuilder()
-                    .setSearchField(EntitySearchField.ENTITY_TYPE_ID)
-                    .setCondition(SearchCondition.EQUAL)
-                    .setValue(type).build());
             searchRequestBuilder.setSearchPermBottomUp(true);
         }
 //        }
-
-        SearchRequest searchRequest = searchRequestBuilder.setOwnerId(callUser
-                .getUsername())
+        SearchRequest searchRequest = searchRequestBuilder.addSearchCriteria(SearchCriteria.newBuilder()
+                .setSearchField(EntitySearchField.ENTITY_TYPE_ID)
+                .setCondition(SearchCondition.EQUAL)
+                .setValue(type).build())
+                .setOwnerId(callUser.getUsername())
                 .setClientId(callUser.getTenantId())
                 .build();
 
