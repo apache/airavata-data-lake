@@ -267,9 +267,6 @@ public class GenericDataParsingTask extends BlockingTask {
                 logger.info("Container " + containerResponse.getId() + " exited with status code " + statusCode);
                 if (statusCode != 0) {
                     logger.error("Failing as non zero status code was returned");
-
-
-
                     throw new Exception("Failing as non zero status code was returned");
                 }
 
