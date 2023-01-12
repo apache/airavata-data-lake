@@ -98,9 +98,16 @@ public class GenericDataParsingTask extends BlockingTask {
         String tempOutputDir = getWorkingDirectory() + File.separator + "outputs";
         logger.info("Using temp working directory {}", getWorkingDirectory());
         try {
-            Files.createDirectory(Paths.get(getWorkingDirectory()));
-            Files.createDirectory(Paths.get(tempInputDir));
-            Files.createDirectory(Paths.get(tempOutputDir));
+            if (!Files.exists(Paths.get(getWorkingDirectory()))) {
+                Files.createDirectory(Paths.get(getWorkingDirectory()));
+            }
+            if (!Files.exists(Paths.get(tempInputDir))) {
+                Files.createDirectory(Paths.get(tempInputDir));
+            }
+            if (!Files.exists(Paths.get(tempOutputDir))) {
+                Files.createDirectory(Paths.get(tempOutputDir));
+            }
+
         } catch (IOException e) {
             logger.error("Failed to create temp working directories in {}", getWorkingDirectory(), e);
             return new TaskResult(TaskResult.Status.FAILED, "Failed to create temp working directories");
@@ -260,6 +267,9 @@ public class GenericDataParsingTask extends BlockingTask {
                 logger.info("Container " + containerResponse.getId() + " exited with status code " + statusCode);
                 if (statusCode != 0) {
                     logger.error("Failing as non zero status code was returned");
+
+
+
                     throw new Exception("Failing as non zero status code was returned");
                 }
 
