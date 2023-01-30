@@ -100,7 +100,12 @@ public class ResourceMapper {
 
         Resource prResource = new Resource();
 
+       Map<String,String> resourceMap =  resource.getPropertiesMap();
 
+       for(Map.Entry<String,String> entry: resourceMap.entrySet()){
+           resourcePropertySet.add(new ResourceProperty(entry.getKey(), entry.getValue(), prResource));
+        }
+       
         if (allFields != null) {
             allFields.forEach((descriptor, value) -> {
                 String fieldName = descriptor.getJsonName();
@@ -115,8 +120,6 @@ public class ResourceMapper {
         resourcePropertySet.add(new ResourceProperty("tenantId", authenticatedUser.getTenantId(), prResource));
         resourcePropertySet.add(new ResourceProperty("lastModifiedTime", String.valueOf(entity.getCreatedAt()), prResource));
         resourcePropertySet.add(new ResourceProperty("owner", entity.getOwnerId(), prResource));
-        resourcePropertySet.add(new ResourceProperty("firstName", authenticatedUser.getFirstName(), prResource));
-        resourcePropertySet.add(new ResourceProperty("lastName", authenticatedUser.getLastName(), prResource));
 
         if(exResource != null){
           Set<ResourceProperty> properties =  exResource.getResourceProperty();
