@@ -252,25 +252,33 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             String entityId = request.getResource().getResourceId();
             String name = request.getResource().getResourceName();
 
-            Optional<Entity> exEntity = CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
-                    parentId, type, entityId,
-                    request.getResource().getResourceName(), request.getResource().getResourceName(),
-                    callUser.getUsername());
+           Optional<Resource> exResource =  resourceRepository.findById(entityId);
+           if (exResource.isPresent()) {
 
-            if (exEntity.isPresent()) {
-                Resource resource = ResourceMapper.map(request.getResource(), exEntity.get(), callUser);
-                resourceRepository.save(resource);
+               List<ResourceProperty> resourceProperties = resourcePropertyRepository.
+                       findByPropertyKeyAndResourceId("owner",exResource.get().getId());
+               if (!resourceProperties.isEmpty()) {
+                   Optional<Entity> exEntity = CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
+                           parentId, type, entityId,
+                           request.getResource().getResourceName(), request.getResource().getResourceName(),
+                           resourceProperties.get(0).getPropertyValue());
+                   
+                   if (exEntity.isPresent()) {
+                       Resource resource = ResourceMapper.map(request.getResource(), exEntity.get(), callUser);
+                       resourceRepository.save(resource);
 
-                GenericResource genericResource = ResourceMapper.map(resource, exEntity.get());
+                       GenericResource genericResource = ResourceMapper.map(resource, exEntity.get());
 
-                ResourceUpdateResponse response = ResourceUpdateResponse
-                        .newBuilder()
-                        .setResource(genericResource)
-                        .build();
-                responseObserver.onNext(response);
-                responseObserver.onCompleted();
-                return;
-            }
+                       ResourceUpdateResponse response = ResourceUpdateResponse
+                               .newBuilder()
+                               .setResource(genericResource)
+                               .build();
+                       responseObserver.onNext(response);
+                       responseObserver.onCompleted();
+                       return;
+                   }
+               }
+           }
             //TODO: Error
 
 
