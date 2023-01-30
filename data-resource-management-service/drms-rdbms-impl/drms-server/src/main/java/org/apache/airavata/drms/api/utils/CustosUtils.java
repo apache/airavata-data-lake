@@ -95,6 +95,8 @@ public class CustosUtils {
                         .build();
                 sharingManagementClient.createEntityType(tenantId, storEntityType);
             }
+
+
             Entity entity = Entity.newBuilder()
                     .setId(entityId)
                     .setName(entityName)
