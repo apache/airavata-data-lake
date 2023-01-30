@@ -254,15 +254,16 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
            Optional<Resource> exResource =  resourceRepository.findById(entityId);
            if (exResource.isPresent()) {
-
                List<ResourceProperty> resourceProperties = resourcePropertyRepository.
                        findByPropertyKeyAndResourceId("owner",exResource.get().getId());
+               if (parentId == null|| parentId.isEmpty())
+                   parentId = exResource.get().getParentResourceId();
                if (!resourceProperties.isEmpty()) {
                    Optional<Entity> exEntity = CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
                            parentId, type, entityId,
                            request.getResource().getResourceName(), request.getResource().getResourceName(),
                            resourceProperties.get(0).getPropertyValue());
-                   
+
                    if (exEntity.isPresent()) {
                        Resource resource = ResourceMapper.map(request.getResource(), exEntity.get(), callUser);
                        resourceRepository.save(resource);
