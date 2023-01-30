@@ -148,7 +148,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     callUser.getUsername());
 
             if (exEntity.isPresent()) {
-                Resource resource = ResourceMapper.map(request.getResource(), exEntity.get(), callUser);
+                Resource resource = ResourceMapper.map(request.getResource(),null, exEntity.get(), callUser);
                 resource.setResourceType(type);
                 resource.setParentResourceId(parentId);
                 resourceRepository.save(resource);
@@ -265,9 +265,10 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                            resourceProperties.get(0).getPropertyValue());
 
                    if (exEntity.isPresent()) {
-                       Resource resource = ResourceMapper.map(request.getResource(), exEntity.get(), callUser);
+                       Resource resource = ResourceMapper.map(request.getResource(), exResource.get(),exEntity.get(), callUser);
                        resource.setResourceType(type);
                        resource.setParentResourceId(parentId);
+
                        resourceRepository.save(resource);
 
                        GenericResource genericResource = ResourceMapper.map(resource, exEntity.get());

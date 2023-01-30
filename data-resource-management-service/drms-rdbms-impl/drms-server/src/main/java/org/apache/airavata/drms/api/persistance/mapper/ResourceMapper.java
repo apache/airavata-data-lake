@@ -91,7 +91,8 @@ public class ResourceMapper {
 
     }
 
-    public static Resource map(GenericResource resource, Entity entity, AuthenticatedUser authenticatedUser) {
+    public static Resource map(GenericResource resource, Resource exResource, Entity entity,
+                               AuthenticatedUser authenticatedUser) {
 
         Map<Descriptors.FieldDescriptor, Object> allFields = resource.getAllFields();
 
@@ -117,6 +118,16 @@ public class ResourceMapper {
         resourcePropertySet.add(new ResourceProperty("firstName", authenticatedUser.getFirstName(), prResource));
         resourcePropertySet.add(new ResourceProperty("lastName", authenticatedUser.getLastName(), prResource));
 
+        if(exResource != null){
+          Set<ResourceProperty> properties =  exResource.getResourceProperty();
+          for(ResourceProperty property: properties){
+              if (property.getPropertyKey().equals("metadata")||
+                      property.getPropertyKey().equals("firstName")||
+                      property.getPropertyKey().equals("lastName")){
+                  resourcePropertySet.add(property);
+              }
+          }
+        }
 
         prResource.setId(entity.getId());
         prResource.setResourceProperty(resourcePropertySet);
