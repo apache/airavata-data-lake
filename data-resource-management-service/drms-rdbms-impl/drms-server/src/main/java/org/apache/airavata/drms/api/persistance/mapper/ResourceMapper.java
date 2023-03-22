@@ -5,9 +5,9 @@ import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.drms.api.persistance.model.Resource;
 import org.apache.airavata.drms.api.persistance.model.ResourceProperty;
-import org.apache.custos.sharing.service.Entity;
-import org.apache.custos.sharing.service.PermissionType;
-import org.apache.custos.sharing.service.SharingMetadata;
+import org.apache.custos.sharing.core.Entity;
+import org.apache.custos.sharing.core.PermissionType;
+import org.apache.custos.sharing.core.SharingMetadata;
 
 import java.util.*;
 

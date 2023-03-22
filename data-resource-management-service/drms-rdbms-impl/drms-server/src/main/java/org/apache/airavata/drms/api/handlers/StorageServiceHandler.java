@@ -31,7 +31,7 @@ import org.apache.airavata.drms.api.utils.CustosUtils;
 import org.apache.airavata.drms.core.constants.SharingConstants;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.sharing.management.client.SharingManagementClient;
-import org.apache.custos.sharing.service.Entity;
+import org.apache.custos.sharing.core.Entity;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
