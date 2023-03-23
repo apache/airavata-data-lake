@@ -39,7 +39,6 @@ public class ProcessManager {
         while (iterator.hasNext()) {
             synchronized (this) {
                 String command = iterator.next();
-                System.out.println(command);
                 ProcessBuilder processBuilder = new ProcessBuilder();
                 processBuilder.command("sh", "-c", command);
                 Process process = processBuilder.start();
