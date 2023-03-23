@@ -35,6 +35,7 @@
         <module>data-resource-management-service/drms-graph-impl</module>
         <module>data-resource-management-service/drms-rdbms-impl</module>
         <module>data-resource-management-service/drms-rdbms-impl/drms-server</module>
+        <module>service-monitor</module>
     </modules>
 
     <parent>

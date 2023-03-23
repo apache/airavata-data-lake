@@ -4,7 +4,9 @@ import org.apache.airavata.drms.core.constants.StorageConstants;
 import org.apache.airavata.drms.core.constants.StoragePreferenceConstants;
 import org.apache.custos.clients.CustosClientProvider;
 import org.apache.custos.sharing.management.client.SharingManagementClient;
-import org.apache.custos.sharing.service.*;
+import org.apache.custos.sharing.core.*;
+import org.apache.custos.sharing.service.SharingRequest;
+import org.apache.custos.sharing.service.Status;
 
 import java.io.IOException;
 import java.util.ArrayList;

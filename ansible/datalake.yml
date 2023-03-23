@@ -21,16 +21,16 @@
 ---
 - hosts: data-lake
   roles:
-    - env_setup
-    - zookeeper
-    - kafka
-    - custos
-    - consul
+#    - env_setup
+#    - zookeeper
+#    - kafka
+#    - custos
+#    - consul
     - data_lake
-    - mft
-    - workflow-engine
+ #    - mft
+#    - workflow-engine
 
-- hosts: emc-portal
-  roles:
-    - env_setup
-    - emc_portal
+#- hosts: emc-portal
+#  roles:
+#    - env_setup
+#    - emc_portal
