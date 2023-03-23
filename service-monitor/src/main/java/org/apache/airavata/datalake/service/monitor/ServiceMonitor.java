@@ -34,10 +34,14 @@ public class ServiceMonitor {
             return null;
         }).collect(Collectors.toList());
 
-        processManager.startServices(servicesToBeStarted);
+        List<String> listWithoutNulls = servicesToBeStarted.parallelStream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        processManager.startServices(listWithoutNulls);
 
         List<String> failedServices = processManager.getUnavailableServices(new ArrayList<String>(fileMap.keySet()));
-        List<String> listWithoutNulls = failedServices.parallelStream()
+        listWithoutNulls = failedServices.parallelStream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
