@@ -22,17 +22,22 @@ import com.google.protobuf.Value;
 import com.google.protobuf.util.JsonFormat;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
+import org.apache.airavata.datalake.data.orchestrator.api.stub.notification.NotificationInvokeRequest;
+import org.apache.airavata.datalake.data.orchestrator.api.stub.notification.NotificationInvokeResponse;
 import org.apache.airavata.datalake.drms.AuthenticatedUser;
 import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.*;
+import org.apache.airavata.dataorchestrator.clients.core.NotificationClient;
 import org.apache.airavata.drms.api.persistance.mapper.ResourceMapper;
 import org.apache.airavata.drms.api.persistance.mapper.StorageMapper;
 import org.apache.airavata.drms.api.persistance.model.Resource;
 import org.apache.airavata.drms.api.persistance.model.ResourceProperty;
 import org.apache.airavata.drms.api.persistance.model.TransferMapping;
+import org.apache.airavata.drms.api.persistance.model.UnverifiedResource;
 import org.apache.airavata.drms.api.persistance.repository.ResourcePropertyRepository;
 import org.apache.airavata.drms.api.persistance.repository.ResourceRepository;
 import org.apache.airavata.drms.api.persistance.repository.TransferMappingRepository;
+import org.apache.airavata.drms.api.persistance.repository.UnverifiedResourceRepository;
 import org.apache.airavata.drms.api.utils.CustosUtils;
 import org.apache.airavata.drms.core.constants.SharingConstants;
 import org.apache.airavata.drms.core.constants.StorageConstants;
@@ -42,12 +47,15 @@ import org.apache.custos.sharing.core.EntitySearchField;
 import org.apache.custos.sharing.core.SearchCondition;
 import org.apache.custos.sharing.core.SearchCriteria;
 import org.apache.custos.sharing.management.client.SharingManagementClient;
-import org.apache.custos.sharing.service.*;
+import org.apache.custos.sharing.service.Entities;
+import org.apache.custos.sharing.service.SearchRequest;
 import org.json.JSONObject;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.io.IOException;
 import java.util.*;
@@ -70,6 +78,15 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
     @Autowired
     private TransferMappingRepository transferMappingRepository;
+
+    @Autowired
+    private UnverifiedResourceRepository unverifiedResourceRepository;
+
+    @org.springframework.beans.factory.annotation.Value("${orch.host}")
+    private String orchHost;
+
+    @org.springframework.beans.factory.annotation.Value("${orch.port}")
+    private int orchPort;
 
 
     @Override
@@ -152,7 +169,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
                     callUser.getUsername());
 
             if (exEntity.isPresent()) {
-                Resource resource = ResourceMapper.map(request.getResource(),null, exEntity.get(), callUser);
+                Resource resource = ResourceMapper.map(request.getResource(), null, exEntity.get(), callUser);
                 resource.setResourceType(type);
                 resource.setParentResourceId(parentId);
                 resourceRepository.save(resource);
@@ -256,37 +273,37 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             String entityId = request.getResource().getResourceId();
             String name = request.getResource().getResourceName();
 
-           Optional<Resource> exResource =  resourceRepository.findById(entityId);
-           if (exResource.isPresent()) {
-               List<ResourceProperty> resourceProperties = resourcePropertyRepository.
-                       findByPropertyKeyAndResourceId("owner",exResource.get().getId());
-               if (parentId == null|| parentId.isEmpty())
-                   parentId = exResource.get().getParentResourceId();
-               if (!resourceProperties.isEmpty()) {
-                   Optional<Entity> exEntity = CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
-                           parentId, type, entityId,
-                           request.getResource().getResourceName(), request.getResource().getResourceName(),
-                           resourceProperties.get(0).getPropertyValue());
+            Optional<Resource> exResource = resourceRepository.findById(entityId);
+            if (exResource.isPresent()) {
+                List<ResourceProperty> resourceProperties = resourcePropertyRepository.
+                        findByPropertyKeyAndResourceId("owner", exResource.get().getId());
+                if (parentId == null || parentId.isEmpty())
+                    parentId = exResource.get().getParentResourceId();
+                if (!resourceProperties.isEmpty()) {
+                    Optional<Entity> exEntity = CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
+                            parentId, type, entityId,
+                            request.getResource().getResourceName(), request.getResource().getResourceName(),
+                            resourceProperties.get(0).getPropertyValue());
 
-                   if (exEntity.isPresent()) {
-                       Resource resource = ResourceMapper.map(request.getResource(), exResource.get(),exEntity.get(), callUser);
-                       resource.setResourceType(type);
-                       resource.setParentResourceId(parentId);
+                    if (exEntity.isPresent()) {
+                        Resource resource = ResourceMapper.map(request.getResource(), exResource.get(), exEntity.get(), callUser);
+                        resource.setResourceType(type);
+                        resource.setParentResourceId(parentId);
 
-                       resourceRepository.save(resource);
+                        resourceRepository.save(resource);
 
-                       GenericResource genericResource = ResourceMapper.map(resource, exEntity.get());
+                        GenericResource genericResource = ResourceMapper.map(resource, exEntity.get());
 
-                       ResourceUpdateResponse response = ResourceUpdateResponse
-                               .newBuilder()
-                               .setResource(genericResource)
-                               .build();
-                       responseObserver.onNext(response);
-                       responseObserver.onCompleted();
-                       return;
-                   }
-               }
-           }
+                        ResourceUpdateResponse response = ResourceUpdateResponse
+                                .newBuilder()
+                                .setResource(genericResource)
+                                .build();
+                        responseObserver.onNext(response);
+                        responseObserver.onCompleted();
+                        return;
+                    }
+                }
+            }
             //TODO: Error
 
 
@@ -306,6 +323,8 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
     public void searchResource(ResourceSearchRequest
                                        request, StreamObserver<ResourceSearchResponse> responseObserver) {
         AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
+
+        invokeUnVerifiedResourceRegistrationWorkflow(callUser.getUsername());
 
         List<ResourceSearchQuery> resourceSearchQueries = request.getQueriesList();
 
@@ -341,7 +360,7 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
         Optional<TransferMapping> transferMappingOptional = transferMappingRepository.
                 findTransferMappingByScope(TransferScope.GLOBAL.name());
 
-      if (transferMappingOptional.isPresent() && searchMap.isEmpty() && !type.equalsIgnoreCase("COLLECTION_GROUP")) {
+        if (transferMappingOptional.isPresent() && searchMap.isEmpty() && !type.equalsIgnoreCase("COLLECTION_GROUP")) {
             TransferMapping transferMapping = transferMappingOptional.get();
             String sourceId = transferMapping.getSource().getId();
 
@@ -412,34 +431,34 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
             GenericResource resource = request.getParentResource();
             List<GenericResource> childResources = request.getChildResourcesList();
-                childResources.forEach(childResource-> {
+            childResources.forEach(childResource -> {
 
-                      List<ResourceProperty> resourceProperties =  resourcePropertyRepository.
-                              findByPropertyKeyAndResourceId("resourceName",childResource.getResourceId());
-                    Optional<Resource>  exRes = resourceRepository.findById(childResource.getResourceId());
-                   try{
-                      if(!resourceProperties.isEmpty() && exRes.isPresent()) {
-                          CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
-                                  resource.getResourceId(), childResource.getType(), childResource.getResourceId(),
-                                  resourceProperties.get(0).getPropertyValue(), resourceProperties.get(0).getPropertyValue(),
-                                  callUser.getUsername());
-                       Resource chResource =  exRes.get();
-                       chResource.setParentResourceId(resource.getResourceId());
-                       resourceRepository.save(chResource);
+                List<ResourceProperty> resourceProperties = resourcePropertyRepository.
+                        findByPropertyKeyAndResourceId("resourceName", childResource.getResourceId());
+                Optional<Resource> exRes = resourceRepository.findById(childResource.getResourceId());
+                try {
+                    if (!resourceProperties.isEmpty() && exRes.isPresent()) {
+                        CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
+                                resource.getResourceId(), childResource.getType(), childResource.getResourceId(),
+                                resourceProperties.get(0).getPropertyValue(), resourceProperties.get(0).getPropertyValue(),
+                                callUser.getUsername());
+                        Resource chResource = exRes.get();
+                        chResource.setParentResourceId(resource.getResourceId());
+                        resourceRepository.save(chResource);
 
 
-                      }
-                    } catch (IOException e) {
-                        String msg = " Error occurred while adding  child memberships " + e.getMessage();
-                        logger.error(" Error occurred while adding  child memberships: Messages {} ", e.getMessage(), e);
                     }
-                });
-                OperationStatusResponse operationStatusResponse = OperationStatusResponse
-                        .newBuilder().
-                                setStatus(true)
-                        .build();
-           responseObserver.onNext(operationStatusResponse);
-           responseObserver.onCompleted();
+                } catch (IOException e) {
+                    String msg = " Error occurred while adding  child memberships " + e.getMessage();
+                    logger.error(" Error occurred while adding  child memberships: Messages {} ", e.getMessage(), e);
+                }
+            });
+            OperationStatusResponse operationStatusResponse = OperationStatusResponse
+                    .newBuilder().
+                            setStatus(true)
+                    .build();
+            responseObserver.onNext(operationStatusResponse);
+            responseObserver.onCompleted();
 
         } catch (Exception e) {
             String msg = " Error occurred while adding  child memberships " + e.getMessage();
@@ -457,16 +476,16 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
             AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
             GenericResource resource = request.getParentResource();
             List<GenericResource> childResources = request.getChildResourcesList();
-            childResources.forEach(childResource-> {
-                List<ResourceProperty> resourceProperties =  resourcePropertyRepository.findByPropertyKeyAndResourceId("resourceName",childResource.getResourceId());
-                Optional<Resource>  exRes = resourceRepository.findById(childResource.getResourceId());
+            childResources.forEach(childResource -> {
+                List<ResourceProperty> resourceProperties = resourcePropertyRepository.findByPropertyKeyAndResourceId("resourceName", childResource.getResourceId());
+                Optional<Resource> exRes = resourceRepository.findById(childResource.getResourceId());
                 try {
-                    if(!resourceProperties.isEmpty() && exRes.isPresent()) {
+                    if (!resourceProperties.isEmpty() && exRes.isPresent()) {
                         CustosUtils.mergeResourceEntity(custosClientProvider, callUser.getTenantId(),
                                 "", childResource.getType(), childResource.getResourceId(),
                                 resourceProperties.get(0).getPropertyValue(), resourceProperties.get(0).getPropertyValue(),
                                 callUser.getUsername());
-                        Resource chResource =  exRes.get();
+                        Resource chResource = exRes.get();
                         chResource.setParentResourceId(null);
                         resourceRepository.save(chResource);
                     }
@@ -643,6 +662,92 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
 
     }
 
+
+    @Override
+    public void fetchUnverifiedResources(ResourceSearchRequest request, StreamObserver<ResourceSearchResponse> responseObserver) {
+        try {
+            PageRequest pageRequest = PageRequest.of(request.getOffset(), request.getLimit());
+            Page<UnverifiedResource> resources = unverifiedResourceRepository.findAll(pageRequest);
+
+            ResourceSearchResponse.Builder response = ResourceSearchResponse.newBuilder();
+
+            Map<String, String> props = new HashMap<>();
+
+
+            resources.forEach(resource -> {
+                Map<String, String> prop = new HashMap<>();
+                prop.put("ERROR_CODE", resource.getErrorCode());
+                prop.put("ERROR_DISCRIPTION", resource.getErrorDiscription());
+                response.addResources(GenericResource.newBuilder()
+                        .setResourceId(resource.getId())
+                        .setResourcePath(resource.getPath())
+                        .setType(resource.getType())
+                        .putAllProperties(prop).build());
+            });
+
+            responseObserver.onNext(response.build());
+            responseObserver.onCompleted();
+        } catch (Exception ex) {
+            String msg = " Error occurred while fetching unverified resources  " + ex.getMessage();
+            logger.error(" Error occurred while fetching unverified resources {} ", ex.getMessage(), ex);
+            responseObserver.onError(Status.INTERNAL.withDescription(msg).asRuntimeException());
+        }
+
+    }
+
+    @Override
+    public void createUnverifiedResource(ResourceCreateRequest request, StreamObserver<ResourceCreateResponse> responseObserver) {
+        try {
+            AuthenticatedUser callUser = request.getAuthToken().getAuthenticatedUser();
+            String type = request.getResource().getType();
+            String entityId = request.getResource().getResourceId();
+            String path = request.getResource().getResourcePath();
+            String tenantId = request.getAuthToken().getAuthenticatedUser().getTenantId();
+            String errorCode = request.getResource().getPropertiesMap().get("ERROR_CODE");
+            String errorDescription = request.getResource().getPropertiesMap().get("ERROR_DESCRIPTION");
+
+
+            UnverifiedResource unverifiedResource = new UnverifiedResource();
+            unverifiedResource.setId(entityId);
+            unverifiedResource.setPath(path);
+            unverifiedResource.setErrorCode(errorCode);
+            unverifiedResource.setErrorDiscription(errorDescription);
+            unverifiedResource.setTenantId(tenantId);
+            unverifiedResource.setType(type);
+
+            if (!callUser.getUsername().isEmpty()) {
+                unverifiedResource.setUnverifiedAssociatedOwner(callUser.getUsername());
+            }
+
+            unverifiedResourceRepository.save(unverifiedResource);
+
+            ResourceCreateResponse response = ResourceCreateResponse
+                    .newBuilder()
+                    .setResource(request.getResource())
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+            return;
+
+        } catch (Exception ex) {
+            logger.error("Error occurred while creating unverified resource {}", request.getResource().getResourceId(), ex);
+            String msg = "Error occurred while creating unverified resource" + ex.getMessage();
+            responseObserver.onError(Status.INTERNAL.withDescription(msg).asRuntimeException());
+        }
+    }
+
+    @Override
+    public void deleteUnverifiedResource(ResourceUpdateRequest request, StreamObserver<ResourceUpdateResponse> responseObserver) {
+        try {
+            unverifiedResourceRepository.deleteById(request.getResourceId());
+        } catch (Exception ex) {
+
+            logger.error("Error occurred while deleting unverified resource {}", request.getResource().getResourceId(), ex);
+            responseObserver.onError(Status.INTERNAL.
+                    withDescription("Error occurred while deleting unverified resource {}" + request.getResource().getResourceId()).asRuntimeException());
+        }
+    }
+
     private Set<ResourceProperty> mergeProperties(Resource resource, Map<String, Object> values) {
 
         Set<ResourceProperty> exProperties = resource.getResourceProperty();
@@ -676,6 +781,32 @@ public class ResourceServiceHandler extends ResourceServiceGrpc.ResourceServiceI
         }
 
         return newProperties;
+    }
+
+
+    private void invokeUnVerifiedResourceRegistrationWorkflow(String username) {
+        List<UnverifiedResource> unverifiedResources = unverifiedResourceRepository
+                .getUnverifiedResourceByUnverifiedAssociatedOwnerAndErrorCode(username, "ERR_0002");
+
+        NotificationClient notificationClient = new NotificationClient(
+                orchHost, orchPort);
+
+        if (!unverifiedResources.isEmpty()) {
+
+            for (UnverifiedResource unverifiedResource : unverifiedResources) {
+
+                NotificationInvokeResponse response = notificationClient.get()
+                        .invokeNotification(NotificationInvokeRequest
+                                .newBuilder()
+                                .setNotificationId(unverifiedResource.getId())
+                                .build());
+                if (response.getStatus()) {
+                    unverifiedResourceRepository.deleteById(unverifiedResource.getId());
+                }
+
+            }
+        }
+
     }
 
 }

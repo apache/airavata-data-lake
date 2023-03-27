@@ -86,6 +86,8 @@ message ResourceSearchRequest {
     repeated ResourceSearchQuery queries = 2;
     int32 depth = 4;
     string type = 5;
+    int32 offset=6;
+    int32 limit=7;
 }
 
 message ResourceSearchResponse {
@@ -219,6 +221,24 @@ service ResourceService {
     rpc fetchResourceMetadata (FetchResourceMetadataRequest) returns (FetchResourceMetadataResponse) {
         option (google.api.http) = {
       get: "/v1.0/api/drms/resource/metadata"
+    };
+    }
+
+    rpc fetchUnverifiedResources (ResourceSearchRequest) returns (ResourceSearchResponse) {
+        option (google.api.http) = {
+      get: "/v1.0/api/drms/resources/unverified"
+    };
+    }
+
+    rpc createUnverifiedResource (ResourceCreateRequest) returns (ResourceCreateResponse) {
+        option (google.api.http) = {
+      post: "/v1.0/api/drms/resource/unverified"
+    };
+    }
+
+    rpc deleteUnverifiedResource (ResourceUpdateRequest) returns (ResourceUpdateResponse) {
+        option (google.api.http) = {
+      delete: "/v1.0/api/drms/resource/unverified"
     };
     }
 

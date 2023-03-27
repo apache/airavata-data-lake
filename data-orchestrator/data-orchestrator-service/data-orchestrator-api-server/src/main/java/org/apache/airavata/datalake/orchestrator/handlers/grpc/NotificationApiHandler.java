@@ -17,28 +17,47 @@
 
 package org.apache.airavata.datalake.orchestrator.handlers.grpc;
 
+import com.google.protobuf.Empty;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.apache.airavata.datalake.data.orchestrator.api.stub.notification.*;
+import org.apache.airavata.datalake.orchestrator.Configuration;
+import org.apache.airavata.datalake.orchestrator.Utils;
+import org.apache.airavata.datalake.orchestrator.handlers.async.OrchestratorEventHandler;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.notification.NotificationEntity;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.notification.NotificationStatusEntity;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.repository.NotificationEntityRepository;
 import org.apache.airavata.datalake.orchestrator.registry.persistance.repository.NotificationStatusEntityRepository;
 import org.dozer.DozerBeanMapper;
 import org.lognet.springboot.grpc.GRpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @GRpcService
 public class NotificationApiHandler extends NotificationServiceGrpc.NotificationServiceImplBase {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrchestratorEventHandler.class);
 
     @Autowired
     private NotificationEntityRepository notificationRepository;
 
     @Autowired
     private NotificationStatusEntityRepository notificationStatusRepository;
+
+
+    @Autowired
+    private OrchestratorEventHandler orchestratorEventHandler;
+
+    @org.springframework.beans.factory.annotation.Value("${config.path}")
+    private String configPath;
+
 
     @Override
     public void registerNotification(NotificationRegisterRequest request, StreamObserver<NotificationRegisterResponse> responseObserver) {
@@ -98,5 +117,41 @@ public class NotificationApiHandler extends NotificationServiceGrpc.Notification
         }
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
+    }
+
+
+    @Override
+    public void invokeNotification(NotificationInvokeRequest request, StreamObserver<NotificationInvokeResponse> responseObserver) {
+        try {
+            Optional<NotificationEntity> notificationOP = notificationRepository.findById(request.getNotificationId());
+
+            if (notificationOP.isPresent()) {
+                NotificationEntity notificationEntity = notificationOP.get();
+
+
+                Notification notification = Notification
+                        .newBuilder()
+                        .setNotificationId(UUID.randomUUID().toString())
+                        .setBasePath(notificationEntity.getBasePath())
+                        .setResourcePath(notificationEntity.getResourcePath())
+                        .setAuthToken(notificationEntity.getAuthToken())
+                        .setEventType(Notification.NotificationType.valueOf(notificationEntity.getResourceType()))
+                        .setHostName(notificationEntity.getHostName())
+                        .setOccuredTime(notificationEntity.getOccuredTime())
+                        .setTenantId(notificationEntity.getTenantId())
+                        .setResourceType(notificationEntity.getResourceType()).build();
+
+                Configuration configuration = Utils.loadConfig(configPath);
+                orchestratorEventHandler.init(configuration);
+                orchestratorEventHandler.invokeMessageFlowForNotification(notification);
+                responseObserver.onNext(NotificationInvokeResponse.newBuilder().setStatus(true).build());
+                responseObserver.onCompleted();
+            }
+        } catch (Exception ex) {
+            String msg = "Notification invocation failed for id " + request.getNotificationId();
+            LOGGER.error(msg, ex);
+            responseObserver.onError(Status.INTERNAL.withDescription(msg).asRuntimeException());
+        }
+
     }
 }

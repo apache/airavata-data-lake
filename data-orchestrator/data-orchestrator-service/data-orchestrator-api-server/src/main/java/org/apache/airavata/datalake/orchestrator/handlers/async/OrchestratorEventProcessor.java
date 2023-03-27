@@ -24,6 +24,7 @@ import org.apache.airavata.datalake.drms.resource.GenericResource;
 import org.apache.airavata.datalake.drms.storage.AnyStoragePreference;
 import org.apache.airavata.datalake.drms.storage.TransferMapping;
 import org.apache.airavata.datalake.orchestrator.Configuration;
+import org.apache.airavata.datalake.orchestrator.Constants;
 import org.apache.airavata.datalake.orchestrator.Utils;
 import org.apache.airavata.datalake.orchestrator.connectors.CustosConnector;
 import org.apache.airavata.datalake.orchestrator.connectors.DRMSConnector;
@@ -160,17 +161,16 @@ public class OrchestratorEventProcessor implements Runnable {
         }
     }
 
-    private String verifyUser(String userName) throws Exception {
+    private Optional<String> verifyUser(String userName) throws Exception {
         if (custosConnector.findUserByUserName(userName).isEmpty()) {
             Optional<UserRepresentation> userByEmail = custosConnector.findUserByEmail(userName);
             if (userByEmail.isPresent()) {
-                return userByEmail.get().getUsername();
+                return Optional.of(userByEmail.get().getUsername());
             } else {
-                logger.error("No user {} by email or user name", userName);
-                throw new Exception("Could not find the user " + userName);
+                return Optional.empty();
             }
         } else {
-            return userName;
+            return Optional.of(userName);
         }
     }
 
@@ -198,6 +198,11 @@ public class OrchestratorEventProcessor implements Runnable {
                         notification.getResourcePath(),
                         notification.getResourceType());
                 logger.error("Resource should be a Folder type");
+                this.drmsConnector.createUnverifiedResource(notification.getAuthToken(), notification.getTenantId(),
+                        notification.getNotificationId(), notification.getResourcePath(), notification.getResourceType(),
+                        Constants.ERROR_CODE_INVALID_TYPE, " Invalid  type :" + notification.getResourceType(), null);
+                throw new Exception("Resource should be a Folder type");
+
             }
 
             String removeBasePath = notification.getResourcePath().substring(notification.getBasePath().length());
@@ -205,11 +210,31 @@ public class OrchestratorEventProcessor implements Runnable {
 
             if (splitted.length < 2) {
                 logger.error("Invalid path. Need at least two folder levels from base. {}", removeBasePath);
+                this.drmsConnector.createUnverifiedResource(notification.getAuthToken(), notification.getTenantId(),
+                        notification.getNotificationId(), notification.getResourcePath(), notification.getResourceType(),
+                        Constants.ERROR_CODE_INVALID_PATH, " Invalid  path ", null);
                 throw new Exception("Invalid path. Need at least two folder levels from base");
             }
+            String adminUser = null;
+            String owner = null;
 
-            String adminUser = verifyUser(splitted[0]);
-            String owner = verifyUser(splitted[1].split("_")[0]);
+            Optional<String> adminUserOp = verifyUser(splitted[0]);
+            Optional<String> ownerOp = verifyUser(splitted[1].split("_")[0]);
+            if (adminUserOp.isEmpty()) {
+                this.drmsConnector.createUnverifiedResource(notification.getAuthToken(), notification.getTenantId(),
+                        notification.getNotificationId(), notification.getResourcePath(), notification.getResourceType(),
+                        Constants.ERROR_CODE_INVALID_USERNAME, " User not verified ", splitted[0]);
+                logger.error("Invalid user. User should be verified users {} . {}", splitted[0], removeBasePath);
+                throw new Exception("Invalid user. User " + splitted[0] + " should be registered users");
+            }
+            if (ownerOp.isEmpty()) {
+                this.drmsConnector.createUnverifiedResource(notification.getAuthToken(), notification.getTenantId(),
+                        notification.getNotificationId(), notification.getResourcePath(), notification.getResourceType(),
+                        Constants.ERROR_CODE_INVALID_USERNAME, " User not verified ", splitted[1]);
+                logger.error("Invalid user. User should be verified users {} . {}", splitted[1], removeBasePath);
+                throw new Exception("Invalid user. User " + splitted[1] + " should be registered users");
+            }
+
 
             Map<String, String> ownerRules = new HashMap<>();
             ownerRules.put(adminUser, "VIEWER");
@@ -393,4 +418,6 @@ public class OrchestratorEventProcessor implements Runnable {
                     directoryMetadata.getResourcePath(), sourceStorageId, sourceStorageId, System.currentTimeMillis() - start);
         }
     }
+
+
 }

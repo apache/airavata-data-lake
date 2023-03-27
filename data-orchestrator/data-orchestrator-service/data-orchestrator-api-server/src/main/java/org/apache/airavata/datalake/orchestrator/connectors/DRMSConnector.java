@@ -194,6 +194,60 @@ public class DRMSConnector implements AbstractConnector<Configuration> {
         }
     }
 
+    public Optional<GenericResource> createUnverifiedResource(String authToken,
+                                                    String tenantId,
+                                                    String resourceId,
+                                                    String resourcePath,
+                                                    String type,
+                                                    String errorCode,
+                                                              String errorDiscription,
+                                                              String unverifiedUser) throws Exception {
+
+        DRMSServiceAuthToken serviceAuthToken = DRMSServiceAuthToken.newBuilder()
+                .setAccessToken(authToken)
+                .setUserUnverified(true)
+                .setAuthCredentialType(AuthCredentialType.AGENT_ACCOUNT_CREDENTIAL)
+                .setAuthenticatedUser(AuthenticatedUser.newBuilder()
+                        .setTenantId(tenantId)
+                        .build())
+                .build();
+        if (unverifiedUser != null){
+           serviceAuthToken = serviceAuthToken
+                    .toBuilder()
+                    .setAuthenticatedUser(AuthenticatedUser.newBuilder()
+                    .setTenantId(tenantId)
+                    .setUsername(unverifiedUser)
+                    .build()).build();
+        }
+
+        GenericResource genericResource = GenericResource
+                .newBuilder()
+                .setResourceId(resourceId)
+                .setResourcePath(resourcePath)
+                .setType(type)
+                .putProperties("ERROR_CODE", errorCode)
+                .putProperties("ERROR_DISCRIPTION", errorDiscription)
+                 .build();
+        ResourceCreateRequest resourceCreateRequest = ResourceCreateRequest
+                .newBuilder()
+                .setAuthToken(serviceAuthToken)
+                .setResource(genericResource)
+                .build();
+
+        try {
+            ResourceCreateResponse resourceCreateResponse = resourceServiceBlockingStub.createUnverifiedResource(resourceCreateRequest);
+            return Optional.ofNullable(resourceCreateResponse.getResource());
+        } catch (Exception ex) {
+            LOGGER.error("Error occurred while creating unverified resource {} in DRMS", resourcePath, ex);
+            return Optional.empty();
+        }
+    }
+
+
+
+
+
+
     public void addResourceMetadata(String authToken,
                                     String tenantId,
                                     String resourceId,

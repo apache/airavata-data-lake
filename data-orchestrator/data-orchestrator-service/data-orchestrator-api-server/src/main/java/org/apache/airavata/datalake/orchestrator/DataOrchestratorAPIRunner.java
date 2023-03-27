@@ -61,24 +61,16 @@ public class DataOrchestratorAPIRunner implements CommandLineRunner {
         LOGGER.info("Starting Data orchestrator API Server ...");
 
         LOGGER.info("Loading configuration from file {} ...", configPath);
-        Configuration configuration = this.loadConfig(configPath);
+        Configuration configuration = Utils.loadConfig(configPath);
 
         LOGGER.info("Registering Orchestration even handler " + OrchestratorEventHandler.class.getName() + " ...");
         orchestratorEventHandler.init(configuration);
+
         LOGGER.info("Data orchestrator start accepting  events ....");
         orchestratorEventHandler.startProcessing();
     }
 
 
-    private Configuration loadConfig(String filePath) {
-        LOGGER.info("File path " + filePath);
-        try (InputStream in = new FileInputStream(filePath)) {
-            Yaml yaml = new Yaml();
-            return yaml.loadAs(in, Configuration.class);
-        } catch (Exception exception) {
-            LOGGER.error("Error loading config file", exception);
-        }
-        return null;
-    }
+
 
 }
