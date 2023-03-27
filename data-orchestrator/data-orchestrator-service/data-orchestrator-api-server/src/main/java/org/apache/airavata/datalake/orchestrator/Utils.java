@@ -1,5 +1,11 @@
 package org.apache.airavata.datalake.orchestrator;
 
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -25,5 +31,12 @@ public class Utils {
         }
 
         return hexString.toString();
+    }
+
+    public static Configuration loadConfig(String filePath) throws IOException {
+        try (InputStream in = new FileInputStream(filePath)) {
+            Yaml yaml = new Yaml();
+            return yaml.loadAs(in, Configuration.class);
+        }
     }
 }

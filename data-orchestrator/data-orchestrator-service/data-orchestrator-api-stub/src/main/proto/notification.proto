@@ -73,6 +73,14 @@ message NotificationRegisterRequest {
     Notification notification = 1;
 }
 
+message NotificationInvokeRequest {
+    string notificationId = 1;
+}
+
+message NotificationInvokeResponse {
+    bool status = 1;
+}
+
 message NotificationRegisterResponse {
 }
 
@@ -106,6 +114,12 @@ service NotificationService {
     rpc registerNotification (NotificationRegisterRequest) returns (NotificationRegisterResponse) {
         option (google.api.http) = {
       post: "/v1.0/api/dataorch/notification"
+    };
+    }
+
+    rpc invokeNotification (NotificationInvokeRequest) returns (NotificationInvokeResponse) {
+        option (google.api.http) = {
+      post: "/v1.0/api/dataorch/notification/invoke"
     };
     }
 

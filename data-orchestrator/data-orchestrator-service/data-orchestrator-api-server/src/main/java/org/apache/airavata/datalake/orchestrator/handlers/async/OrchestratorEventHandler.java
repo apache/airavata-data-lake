@@ -20,6 +20,7 @@ package org.apache.airavata.datalake.orchestrator.handlers.async;
 import org.apache.airavata.datalake.data.orchestrator.api.stub.notification.Notification;
 import org.apache.airavata.datalake.data.orchestrator.api.stub.notification.NotificationRegisterRequest;
 import org.apache.airavata.datalake.orchestrator.Configuration;
+import org.apache.airavata.datalake.orchestrator.registry.persistance.entity.notification.NotificationEntity;
 import org.apache.airavata.dataorchestrator.clients.core.NotificationClient;
 import org.apache.airavata.dataorchestrator.messaging.consumer.MessageConsumer;
 import org.dozer.DozerBeanMapper;
@@ -93,6 +94,23 @@ public class OrchestratorEventHandler {
             }
         }));
     }
+
+
+
+    public void invokeMessageFlowForNotification(Notification notification) throws Exception {
+        try {
+            if (!eventCache.contains(notification.getResourcePath() + ":" + notification.getHostName())) {
+                eventCache.add(notification.getResourcePath() + ":" + notification.getHostName());
+                this.executorService.submit(new OrchestratorEventProcessor(
+                        configuration, notification, eventCache, notificationClient));
+            }
+        }catch (Exception e) {
+            LOGGER.error("Failed to submit data orchestrator event to process on path {}",
+                    notification.getResourcePath(), e);
+        }
+    }
+
+
 
     public Configuration getConfiguration() {
         return configuration;

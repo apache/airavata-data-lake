@@ -120,7 +120,7 @@ public class Authenticator implements ServiceInterceptor {
                         String tenantId = drmsServiceAuthToken.getAuthenticatedUser().getTenantId();
                         Struct struct = identityManagementClient
                                 .getAgentToken(tenantId, agentClientId, agentClientSec, "client_credentials", "");
-                        if (struct.getFieldsMap().get("access_token").isInitialized()) {
+                        if (struct.getFieldsMap().get("access_token").isInitialized() && ! drmsServiceAuthToken.getUserUnverified()) {
                             UserRepresentation user = userManagementClient.getUser(username, tenantId);
                             return Optional.ofNullable(AuthenticatedUser.newBuilder()
                                     .setUsername(user.getUsername())
@@ -129,6 +129,14 @@ public class Authenticator implements ServiceInterceptor {
                                     .setEmailAddress(user.getEmail())
                                     .setTenantId(tenantId)
                                     .build());
+                        } else {
+                          AuthenticatedUser user =   AuthenticatedUser.newBuilder()
+                                    .setTenantId(tenantId)
+                                    .build();
+                          if (username == null || username.isEmpty()) {
+                              user = user.toBuilder().setUsername(username).build();
+                          }
+                            return Optional.ofNullable(user);
                         }
                     }
                 } else {
