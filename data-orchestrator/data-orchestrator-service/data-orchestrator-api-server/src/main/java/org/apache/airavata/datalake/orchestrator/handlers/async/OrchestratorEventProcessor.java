@@ -227,6 +227,7 @@ public class OrchestratorEventProcessor implements Runnable {
                 logger.error("Invalid user. User should be verified users {} . {}", splitted[0], removeBasePath);
                 throw new Exception("Invalid user. User " + splitted[0] + " should be registered users");
             }
+
             if (ownerOp.isEmpty()) {
                 this.drmsConnector.createUnverifiedResource(notification.getAuthToken(), notification.getTenantId(),
                         notification.getNotificationId(), notification.getResourcePath(), notification.getResourceType(),
@@ -234,7 +235,9 @@ public class OrchestratorEventProcessor implements Runnable {
                 logger.error("Invalid user. User should be verified users {} . {}", splitted[1], removeBasePath);
                 throw new Exception("Invalid user. User " + splitted[1] + " should be registered users");
             }
-
+            
+            adminUser = adminUserOp.get();
+            owner = ownerOp.get();
 
             Map<String, String> ownerRules = new HashMap<>();
             ownerRules.put(adminUser, "VIEWER");
