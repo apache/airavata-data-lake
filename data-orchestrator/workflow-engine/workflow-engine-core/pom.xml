@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.apache.helix</groupId>
             <artifactId>helix-core</artifactId>
-            <version>0.9.7</version>
+            <version>1.3.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
